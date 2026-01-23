@@ -499,3 +499,179 @@
   vertical-align: text-bottom;
   animation: block-cursor-blink 1s step-end infinite;
 }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   ULTRAVIOLENCE: Callout boxes
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.callout {
+  margin: 1.5rem 0;
+  padding: 1rem 1.25rem;
+  border-left: 4px solid;
+  background: var(--card);
+}
+
+.callout-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+  font-size: 1rem;
+}
+
+.callout-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.25rem;
+  height: 1.25rem;
+  font-size: 0.875rem;
+  font-weight: 700;
+  line-height: 1;
+  border-radius: 50%;
+  background: currentColor;
+  color: var(--card);
+}
+
+.callout-content {
+  font-size: 0.95rem;
+}
+
+.callout-content p:first-child {
+  margin-top: 0;
+}
+
+.callout-content p:last-child {
+  margin-bottom: 0;
+}
+
+/* Info: blue */
+.callout-info {
+  border-left-color: var(--primary);
+}
+
+.callout-info .callout-title {
+  color: var(--primary);
+}
+
+/* Warning: orange */
+.callout-warning {
+  border-left-color: #d19a66;
+}
+
+.callout-warning .callout-title {
+  color: #d19a66;
+}
+
+/* Danger: red */
+.callout-danger {
+  border-left-color: var(--destructive);
+}
+
+.callout-danger .callout-title {
+  color: var(--destructive);
+}
+
+/* Tip: green */
+.callout-tip {
+  border-left-color: #7ec699;
+}
+
+.callout-tip .callout-title {
+  color: #7ec699;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   ULTRAVIOLENCE: Tags
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.uv-tag {
+  display: inline-block;
+  font-size: 0.85rem;
+  color: var(--muted-foreground);
+  letter-spacing: 0.02em;
+}
+
+.uv-tag::before {
+  content: '// ';
+  color: var(--primary);
+}
+
+.uv-tag::after {
+  content: ' //';
+  color: var(--primary);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   ULTRAVIOLENCE: Status blocks
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.uv-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.uv-status-block {
+  display: inline-block;
+}
+
+.uv-status-nominal {
+  color: #7ec699;
+}
+
+.uv-status-degraded {
+  color: #d19a66;
+}
+
+.uv-status-offline {
+  color: var(--destructive);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   ULTRAVIOLENCE: Nav bar
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.uv-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 2rem;
+  border-bottom: 1px solid var(--border);
+  font-size: 0.9rem;
+}
+
+.uv-nav-logo {
+  color: var(--text);
+  font-weight: 500;
+}
+
+.uv-nav-logo::before,
+.uv-nav-logo::after {
+  content: '//';
+  color: var(--primary);
+  margin: 0 0.5rem;
+}
+
+.uv-nav a {
+  color: var(--muted-foreground);
+  text-decoration: none;
+  transition: color 0.15s;
+}
+
+.uv-nav a:hover {
+  color: var(--text);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   ULTRAVIOLENCE: Hard rules
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.uv-hr {
+  border: none;
+  height: 1px;
+  background: var(--border);
+  margin: 2rem 0;
+}

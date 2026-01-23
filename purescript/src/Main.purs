@@ -167,4 +167,15 @@ renderPage = case _ of
 
 renderHeader :: forall m. MonadAff m => AppState -> H.ComponentHTML AppAction AppSlots m
 renderHeader state =
-  HH.slot_ _header unit Header.header { currentPath: routeToPath state.route }
+  HH.slot_ _header unit Header.header 
+    { currentPath: routeToPath state.route
+    , themeLock: routeThemeLock state.route
+    }
+
+-- | Pages that lock the theme (ultraviolence mode)
+routeThemeLock :: Route -> Maybe String
+routeThemeLock = case _ of
+  -- Villa Straylight papers lock to memphis black
+  Plan -> Just "ono-memphis"
+  Lean -> Just "ono-memphis"
+  _ -> Nothing

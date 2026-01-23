@@ -91,10 +91,10 @@
   };
   var applySecond = function(dictApply) {
     var apply1 = apply(dictApply);
-    var map23 = map(dictApply.Functor0());
+    var map24 = map(dictApply.Functor0());
     return function(a2) {
       return function(b2) {
-        return apply1(map23($$const(identity2))(a2))(b2);
+        return apply1(map24($$const(identity2))(a2))(b2);
       };
     };
   };
@@ -596,6 +596,11 @@
       });
     };
   };
+  var get = function(dictMonadState) {
+    return state(dictMonadState)(function(s) {
+      return new Tuple(s, s);
+    });
+  };
 
   // output/Data.Maybe/index.js
   var identity3 = /* @__PURE__ */ identity(categoryFn);
@@ -730,12 +735,12 @@
   };
   var ap = function(dictMonad) {
     var bind8 = bind(dictMonad.Bind1());
-    var pure10 = pure(dictMonad.Applicative0());
+    var pure11 = pure(dictMonad.Applicative0());
     return function(f) {
       return function(a2) {
         return bind8(f)(function(f$prime) {
           return bind8(a2)(function(a$prime) {
-            return pure10(f$prime(a$prime));
+            return pure11(f$prime(a$prime));
           });
         });
       };
@@ -813,17 +818,17 @@
     var FORKED = "Forked";
     var FIBER = "Fiber";
     var THUNK = "Thunk";
-    function Aff2(tag, _1, _2, _3) {
-      this.tag = tag;
+    function Aff2(tag2, _1, _2, _3) {
+      this.tag = tag2;
       this._1 = _1;
       this._2 = _2;
       this._3 = _3;
     }
-    function AffCtr(tag) {
+    function AffCtr(tag2) {
       var fn = function(_1, _2, _3) {
-        return new Aff2(tag, _1, _2, _3);
+        return new Aff2(tag2, _1, _2, _3);
       };
-      fn.tag = tag;
+      fn.tag = tag2;
       return fn;
     }
     function nonCanceler2(error4) {
@@ -966,7 +971,7 @@
     var COMPLETED = 6;
     function Fiber(util, supervisor, aff) {
       var runTick = 0;
-      var status = SUSPENDED;
+      var status2 = SUSPENDED;
       var step3 = aff;
       var fail2 = null;
       var interrupt = null;
@@ -983,9 +988,9 @@
           tmp = null;
           result = null;
           attempt = null;
-          switch (status) {
+          switch (status2) {
             case STEP_BIND:
-              status = CONTINUE;
+              status2 = CONTINUE;
               try {
                 step3 = bhead(step3);
                 if (btail === null) {
@@ -995,20 +1000,20 @@
                   btail = btail._2;
                 }
               } catch (e) {
-                status = RETURN;
+                status2 = RETURN;
                 fail2 = util.left(e);
                 step3 = null;
               }
               break;
             case STEP_RESULT:
               if (util.isLeft(step3)) {
-                status = RETURN;
+                status2 = RETURN;
                 fail2 = step3;
                 step3 = null;
               } else if (bhead === null) {
-                status = RETURN;
+                status2 = RETURN;
               } else {
-                status = STEP_BIND;
+                status2 = STEP_BIND;
                 step3 = util.fromRight(step3);
               }
               break;
@@ -1019,24 +1024,24 @@
                     btail = new Aff2(CONS, bhead, btail);
                   }
                   bhead = step3._2;
-                  status = CONTINUE;
+                  status2 = CONTINUE;
                   step3 = step3._1;
                   break;
                 case PURE:
                   if (bhead === null) {
-                    status = RETURN;
+                    status2 = RETURN;
                     step3 = util.right(step3._1);
                   } else {
-                    status = STEP_BIND;
+                    status2 = STEP_BIND;
                     step3 = step3._1;
                   }
                   break;
                 case SYNC:
-                  status = STEP_RESULT;
+                  status2 = STEP_RESULT;
                   step3 = runSync(util.left, util.right, step3._1);
                   break;
                 case ASYNC:
-                  status = PENDING;
+                  status2 = PENDING;
                   step3 = runAsync(util.left, step3._1, function(result2) {
                     return function() {
                       if (runTick !== localRunTick) {
@@ -1047,7 +1052,7 @@
                         if (runTick !== localRunTick + 1) {
                           return;
                         }
-                        status = STEP_RESULT;
+                        status2 = STEP_RESULT;
                         step3 = result2;
                         run3(runTick);
                       });
@@ -1055,7 +1060,7 @@
                   });
                   return;
                 case THROW:
-                  status = RETURN;
+                  status2 = RETURN;
                   fail2 = util.left(step3._1);
                   step3 = null;
                   break;
@@ -1069,7 +1074,7 @@
                   }
                   bhead = null;
                   btail = null;
-                  status = CONTINUE;
+                  status2 = CONTINUE;
                   step3 = step3._1;
                   break;
                 // Enqueue the Bracket so that we can call the appropriate handlers
@@ -1083,11 +1088,11 @@
                   }
                   bhead = null;
                   btail = null;
-                  status = CONTINUE;
+                  status2 = CONTINUE;
                   step3 = step3._1;
                   break;
                 case FORK:
-                  status = STEP_RESULT;
+                  status2 = STEP_RESULT;
                   tmp = Fiber(util, supervisor, step3._2);
                   if (supervisor) {
                     supervisor.register(tmp);
@@ -1098,7 +1103,7 @@
                   step3 = util.right(tmp);
                   break;
                 case SEQ:
-                  status = CONTINUE;
+                  status2 = CONTINUE;
                   step3 = sequential3(util, supervisor, step3._1);
                   break;
               }
@@ -1107,7 +1112,7 @@
               bhead = null;
               btail = null;
               if (attempts === null) {
-                status = COMPLETED;
+                status2 = COMPLETED;
                 step3 = interrupt || fail2 || step3;
               } else {
                 tmp = attempts._3;
@@ -1119,9 +1124,9 @@
                   // was raised.
                   case CATCH:
                     if (interrupt && interrupt !== tmp && bracketCount === 0) {
-                      status = RETURN;
+                      status2 = RETURN;
                     } else if (fail2) {
-                      status = CONTINUE;
+                      status2 = CONTINUE;
                       step3 = attempt._2(util.fromLeft(fail2));
                       fail2 = null;
                     }
@@ -1129,11 +1134,11 @@
                   // We cannot resume from an unmasked interrupt or exception.
                   case RESUME:
                     if (interrupt && interrupt !== tmp && bracketCount === 0 || fail2) {
-                      status = RETURN;
+                      status2 = RETURN;
                     } else {
                       bhead = attempt._1;
                       btail = attempt._2;
-                      status = STEP_BIND;
+                      status2 = STEP_BIND;
                       step3 = util.fromRight(step3);
                     }
                     break;
@@ -1147,7 +1152,7 @@
                       result = util.fromRight(step3);
                       attempts = new Aff2(CONS, new Aff2(RELEASE, attempt._2, result), attempts, tmp);
                       if (interrupt === tmp || bracketCount > 0) {
-                        status = CONTINUE;
+                        status2 = CONTINUE;
                         step3 = attempt._3(result);
                       }
                     }
@@ -1156,7 +1161,7 @@
                   // because it should not be cancelled.
                   case RELEASE:
                     attempts = new Aff2(CONS, new Aff2(FINALIZED, step3, fail2), attempts, interrupt);
-                    status = CONTINUE;
+                    status2 = CONTINUE;
                     if (interrupt && interrupt !== tmp && bracketCount === 0) {
                       step3 = attempt._1.killed(util.fromLeft(interrupt))(attempt._2);
                     } else if (fail2) {
@@ -1170,12 +1175,12 @@
                   case FINALIZER:
                     bracketCount++;
                     attempts = new Aff2(CONS, new Aff2(FINALIZED, step3, fail2), attempts, interrupt);
-                    status = CONTINUE;
+                    status2 = CONTINUE;
                     step3 = attempt._1;
                     break;
                   case FINALIZED:
                     bracketCount--;
-                    status = RETURN;
+                    status2 = RETURN;
                     step3 = attempt._1;
                     fail2 = attempt._2;
                     break;
@@ -1203,7 +1208,7 @@
               }
               return;
             case SUSPENDED:
-              status = CONTINUE;
+              status2 = CONTINUE;
               break;
             case PENDING:
               return;
@@ -1212,7 +1217,7 @@
       }
       function onComplete(join4) {
         return function() {
-          if (status === COMPLETED) {
+          if (status2 === COMPLETED) {
             rethrow = rethrow && join4.rethrow;
             join4.handler(step3)();
             return function() {
@@ -1230,7 +1235,7 @@
       }
       function kill2(error4, cb) {
         return function() {
-          if (status === COMPLETED) {
+          if (status2 === COMPLETED) {
             cb(util.right(void 0))();
             return function() {
             };
@@ -1241,10 +1246,10 @@
               return cb(util.right(void 0));
             }
           })();
-          switch (status) {
+          switch (status2) {
             case SUSPENDED:
               interrupt = util.left(error4);
-              status = COMPLETED;
+              status2 = COMPLETED;
               step3 = interrupt;
               run3(runTick);
               break;
@@ -1253,10 +1258,10 @@
                 interrupt = util.left(error4);
               }
               if (bracketCount === 0) {
-                if (status === PENDING) {
+                if (status2 === PENDING) {
                   attempts = new Aff2(CONS, new Aff2(FINALIZER, step3(error4)), attempts, interrupt);
                 }
-                status = RETURN;
+                status2 = RETURN;
                 step3 = null;
                 fail2 = null;
                 run3(++runTick);
@@ -1267,7 +1272,7 @@
                 interrupt = util.left(error4);
               }
               if (bracketCount === 0) {
-                status = RETURN;
+                status2 = RETURN;
                 step3 = null;
                 fail2 = null;
               }
@@ -1281,7 +1286,7 @@
             rethrow: false,
             handler: cb
           })();
-          if (status === SUSPENDED) {
+          if (status2 === SUSPENDED) {
             run3(runTick);
           }
           return canceler;
@@ -1292,10 +1297,10 @@
         join: join3,
         onComplete,
         isSuspended: function() {
-          return status === SUSPENDED;
+          return status2 === SUSPENDED;
         },
         run: function() {
-          if (status === SUSPENDED) {
+          if (status2 === SUSPENDED) {
             if (!Scheduler.isDraining()) {
               Scheduler.enqueue(function() {
                 run3(runTick);
@@ -1317,7 +1322,7 @@
       var root = EMPTY;
       function kill2(error4, par2, cb2) {
         var step3 = par2;
-        var head2 = null;
+        var head3 = null;
         var tail = null;
         var count = 0;
         var kills2 = {};
@@ -1337,14 +1342,14 @@
                   };
                 });
               }
-              if (head2 === null) {
+              if (head3 === null) {
                 break loop;
               }
-              step3 = head2._2;
+              step3 = head3._2;
               if (tail === null) {
-                head2 = null;
+                head3 = null;
               } else {
-                head2 = tail._1;
+                head3 = tail._1;
                 tail = tail._2;
               }
               break;
@@ -1353,10 +1358,10 @@
               break;
             case APPLY:
             case ALT:
-              if (head2) {
-                tail = new Aff2(CONS, head2, tail);
+              if (head3) {
+                tail = new Aff2(CONS, head3, tail);
               }
-              head2 = step3;
+              head3 = step3;
               step3 = step3._1;
               break;
           }
@@ -1372,7 +1377,7 @@
         }
         return kills2;
       }
-      function join3(result, head2, tail) {
+      function join3(result, head3, tail) {
         var fail2, step3, lhs, rhs, tmp, kid;
         if (util.isLeft(result)) {
           fail2 = result;
@@ -1389,30 +1394,30 @@
           if (interrupt !== null) {
             return;
           }
-          if (head2 === null) {
+          if (head3 === null) {
             cb(fail2 || step3)();
             return;
           }
-          if (head2._3 !== EMPTY) {
+          if (head3._3 !== EMPTY) {
             return;
           }
-          switch (head2.tag) {
+          switch (head3.tag) {
             case MAP:
               if (fail2 === null) {
-                head2._3 = util.right(head2._1(util.fromRight(step3)));
-                step3 = head2._3;
+                head3._3 = util.right(head3._1(util.fromRight(step3)));
+                step3 = head3._3;
               } else {
-                head2._3 = fail2;
+                head3._3 = fail2;
               }
               break;
             case APPLY:
-              lhs = head2._1._3;
-              rhs = head2._2._3;
+              lhs = head3._1._3;
+              rhs = head3._2._3;
               if (fail2) {
-                head2._3 = fail2;
+                head3._3 = fail2;
                 tmp = true;
                 kid = killId++;
-                kills[kid] = kill2(early, fail2 === lhs ? head2._2 : head2._1, function() {
+                kills[kid] = kill2(early, fail2 === lhs ? head3._2 : head3._1, function() {
                   return function() {
                     delete kills[kid];
                     if (tmp) {
@@ -1432,24 +1437,24 @@
                 return;
               } else {
                 step3 = util.right(util.fromRight(lhs)(util.fromRight(rhs)));
-                head2._3 = step3;
+                head3._3 = step3;
               }
               break;
             case ALT:
-              lhs = head2._1._3;
-              rhs = head2._2._3;
+              lhs = head3._1._3;
+              rhs = head3._2._3;
               if (lhs === EMPTY && util.isLeft(rhs) || rhs === EMPTY && util.isLeft(lhs)) {
                 return;
               }
               if (lhs !== EMPTY && util.isLeft(lhs) && rhs !== EMPTY && util.isLeft(rhs)) {
                 fail2 = step3 === lhs ? rhs : lhs;
                 step3 = null;
-                head2._3 = fail2;
+                head3._3 = fail2;
               } else {
-                head2._3 = step3;
+                head3._3 = step3;
                 tmp = true;
                 kid = killId++;
-                kills[kid] = kill2(early, step3 === lhs ? head2._2 : head2._1, function() {
+                kills[kid] = kill2(early, step3 === lhs ? head3._2 : head3._1, function() {
                   return function() {
                     delete kills[kid];
                     if (tmp) {
@@ -1469,9 +1474,9 @@
               break;
           }
           if (tail === null) {
-            head2 = null;
+            head3 = null;
           } else {
-            head2 = tail._1;
+            head3 = tail._1;
             tail = tail._2;
           }
         }
@@ -1486,43 +1491,43 @@
         };
       }
       function run3() {
-        var status = CONTINUE;
+        var status2 = CONTINUE;
         var step3 = par;
-        var head2 = null;
+        var head3 = null;
         var tail = null;
         var tmp, fid;
         loop: while (true) {
           tmp = null;
           fid = null;
-          switch (status) {
+          switch (status2) {
             case CONTINUE:
               switch (step3.tag) {
                 case MAP:
-                  if (head2) {
-                    tail = new Aff2(CONS, head2, tail);
+                  if (head3) {
+                    tail = new Aff2(CONS, head3, tail);
                   }
-                  head2 = new Aff2(MAP, step3._1, EMPTY, EMPTY);
+                  head3 = new Aff2(MAP, step3._1, EMPTY, EMPTY);
                   step3 = step3._2;
                   break;
                 case APPLY:
-                  if (head2) {
-                    tail = new Aff2(CONS, head2, tail);
+                  if (head3) {
+                    tail = new Aff2(CONS, head3, tail);
                   }
-                  head2 = new Aff2(APPLY, EMPTY, step3._2, EMPTY);
+                  head3 = new Aff2(APPLY, EMPTY, step3._2, EMPTY);
                   step3 = step3._1;
                   break;
                 case ALT:
-                  if (head2) {
-                    tail = new Aff2(CONS, head2, tail);
+                  if (head3) {
+                    tail = new Aff2(CONS, head3, tail);
                   }
-                  head2 = new Aff2(ALT, EMPTY, step3._2, EMPTY);
+                  head3 = new Aff2(ALT, EMPTY, step3._2, EMPTY);
                   step3 = step3._1;
                   break;
                 default:
                   fid = fiberId++;
-                  status = RETURN;
+                  status2 = RETURN;
                   tmp = step3;
-                  step3 = new Aff2(FORKED, fid, new Aff2(CONS, head2, tail), EMPTY);
+                  step3 = new Aff2(FORKED, fid, new Aff2(CONS, head3, tail), EMPTY);
                   tmp = Fiber(util, supervisor, tmp);
                   tmp.onComplete({
                     rethrow: false,
@@ -1535,21 +1540,21 @@
               }
               break;
             case RETURN:
-              if (head2 === null) {
+              if (head3 === null) {
                 break loop;
               }
-              if (head2._1 === EMPTY) {
-                head2._1 = step3;
-                status = CONTINUE;
-                step3 = head2._2;
-                head2._2 = EMPTY;
+              if (head3._1 === EMPTY) {
+                head3._1 = step3;
+                status2 = CONTINUE;
+                step3 = head3._2;
+                head3._2 = EMPTY;
               } else {
-                head2._2 = step3;
-                step3 = head2;
+                head3._2 = step3;
+                step3 = head3;
                 if (tail === null) {
-                  head2 = null;
+                  head3 = null;
                 } else {
-                  head2 = tail._1;
+                  head3 = tail._1;
                   tail = tail._2;
                 }
               }
@@ -1764,11 +1769,11 @@
   var $$try = function(dictMonadError) {
     var catchError1 = catchError(dictMonadError);
     var Monad0 = dictMonadError.MonadThrow0().Monad0();
-    var map23 = map(Monad0.Bind1().Apply0().Functor0());
-    var pure10 = pure(Monad0.Applicative0());
+    var map24 = map(Monad0.Bind1().Apply0().Functor0());
+    var pure11 = pure(Monad0.Applicative0());
     return function(a2) {
-      return catchError1(map23(Right.create)(a2))(function($52) {
-        return pure10(Left.create($52));
+      return catchError1(map24(Right.create)(a2))(function($52) {
+        return pure11(Left.create($52));
       });
     };
   };
@@ -1963,13 +1968,13 @@
   };
   var traverse_ = function(dictApplicative) {
     var applySecond2 = applySecond(dictApplicative.Apply0());
-    var pure10 = pure(dictApplicative);
+    var pure11 = pure(dictApplicative);
     return function(dictFoldable) {
       var foldr22 = foldr(dictFoldable);
       return function(f) {
         return foldr22(function($454) {
           return applySecond2(f($454));
-        })(pure10(unit));
+        })(pure11(unit));
       };
     };
   };
@@ -2538,8 +2543,8 @@
 
   // output/Web.HTML.HTMLElement/foreign.js
   function _read(nothing, just, value12) {
-    var tag = Object.prototype.toString.call(value12);
-    if (tag.indexOf("[object HTML") === 0 && tag.indexOf("Element]") === tag.length - 8) {
+    var tag2 = Object.prototype.toString.call(value12);
+    if (tag2.indexOf("[object HTML") === 0 && tag2.indexOf("Element]") === tag2.length - 8) {
       return just(value12);
     } else {
       return nothing;
@@ -3671,6 +3676,9 @@
   var index2 = /* @__PURE__ */ function() {
     return runFn4(indexImpl)(Just.create)(Nothing.value);
   }();
+  var head = function(xs) {
+    return index2(xs)(0);
+  };
   var findIndex = /* @__PURE__ */ function() {
     return runFn4(findIndexImpl)(Just.create)(Nothing.value);
   }();
@@ -4813,7 +4821,7 @@
     return Lift.create;
   }();
   var goLeft = function(dictApplicative) {
-    var pure10 = pure(dictApplicative);
+    var pure11 = pure(dictApplicative);
     return function(fStack) {
       return function(valStack) {
         return function(nat) {
@@ -4821,7 +4829,7 @@
             return function(count) {
               if (func instanceof Pure) {
                 return new Tuple(new Cons({
-                  func: pure10(func.value0),
+                  func: pure11(func.value0),
                   count
                 }, fStack), valStack);
               }
@@ -4892,7 +4900,7 @@
   };
   var foldFreeAp = function(dictApplicative) {
     var goApply1 = goApply(dictApplicative);
-    var pure10 = pure(dictApplicative);
+    var pure11 = pure(dictApplicative);
     var goLeft1 = goLeft(dictApplicative);
     return function(nat) {
       return function(z) {
@@ -4901,7 +4909,7 @@
           var $tco_result;
           function $tco_loop(v) {
             if (v.value1.value0 instanceof Pure) {
-              var v1 = goApply1(v.value0)(v.value1.value1)(pure10(v.value1.value0.value0));
+              var v1 = goApply1(v.value0)(v.value1.value1)(pure11(v.value1.value0.value0));
               if (v1 instanceof Left) {
                 $tco_done = true;
                 return v1.value0;
@@ -5610,17 +5618,17 @@
     return Finalize2;
   }();
   var Receive = /* @__PURE__ */ function() {
-    function Receive2(value0, value1) {
+    function Receive3(value0, value1) {
       this.value0 = value0;
       this.value1 = value1;
     }
     ;
-    Receive2.create = function(value0) {
+    Receive3.create = function(value0) {
       return function(value1) {
-        return new Receive2(value0, value1);
+        return new Receive3(value0, value1);
       };
     };
-    return Receive2;
+    return Receive3;
   }();
   var Action2 = /* @__PURE__ */ function() {
     function Action3(value0, value1) {
@@ -5809,10 +5817,18 @@
   var element2 = /* @__PURE__ */ function() {
     return element(Nothing.value);
   }();
+  var em = /* @__PURE__ */ element2("em");
+  var em_ = /* @__PURE__ */ em([]);
   var footer = /* @__PURE__ */ element2("footer");
   var h1 = /* @__PURE__ */ element2("h1");
   var h2 = /* @__PURE__ */ element2("h2");
   var header = /* @__PURE__ */ element2("header");
+  var hr = function(props) {
+    return element2("hr")(props)([]);
+  };
+  var img = function(props) {
+    return element2("img")(props)([]);
+  };
   var main = /* @__PURE__ */ element2("main");
   var nav = /* @__PURE__ */ element2("nav");
   var p = /* @__PURE__ */ element2("p");
@@ -5821,11 +5837,14 @@
   var section = /* @__PURE__ */ element2("section");
   var span3 = /* @__PURE__ */ element2("span");
   var span_ = /* @__PURE__ */ span3([]);
+  var strong = /* @__PURE__ */ element2("strong");
+  var strong_ = /* @__PURE__ */ strong([]);
   var div2 = /* @__PURE__ */ element2("div");
   var div_ = /* @__PURE__ */ div2([]);
   var code = /* @__PURE__ */ element2("code");
   var code_ = /* @__PURE__ */ code([]);
   var button = /* @__PURE__ */ element2("button");
+  var aside = /* @__PURE__ */ element2("aside");
   var a = /* @__PURE__ */ element2("a");
 
   // output/Halogen.HTML.Properties/index.js
@@ -5835,6 +5854,7 @@
   };
   var prop22 = /* @__PURE__ */ prop2(isPropString);
   var rel4 = /* @__PURE__ */ prop22("rel");
+  var src9 = /* @__PURE__ */ prop22("src");
   var target5 = /* @__PURE__ */ prop22("target");
   var type_17 = function(dictIsProp) {
     return prop2(dictIsProp)("type");
@@ -5850,6 +5870,7 @@
     return attr(Nothing.value);
   }();
   var style = /* @__PURE__ */ attr2("style");
+  var alt5 = /* @__PURE__ */ prop22("alt");
 
   // output/Halogen.HTML/index.js
   var componentSlot2 = /* @__PURE__ */ componentSlot();
@@ -6977,14 +6998,26 @@
   // output/Straylight.Layout.Header/index.js
   var type_19 = /* @__PURE__ */ type_17(isPropButtonType);
   var bind5 = /* @__PURE__ */ bind(bindHalogenM);
+  var get2 = /* @__PURE__ */ get(monadStateHalogenM);
   var discard5 = /* @__PURE__ */ discard(discardUnit)(bindHalogenM);
   var modify_4 = /* @__PURE__ */ modify_(monadStateHalogenM);
+  var pure9 = /* @__PURE__ */ pure(applicativeHalogenM);
   var Initialize3 = /* @__PURE__ */ function() {
     function Initialize6() {
     }
     ;
     Initialize6.value = new Initialize6();
     return Initialize6;
+  }();
+  var Receive2 = /* @__PURE__ */ function() {
+    function Receive3(value0) {
+      this.value0 = value0;
+    }
+    ;
+    Receive3.create = function(value0) {
+      return new Receive3(value0);
+    };
+    return Receive3;
   }();
   var ToggleMobileMenu = /* @__PURE__ */ function() {
     function ToggleMobileMenu2() {
@@ -7015,8 +7048,8 @@
       return function(name15) {
         return function(desc) {
           return button([cls(["text-left px-2 py-1.5 transition-colors flex items-center justify-between group cursor-pointer", function() {
-            var $23 = state3.currentTheme === themeId;
-            if ($23) {
+            var $30 = state3.currentTheme === themeId;
+            if ($30) {
               return "bg-primary/10 text-text";
             }
             ;
@@ -7031,10 +7064,66 @@
   var themeMenu = function(state3) {
     return div2([cls(["absolute top-full left-0 mt-2 bg-card border border-border p-4 min-w-[320px] z-50 theme-menu"])])([div2([cls(["text-[10px] text-muted-foreground uppercase tracking-widest mb-3"])])([text5("// chromatic series")]), div2([cls(["mb-4"])])([div2([cls(["text-[9px] text-primary uppercase tracking-wider mb-2 flex items-center gap-2"])])([span3([cls(["w-1.5 h-1.5 bg-primary inline-block"])])([]), text5("ONO-SENDAI DARK")]), div2([cls(["flex flex-col gap-1"])])([themeOption(state3)("ono-tuned")("TUNED")("HSL perceptual / daily driver"), themeOption(state3)("ono-sprawl")("SPRAWL")("carbon black / best compromise"), themeOption(state3)("ono-memphis")("MEMPHIS")("true black / OLED perfect"), themeOption(state3)("ono-github")("GITHUB")("robust default / maximum compat")])]), div_([div2([cls(["text-[9px] text-status uppercase tracking-wider mb-2 flex items-center gap-2"])])([span3([cls(["w-1.5 h-1.5 bg-status inline-block"])])([]), text5("MAAS BIOLABS LIGHT")]), div2([cls(["flex flex-col gap-1"])])([themeOption(state3)("maas-neoform")("NEOFORM")("clean room schematics / daily driver"), themeOption(state3)("maas-bioptic")("BIOPTIC")("warm cream paper / long reading"), themeOption(state3)("maas-ghost")("GHOST")("low contrast / photosensitivity"), themeOption(state3)("maas-tessier")("TESSIER")("maximum contrast / clinical QA")])]), div2([cls(["mt-4 pt-3 border-t border-border"])])([div2([cls(["text-[8px] text-muted-foreground uppercase tracking-wider"])])([text5("211\xB0 hue lock / base16 compatible")])])]);
   };
+  var themeDisplayName = function(v) {
+    if (v === "ono-tuned") {
+      return "ono-tuned";
+    }
+    ;
+    if (v === "ono-sprawl") {
+      return "ono-sprawl";
+    }
+    ;
+    if (v === "ono-memphis") {
+      return "ono-memphis";
+    }
+    ;
+    if (v === "ono-github") {
+      return "ono-github";
+    }
+    ;
+    if (v === "maas-neoform") {
+      return "maas-neoform";
+    }
+    ;
+    if (v === "maas-bioptic") {
+      return "maas-bioptic";
+    }
+    ;
+    if (v === "maas-ghost") {
+      return "maas-ghost";
+    }
+    ;
+    if (v === "maas-tessier") {
+      return "maas-tessier";
+    }
+    ;
+    return v;
+  };
+  var themeLockIndicator = function(state3) {
+    if (state3.themeLock instanceof Nothing) {
+      return text5("");
+    }
+    ;
+    if (state3.themeLock instanceof Just) {
+      return span3([cls(["ml-4 text-[11px] text-muted-foreground"])])([text5(themeDisplayName(state3.themeLock.value0)), span3([cls(["ml-1 text-primary"])])([text5("\u25A0")])]);
+    }
+    ;
+    throw new Error("Failed pattern match at Straylight.Layout.Header (line 191, column 3 - line 198, column 10): " + [state3.themeLock.constructor.name]);
+  };
   var themeSwitcher = function(state3) {
-    return div2([cls(["relative"])])([button([cls(["text-text font-medium text-sm hover:text-primary transition-colors geo-hover cursor-pointer"]), onClick(function(v) {
+    return div2([cls(["relative flex items-center"])])([button([cls(["text-text font-medium text-sm transition-colors geo-hover", function() {
+      if (state3.themeLock instanceof Just) {
+        return "cursor-default";
+      }
+      ;
+      if (state3.themeLock instanceof Nothing) {
+        return "hover:text-primary cursor-pointer";
+      }
+      ;
+      throw new Error("Failed pattern match at Straylight.Layout.Header (line 174, column 17 - line 176, column 65): " + [state3.themeLock.constructor.name]);
+    }()]), onClick(function(v) {
       return ToggleThemeMenu.value;
-    }), type_19(ButtonButton.value)])([span3([cls(["text-primary"])])([text5("//")]), text5(" straylight "), span3([cls(["text-primary"])])([text5("//")])]), function() {
+    }), type_19(ButtonButton.value)])([span3([cls(["text-primary"])])([text5("//")]), text5(" straylight "), span3([cls(["text-primary"])])([text5("//")])]), themeLockIndicator(state3), function() {
       if (state3.themeMenuOpen) {
         return themeMenu(state3);
       }
@@ -7048,84 +7137,181 @@
     };
   };
   var menuIcon = /* @__PURE__ */ elementNS(svgNS)("svg")([/* @__PURE__ */ cls(["w-6 h-6"]), /* @__PURE__ */ attr2("fill")("none"), /* @__PURE__ */ attr2("stroke")("currentColor"), /* @__PURE__ */ attr2("viewBox")("0 0 24 24")])([/* @__PURE__ */ elementNS(svgNS)("path")([/* @__PURE__ */ attr2("stroke-linecap")("round"), /* @__PURE__ */ attr2("stroke-linejoin")("round"), /* @__PURE__ */ attr2("stroke-width")("2"), /* @__PURE__ */ attr2("d")("M4 6h16M4 12h16M4 18h16")])([])]);
-  var initialState = function(v) {
+  var initialState = function(input3) {
     return {
       mobileMenuOpen: false,
       themeMenuOpen: false,
-      currentTheme: "ono-tuned"
+      currentTheme: "ono-tuned",
+      themeLock: input3.themeLock
     };
   };
   var handleAction2 = function(dictMonadAff) {
     var liftEffect7 = liftEffect(monadEffectHalogenM(dictMonadAff.MonadEffect0()));
     return function(v) {
       if (v instanceof Initialize3) {
-        return bind5(liftEffect7(getStoredThemeImpl("ono-tuned")))(function(theme) {
-          return discard5(liftEffect7(setThemeImpl(theme)))(function() {
-            return modify_4(function(v1) {
-              var $26 = {};
-              for (var $27 in v1) {
-                if ({}.hasOwnProperty.call(v1, $27)) {
-                  $26[$27] = v1[$27];
+        return bind5(get2)(function(state3) {
+          if (state3.themeLock instanceof Just) {
+            return discard5(liftEffect7(setThemeImpl(state3.themeLock.value0)))(function() {
+              return modify_4(function(v1) {
+                var $39 = {};
+                for (var $40 in v1) {
+                  if ({}.hasOwnProperty.call(v1, $40)) {
+                    $39[$40] = v1[$40];
+                  }
+                  ;
                 }
                 ;
-              }
-              ;
-              $26.currentTheme = theme;
-              return $26;
+                $39.currentTheme = state3.themeLock.value0;
+                return $39;
+              });
             });
-          });
+          }
+          ;
+          if (state3.themeLock instanceof Nothing) {
+            return bind5(liftEffect7(getStoredThemeImpl("ono-tuned")))(function(theme) {
+              return discard5(liftEffect7(setThemeImpl(theme)))(function() {
+                return modify_4(function(v1) {
+                  var $43 = {};
+                  for (var $44 in v1) {
+                    if ({}.hasOwnProperty.call(v1, $44)) {
+                      $43[$44] = v1[$44];
+                    }
+                    ;
+                  }
+                  ;
+                  $43.currentTheme = theme;
+                  return $43;
+                });
+              });
+            });
+          }
+          ;
+          throw new Error("Failed pattern match at Straylight.Layout.Header (line 75, column 5 - line 82, column 45): " + [state3.themeLock.constructor.name]);
+        });
+      }
+      ;
+      if (v instanceof Receive2) {
+        return discard5(modify_4(function(v1) {
+          var $46 = {};
+          for (var $47 in v1) {
+            if ({}.hasOwnProperty.call(v1, $47)) {
+              $46[$47] = v1[$47];
+            }
+            ;
+          }
+          ;
+          $46.themeLock = v.value0.themeLock;
+          return $46;
+        }))(function() {
+          if (v.value0.themeLock instanceof Just) {
+            return discard5(liftEffect7(setThemeImpl(v.value0.themeLock.value0)))(function() {
+              return modify_4(function(v1) {
+                var $50 = {};
+                for (var $51 in v1) {
+                  if ({}.hasOwnProperty.call(v1, $51)) {
+                    $50[$51] = v1[$51];
+                  }
+                  ;
+                }
+                ;
+                $50.currentTheme = v.value0.themeLock.value0;
+                return $50;
+              });
+            });
+          }
+          ;
+          if (v.value0.themeLock instanceof Nothing) {
+            return bind5(liftEffect7(getStoredThemeImpl("ono-tuned")))(function(theme) {
+              return discard5(liftEffect7(setThemeImpl(theme)))(function() {
+                return modify_4(function(v1) {
+                  var $54 = {};
+                  for (var $55 in v1) {
+                    if ({}.hasOwnProperty.call(v1, $55)) {
+                      $54[$55] = v1[$55];
+                    }
+                    ;
+                  }
+                  ;
+                  $54.currentTheme = theme;
+                  return $54;
+                });
+              });
+            });
+          }
+          ;
+          throw new Error("Failed pattern match at Straylight.Layout.Header (line 87, column 5 - line 95, column 45): " + [v.value0.themeLock.constructor.name]);
         });
       }
       ;
       if (v instanceof ToggleMobileMenu) {
         return modify_4(function(s) {
-          var $29 = {};
-          for (var $30 in s) {
-            if ({}.hasOwnProperty.call(s, $30)) {
-              $29[$30] = s[$30];
+          var $58 = {};
+          for (var $59 in s) {
+            if ({}.hasOwnProperty.call(s, $59)) {
+              $58[$59] = s[$59];
             }
             ;
           }
           ;
-          $29.mobileMenuOpen = !s.mobileMenuOpen;
-          return $29;
+          $58.mobileMenuOpen = !s.mobileMenuOpen;
+          return $58;
         });
       }
       ;
       if (v instanceof ToggleThemeMenu) {
-        return modify_4(function(s) {
-          var $32 = {};
-          for (var $33 in s) {
-            if ({}.hasOwnProperty.call(s, $33)) {
-              $32[$33] = s[$33];
-            }
-            ;
+        return bind5(get2)(function(state3) {
+          if (state3.themeLock instanceof Just) {
+            return pure9(unit);
           }
           ;
-          $32.themeMenuOpen = !s.themeMenuOpen;
-          return $32;
+          if (state3.themeLock instanceof Nothing) {
+            return modify_4(function(s) {
+              var $63 = {};
+              for (var $64 in s) {
+                if ({}.hasOwnProperty.call(s, $64)) {
+                  $63[$64] = s[$64];
+                }
+                ;
+              }
+              ;
+              $63.themeMenuOpen = !s.themeMenuOpen;
+              return $63;
+            });
+          }
+          ;
+          throw new Error("Failed pattern match at Straylight.Layout.Header (line 103, column 5 - line 105, column 75): " + [state3.themeLock.constructor.name]);
         });
       }
       ;
       if (v instanceof SetTheme) {
-        return discard5(liftEffect7(setThemeImpl(v.value0)))(function() {
-          return modify_4(function(v1) {
-            var $35 = {};
-            for (var $36 in v1) {
-              if ({}.hasOwnProperty.call(v1, $36)) {
-                $35[$36] = v1[$36];
-              }
-              ;
-            }
-            ;
-            $35.currentTheme = v.value0;
-            $35.themeMenuOpen = false;
-            return $35;
-          });
+        return bind5(get2)(function(state3) {
+          if (state3.themeLock instanceof Just) {
+            return pure9(unit);
+          }
+          ;
+          if (state3.themeLock instanceof Nothing) {
+            return discard5(liftEffect7(setThemeImpl(v.value0)))(function() {
+              return modify_4(function(v1) {
+                var $68 = {};
+                for (var $69 in v1) {
+                  if ({}.hasOwnProperty.call(v1, $69)) {
+                    $68[$69] = v1[$69];
+                  }
+                  ;
+                }
+                ;
+                $68.currentTheme = v.value0;
+                $68.themeMenuOpen = false;
+                return $68;
+              });
+            });
+          }
+          ;
+          throw new Error("Failed pattern match at Straylight.Layout.Header (line 110, column 5 - line 114, column 68): " + [state3.themeLock.constructor.name]);
         });
       }
       ;
-      throw new Error("Failed pattern match at Straylight.Layout.Header (line 64, column 16 - line 78, column 64): " + [v.constructor.name]);
+      throw new Error("Failed pattern match at Straylight.Layout.Header (line 71, column 16 - line 114, column 68): " + [v.constructor.name]);
     };
   };
   var externalLink = function(href5) {
@@ -7158,10 +7344,12 @@
       render: render2,
       "eval": mkEval({
         handleQuery: defaultEval.handleQuery,
-        receive: defaultEval.receive,
         finalize: defaultEval.finalize,
         handleAction: handleAction2(dictMonadAff),
-        initialize: new Just(Initialize3.value)
+        initialize: new Just(Initialize3.value),
+        receive: function($74) {
+          return Just.create(Receive2.create($74));
+        }
       })
     });
   };
@@ -7174,7 +7362,169 @@
     "eval": /* @__PURE__ */ mkEval(defaultEval)
   });
 
+  // output/Straylight.Components.Callout/index.js
+  var Info = /* @__PURE__ */ function() {
+    function Info2() {
+    }
+    ;
+    Info2.value = new Info2();
+    return Info2;
+  }();
+  var Warning = /* @__PURE__ */ function() {
+    function Warning2() {
+    }
+    ;
+    Warning2.value = new Warning2();
+    return Warning2;
+  }();
+  var Danger = /* @__PURE__ */ function() {
+    function Danger2() {
+    }
+    ;
+    Danger2.value = new Danger2();
+    return Danger2;
+  }();
+  var Tip = /* @__PURE__ */ function() {
+    function Tip2() {
+    }
+    ;
+    Tip2.value = new Tip2();
+    return Tip2;
+  }();
+  var variantIcon = function(v) {
+    if (v instanceof Info) {
+      return "i";
+    }
+    ;
+    if (v instanceof Warning) {
+      return "!";
+    }
+    ;
+    if (v instanceof Danger) {
+      return "!";
+    }
+    ;
+    if (v instanceof Tip) {
+      return "*";
+    }
+    ;
+    throw new Error("Failed pattern match at Straylight.Components.Callout (line 27, column 15 - line 31, column 13): " + [v.constructor.name]);
+  };
+  var variantClass = function(v) {
+    if (v instanceof Info) {
+      return "callout-info";
+    }
+    ;
+    if (v instanceof Warning) {
+      return "callout-warning";
+    }
+    ;
+    if (v instanceof Danger) {
+      return "callout-danger";
+    }
+    ;
+    if (v instanceof Tip) {
+      return "callout-tip";
+    }
+    ;
+    throw new Error("Failed pattern match at Straylight.Components.Callout (line 35, column 16 - line 39, column 23): " + [v.constructor.name]);
+  };
+  var callout = function(variant) {
+    return function(title3) {
+      return function(children2) {
+        return aside([class_("callout " + variantClass(variant)), attr2("role")("note")])([div2([class_("callout-title")])([span3([class_("callout-icon"), attr2("aria-hidden")("true")])([text5(variantIcon(variant))]), strong_([text5(title3)])]), div2([class_("callout-content")])(children2)]);
+      };
+    };
+  };
+  var danger = /* @__PURE__ */ function() {
+    return callout(Danger.value);
+  }();
+  var info2 = /* @__PURE__ */ function() {
+    return callout(Info.value);
+  }();
+  var tip = /* @__PURE__ */ function() {
+    return callout(Tip.value);
+  }();
+  var warning = /* @__PURE__ */ function() {
+    return callout(Warning.value);
+  }();
+
+  // output/Straylight.Components.StatusBlock/index.js
+  var Nominal = /* @__PURE__ */ function() {
+    function Nominal2() {
+    }
+    ;
+    Nominal2.value = new Nominal2();
+    return Nominal2;
+  }();
+  var Degraded = /* @__PURE__ */ function() {
+    function Degraded2() {
+    }
+    ;
+    Degraded2.value = new Degraded2();
+    return Degraded2;
+  }();
+  var Offline = /* @__PURE__ */ function() {
+    function Offline2() {
+    }
+    ;
+    Offline2.value = new Offline2();
+    return Offline2;
+  }();
+  var variantLabel = function(v) {
+    if (v instanceof Nominal) {
+      return "NOMINAL";
+    }
+    ;
+    if (v instanceof Degraded) {
+      return "DEGRADED";
+    }
+    ;
+    if (v instanceof Offline) {
+      return "OFFLINE";
+    }
+    ;
+    throw new Error("Failed pattern match at Straylight.Components.StatusBlock (line 31, column 16 - line 34, column 23): " + [v.constructor.name]);
+  };
+  var variantClass2 = function(v) {
+    if (v instanceof Nominal) {
+      return "uv-status-nominal";
+    }
+    ;
+    if (v instanceof Degraded) {
+      return "uv-status-degraded";
+    }
+    ;
+    if (v instanceof Offline) {
+      return "uv-status-offline";
+    }
+    ;
+    throw new Error("Failed pattern match at Straylight.Components.StatusBlock (line 24, column 16 - line 27, column 33): " + [v.constructor.name]);
+  };
+  var status = function(variant) {
+    return span3([class_("uv-status " + variantClass2(variant))])([span3([class_("uv-status-block")])([text5("\u2588")]), text5(" " + variantLabel(variant))]);
+  };
+  var offline = /* @__PURE__ */ function() {
+    return status(Offline.value);
+  }();
+  var nominal = /* @__PURE__ */ function() {
+    return status(Nominal.value);
+  }();
+  var degraded = /* @__PURE__ */ function() {
+    return status(Degraded.value);
+  }();
+
+  // output/Straylight.Components.Tag/index.js
+  var map18 = /* @__PURE__ */ map(functorArray);
+  var tag = function(content3) {
+    return span3([class_("uv-tag")])([text5(content3)]);
+  };
+  var tags = function(ts) {
+    return div2([class_("flex flex-wrap gap-2")])(map18(tag)(ts));
+  };
+
   // output/Straylight.Pages.Home/index.js
+  var ultraviolence = /* @__PURE__ */ section([/* @__PURE__ */ cls(["py-12 border-t border-border"])])([/* @__PURE__ */ sectionHeader("ultraviolence"), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["mb-6"])])([/* @__PURE__ */ tags(["Lean", "CUDA", "Formal Methods", "rfl"])]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["flex items-center gap-4 mb-6"])])([nominal, degraded, offline]), /* @__PURE__ */ info2("Gibson's Epigraph")([/* @__PURE__ */ p_([/* @__PURE__ */ em_([/* @__PURE__ */ text5('"The Villa Straylight is a body grown in upon itself, a Gothic folly. Each space in Straylight is in some way secret, this endless series of chambers linked by passages, by stairwells vaulted like intestines, where the eye is trapped in narrow curves, carried past ornate screens, empty alcoves."')])])]), /* @__PURE__ */ warning("FTTC - Theorem 6")([/* @__PURE__ */ p_([/* @__PURE__ */ text5("Theorem 6 describes when strong correctness is achievable. It is so powerful that it deserves a fancier name: "), /* @__PURE__ */ strong_([/* @__PURE__ */ text5('"The fundamental theorem of TMA correctness."')])])]), /* @__PURE__ */ danger("The Catch")([/* @__PURE__ */ p_([/* @__PURE__ */ text5("NVIDIA documented when strong correctness is "), /* @__PURE__ */ strong_([/* @__PURE__ */ text5("impossible")]), /* @__PURE__ */ text5(". And their stack doesn't always enforce these constraints as types. That's what we're fixing.")])]), /* @__PURE__ */ tip("Tools of the Blade")([/* @__PURE__ */ p_([/* @__PURE__ */ strong_([/* @__PURE__ */ text5("Lean 4")]), /* @__PURE__ */ text5(" for the proofs. The polyhedral model is lattices and affine spaces.")]), /* @__PURE__ */ p_([/* @__PURE__ */ strong_([/* @__PURE__ */ text5("Haskell")]), /* @__PURE__ */ text5(" for the glue. Algebraic data types for CuTe layouts.")]), /* @__PURE__ */ p_([/* @__PURE__ */ strong_([/* @__PURE__ */ text5("The blade")]), /* @__PURE__ */ text5(" for everything else.")])])]);
   var primitiveItem = function(n) {
     return function(name15) {
       return function(desc) {
@@ -7186,7 +7536,7 @@
   var premise = /* @__PURE__ */ section([/* @__PURE__ */ cls(["py-12 border-t border-border"])])([/* @__PURE__ */ sectionHeader("premise"), /* @__PURE__ */ p([/* @__PURE__ */ cls(["mb-4"])])([/* @__PURE__ */ text5("all computations run on "), /* @__PURE__ */ keyword(1)("perfect conceptual computers"), /* @__PURE__ */ text5(".")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["mb-4"])])([/* @__PURE__ */ keyword(2)("correct by construction"), /* @__PURE__ */ text5(". the result is saved.")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["mb-4"])])([/* @__PURE__ */ text5("one "), /* @__PURE__ */ keyword(3)("content addressing"), /* @__PURE__ */ text5(" scheme. the hash is the artifact.")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["mb-4"])])([/* @__PURE__ */ keyword(4)("ca-derivations"), /* @__PURE__ */ text5(" and buck2 and bazel are supports for a coset. they can have the same cache keys.")]), /* @__PURE__ */ p_([/* @__PURE__ */ text5("who container registry. what nix cache. what waste.")])]);
   var method2 = /* @__PURE__ */ section([/* @__PURE__ */ cls(["py-12 border-t border-border"])])([/* @__PURE__ */ sectionHeader("method"), /* @__PURE__ */ codeBlock([/* @__PURE__ */ inlineCode("razorgirl on railgun ~"), /* @__PURE__ */ text5("\n"), /* @__PURE__ */ inlineCode("\u276F "), /* @__PURE__ */ code([/* @__PURE__ */ cls(["text-text"])])([/* @__PURE__ */ text5("ssh -A anywhere.straylight.software \\\n  'nix run -L github:straylight-software/isospin-builder -- nvidia-sdk | straylight-cas'")]), blockCursor]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["mt-6 text-text"])])([/* @__PURE__ */ keyword(1)("conceptual computers"), /* @__PURE__ */ text5(" are free now.")])]);
   var hero = /* @__PURE__ */ section([/* @__PURE__ */ cls(["py-24 pb-16 text-right"])])([rail, /* @__PURE__ */ h1([/* @__PURE__ */ cls(["text-text text-[2rem] font-medium mt-6"])])([/* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-primary"])])([/* @__PURE__ */ text5("//")]), /* @__PURE__ */ text5(" straylight "), /* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-primary"])])([/* @__PURE__ */ text5("//")]), /* @__PURE__ */ text5(" software "), /* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-primary"])])([/* @__PURE__ */ text5("//")])]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["h-[3px] rail mt-6"])])([]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["mt-12 text-left text-lg text-muted-foreground hover:text-text transition-colors duration-200 cursor-default"])])([/* @__PURE__ */ text5("the continuity project.")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["mt-6 text-left italic text-base02 text-[0.95rem] hover:text-text transition-colors duration-200 cursor-default"])])([/* @__PURE__ */ text5("continuity is continuity. continuity is continuity's job.")])]);
-  var render4 = /* @__PURE__ */ div_([hero, premise, primitives, method2]);
+  var render4 = /* @__PURE__ */ div_([hero, premise, primitives, method2, ultraviolence]);
   var homePage = /* @__PURE__ */ mkComponent({
     initialState: /* @__PURE__ */ $$const(unit),
     render: /* @__PURE__ */ $$const(render4),
@@ -7260,7 +7610,7 @@
 
   // output/Data.String.CodePoints/index.js
   var fromEnum2 = /* @__PURE__ */ fromEnum(boundedEnumChar);
-  var map18 = /* @__PURE__ */ map(functorMaybe);
+  var map19 = /* @__PURE__ */ map(functorMaybe);
   var unfoldr2 = /* @__PURE__ */ unfoldr(unfoldableArray);
   var div3 = /* @__PURE__ */ div(euclideanRingInt);
   var mod3 = /* @__PURE__ */ mod(euclideanRingInt);
@@ -7304,7 +7654,7 @@
     });
   };
   var unconsButWithTuple = function(s) {
-    return map18(function(v) {
+    return map19(function(v) {
       return new Tuple(v.head, v.tail);
     })(uncons4(s));
   };
@@ -7372,7 +7722,7 @@
   var elem3 = /* @__PURE__ */ elem2(eqString);
   var append12 = /* @__PURE__ */ append(semigroupArray);
   var intercalate3 = /* @__PURE__ */ intercalate2(monoidArray);
-  var map19 = /* @__PURE__ */ map(functorArray);
+  var map20 = /* @__PURE__ */ map(functorArray);
   var isWordBreak = function(c) {
     return c === " " || (c === "(" || (c === ")" || (c === "[" || (c === "]" || (c === "{" || (c === "}" || (c === ":" || (c === "," || (c === "\n" || (c === "\u27E8" || (c === "\u27E9" || (c === "\u2192" || (c === "\u2190" || (c === "\u2194" || (c === "\u2227" || (c === "\u2228" || (c === "\xAC" || (c === "\u2200" || (c === "\u2203" || (c === "=" || (c === "<" || (c === ">" || (c === "+" || (c === "-" || (c === "*" || (c === "/" || (c === "|" || c === "\xB7")))))))))))))))))))))))))));
   };
@@ -7595,7 +7945,7 @@
     throw new Error("Failed pattern match at Straylight.Pages.Lean.Highlight (line 55, column 1 - line 55, column 59): " + [line.constructor.name]);
   };
   var highlightLean = function(content3) {
-    return intercalate3([text5("\n")])(map19(highlightLine)(split("\n")(content3)));
+    return intercalate3([text5("\n")])(map20(highlightLine)(split("\n")(content3)));
   };
 
   // output/Straylight.Pages.Lean/index.js
@@ -7684,63 +8034,81 @@
   };
 
   // output/Straylight.Pages.Plan/index.js
-  var map20 = /* @__PURE__ */ map(functorArray);
-  var papers = /* @__PURE__ */ function() {
-    return [{
-      title: "The Villa Straylight Papers",
-      subtitle: "Jensen's Razor and the malevolent combinatorics of CUDA architecture.",
-      meta: "January 8, 2026 // 13 min read",
-      tags: ["CUDA", "NVIDIA", "TENSOR CORES", "NEUROMANCER"],
-      href: new Just("/plan/papers")
-    }, {
-      title: "Part I: The Rectilinear Chamber",
-      subtitle: "Layouts, Coordinate Spaces, and the CuTe Contract.",
-      meta: "January 8, 2026 // 5 min read",
-      tags: ["CUTE", "LAYOUTS", "LEAN"],
-      href: new Just("/plan/part-1")
-    }, {
-      title: "Part II: The Sense/Net Pyramid",
-      subtitle: "Coalescence, Noetherian Reduction, and Why the Gothic Folly Terminates.",
-      meta: "January 8, 2026 // 4 min read",
-      tags: ["COALESCENCE", "TERMINATION"],
-      href: new Just("/plan/part-2")
-    }, {
-      title: "Part III: Built Him up From Nothing",
-      subtitle: "Complementation, the FTTC, and the Holes in Your Iteration Space.",
-      meta: "January 8, 2026 // 4 min read",
-      tags: ["FTTC", "TMA", "HOLES"],
-      href: new Just("/plan/part-3")
-    }, {
-      title: "Part IV: Take Your Word, Thief",
-      subtitle: "Composition, the Tensor Core Cathedral, and Jensen's Razor.",
-      meta: "January 8, 2026 // 5 min read",
-      tags: ["RAZORGIRL", "COMPOSITION"],
-      href: new Just("/plan/part-4")
-    }, {
-      title: "Part V: VillaStraylight.lean",
-      subtitle: "21 theorems from nvfuser. 0 sorry. The blade studied you back.",
-      meta: "January 2026 // 1575 lines // Lean 4",
-      tags: ["LEAN4", "MATHLIB", "PROOFS"],
-      href: new Just("/plan/lean")
-    }];
+  var map21 = /* @__PURE__ */ map(functorArray);
+  var posts = [{
+    title: "The Villa Straylight Papers",
+    subtitle: "Jensen's Razor and the malevolent combinatorics of CUDA architecture. Encoding NVIDIA's theorems as types through Gibson's lens.",
+    date: "January 8, 2026",
+    readTime: "13 min",
+    postTags: ["CUDA", "NVIDIA", "Lean", "Formal Methods"],
+    href: "/plan/papers",
+    featured: true
+  }, {
+    title: "Part I: The Rectilinear Chamber",
+    subtitle: "Layouts, Coordinate Spaces, and the CuTe Contract. The tensor core at the center of the Gothic folly.",
+    date: "January 8, 2026",
+    readTime: "5 min",
+    postTags: ["CuTe", "Layouts", "Lean"],
+    href: "/plan/part-1",
+    featured: false
+  }, {
+    title: "Part II: The Sense/Net Pyramid",
+    subtitle: "Coalescence, Noetherian Reduction, and Why the Gothic Folly Terminates.",
+    date: "January 8, 2026",
+    readTime: "4 min",
+    postTags: ["Coalescence", "Termination"],
+    href: "/plan/part-2",
+    featured: false
+  }, {
+    title: "Part III: Built Him up From Nothing",
+    subtitle: "Complementation, the FTTC, and the Holes in Your Iteration Space. The theorem that should terrify you.",
+    date: "January 8, 2026",
+    readTime: "4 min",
+    postTags: ["FTTC", "TMA", "Holes"],
+    href: "/plan/part-3",
+    featured: false
+  }, {
+    title: "Part IV: Take Your Word, Thief",
+    subtitle: "Composition, the Tensor Core Cathedral, and Jensen's Razor. Never attribute to search what can be proven by construction.",
+    date: "January 8, 2026",
+    readTime: "5 min",
+    postTags: ["razorgirl", "Composition"],
+    href: "/plan/part-4",
+    featured: false
+  }];
+  var postTag = function(t) {
+    return span3([cls(["text-[0.7rem] text-primary/70"])])([text5("// " + t)]);
+  };
+  var postCard = function(post) {
+    return a([href4(post.href), cls(["block p-4 bg-card border-l-4 border-l-primary hover:border-l-status transition-colors group"])])([div2([cls(["flex items-baseline justify-between mb-1"])])([div2([cls(["text-text font-medium group-hover:text-primary transition-colors"])])([text5(post.title)]), div2([cls(["text-[0.75rem] text-muted-foreground"])])([text5(post.date)])]), div2([cls(["text-[0.85rem] text-muted-foreground mb-2"])])([text5(post.subtitle)]), div2([cls(["flex flex-wrap gap-2"])])(map21(postTag)(post.postTags))]);
+  };
+  var featuredCard = function(post) {
+    return a([href4(post.href), cls(["block mb-8 group"])])([div2([cls(["bg-card border border-border p-6 hover:border-primary transition-colors"])])([div2([cls(["flex items-center gap-2 mb-3"])])([span3([cls(["text-[0.7rem] text-primary uppercase tracking-wider"])])([text5("Featured")]), span3([cls(["text-[0.7rem] text-muted-foreground"])])([text5(post.date + (" // " + post.readTime))])]), h2([cls(["text-text text-[1.5rem] font-medium mb-2 group-hover:text-primary transition-colors"])])([text5(post.title)]), p([cls(["text-muted-foreground mb-4"])])([text5(post.subtitle)]), div2([cls(["flex flex-wrap gap-2"])])(map21(postTag)(post.postTags))])]);
+  };
+  var render7 = /* @__PURE__ */ function() {
+    var otherPosts = filter(function() {
+      var $8 = not(heytingAlgebraBoolean);
+      return function($9) {
+        return $8(function(v) {
+          return v.featured;
+        }($9));
+      };
+    }())(posts);
+    var featuredPost = head(filter(function(v) {
+      return v.featured;
+    })(posts));
+    return div_([sectionHeader(".plan"), p([cls(["mb-8 text-muted-foreground"])])([text5("it doesn't matter who we are. what matters is our .plan")]), function() {
+      if (featuredPost instanceof Just) {
+        return featuredCard(featuredPost.value0);
+      }
+      ;
+      if (featuredPost instanceof Nothing) {
+        return text5("");
+      }
+      ;
+      throw new Error("Failed pattern match at Straylight.Pages.Plan (line 92, column 7 - line 94, column 30): " + [featuredPost.constructor.name]);
+    }(), hr([cls(["uv-hr"])]), div2([cls(["flex flex-col gap-4"])])(map21(postCard)(otherPosts))]);
   }();
-  var cardContent = function(paper) {
-    return [div2([cls(["text-text font-medium mb-1"])])([text5(paper.title)]), div2([cls(["text-[0.85rem] text-muted-foreground mb-2"])])([text5(paper.subtitle)]), div2([cls(["text-[0.8rem] text-muted-foreground/70"])])([text5(paper.meta)]), div2([cls(["mt-2 text-[0.75rem]"])])(map20(function(tag) {
-      return span3([cls(["text-primary/80 mr-2"])])([text5("// " + tag)]);
-    })(paper.tags))];
-  };
-  var paperCard = function(paper) {
-    if (paper.href instanceof Just) {
-      return a([href4(paper.href.value0), cls(["block p-4 bg-card border-l-[3px] border-l-primary hover:bg-secondary transition-colors"])])(cardContent(paper));
-    }
-    ;
-    if (paper.href instanceof Nothing) {
-      return div2([cls(["block p-4 bg-card border-l-[3px] border-l-primary"])])(cardContent(paper));
-    }
-    ;
-    throw new Error("Failed pattern match at Straylight.Pages.Plan (line 87, column 3 - line 97, column 28): " + [paper.href.constructor.name]);
-  };
-  var render7 = /* @__PURE__ */ div_([/* @__PURE__ */ sectionHeader(".plan"), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["flex flex-col gap-4"])])(/* @__PURE__ */ map20(paperCard)(papers))]);
   var planPage = /* @__PURE__ */ mkComponent({
     initialState: /* @__PURE__ */ $$const(unit),
     render: /* @__PURE__ */ $$const(render7),
@@ -7748,21 +8116,10 @@
   });
 
   // output/Straylight.Pages.Razorgirl/index.js
-  var map21 = /* @__PURE__ */ map(functorArray);
   var quotes2 = [{
     source: "GIBSON",
     text: '"The Panther Moderns differ from other terrorists precisely in their degree of self-consciousness, in their awareness of the extent to which media divorce the act of terrorism from the original sociopolitical intent."',
     attribution: '"Skip it," Case said.',
-    accent: "primary"
-  }, {
-    source: "TESSIER-ASHPOOL",
-    text: '"Hans Becker is an Austrian video artist whose hallmark is an obsessive interrogation of rigidly delimited fields of visual information. His approaches range from classical montage to techniques borrowed from industrial espionage, deep-space imaging, and kino-archaeology."',
-    attribution: "\u2014 Antarctica Starts Here, Net library intro-critique",
-    accent: "status"
-  }, {
-    source: "GIBSON",
-    text: '"Cyberspace. A consensual hallucination experienced daily by billions of legitimate operators, in every nation."',
-    attribution: "",
     accent: "primary"
   }, {
     source: "GIBSON",
@@ -7776,14 +8133,14 @@
     accent: "primary"
   }];
   var quoteBlock = function(q2) {
-    return div2([cls(["bg-card border-l-[3px] px-6 py-4 my-6 quote-breathe", function() {
+    return div2([cls(["bg-card border-l-4 px-6 py-4 my-6 quote-breathe", function() {
       var $2 = q2.accent === "primary";
       if ($2) {
         return "border-l-primary";
       }
       ;
       return "border-l-status";
-    }()])])([div2([cls(["text-[0.75rem] text-muted-foreground uppercase tracking-wide mb-3 flex items-center gap-2"])])([span_([text5("i")]), text5(q2.source)]), div2([cls(["text-text italic text-[0.9rem] leading-relaxed"])])([text5(q2.text)]), function() {
+    }()])])([div2([cls(["text-[0.75rem] text-muted-foreground uppercase tracking-wide mb-3 flex items-center gap-2"])])([span3([cls(["text-primary"])])([text5("i")]), text5(q2.source)]), div2([cls(["text-text italic text-[0.9rem] leading-relaxed"])])([text5(q2.text)]), function() {
       var $3 = q2.attribution === "";
       if ($3) {
         return text5("");
@@ -7792,31 +8149,14 @@
       return div2([cls(["mt-3 text-muted-foreground text-[0.9rem]"])])([text5(q2.attribution)]);
     }()]);
   };
-  var assets = [{
-    filename: "wallpaper-razorgirl.svg",
-    href: "/assets/wallpaper-razorgirl.svg",
-    desc: "villa straylight. myelin tactics. svg."
-  }, {
-    filename: "wallpaper-continuity.svg",
-    href: "/assets/wallpaper-continuity.svg",
-    desc: "continuity is continuity. svg."
-  }, {
-    filename: "logo.svg",
-    href: "/assets/logo.svg",
-    desc: "vector mark. primary."
-  }, {
-    filename: "ono-sendai.svg",
-    href: "/assets/agency-sheet-ono-sendai.svg",
-    desc: "ono-sendai theme. base16."
-  }, {
-    filename: "maas.svg",
-    href: "/assets/agency-sheet-maas.svg",
-    desc: "maas neoform theme. base16."
-  }];
-  var assetRow = function(a2) {
-    return div2([cls(["grid grid-cols-[160px_1fr] gap-4 items-baseline group"])])([a([href4(a2.href), attr2("download")(""), cls(["text-text hover:text-primary transition-colors geo-hover"])])([text5(a2.filename)]), span3([cls(["text-muted-foreground group-hover:text-text/70 transition-colors"])])([text5(a2.desc)])]);
+  var assetCard = function(href5) {
+    return function(filename) {
+      return function(desc) {
+        return a([href4(href5), target5("_blank"), cls(["block bg-card border border-border hover:border-primary transition-all group"])])([div2([cls(["relative aspect-[16/9] bg-black/50 overflow-hidden"])])([img([src9(href5), alt5(filename), cls(["absolute inset-0 w-full h-full object-cover group-hover:scale-[1.02] transition-transform duration-200"])])]), div2([cls(["p-3"])])([div2([cls(["text-[0.8rem] text-text font-mono"])])([text5(filename)]), div2([cls(["text-[0.7rem] text-muted-foreground mt-1"])])([text5(desc)])])]);
+      };
+    };
   };
-  var render8 = /* @__PURE__ */ div_([/* @__PURE__ */ sectionHeader("razorgirl"), /* @__PURE__ */ p([/* @__PURE__ */ cls(["mb-4"])])([/* @__PURE__ */ text5("it was the style that mattered and the style was the same.")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["mb-8"])])([/* @__PURE__ */ text5("the moderns were mercenaries, practical jokers, "), /* @__PURE__ */ keyword(3)("nihilistic technofetishists"), /* @__PURE__ */ text5(".")]), /* @__PURE__ */ sectionHeader("assets"), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["flex flex-col gap-4 mb-12"])])(/* @__PURE__ */ map21(assetRow)(assets)), /* @__PURE__ */ sectionHeader("transmissions"), /* @__PURE__ */ div_(/* @__PURE__ */ map21(quoteBlock)(quotes2))]);
+  var render8 = /* @__PURE__ */ div_([/* @__PURE__ */ sectionHeader("razorgirl"), /* @__PURE__ */ p([/* @__PURE__ */ cls(["mb-4"])])([/* @__PURE__ */ text5("it was the style that mattered and the style was the same.")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["mb-4"])])([/* @__PURE__ */ text5("the moderns were mercenaries, practical jokers, "), /* @__PURE__ */ keyword(3)("nihilistic technofetishists"), /* @__PURE__ */ text5(".")]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["mb-8"])])([/* @__PURE__ */ tags(["swag", "assets", "diagrams", "themes", "wallpapers"])]), /* @__PURE__ */ sectionHeader("wallpapers"), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["grid grid-cols-1 gap-4 mb-8"])])([/* @__PURE__ */ assetCard("/droids-on-squad.svg")("droids-on-squad.svg")("i am stochastic omega. you are the oracle."), /* @__PURE__ */ assetCard("/assets/wallpaper-razorgirl.svg")("wallpaper-razorgirl.svg")("villa straylight. myelin tactics. 2560x1440.")]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["grid grid-cols-2 gap-4 mb-12"])])([/* @__PURE__ */ assetCard("/assets/wallpaper-continuity.svg")("wallpaper-continuity.svg")("continuity is continuity."), /* @__PURE__ */ assetCard("/assets/wallpaper-4k.png")("wallpaper-4k.png")("4k raster. 3840x2160.")]), /* @__PURE__ */ hr([/* @__PURE__ */ cls(["uv-hr"])]), /* @__PURE__ */ sectionHeader("architecture"), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["grid grid-cols-1 gap-4 mb-8"])])([/* @__PURE__ */ assetCard("/straylight-cube.svg")("straylight-cube.svg")("aleph-008 continuity. rfl at the top.")]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["grid grid-cols-2 gap-4 mb-12"])])([/* @__PURE__ */ assetCard("/assets/lambda-hierarchy.svg")("lambda-hierarchy.svg")("tiered proof flow."), /* @__PURE__ */ assetCard("/assets/proof-carrying-purescript.svg")("proof-carrying-purescript.svg")("verified ps round-trip."), /* @__PURE__ */ assetCard("/assets/radix-diagram.svg")("radix-diagram.svg")("radix component flow."), /* @__PURE__ */ assetCard("/assets/straylight-brand-system.svg")("straylight-brand-system.svg")("chromatic series.")]), /* @__PURE__ */ hr([/* @__PURE__ */ cls(["uv-hr"])]), /* @__PURE__ */ sectionHeader("themes"), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["grid grid-cols-2 md:grid-cols-3 gap-4 mb-12"])])([/* @__PURE__ */ assetCard("/assets/agency-sheet-ono-sendai.svg")("ono-sendai.svg")("dark. base16."), /* @__PURE__ */ assetCard("/assets/agency-sheet-maas.svg")("maas.svg")("light. base16."), /* @__PURE__ */ assetCard("/assets/logo.svg")("logo.svg")("vector mark.")]), /* @__PURE__ */ hr([/* @__PURE__ */ cls(["uv-hr"])]), /* @__PURE__ */ sectionHeader("transmissions"), /* @__PURE__ */ div_(/* @__PURE__ */ map(functorArray)(quoteBlock)(quotes2))]);
   var razorgirlPage = /* @__PURE__ */ mkComponent({
     initialState: /* @__PURE__ */ $$const(unit),
     render: /* @__PURE__ */ $$const(render8),
@@ -7824,26 +8164,49 @@
   });
 
   // output/Straylight.Pages.Software/index.js
+  var map23 = /* @__PURE__ */ map(functorArray);
   var projects = [{
+    name: "verified-purescript",
+    desc: "proof-carrying PureScript from Lean 4. 21 theorems, 0 sorry.",
+    category: "rfl"
+  }, {
+    name: "purescript-radix",
+    desc: "shadcn-style component generator. Lean 4 compiler, Halogen output.",
+    category: "rfl"
+  }, {
     name: "nix",
-    desc: "our fork. correct, modern, apolitical."
+    desc: "our fork. correct, modern, apolitical.",
+    category: "infra"
   }, {
     name: "aleph",
-    desc: "typed infrastructure. System F\u03C9. droids ship code that works."
-  }, {
-    name: "zeitschrift",
-    desc: "scope graph publishing. references resolve or the build fails."
+    desc: "typed infrastructure. System F\u03C9. droids ship code that works.",
+    category: "infra"
   }, {
     name: "isospin-microvm",
-    desc: "microvm orchestration. GPUs appear inside firecracker."
+    desc: "microvm orchestration. GPUs appear inside firecracker.",
+    category: "infra"
   }, {
     name: "hacker-flake",
-    desc: "nix flake for NVIDIA dev. just compile some shit."
+    desc: "nix flake for NVIDIA dev. just compile some shit.",
+    category: "tools"
+  }, {
+    name: "zeitschrift",
+    desc: "scope graph publishing. references resolve or the build fails.",
+    category: "tools"
   }];
   var projectRow = function(p2) {
     return div2([cls(["grid grid-cols-[140px_1fr] gap-4 items-baseline group"])])([a([href4("https://github.com/straylight-software/" + p2.name), target5("_blank"), rel4("noopener noreferrer"), cls(["text-text hover:text-primary transition-colors geo-hover"])])([text5(p2.name)]), span3([cls(["text-muted-foreground group-hover:text-text/70 transition-colors"])])([text5(p2.desc)])]);
   };
-  var render9 = /* @__PURE__ */ div_([/* @__PURE__ */ sectionHeader("software"), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["flex flex-col gap-6"])])(/* @__PURE__ */ map(functorArray)(projectRow)(projects))]);
+  var categoryHeader = function(title3) {
+    return div2([cls(["text-[0.75rem] text-primary uppercase tracking-wider mb-3"])])([text5("// " + title3)]);
+  };
+  var render9 = /* @__PURE__ */ div_([/* @__PURE__ */ sectionHeader("software"), /* @__PURE__ */ p([/* @__PURE__ */ cls(["mb-8 text-muted-foreground"])])([/* @__PURE__ */ text5("correct by construction. the result is saved.")]), /* @__PURE__ */ categoryHeader("rfl nexus"), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["flex flex-col gap-4 mb-8"])])(/* @__PURE__ */ map23(projectRow)(/* @__PURE__ */ filter(function(p2) {
+    return p2.category === "rfl";
+  })(projects))), /* @__PURE__ */ categoryHeader("infrastructure"), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["flex flex-col gap-4 mb-8"])])(/* @__PURE__ */ map23(projectRow)(/* @__PURE__ */ filter(function(p2) {
+    return p2.category === "infra";
+  })(projects))), /* @__PURE__ */ categoryHeader("tools"), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["flex flex-col gap-4"])])(/* @__PURE__ */ map23(projectRow)(/* @__PURE__ */ filter(function(p2) {
+    return p2.category === "tools";
+  })(projects)))]);
   var softwarePage = /* @__PURE__ */ mkComponent({
     initialState: /* @__PURE__ */ $$const(unit),
     render: /* @__PURE__ */ $$const(render9),
@@ -8033,7 +8396,7 @@
   var liftEffect6 = /* @__PURE__ */ liftEffect(monadEffectAff);
   var bind22 = /* @__PURE__ */ bind(bindEffect);
   var bind32 = /* @__PURE__ */ bind(bindMaybe);
-  var pure9 = /* @__PURE__ */ pure(applicativeAff);
+  var pure10 = /* @__PURE__ */ pure(applicativeAff);
   var void1 = /* @__PURE__ */ $$void(functorAff);
   var Initialize5 = /* @__PURE__ */ function() {
     function Initialize6() {
@@ -8096,22 +8459,33 @@
     ;
     throw new Error("Failed pattern match at Main (line 133, column 15 - line 140, column 24): " + [v.constructor.name]);
   };
+  var routeThemeLock = function(v) {
+    if (v instanceof Plan) {
+      return new Just("ono-memphis");
+    }
+    ;
+    if (v instanceof Lean) {
+      return new Just("ono-memphis");
+    }
+    ;
+    return Nothing.value;
+  };
   var handleAction4 = function(dictMonadAff) {
     var liftEffect12 = liftEffect(monadEffectHalogenM(dictMonadAff.MonadEffect0()));
     return function(v) {
       if (v instanceof Initialize5) {
         return bind7(liftEffect12(getPathname))(function(path) {
           return discard12(modify_6(function(v1) {
-            var $67 = {};
-            for (var $68 in v1) {
-              if ({}.hasOwnProperty.call(v1, $68)) {
-                $67[$68] = v1[$68];
+            var $69 = {};
+            for (var $70 in v1) {
+              if ({}.hasOwnProperty.call(v1, $70)) {
+                $69[$70] = v1[$70];
               }
               ;
             }
             ;
-            $67.route = parseRoute(path);
-            return $67;
+            $69.route = parseRoute(path);
+            return $69;
           }))(function() {
             return bind7(liftEffect12(create3))(function(v1) {
               return discard12(liftEffect12(onPopState(function(p2) {
@@ -8128,16 +8502,16 @@
         return discard12(liftEffect12(preventDefault(toEvent(v.value1))))(function() {
           return discard12(liftEffect12(pushState2(routeToPath(v.value0))))(function() {
             return modify_6(function(v1) {
-              var $73 = {};
-              for (var $74 in v1) {
-                if ({}.hasOwnProperty.call(v1, $74)) {
-                  $73[$74] = v1[$74];
+              var $75 = {};
+              for (var $76 in v1) {
+                if ({}.hasOwnProperty.call(v1, $76)) {
+                  $75[$76] = v1[$76];
                 }
                 ;
               }
               ;
-              $73.route = v.value0;
-              return $73;
+              $75.route = v.value0;
+              return $75;
             });
           });
         });
@@ -8145,16 +8519,16 @@
       ;
       if (v instanceof RouteChanged) {
         return modify_6(function(v1) {
-          var $78 = {};
-          for (var $79 in v1) {
-            if ({}.hasOwnProperty.call(v1, $79)) {
-              $78[$79] = v1[$79];
+          var $80 = {};
+          for (var $81 in v1) {
+            if ({}.hasOwnProperty.call(v1, $81)) {
+              $80[$81] = v1[$81];
             }
             ;
           }
           ;
-          $78.route = parseRoute(v.value0);
-          return $78;
+          $80.route = parseRoute(v.value0);
+          return $80;
         });
       }
       ;
@@ -8186,7 +8560,8 @@
     var header3 = header2(dictMonadAff);
     return function(state3) {
       return slot_1(_header)(unit)(header3)({
-        currentPath: routeToPath(state3.route)
+        currentPath: routeToPath(state3.route),
+        themeLock: routeThemeLock(state3.route)
       });
     };
   };
@@ -8260,7 +8635,7 @@
       return bind15(liftEffect6(querySelector("#straylight-app")(parent2)))(function(mbContainer) {
         var v = bind32(mbContainer)(fromElement);
         if (v instanceof Nothing) {
-          return pure9(unit);
+          return pure10(unit);
         }
         ;
         if (v instanceof Just) {

@@ -29,15 +29,20 @@ type State =
   { mobileMenuOpen :: Boolean
   , themeMenuOpen :: Boolean
   , currentTheme :: String
+  , themeLock :: Maybe String
   }
 
 data Action
   = Initialize
+  | Receive Input
   | ToggleMobileMenu
   | ToggleThemeMenu
   | SetTheme String
 
-type Input = { currentPath :: String }
+type Input = 
+  { currentPath :: String
+  , themeLock :: Maybe String  -- Just "ono-memphis" = page locks theme
+  }
 
 -- ============================================================
 -- COMPONENT
@@ -50,32 +55,63 @@ header = H.mkComponent
   , eval: H.mkEval H.defaultEval 
       { handleAction = handleAction
       , initialize = Just Initialize
+      , receive = Just <<< Receive
       }
   }
 
 initialState :: Input -> State
-initialState _ =
+initialState input =
   { mobileMenuOpen: false
   , themeMenuOpen: false
   , currentTheme: "ono-tuned"
+  , themeLock: input.themeLock
   }
 
 handleAction :: forall o m. MonadAff m => Action -> H.HalogenM State Action () o m Unit
 handleAction = case _ of
   Initialize -> do
-    theme <- liftEffect $ getStoredThemeImpl "ono-tuned"
-    liftEffect $ setThemeImpl theme
-    H.modify_ _ { currentTheme = theme }
+    state <- H.get
+    -- If page has theme lock, use that; otherwise use stored preference
+    case state.themeLock of
+      Just lockedTheme -> do
+        liftEffect $ setThemeImpl lockedTheme
+        H.modify_ _ { currentTheme = lockedTheme }
+      Nothing -> do
+        theme <- liftEffect $ getStoredThemeImpl "ono-tuned"
+        liftEffect $ setThemeImpl theme
+        H.modify_ _ { currentTheme = theme }
+
+  Receive input -> do
+    -- Update theme lock when navigating to new page
+    H.modify_ _ { themeLock = input.themeLock }
+    case input.themeLock of
+      Just lockedTheme -> do
+        liftEffect $ setThemeImpl lockedTheme
+        H.modify_ _ { currentTheme = lockedTheme }
+      Nothing -> do
+        -- Restore user preference when leaving locked page
+        theme <- liftEffect $ getStoredThemeImpl "ono-tuned"
+        liftEffect $ setThemeImpl theme
+        H.modify_ _ { currentTheme = theme }
 
   ToggleMobileMenu -> 
     H.modify_ \s -> s { mobileMenuOpen = not s.mobileMenuOpen }
   
-  ToggleThemeMenu ->
-    H.modify_ \s -> s { themeMenuOpen = not s.themeMenuOpen }
+  ToggleThemeMenu -> do
+    state <- H.get
+    -- Don't open theme menu if locked
+    case state.themeLock of
+      Just _ -> pure unit
+      Nothing -> H.modify_ \s -> s { themeMenuOpen = not s.themeMenuOpen }
   
   SetTheme theme -> do
-    liftEffect $ setThemeImpl theme
-    H.modify_ _ { currentTheme = theme, themeMenuOpen = false }
+    state <- H.get
+    -- Can't change theme if locked
+    case state.themeLock of
+      Just _ -> pure unit
+      Nothing -> do
+        liftEffect $ setThemeImpl theme
+        H.modify_ _ { currentTheme = theme, themeMenuOpen = false }
 
 -- ============================================================
 -- RENDER
@@ -132,9 +168,13 @@ render state =
 themeSwitcher :: forall m. State -> H.ComponentHTML Action () m
 themeSwitcher state =
   HH.div
-    [ cls [ "relative" ] ]
+    [ cls [ "relative flex items-center" ] ]
     [ HH.button
-        [ cls [ "text-text font-medium text-sm hover:text-primary transition-colors geo-hover cursor-pointer" ]
+        [ cls [ "text-text font-medium text-sm transition-colors geo-hover"
+              , case state.themeLock of
+                  Just _ -> "cursor-default"
+                  Nothing -> "hover:text-primary cursor-pointer"
+              ]
         , HE.onClick \_ -> ToggleThemeMenu
         , HP.type_ HP.ButtonButton
         ]
@@ -142,8 +182,32 @@ themeSwitcher state =
         , HH.text " straylight "
         , HH.span [ cls [ "text-primary" ] ] [ HH.text "//" ]
         ]
+    , themeLockIndicator state
     , if state.themeMenuOpen then themeMenu state else HH.text ""
     ]
+
+themeLockIndicator :: forall m. State -> H.ComponentHTML Action () m
+themeLockIndicator state =
+  case state.themeLock of
+    Nothing -> HH.text ""
+    Just lockedTheme ->
+      HH.span
+        [ cls [ "ml-4 text-[11px] text-muted-foreground" ] ]
+        [ HH.text (themeDisplayName lockedTheme)
+        , HH.span [ cls [ "ml-1 text-primary" ] ] [ HH.text "■" ]
+        ]
+
+themeDisplayName :: String -> String
+themeDisplayName = case _ of
+  "ono-tuned" -> "ono-tuned"
+  "ono-sprawl" -> "ono-sprawl"
+  "ono-memphis" -> "ono-memphis"
+  "ono-github" -> "ono-github"
+  "maas-neoform" -> "maas-neoform"
+  "maas-bioptic" -> "maas-bioptic"
+  "maas-ghost" -> "maas-ghost"
+  "maas-tessier" -> "maas-tessier"
+  other -> other
 
 themeMenu :: forall m. State -> H.ComponentHTML Action () m
 themeMenu state =

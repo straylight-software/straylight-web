@@ -32,3 +32,8 @@ next-env.d.ts
 
 # nix
 /result
+.nixd.json
+.nil.toml
+.direnv
+.devshell
+result

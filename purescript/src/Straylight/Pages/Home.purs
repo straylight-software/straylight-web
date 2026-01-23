@@ -7,6 +7,9 @@ import Halogen as H
 import Halogen.HTML as HH
 
 import Straylight.UI (cls, rail, keyword, sectionHeader, codeBlock, inlineCode, blockCursor)
+import Straylight.Components.Callout as Callout
+import Straylight.Components.Tag (tags)
+import Straylight.Components.StatusBlock as Status
 
 -- ============================================================
 -- COMPONENT
@@ -30,6 +33,7 @@ render =
     , premise
     , primitives
     , method
+    , ultraviolence
     ]
 
 -- ============================================================
@@ -129,5 +133,44 @@ method =
         [ cls [ "mt-6 text-text" ] ]
         [ keyword 1 "conceptual computers"
         , HH.text " are free now."
+        ]
+    ]
+
+ultraviolence :: forall w i. HH.HTML w i
+ultraviolence =
+  HH.section
+    [ cls [ "py-12 border-t border-border" ] ]
+    [ sectionHeader "ultraviolence"
+    , HH.div
+        [ cls [ "mb-6" ] ]
+        [ tags ["Lean", "CUDA", "Formal Methods", "rfl"] ]
+    , HH.div
+        [ cls [ "flex items-center gap-4 mb-6" ] ]
+        [ Status.nominal
+        , Status.degraded
+        , Status.offline
+        ]
+    , Callout.info "Gibson's Epigraph"
+        [ HH.p_
+            [ HH.em_ [ HH.text "\"The Villa Straylight is a body grown in upon itself, a Gothic folly. Each space in Straylight is in some way secret, this endless series of chambers linked by passages, by stairwells vaulted like intestines, where the eye is trapped in narrow curves, carried past ornate screens, empty alcoves.\"" ]
+            ]
+        ]
+    , Callout.warning "FTTC - Theorem 6"
+        [ HH.p_
+            [ HH.text "Theorem 6 describes when strong correctness is achievable. It is so powerful that it deserves a fancier name: "
+            , HH.strong_ [ HH.text "\"The fundamental theorem of TMA correctness.\"" ]
+            ]
+        ]
+    , Callout.danger "The Catch"
+        [ HH.p_
+            [ HH.text "NVIDIA documented when strong correctness is "
+            , HH.strong_ [ HH.text "impossible" ]
+            , HH.text ". And their stack doesn't always enforce these constraints as types. That's what we're fixing."
+            ]
+        ]
+    , Callout.tip "Tools of the Blade"
+        [ HH.p_ [ HH.strong_ [ HH.text "Lean 4" ], HH.text " for the proofs. The polyhedral model is lattices and affine spaces." ]
+        , HH.p_ [ HH.strong_ [ HH.text "Haskell" ], HH.text " for the glue. Algebraic data types for CuTe layouts." ]
+        , HH.p_ [ HH.strong_ [ HH.text "The blade" ], HH.text " for everything else." ]
         ]
     ]
