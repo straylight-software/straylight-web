@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080">
+  <defs>
+    <pattern id="grid" width="64" height="64" patternUnits="userSpaceOnUse">
+      <path d="M 64 0 L 0 0 0 64" fill="none" stroke="#596775" stroke-width="0.5" opacity="0.15"/>
+    </pattern>
+    <linearGradient id="glowGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#54aeff" stop-opacity="0"/>
+      <stop offset="50%" stop-color="#54aeff" stop-opacity="0.6"/>
+      <stop offset="100%" stop-color="#54aeff" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  
+  <rect width="1920" height="1080" fill="#111417"/>
+  <rect width="1920" height="1080" fill="url(#grid)"/>
+  
+  <!-- Subtle glow line -->
+  <rect x="0" y="538" width="1920" height="4" fill="url(#glowGrad)" opacity="0.4"/>
+  
+  <!-- Main text -->
+  <text x="960" y="480" text-anchor="middle" font-family="JetBrains Mono, SF Mono, Consolas, monospace" font-size="120" font-weight="600" fill="#54aeff">droids on squad</text>
+  
+  <!-- Straylight mark -->
+  <text x="960" y="620" text-anchor="middle" font-family="JetBrains Mono, SF Mono, Consolas, monospace" font-size="24" fill="#596775" letter-spacing="0.3em">// STRAYLIGHT //</text>
+  
+  <!-- Subtle corner marks -->
+  <path d="M 60 60 L 60 120 M 60 60 L 120 60" stroke="#54aeff" stroke-width="2" fill="none" opacity="0.4"/>
+  <path d="M 1860 60 L 1860 120 M 1860 60 L 1800 60" stroke="#54aeff" stroke-width="2" fill="none" opacity="0.4"/>
+  <path d="M 60 1020 L 60 960 M 60 1020 L 120 1020" stroke="#54aeff" stroke-width="2" fill="none" opacity="0.4"/>
+  <path d="M 1860 1020 L 1860 960 M 1860 1020 L 1800 1020" stroke="#54aeff" stroke-width="2" fill="none" opacity="0.4"/>
+  
+  <!-- Status indicator -->
+  <circle cx="960" cy="720" r="4" fill="#54aeff" opacity="0.8">
+    <animate attributeName="opacity" values="0.8;0.3;0.8" dur="2s" repeatCount="indefinite"/>
+  </circle>
+  
+  <!-- Footer -->
+  <text x="960" y="980" text-anchor="middle" font-family="JetBrains Mono, SF Mono, Consolas, monospace" font-size="14" fill="#596775" opacity="0.6">collaborators · 2026</text>
+</svg>
