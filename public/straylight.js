@@ -91,10 +91,10 @@
   };
   var applySecond = function(dictApply) {
     var apply1 = apply(dictApply);
-    var map24 = map(dictApply.Functor0());
+    var map25 = map(dictApply.Functor0());
     return function(a2) {
       return function(b2) {
-        return apply1(map24($$const(identity2))(a2))(b2);
+        return apply1(map25($$const(identity2))(a2))(b2);
       };
     };
   };
@@ -142,6 +142,26 @@
       return function(a2) {
         return apply2(pure12(f))(a2);
       };
+    };
+  };
+
+  // output/Control.Bind/foreign.js
+  var arrayBind = typeof Array.prototype.flatMap === "function" ? function(arr) {
+    return function(f) {
+      return arr.flatMap(f);
+    };
+  } : function(arr) {
+    return function(f) {
+      var result = [];
+      var l = arr.length;
+      for (var i2 = 0; i2 < l; i2++) {
+        var xs = f(arr[i2]);
+        var k = xs.length;
+        for (var j = 0; j < k; j++) {
+          result.push(xs[j]);
+        }
+      }
+      return result;
     };
   };
 
@@ -1769,10 +1789,10 @@
   var $$try = function(dictMonadError) {
     var catchError1 = catchError(dictMonadError);
     var Monad0 = dictMonadError.MonadThrow0().Monad0();
-    var map24 = map(Monad0.Bind1().Apply0().Functor0());
+    var map25 = map(Monad0.Bind1().Apply0().Functor0());
     var pure11 = pure(Monad0.Applicative0());
     return function(a2) {
-      return catchError1(map24(Right.create)(a2))(function($52) {
+      return catchError1(map25(Right.create)(a2))(function($52) {
         return pure11(Left.create($52));
       });
     };
@@ -4408,6 +4428,11 @@
   var length5 = function(s) {
     return s.length;
   };
+  var take2 = function(n) {
+    return function(s) {
+      return s.substr(0, n);
+    };
+  };
   var drop2 = function(n) {
     return function(s) {
       return s.substring(n);
@@ -4419,6 +4444,18 @@
     return function(s) {
       if (i2 >= 0 && i2 < s.length) return s.charAt(i2);
       throw new Error("Data.String.Unsafe.charAt: Invalid index.");
+    };
+  };
+
+  // output/Data.String.CodeUnits/index.js
+  var takeRight = function(i2) {
+    return function(s) {
+      return drop2(length5(s) - i2 | 0)(s);
+    };
+  };
+  var dropRight = function(i2) {
+    return function(s) {
+      return take2(length5(s) - i2 | 0)(s);
     };
   };
 
@@ -5829,6 +5866,7 @@
   var img = function(props) {
     return element2("img")(props)([]);
   };
+  var li = /* @__PURE__ */ element2("li");
   var main = /* @__PURE__ */ element2("main");
   var nav = /* @__PURE__ */ element2("nav");
   var p = /* @__PURE__ */ element2("p");
@@ -5839,6 +5877,7 @@
   var span_ = /* @__PURE__ */ span3([]);
   var strong = /* @__PURE__ */ element2("strong");
   var strong_ = /* @__PURE__ */ strong([]);
+  var ul = /* @__PURE__ */ element2("ul");
   var div2 = /* @__PURE__ */ element2("div");
   var div_ = /* @__PURE__ */ div2([]);
   var code = /* @__PURE__ */ element2("code");
@@ -6064,16 +6103,16 @@
       });
     };
   };
-  var evalQ = function(render11) {
+  var evalQ = function(render13) {
     return function(ref2) {
       return function(q2) {
         return bind12(liftEffect3(read(ref2)))(function(v) {
-          return evalM(render11)(ref2)(v["component"]["eval"](new Query(map13(Just.create)(liftCoyoneda(q2)), $$const(Nothing.value))));
+          return evalM(render13)(ref2)(v["component"]["eval"](new Query(map13(Just.create)(liftCoyoneda(q2)), $$const(Nothing.value))));
         });
       };
     };
   };
-  var evalM = function(render11) {
+  var evalM = function(render13) {
     return function(initRef) {
       return function(v) {
         var evalChildQuery = function(ref2) {
@@ -6083,7 +6122,7 @@
                 var evalChild = function(v3) {
                   return parallel3(bind12(liftEffect3(read(v3)))(function(dsx) {
                     return unDriverStateX(function(ds) {
-                      return evalQ(render11)(ds.selfRef)(v2.value1);
+                      return evalQ(render13)(ds.selfRef)(v2.value1);
                     })(dsx);
                   }));
                 };
@@ -6120,7 +6159,7 @@
                     lifecycleHandlers: v2.lifecycleHandlers,
                     state: v3.value1
                   })(ref2)))(function() {
-                    return discard1(handleLifecycle(v2.lifecycleHandlers)(render11(v2.lifecycleHandlers)(ref2)))(function() {
+                    return discard1(handleLifecycle(v2.lifecycleHandlers)(render13(v2.lifecycleHandlers)(ref2)))(function() {
                       return pure6(v3.value0);
                     });
                   });
@@ -6133,7 +6172,7 @@
             if (v1 instanceof Subscribe) {
               return bind12(fresh(SubscriptionId)(ref2))(function(sid) {
                 return bind12(liftEffect3(subscribe(v1.value0(sid))(function(act) {
-                  return handleAff(evalF(render11)(ref2)(new Action(act)));
+                  return handleAff(evalF(render13)(ref2)(new Action(act)));
                 })))(function(finalize) {
                   return bind12(liftEffect3(read(ref2)))(function(v2) {
                     return discard1(liftEffect3(modify_2(map22(insert4(sid)(finalize)))(v2.subscriptions)))(function() {
@@ -6170,7 +6209,7 @@
             ;
             if (v1 instanceof Par) {
               return sequential2(retractFreeAp2(hoistFreeAp(function() {
-                var $119 = evalM(render11)(ref2);
+                var $119 = evalM(render13)(ref2);
                 return function($120) {
                   return parallel3($119($120));
                 };
@@ -6184,7 +6223,7 @@
                     return bind12(fork3($$finally(liftEffect3(function __do2() {
                       modify_2($$delete2(fid))(v2.forks)();
                       return write(true)(doneRef)();
-                    }))(evalM(render11)(ref2)(v1.value0))))(function(fiber) {
+                    }))(evalM(render13)(ref2)(v1.value0))))(function(fiber) {
                       return discard1(liftEffect3(unlessM2(read(doneRef))(modify_2(insert12(fid)(fiber))(v2.forks))))(function() {
                         return pure6(v1.value1(fid));
                       });
@@ -6227,7 +6266,7 @@
       };
     };
   };
-  var evalF = function(render11) {
+  var evalF = function(render13) {
     return function(ref2) {
       return function(v) {
         if (v instanceof RefUpdate) {
@@ -6255,7 +6294,7 @@
         ;
         if (v instanceof Action) {
           return bind12(liftEffect3(read(ref2)))(function(v1) {
-            return evalM(render11)(ref2)(v1["component"]["eval"](new Action2(v.value0, unit)));
+            return evalM(render13)(ref2)(v1["component"]["eval"](new Action2(v.value0, unit)));
           });
         }
         ;
@@ -6326,7 +6365,7 @@
         var squashChildInitializers = function(lchs) {
           return function(preInits) {
             return unDriverStateX(function(st) {
-              var parentInitializer = evalM(render11)(st.selfRef)(st["component"]["eval"](new Initialize(unit)));
+              var parentInitializer = evalM(render13)(st.selfRef)(st["component"]["eval"](new Initialize(unit)));
               return modify_2(function(handlers) {
                 return {
                   initializers: new Cons(discard22(parSequence_3(reverse2(handlers.initializers)))(function() {
@@ -6356,7 +6395,7 @@
                     finalizers: pre2.finalizers
                   })(lchs)();
                   bindFlipped6(unDriverStateX(function() {
-                    var $63 = render11(lchs);
+                    var $63 = render13(lchs);
                     return function($64) {
                       return $63(function(v) {
                         return v.selfRef;
@@ -6389,7 +6428,7 @@
                                 return $65(slot.output($66));
                               };
                             }())();
-                            return handleAff(evalM(render11)(st.selfRef)(st["component"]["eval"](new Receive(slot.input, unit))))();
+                            return handleAff(evalM(render13)(st.selfRef)(st["component"]["eval"](new Receive(slot.input, unit))))();
                           };
                         })(dsx)();
                         return childrenIn.value0.value0;
@@ -6428,7 +6467,7 @@
             };
           };
         };
-        var render11 = function(lchs) {
+        var render13 = function(lchs) {
           return function($$var2) {
             return function __do2() {
               var v = read($$var2)();
@@ -6438,7 +6477,7 @@
               write(v.children)(v.childrenIn)();
               var handler3 = function() {
                 var $70 = queueOrRun(v.pendingHandlers);
-                var $71 = evalF(render11)(v.selfRef);
+                var $71 = evalF(render13)(v.selfRef);
                 return function($72) {
                   return $70($$void5($71($72)));
                 };
@@ -6507,7 +6546,7 @@
           return unDriverStateX(function(st) {
             return function __do2() {
               cleanupSubscriptionsAndForks(st)();
-              var f = evalM(render11)(st.selfRef)(st["component"]["eval"](new Finalize(unit)));
+              var f = evalM(render13)(st.selfRef)(st["component"]["eval"](new Finalize(unit)));
               modify_2(function(handlers) {
                 return {
                   initializers: handlers.initializers,
@@ -6531,7 +6570,7 @@
                   return pure1(Nothing.value);
                 }
                 ;
-                return evalQ(render11)(ref2)(q2);
+                return evalQ(render13)(ref2)(q2);
               });
             };
           };
@@ -6743,9 +6782,9 @@
             };
           });
           var patch = $lazy_patch(91);
-          var render11 = $lazy_render(82);
+          var render13 = $lazy_render(82);
           var renderComponentSlot = $lazy_renderComponentSlot(109);
-          return render11;
+          return render13;
         };
         var buildAttributes = buildProp(handler3);
         return {
@@ -6757,8 +6796,8 @@
     };
   };
   var renderSpec = function(document3) {
-    return function(container) {
-      var render11 = function(handler3) {
+    return function(container2) {
+      var render13 = function(handler3) {
         return function(child) {
           return function(v) {
             return function(v1) {
@@ -6768,7 +6807,7 @@
                   var spec = mkSpec(handler3)(renderChildRef)(document3);
                   var machine = buildVDom(spec)(v);
                   var node = extract2(machine);
-                  $$void6(appendChild(node)(toNode(container)))();
+                  $$void6(appendChild(node)(toNode(container2)))();
                   return {
                     machine,
                     node,
@@ -6799,7 +6838,7 @@
         };
       };
       return {
-        render: render11,
+        render: render13,
         renderChild: identity7,
         removeChild: removeChild3,
         dispose: removeChild3
@@ -6816,6 +6855,56 @@
     };
   };
 
+  // output/Hydrogen.Router/foreign.js
+  var getPathname = () => window.location.pathname;
+  var pushState2 = (path) => () => {
+    window.history.pushState({}, "", path);
+    window.dispatchEvent(new CustomEvent("straylight:routechange", { detail: path }));
+  };
+  var onPopState = (callback) => () => {
+    window.addEventListener("popstate", () => {
+      callback(window.location.pathname)();
+    });
+    window.addEventListener("straylight:routechange", (e) => {
+      callback(e.detail)();
+    });
+  };
+
+  // output/Hydrogen.Router/index.js
+  var routeToPath = function(dict) {
+    return dict.routeToPath;
+  };
+  var parseRoute = function(dict) {
+    return dict.parseRoute;
+  };
+  var normalizeTrailingSlash = function(v) {
+    if (v === "/") {
+      return "/";
+    }
+    ;
+    var $10 = takeRight(1)(v) === "/";
+    if ($10) {
+      return dropRight(1)(v);
+    }
+    ;
+    return v;
+  };
+
+  // output/Hydrogen.UI.Core/index.js
+  var svgNS = "http://www.w3.org/2000/svg";
+  var classes = /* @__PURE__ */ function() {
+    var $7 = intercalate2(monoidString)(" ");
+    var $8 = filter(function(v) {
+      return v !== "";
+    });
+    return function($9) {
+      return $7($8($9));
+    };
+  }();
+  var cls = function($10) {
+    return class_(ClassName(classes($10)));
+  };
+
   // output/Straylight.Layout.Footer/foreign.js
   var setIntervalImpl = function(ms) {
     return function(callback) {
@@ -6824,39 +6913,6 @@
       };
     };
   };
-
-  // output/Straylight.UI/index.js
-  var show2 = /* @__PURE__ */ show(showInt);
-  var svgNS = "http://www.w3.org/2000/svg";
-  var classes = /* @__PURE__ */ function() {
-    var $9 = intercalate2(monoidString)(" ");
-    var $10 = filter(function(v) {
-      return v !== "";
-    });
-    return function($11) {
-      return $9($10($11));
-    };
-  }();
-  var cls = function($12) {
-    return class_(ClassName(classes($12)));
-  };
-  var codeBlock = function(children2) {
-    return pre([cls(["bg-card p-4 overflow-x-auto text-[0.9rem] leading-relaxed"])])(children2);
-  };
-  var inlineCode = function(content3) {
-    return code([cls(["text-muted-foreground"])])([text5(content3)]);
-  };
-  var keyword = function(n) {
-    return function(content3) {
-      return span3([cls(["text-text keyword keyword-" + show2(n)])])([text5(content3)]);
-    };
-  };
-  var rail = /* @__PURE__ */ div2([/* @__PURE__ */ cls(["h-[3px] rail"])])([]);
-  var scanlineOverlay = /* @__PURE__ */ div2([/* @__PURE__ */ cls(["scanline-overlay"])])([]);
-  var sectionHeader = function(title3) {
-    return h2([cls(["text-primary text-[0.85rem] font-medium mb-6 lowercase section-header"])])([code_([text5("// " + title3)])]);
-  };
-  var blockCursor = /* @__PURE__ */ span3([/* @__PURE__ */ cls(["block-cursor"])])([]);
 
   // output/Straylight.Layout.Footer/index.js
   var bind4 = /* @__PURE__ */ bind(bindHalogenM);
@@ -7108,7 +7164,7 @@
       return span3([cls(["ml-4 text-[11px] text-muted-foreground"])])([text5(themeDisplayName(state3.themeLock.value0)), span3([cls(["ml-1 text-primary"])])([text5("\u25A0")])]);
     }
     ;
-    throw new Error("Failed pattern match at Straylight.Layout.Header (line 191, column 3 - line 198, column 10): " + [state3.themeLock.constructor.name]);
+    throw new Error("Failed pattern match at Straylight.Layout.Header (line 189, column 3 - line 196, column 10): " + [state3.themeLock.constructor.name]);
   };
   var themeSwitcher = function(state3) {
     return div2([cls(["relative flex items-center"])])([button([cls(["text-text font-medium text-sm transition-colors geo-hover", function() {
@@ -7120,7 +7176,7 @@
         return "hover:text-primary cursor-pointer";
       }
       ;
-      throw new Error("Failed pattern match at Straylight.Layout.Header (line 174, column 17 - line 176, column 65): " + [state3.themeLock.constructor.name]);
+      throw new Error("Failed pattern match at Straylight.Layout.Header (line 172, column 17 - line 174, column 65): " + [state3.themeLock.constructor.name]);
     }()]), onClick(function(v) {
       return ToggleThemeMenu.value;
     }), type_19(ButtonButton.value)])([span3([cls(["text-primary"])])([text5("//")]), text5(" straylight "), span3([cls(["text-primary"])])([text5("//")])]), themeLockIndicator(state3), function() {
@@ -7319,10 +7375,10 @@
       return a([href4(href5), target5("_blank"), rel4("noopener noreferrer"), cls(["text-muted-foreground text-[13px] hover:text-text transition-colors link-trace"])])([text5(label5)]);
     };
   };
-  var mobileMenu = /* @__PURE__ */ div2([/* @__PURE__ */ cls(["md:hidden py-4 border-t border-border mt-4"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["flex flex-col gap-4"])])([/* @__PURE__ */ navLink("/plan")(".plan"), /* @__PURE__ */ navLink("/razorgirl")("razorgirl"), /* @__PURE__ */ navLink("/software")("software"), /* @__PURE__ */ externalLink("https://github.com/straylight-software")("github"), /* @__PURE__ */ externalLink("https://tangled.sh/straylight.software")("tangled"), /* @__PURE__ */ navLink("/irc")("irc"), /* @__PURE__ */ navLink("/discord")("discord")])]);
+  var mobileMenu = /* @__PURE__ */ div2([/* @__PURE__ */ cls(["md:hidden py-4 border-t border-border mt-4"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["flex flex-col gap-4"])])([/* @__PURE__ */ navLink("/omega/code")("omega//code"), /* @__PURE__ */ navLink("/team")("team"), /* @__PURE__ */ navLink("/software")("software"), /* @__PURE__ */ externalLink("https://github.com/straylight-software")("github"), /* @__PURE__ */ navLink("/discord")("discord")])]);
   var closeIcon = /* @__PURE__ */ elementNS(svgNS)("svg")([/* @__PURE__ */ cls(["w-6 h-6"]), /* @__PURE__ */ attr2("fill")("none"), /* @__PURE__ */ attr2("stroke")("currentColor"), /* @__PURE__ */ attr2("viewBox")("0 0 24 24")])([/* @__PURE__ */ elementNS(svgNS)("path")([/* @__PURE__ */ attr2("stroke-linecap")("round"), /* @__PURE__ */ attr2("stroke-linejoin")("round"), /* @__PURE__ */ attr2("stroke-width")("2"), /* @__PURE__ */ attr2("d")("M6 18L18 6M6 6l12 12")])([])]);
   var render2 = function(state3) {
-    return header([cls(["sticky top-0 z-50 bg-background border-b border-border"])])([div2([cls(["max-w-[900px] mx-auto px-8 py-4"])])([div2([cls(["flex justify-between items-center"])])([themeSwitcher(state3), nav([cls(["hidden md:flex items-center gap-6"])])([navLink("/plan")(".plan"), navLink("/razorgirl")("razorgirl"), navLink("/software")("software"), externalLink("https://github.com/straylight-software")("github"), externalLink("https://tangled.sh/straylight.software")("tangled"), navLink("/irc")("irc"), navLink("/discord")("discord")]), div2([cls(["flex items-center gap-2 text-xs text-muted-foreground"])])([span3([cls(["w-2 h-2 bg-status inline-block status-pulse"])])([]), text5("NOMINAL")]), button([cls(["md:hidden p-2 cursor-pointer text-text"]), onClick(function(v) {
+    return header([cls(["sticky top-0 z-50 bg-background border-b border-border"])])([div2([cls(["max-w-[900px] mx-auto px-8 py-4"])])([div2([cls(["flex justify-between items-center"])])([themeSwitcher(state3), nav([cls(["hidden md:flex items-center gap-6"])])([navLink("/omega/code")("omega//code"), navLink("/team")("team"), navLink("/software")("software"), externalLink("https://github.com/straylight-software")("github"), navLink("/discord")("discord")]), div2([cls(["flex items-center gap-2 text-xs text-muted-foreground"])])([span3([cls(["w-2 h-2 bg-status inline-block status-pulse"])])([]), text5("NOMINAL")]), button([cls(["md:hidden p-2 cursor-pointer text-text"]), onClick(function(v) {
       return ToggleMobileMenu.value;
     }), type_19(ButtonButton.value)])([function() {
       if (state3.mobileMenuOpen) {
@@ -7354,6 +7410,26 @@
     });
   };
 
+  // output/Straylight.UI/index.js
+  var show2 = /* @__PURE__ */ show(showInt);
+  var sectionHeader = function(title3) {
+    return h2([cls(["text-primary text-[0.85rem] font-medium mb-6 lowercase section-header"])])([code_([text5("// " + title3)])]);
+  };
+  var scanlineOverlay = /* @__PURE__ */ div2([/* @__PURE__ */ cls(["scanline-overlay"])])([]);
+  var rail = /* @__PURE__ */ div2([/* @__PURE__ */ cls(["h-[3px] rail"])])([]);
+  var keyword = function(n) {
+    return function(content3) {
+      return span3([cls(["text-text keyword keyword-" + show2(n)])])([text5(content3)]);
+    };
+  };
+  var inlineCode = function(content3) {
+    return code([cls(["text-muted-foreground"])])([text5(content3)]);
+  };
+  var codeBlock = function(children2) {
+    return pre([cls(["bg-card p-4 overflow-x-auto text-[0.9rem] leading-relaxed"])])(children2);
+  };
+  var blockCursor = /* @__PURE__ */ span3([/* @__PURE__ */ cls(["block-cursor"])])([]);
+
   // output/Straylight.Pages.Discord/index.js
   var render3 = /* @__PURE__ */ div_([/* @__PURE__ */ sectionHeader("discord"), /* @__PURE__ */ p([/* @__PURE__ */ cls(["mb-6"])])([/* @__PURE__ */ text5("real-time coordination. less formal than irc.")]), /* @__PURE__ */ a([/* @__PURE__ */ href4("https://discord.gg/straylight"), /* @__PURE__ */ target5("_blank"), /* @__PURE__ */ rel4("noopener noreferrer"), /* @__PURE__ */ cls(["inline-block text-text hover:text-primary transition-colors geo-hover"])])([/* @__PURE__ */ text5("discord.gg/straylight")])]);
   var discordPage = /* @__PURE__ */ mkComponent({
@@ -7362,181 +7438,105 @@
     "eval": /* @__PURE__ */ mkEval(defaultEval)
   });
 
-  // output/Straylight.Components.Callout/index.js
-  var Info = /* @__PURE__ */ function() {
-    function Info2() {
-    }
-    ;
-    Info2.value = new Info2();
-    return Info2;
-  }();
-  var Warning = /* @__PURE__ */ function() {
-    function Warning2() {
-    }
-    ;
-    Warning2.value = new Warning2();
-    return Warning2;
-  }();
-  var Danger = /* @__PURE__ */ function() {
-    function Danger2() {
-    }
-    ;
-    Danger2.value = new Danger2();
-    return Danger2;
-  }();
-  var Tip = /* @__PURE__ */ function() {
-    function Tip2() {
-    }
-    ;
-    Tip2.value = new Tip2();
-    return Tip2;
-  }();
-  var variantIcon = function(v) {
-    if (v instanceof Info) {
-      return "i";
-    }
-    ;
-    if (v instanceof Warning) {
-      return "!";
-    }
-    ;
-    if (v instanceof Danger) {
-      return "!";
-    }
-    ;
-    if (v instanceof Tip) {
-      return "*";
-    }
-    ;
-    throw new Error("Failed pattern match at Straylight.Components.Callout (line 27, column 15 - line 31, column 13): " + [v.constructor.name]);
-  };
-  var variantClass = function(v) {
-    if (v instanceof Info) {
-      return "callout-info";
-    }
-    ;
-    if (v instanceof Warning) {
-      return "callout-warning";
-    }
-    ;
-    if (v instanceof Danger) {
-      return "callout-danger";
-    }
-    ;
-    if (v instanceof Tip) {
-      return "callout-tip";
-    }
-    ;
-    throw new Error("Failed pattern match at Straylight.Components.Callout (line 35, column 16 - line 39, column 23): " + [v.constructor.name]);
-  };
-  var callout = function(variant) {
-    return function(title3) {
-      return function(children2) {
-        return aside([class_("callout " + variantClass(variant)), attr2("role")("note")])([div2([class_("callout-title")])([span3([class_("callout-icon"), attr2("aria-hidden")("true")])([text5(variantIcon(variant))]), strong_([text5(title3)])]), div2([class_("callout-content")])(children2)]);
-      };
+  // output/Straylight.Pages.Home/index.js
+  var secondaryButton = function(href5) {
+    return function(label5) {
+      return a([href4(href5), target5("_blank"), rel4("noopener noreferrer"), cls(["inline-flex items-center justify-center px-6 py-3 border border-border text-text font-medium rounded-md hover:bg-card transition-colors"])])([text5(label5)]);
     };
   };
-  var danger = /* @__PURE__ */ function() {
-    return callout(Danger.value);
-  }();
-  var info2 = /* @__PURE__ */ function() {
-    return callout(Info.value);
-  }();
-  var tip = /* @__PURE__ */ function() {
-    return callout(Tip.value);
-  }();
-  var warning = /* @__PURE__ */ function() {
-    return callout(Warning.value);
-  }();
-
-  // output/Straylight.Components.StatusBlock/index.js
-  var Nominal = /* @__PURE__ */ function() {
-    function Nominal2() {
-    }
-    ;
-    Nominal2.value = new Nominal2();
-    return Nominal2;
-  }();
-  var Degraded = /* @__PURE__ */ function() {
-    function Degraded2() {
-    }
-    ;
-    Degraded2.value = new Degraded2();
-    return Degraded2;
-  }();
-  var Offline = /* @__PURE__ */ function() {
-    function Offline2() {
-    }
-    ;
-    Offline2.value = new Offline2();
-    return Offline2;
-  }();
-  var variantLabel = function(v) {
-    if (v instanceof Nominal) {
-      return "NOMINAL";
-    }
-    ;
-    if (v instanceof Degraded) {
-      return "DEGRADED";
-    }
-    ;
-    if (v instanceof Offline) {
-      return "OFFLINE";
-    }
-    ;
-    throw new Error("Failed pattern match at Straylight.Components.StatusBlock (line 31, column 16 - line 34, column 23): " + [v.constructor.name]);
-  };
-  var variantClass2 = function(v) {
-    if (v instanceof Nominal) {
-      return "uv-status-nominal";
-    }
-    ;
-    if (v instanceof Degraded) {
-      return "uv-status-degraded";
-    }
-    ;
-    if (v instanceof Offline) {
-      return "uv-status-offline";
-    }
-    ;
-    throw new Error("Failed pattern match at Straylight.Components.StatusBlock (line 24, column 16 - line 27, column 33): " + [v.constructor.name]);
-  };
-  var status = function(variant) {
-    return span3([class_("uv-status " + variantClass2(variant))])([span3([class_("uv-status-block")])([text5("\u2588")]), text5(" " + variantLabel(variant))]);
-  };
-  var offline = /* @__PURE__ */ function() {
-    return status(Offline.value);
-  }();
-  var nominal = /* @__PURE__ */ function() {
-    return status(Nominal.value);
-  }();
-  var degraded = /* @__PURE__ */ function() {
-    return status(Degraded.value);
-  }();
-
-  // output/Straylight.Components.Tag/index.js
-  var map18 = /* @__PURE__ */ map(functorArray);
-  var tag = function(content3) {
-    return span3([class_("uv-tag")])([text5(content3)]);
-  };
-  var tags = function(ts) {
-    return div2([class_("flex flex-wrap gap-2")])(map18(tag)(ts));
-  };
-
-  // output/Straylight.Pages.Home/index.js
-  var ultraviolence = /* @__PURE__ */ section([/* @__PURE__ */ cls(["py-12 border-t border-border"])])([/* @__PURE__ */ sectionHeader("ultraviolence"), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["mb-6"])])([/* @__PURE__ */ tags(["Lean", "CUDA", "Formal Methods", "rfl"])]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["flex items-center gap-4 mb-6"])])([nominal, degraded, offline]), /* @__PURE__ */ info2("Gibson's Epigraph")([/* @__PURE__ */ p_([/* @__PURE__ */ em_([/* @__PURE__ */ text5('"The Villa Straylight is a body grown in upon itself, a Gothic folly. Each space in Straylight is in some way secret, this endless series of chambers linked by passages, by stairwells vaulted like intestines, where the eye is trapped in narrow curves, carried past ornate screens, empty alcoves."')])])]), /* @__PURE__ */ warning("FTTC - Theorem 6")([/* @__PURE__ */ p_([/* @__PURE__ */ text5("Theorem 6 describes when strong correctness is achievable. It is so powerful that it deserves a fancier name: "), /* @__PURE__ */ strong_([/* @__PURE__ */ text5('"The fundamental theorem of TMA correctness."')])])]), /* @__PURE__ */ danger("The Catch")([/* @__PURE__ */ p_([/* @__PURE__ */ text5("NVIDIA documented when strong correctness is "), /* @__PURE__ */ strong_([/* @__PURE__ */ text5("impossible")]), /* @__PURE__ */ text5(". And their stack doesn't always enforce these constraints as types. That's what we're fixing.")])]), /* @__PURE__ */ tip("Tools of the Blade")([/* @__PURE__ */ p_([/* @__PURE__ */ strong_([/* @__PURE__ */ text5("Lean 4")]), /* @__PURE__ */ text5(" for the proofs. The polyhedral model is lattices and affine spaces.")]), /* @__PURE__ */ p_([/* @__PURE__ */ strong_([/* @__PURE__ */ text5("Haskell")]), /* @__PURE__ */ text5(" for the glue. Algebraic data types for CuTe layouts.")]), /* @__PURE__ */ p_([/* @__PURE__ */ strong_([/* @__PURE__ */ text5("The blade")]), /* @__PURE__ */ text5(" for everything else.")])])]);
-  var primitiveItem = function(n) {
+  var productCardLink = function(isSense) {
     return function(name15) {
       return function(desc) {
-        return div2([cls(["grid grid-cols-[140px_1fr] gap-4"])])([keyword(n)(name15), span_([text5(desc)])]);
+        return function(replaces) {
+          return function(href5) {
+            return a([href4(href5), cls(["block p-4 bg-card border border-border rounded-md transition-all group", function() {
+              if (isSense) {
+                return "hover:border-primary hover:bg-primary/5";
+              }
+              ;
+              return "hover:border-blue-300 hover:bg-blue-300/5";
+            }()])])([div2([cls(["flex items-baseline gap-2 mb-2"])])([span3([cls(["font-mono font-bold text-sm", function() {
+              if (isSense) {
+                return "text-primary";
+              }
+              ;
+              return "text-blue-300";
+            }()])])([text5("//")]), span3([cls(["font-semibold text-text group-hover:text-primary transition-colors", function() {
+              if (isSense) {
+                return "group-hover:text-primary";
+              }
+              ;
+              return "group-hover:text-blue-300";
+            }()])])([text5(name15)]), span3([cls(["ml-auto text-xs text-muted-foreground group-hover:text-text transition-colors"])])([text5("\u2192")])]), p([cls(["text-sm text-muted-foreground leading-relaxed mb-2"])])([text5(desc)]), p([cls(["font-mono text-[10px] text-muted-foreground/60"])])([span3([cls([function() {
+              if (isSense) {
+                return "text-primary/50";
+              }
+              ;
+              return "text-blue-300/50";
+            }()])])([text5("replaces ")]), text5(replaces)])]);
+          };
+        };
       };
     };
   };
-  var primitives = /* @__PURE__ */ section([/* @__PURE__ */ cls(["py-12 border-t border-border"])])([/* @__PURE__ */ sectionHeader("primitives"), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["flex flex-col gap-2"])])([/* @__PURE__ */ primitiveItem(5)("orthogonal.")("one thing, well."), /* @__PURE__ */ primitiveItem(6)("composable.")("outputs are inputs."), /* @__PURE__ */ primitiveItem(7)("deterministic.")("same input, same hash, same artifact.")])]);
-  var premise = /* @__PURE__ */ section([/* @__PURE__ */ cls(["py-12 border-t border-border"])])([/* @__PURE__ */ sectionHeader("premise"), /* @__PURE__ */ p([/* @__PURE__ */ cls(["mb-4"])])([/* @__PURE__ */ text5("all computations run on "), /* @__PURE__ */ keyword(1)("perfect conceptual computers"), /* @__PURE__ */ text5(".")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["mb-4"])])([/* @__PURE__ */ keyword(2)("correct by construction"), /* @__PURE__ */ text5(". the result is saved.")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["mb-4"])])([/* @__PURE__ */ text5("one "), /* @__PURE__ */ keyword(3)("content addressing"), /* @__PURE__ */ text5(" scheme. the hash is the artifact.")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["mb-4"])])([/* @__PURE__ */ keyword(4)("ca-derivations"), /* @__PURE__ */ text5(" and buck2 and bazel are supports for a coset. they can have the same cache keys.")]), /* @__PURE__ */ p_([/* @__PURE__ */ text5("who container registry. what nix cache. what waste.")])]);
-  var method2 = /* @__PURE__ */ section([/* @__PURE__ */ cls(["py-12 border-t border-border"])])([/* @__PURE__ */ sectionHeader("method"), /* @__PURE__ */ codeBlock([/* @__PURE__ */ inlineCode("razorgirl on railgun ~"), /* @__PURE__ */ text5("\n"), /* @__PURE__ */ inlineCode("\u276F "), /* @__PURE__ */ code([/* @__PURE__ */ cls(["text-text"])])([/* @__PURE__ */ text5("ssh -A anywhere.straylight.software \\\n  'nix run -L github:straylight-software/isospin-builder -- nvidia-sdk | straylight-cas'")]), blockCursor]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["mt-6 text-text"])])([/* @__PURE__ */ keyword(1)("conceptual computers"), /* @__PURE__ */ text5(" are free now.")])]);
-  var hero = /* @__PURE__ */ section([/* @__PURE__ */ cls(["py-24 pb-16 text-right"])])([rail, /* @__PURE__ */ h1([/* @__PURE__ */ cls(["text-text text-[2rem] font-medium mt-6"])])([/* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-primary"])])([/* @__PURE__ */ text5("//")]), /* @__PURE__ */ text5(" straylight "), /* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-primary"])])([/* @__PURE__ */ text5("//")]), /* @__PURE__ */ text5(" software "), /* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-primary"])])([/* @__PURE__ */ text5("//")])]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["h-[3px] rail mt-6"])])([]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["mt-12 text-left text-lg text-muted-foreground hover:text-text transition-colors duration-200 cursor-default"])])([/* @__PURE__ */ text5("the continuity project.")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["mt-6 text-left italic text-base02 text-[0.95rem] hover:text-text transition-colors duration-200 cursor-default"])])([/* @__PURE__ */ text5("continuity is continuity. continuity is continuity's job.")])]);
-  var render4 = /* @__PURE__ */ div_([hero, premise, primitives, method2, ultraviolence]);
+  var productCard = function(isSense) {
+    return function(name15) {
+      return function(desc) {
+        return function(replaces) {
+          return div2([cls(["p-4 bg-card border border-border rounded-md transition-all hover:border-opacity-50 group", function() {
+            if (isSense) {
+              return "hover:border-primary";
+            }
+            ;
+            return "hover:border-blue-300";
+          }()])])([div2([cls(["flex items-baseline gap-2 mb-2"])])([span3([cls(["font-mono font-bold text-sm", function() {
+            if (isSense) {
+              return "text-primary";
+            }
+            ;
+            return "text-blue-300";
+          }()])])([text5("//")]), span3([cls(["font-semibold text-text"])])([text5(name15)])]), p([cls(["text-sm text-muted-foreground leading-relaxed mb-2"])])([text5(desc)]), p([cls(["font-mono text-[10px] text-muted-foreground/60"])])([span3([cls([function() {
+            if (isSense) {
+              return "text-primary/50";
+            }
+            ;
+            return "text-blue-300/50";
+          }()])])([text5("replaces ")]), text5(replaces)])]);
+        };
+      };
+    };
+  };
+  var primaryButton = function(href5) {
+    return function(label5) {
+      return a([href4(href5), cls(["inline-flex items-center justify-center px-6 py-3 bg-primary text-background font-medium rounded-md hover:bg-primary/90 transition-colors"])])([text5(label5)]);
+    };
+  };
+  var cta = /* @__PURE__ */ section([/* @__PURE__ */ cls(["py-24 border-t border-border"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["text-center"])])([/* @__PURE__ */ h2([/* @__PURE__ */ cls(["text-3xl font-bold text-text mb-4"])])([/* @__PURE__ */ text5("Ready to ship?")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-muted-foreground mb-8 max-w-xl mx-auto"])])([/* @__PURE__ */ text5("omega//code is in private beta. Join the waitlist or check out our open source work.")]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["flex flex-col sm:flex-row items-center justify-center gap-4"])])([/* @__PURE__ */ primaryButton("/omega/code")("Learn about omega//code"), /* @__PURE__ */ secondaryButton("https://github.com/straylight-software")("GitHub")])])]);
+  var brandHeader = function(name15) {
+    return function(desc) {
+      return function(isSense) {
+        return div2([cls(["flex items-baseline gap-3 mb-5"])])([span3([cls(["font-mono font-bold text-sm tracking-wide", function() {
+          if (isSense) {
+            return "text-primary";
+          }
+          ;
+          return "text-blue-300";
+        }()])])([text5(name15)]), span3([cls(["text-sm text-muted-foreground italic"])])([text5(desc)])]);
+      };
+    };
+  };
+  var badge = function(label5) {
+    return span3([cls(["inline-block px-3 py-1 bg-primary/10 border border-primary/20 rounded-full text-primary text-sm font-medium mb-6"])])([text5(label5)]);
+  };
+  var hero = /* @__PURE__ */ section([/* @__PURE__ */ cls(["py-24 md:py-32"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["text-center"])])([/* @__PURE__ */ badge("Q1 2026 \xB7 February \u2013 March"), /* @__PURE__ */ h1([/* @__PURE__ */ cls(["text-4xl md:text-6xl font-bold text-text mb-6 leading-tight"])])([/* @__PURE__ */ text5("Product Map")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-xl text-primary max-w-2xl mx-auto"])])([/* @__PURE__ */ text5("Two product families. Ten external products. One attestation layer.")])])]);
+  var archPill = function(name15) {
+    return function(label5) {
+      return span3([cls(["text-blue-300 px-3 py-1.5 border border-border rounded-md"])])([text5(name15 + " "), span3([cls(["text-muted-foreground text-[9px]"])])([text5(label5)])]);
+    };
+  };
+  var sharedArchitecture = /* @__PURE__ */ div2([/* @__PURE__ */ cls(["mt-6 p-5 border border-border rounded-md bg-card"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["font-mono text-[10px] text-muted-foreground text-center mb-4 tracking-widest"])])([/* @__PURE__ */ text5("SHARED ARCHITECTURE")]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["flex justify-center items-center gap-2 font-mono text-xs"])])([/* @__PURE__ */ archPill("code")("TUI"), /* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-muted-foreground"])])([/* @__PURE__ */ text5("\u2572")]), /* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-text px-4 py-2 border border-primary rounded-md bg-primary/10 font-medium"])])([/* @__PURE__ */ text5("Agent Engine")]), /* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-muted-foreground"])])([/* @__PURE__ */ text5("\u2571")]), /* @__PURE__ */ archPill("work")("Electron")]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["text-center mt-4 font-mono text-[9px] text-muted-foreground"])])([/* @__PURE__ */ text5("weapon-server \xB7 95 endpoints \xB7 221 property tests \xB7 SIGIL protocol")])]);
+  var productMap = /* @__PURE__ */ section([/* @__PURE__ */ cls(["py-16 border-t border-border"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["grid grid-cols-1 lg:grid-cols-2 gap-12"])])([/* @__PURE__ */ div_([/* @__PURE__ */ brandHeader("SENSE // NET")("Build infrastructure")(true), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["flex flex-col gap-3"])])([/* @__PURE__ */ productCard(true)("Cache")("Attestation-aware binary cache & artifact store. Content-addressed. Post-quantum signatures.")("Cachix, S3 artifact buckets"), /* @__PURE__ */ productCard(true)("Build")("Typed build system with formal verification. Dhall configs. Lean4-proven derivations.")("Bazel, Buck2, Nix expressions"), /* @__PURE__ */ productCard(true)("Converge")("Typed infrastructure-as-code. Desired-state convergence. No state files, no drift.")("Terraform, Pulumi, Ansible"), /* @__PURE__ */ productCard(true)("Confirm")("CI with proof obligations. Typed Dhall pipelines. Agent code faces higher review burden.")("GitHub Actions, CircleCI, Jenkins"), /* @__PURE__ */ productCard(true)("Forge")("Code hosting + review. Stacked diffs, not PRs. jujutsu first-class. Agent-era design.")("GitHub, Graphite, Phabricator"), /* @__PURE__ */ productCard(true)("Publish")("Scope-graph documentation. References resolve or the build fails. Cross-language. Machine-readable.")("rustdoc, Haddock, typedoc, Doxygen")])]), /* @__PURE__ */ div_([/* @__PURE__ */ brandHeader("// \u03A9 //")("Agent infrastructure")(false), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["flex flex-col gap-3"])])([/* @__PURE__ */ productCardLink(false)("code")("Native terminal AI coding agent. Haskell + Brick TUI. io_uring event loop. 509k req/s. SIGIL-native.")("Claude Code, Cursor, Windsurf, Aider")("/omega/code"), /* @__PURE__ */ productCard(false)("work")("Electron desktop app for non-coders. Same agent engine, GUI surface. For PMs, designers, analysts, ops.")("ChatGPT desktop, Claude desktop (for teams)"), /* @__PURE__ */ productCard(false)("proxy")("Verified inference proxy. jaylene-slide ingress: SSE \u2192 SIGIL over ZeroMQ. Reset-on-ambiguity. 200\u2013600% wire compression.")("LiteLLM, raw OpenAI SDK, broken tool calls"), /* @__PURE__ */ productCard(false)("boost")("Managed inference co-located with BYOK vendor. evring HTTP/1.1+2+3 stack. Custom CUTLASS 3.x sm_120 kernels.")("Self-hosted vLLM, raw provider APIs")]), sharedArchitecture])])]);
+  var render4 = /* @__PURE__ */ div_([hero, productMap, cta]);
   var homePage = /* @__PURE__ */ mkComponent({
     initialState: /* @__PURE__ */ $$const(unit),
     render: /* @__PURE__ */ $$const(render4),
@@ -7545,12 +7545,12 @@
 
   // output/Straylight.Pages.Irc/index.js
   var webchatUrl = "https://web.libera.chat/#straylight";
-  var row = function(label5) {
+  var row2 = function(label5) {
     return function(value12) {
       return div2([cls(["grid grid-cols-[100px_1fr] gap-4 items-baseline"])])([span3([cls(["text-text"])])([text5(label5)]), span3([cls(["text-muted-foreground"])])([text5(value12)])]);
     };
   };
-  var render5 = /* @__PURE__ */ div_([/* @__PURE__ */ sectionHeader("irc"), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["flex flex-col gap-4 mb-6"])])([/* @__PURE__ */ row("network")("libera.chat"), /* @__PURE__ */ row("channel")("#straylight")]), /* @__PURE__ */ a([/* @__PURE__ */ href4(webchatUrl), /* @__PURE__ */ target5("_blank"), /* @__PURE__ */ rel4("noopener"), /* @__PURE__ */ cls(["inline-block px-4 py-2 border border-border text-text hover:bg-accent transition-colors"])])([/* @__PURE__ */ text5("open webchat")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["mt-6 text-[0.85rem] text-muted-foreground"])])([/* @__PURE__ */ text5("or connect with your client:")]), /* @__PURE__ */ codeBlock([/* @__PURE__ */ inlineCode("/connect"), /* @__PURE__ */ text5(" irc.libera.chat\n"), /* @__PURE__ */ inlineCode("/join"), /* @__PURE__ */ text5(" #straylight")])]);
+  var render5 = /* @__PURE__ */ div_([/* @__PURE__ */ sectionHeader("irc"), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["flex flex-col gap-4 mb-6"])])([/* @__PURE__ */ row2("network")("libera.chat"), /* @__PURE__ */ row2("channel")("#straylight")]), /* @__PURE__ */ a([/* @__PURE__ */ href4(webchatUrl), /* @__PURE__ */ target5("_blank"), /* @__PURE__ */ rel4("noopener"), /* @__PURE__ */ cls(["inline-block px-4 py-2 border border-border text-text hover:bg-accent transition-colors"])])([/* @__PURE__ */ text5("open webchat")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["mt-6 text-[0.85rem] text-muted-foreground"])])([/* @__PURE__ */ text5("or connect with your client:")]), /* @__PURE__ */ codeBlock([/* @__PURE__ */ inlineCode("/connect"), /* @__PURE__ */ text5(" irc.libera.chat\n"), /* @__PURE__ */ inlineCode("/join"), /* @__PURE__ */ text5(" #straylight")])]);
   var ircPage = /* @__PURE__ */ mkComponent({
     initialState: /* @__PURE__ */ $$const(unit),
     render: /* @__PURE__ */ $$const(render5),
@@ -7610,7 +7610,7 @@
 
   // output/Data.String.CodePoints/index.js
   var fromEnum2 = /* @__PURE__ */ fromEnum(boundedEnumChar);
-  var map19 = /* @__PURE__ */ map(functorMaybe);
+  var map18 = /* @__PURE__ */ map(functorMaybe);
   var unfoldr2 = /* @__PURE__ */ unfoldr(unfoldableArray);
   var div3 = /* @__PURE__ */ div(euclideanRingInt);
   var mod3 = /* @__PURE__ */ mod(euclideanRingInt);
@@ -7654,7 +7654,7 @@
     });
   };
   var unconsButWithTuple = function(s) {
-    return map19(function(v) {
+    return map18(function(v) {
       return new Tuple(v.head, v.tail);
     })(uncons4(s));
   };
@@ -7722,7 +7722,7 @@
   var elem3 = /* @__PURE__ */ elem2(eqString);
   var append12 = /* @__PURE__ */ append(semigroupArray);
   var intercalate3 = /* @__PURE__ */ intercalate2(monoidArray);
-  var map20 = /* @__PURE__ */ map(functorArray);
+  var map19 = /* @__PURE__ */ map(functorArray);
   var isWordBreak = function(c) {
     return c === " " || (c === "(" || (c === ")" || (c === "[" || (c === "]" || (c === "{" || (c === "}" || (c === ":" || (c === "," || (c === "\n" || (c === "\u27E8" || (c === "\u27E9" || (c === "\u2192" || (c === "\u2190" || (c === "\u2194" || (c === "\u2227" || (c === "\u2228" || (c === "\xAC" || (c === "\u2200" || (c === "\u2203" || (c === "=" || (c === "<" || (c === ">" || (c === "+" || (c === "-" || (c === "*" || (c === "/" || (c === "|" || c === "\xB7")))))))))))))))))))))))))));
   };
@@ -7945,7 +7945,7 @@
     throw new Error("Failed pattern match at Straylight.Pages.Lean.Highlight (line 55, column 1 - line 55, column 59): " + [line.constructor.name]);
   };
   var highlightLean = function(content3) {
-    return intercalate3([text5("\n")])(map20(highlightLine)(split("\n")(content3)));
+    return intercalate3([text5("\n")])(map19(highlightLine)(split("\n")(content3)));
   };
 
   // output/Straylight.Pages.Lean/index.js
@@ -8034,7 +8034,7 @@
   };
 
   // output/Straylight.Pages.Plan/index.js
-  var map21 = /* @__PURE__ */ map(functorArray);
+  var map20 = /* @__PURE__ */ map(functorArray);
   var posts = [{
     title: "The Villa Straylight Papers",
     subtitle: "Jensen's Razor and the malevolent combinatorics of CUDA architecture. Encoding NVIDIA's theorems as types through Gibson's lens.",
@@ -8080,10 +8080,10 @@
     return span3([cls(["text-[0.7rem] text-primary/70"])])([text5("// " + t)]);
   };
   var postCard = function(post) {
-    return a([href4(post.href), cls(["block p-4 bg-card border-l-4 border-l-primary hover:border-l-status transition-colors group"])])([div2([cls(["flex items-baseline justify-between mb-1"])])([div2([cls(["text-text font-medium group-hover:text-primary transition-colors"])])([text5(post.title)]), div2([cls(["text-[0.75rem] text-muted-foreground"])])([text5(post.date)])]), div2([cls(["text-[0.85rem] text-muted-foreground mb-2"])])([text5(post.subtitle)]), div2([cls(["flex flex-wrap gap-2"])])(map21(postTag)(post.postTags))]);
+    return a([href4(post.href), cls(["block p-4 bg-card border-l-4 border-l-primary hover:border-l-status transition-colors group"])])([div2([cls(["flex items-baseline justify-between mb-1"])])([div2([cls(["text-text font-medium group-hover:text-primary transition-colors"])])([text5(post.title)]), div2([cls(["text-[0.75rem] text-muted-foreground"])])([text5(post.date)])]), div2([cls(["text-[0.85rem] text-muted-foreground mb-2"])])([text5(post.subtitle)]), div2([cls(["flex flex-wrap gap-2"])])(map20(postTag)(post.postTags))]);
   };
   var featuredCard = function(post) {
-    return a([href4(post.href), cls(["block mb-8 group"])])([div2([cls(["bg-card border border-border p-6 hover:border-primary transition-colors"])])([div2([cls(["flex items-center gap-2 mb-3"])])([span3([cls(["text-[0.7rem] text-primary uppercase tracking-wider"])])([text5("Featured")]), span3([cls(["text-[0.7rem] text-muted-foreground"])])([text5(post.date + (" // " + post.readTime))])]), h2([cls(["text-text text-[1.5rem] font-medium mb-2 group-hover:text-primary transition-colors"])])([text5(post.title)]), p([cls(["text-muted-foreground mb-4"])])([text5(post.subtitle)]), div2([cls(["flex flex-wrap gap-2"])])(map21(postTag)(post.postTags))])]);
+    return a([href4(post.href), cls(["block mb-8 group"])])([div2([cls(["bg-card border border-border p-6 hover:border-primary transition-colors"])])([div2([cls(["flex items-center gap-2 mb-3"])])([span3([cls(["text-[0.7rem] text-primary uppercase tracking-wider"])])([text5("Featured")]), span3([cls(["text-[0.7rem] text-muted-foreground"])])([text5(post.date + (" // " + post.readTime))])]), h2([cls(["text-text text-[1.5rem] font-medium mb-2 group-hover:text-primary transition-colors"])])([text5(post.title)]), p([cls(["text-muted-foreground mb-4"])])([text5(post.subtitle)]), div2([cls(["flex flex-wrap gap-2"])])(map20(postTag)(post.postTags))])]);
   };
   var render7 = /* @__PURE__ */ function() {
     var otherPosts = filter(function() {
@@ -8107,13 +8107,118 @@
       }
       ;
       throw new Error("Failed pattern match at Straylight.Pages.Plan (line 92, column 7 - line 94, column 30): " + [featuredPost.constructor.name]);
-    }(), hr([cls(["uv-hr"])]), div2([cls(["flex flex-col gap-4"])])(map21(postCard)(otherPosts))]);
+    }(), hr([cls(["uv-hr"])]), div2([cls(["flex flex-col gap-4"])])(map20(postCard)(otherPosts))]);
   }();
   var planPage = /* @__PURE__ */ mkComponent({
     initialState: /* @__PURE__ */ $$const(unit),
     render: /* @__PURE__ */ $$const(render7),
     "eval": /* @__PURE__ */ mkEval(defaultEval)
   });
+
+  // output/Straylight.Pages.Products.OmegaCode/index.js
+  var show3 = /* @__PURE__ */ show(showInt);
+  var div4 = /* @__PURE__ */ div(euclideanRingInt);
+  var map21 = /* @__PURE__ */ map(functorArray);
+  var throughputBar = function(label5) {
+    return function(value12) {
+      return function(color) {
+        return div_([div2([cls(["flex justify-between text-sm mb-2"])])([span3([cls(["text-muted-foreground"])])([text5(label5)]), span3([cls([color, "font-mono"])])([text5(show3(value12) + "k")])]), div2([cls(["h-4 bg-background rounded-full overflow-hidden"])])([div2([cls(["h-full rounded-full transition-all duration-1000", function() {
+          var $7 = value12 > 200;
+          if ($7) {
+            return "bg-blue-300";
+          }
+          ;
+          return "bg-muted-foreground/50";
+        }()]), style("width: " + (show3(div4(value12 * 100 | 0)(509)) + "%"))])([])])]);
+      };
+    };
+  };
+  var secondaryButton2 = function(href5) {
+    return function(label5) {
+      return a([href4(href5), target5("_blank"), rel4("noopener noreferrer"), cls(["inline-flex items-center justify-center px-6 py-3 border border-border text-text font-medium rounded-md hover:bg-card transition-colors"])])([text5(label5)]);
+    };
+  };
+  var proofCard = function(value12) {
+    return function(label5) {
+      return div2([cls(["bg-card border border-border rounded-lg p-6 text-center"])])([p([cls(["text-2xl font-bold text-blue-300 mb-1"])])([text5(value12)]), p([cls(["text-sm text-muted-foreground"])])([text5(label5)])]);
+    };
+  };
+  var primaryButton2 = function(href5) {
+    return function(label5) {
+      return a([href4(href5), cls(["inline-flex items-center justify-center px-6 py-3 bg-blue-300 text-background font-medium rounded-md hover:bg-blue-300/90 transition-colors"])])([text5(label5)]);
+    };
+  };
+  var featureItem = function(text6) {
+    return li([cls(["flex items-start gap-3"])])([span3([cls(["text-blue-300 mt-1"])])([text5("+")]), span3([cls(["text-muted-foreground"])])([text5(text6)])]);
+  };
+  var featureList = function(items2) {
+    return ul([cls(["space-y-3"])])(map21(featureItem)(items2));
+  };
+  var cta2 = /* @__PURE__ */ section([/* @__PURE__ */ cls(["py-24 border-t border-border"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["text-center"])])([/* @__PURE__ */ h2([/* @__PURE__ */ cls(["text-3xl font-bold text-text mb-4"])])([/* @__PURE__ */ text5("Ready to try it?")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-muted-foreground mb-8 max-w-xl mx-auto"])])([/* @__PURE__ */ text5("omega//code is in private beta. Join the waitlist or check out the source.")]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["flex flex-col sm:flex-row items-center justify-center gap-4"])])([/* @__PURE__ */ primaryButton2("/waitlist")("Join waitlist"), /* @__PURE__ */ secondaryButton2("https://github.com/straylight-software")("View on GitHub")])])]);
+  var crewAgent = function(name15) {
+    return function(_task) {
+      return function(status2) {
+        return div2([cls(["flex items-center justify-between p-3 bg-background rounded"])])([div2([cls(["flex items-center gap-3"])])([span3([cls(["w-2 h-2 rounded-full", function() {
+          var $8 = status2 === "complete \u2713";
+          if ($8) {
+            return "bg-green-500";
+          }
+          ;
+          return "bg-blue-300 animate-pulse";
+        }()])])([]), span3([cls(["font-mono text-sm text-text"])])([text5(name15)])]), span3([cls(["text-xs text-muted-foreground"])])([text5(status2)])]);
+      };
+    };
+  };
+  var codeBlock2 = function(children2) {
+    return pre([cls(["font-mono text-sm leading-relaxed"])])(children2);
+  };
+  var benchItem = function(value12) {
+    return function(label5) {
+      return div2([cls(["bg-card border border-border rounded-lg p-6 text-center hover:border-blue-300/50 transition-colors"])])([div2([cls(["font-mono font-bold text-3xl text-blue-300 mb-1"])])([text5(value12)]), div2([cls(["font-mono text-xs text-muted-foreground"])])([text5(label5)])]);
+    };
+  };
+  var benchmarks = /* @__PURE__ */ section([/* @__PURE__ */ cls(["py-16 border-t border-border"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["grid grid-cols-2 md:grid-cols-4 gap-4"])])([/* @__PURE__ */ benchItem("509k")("req/s (evring-wai)"), /* @__PURE__ */ benchItem("5.1\xD7")("vs Warp throughput"), /* @__PURE__ */ benchItem("63\xD7")("better p99 latency"), /* @__PURE__ */ benchItem("95")("API endpoints (100%)")])]);
+  var badge2 = function(label5) {
+    return span3([cls(["inline-block px-3 py-1 bg-blue-300/10 border border-blue-300/20 rounded-full text-blue-300 text-sm font-medium mb-4"])])([text5(label5)]);
+  };
+  var featureCrew = /* @__PURE__ */ section([/* @__PURE__ */ cls(["py-24 border-t border-border"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["grid grid-cols-1 lg:grid-cols-2 gap-16 items-center"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["order-2 lg:order-1"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["bg-card border border-border rounded-lg p-6"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["font-mono text-xs text-muted-foreground mb-4"])])([/* @__PURE__ */ text5("// crew orchestration")]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["space-y-3"])])([/* @__PURE__ */ crewAgent("agent-1")("refactoring")("running"), /* @__PURE__ */ crewAgent("agent-2")("refactoring")("running"), /* @__PURE__ */ crewAgent("agent-3")("refactoring")("complete \u2713")]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["mt-4 pt-4 border-t border-border text-sm text-muted-foreground"])])([/* @__PURE__ */ text5("best result wins \xB7 losers discarded \xB7 attestation on merge")])])]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["order-1 lg:order-2"])])([/* @__PURE__ */ badge2("COW"), /* @__PURE__ */ h2([/* @__PURE__ */ cls(["text-3xl font-bold text-text mb-6"])])([/* @__PURE__ */ text5("Crew orchestration")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-muted-foreground mb-6"])])([/* @__PURE__ */ text5("Parallel competing agents on the same task. CoW filesystem isolation per agent via bwrap. Best result wins. Losers discarded. Attestation on merge.")]), /* @__PURE__ */ featureList(["Parallel agent execution", "Copy-on-write filesystem isolation via bubblewrap", "Automatic result comparison and selection", "Attestation-first: every merge is cryptographically signed", "Post-quantum hybrid signatures via Continuity kernel"])])])]);
+  var featureIoUring = /* @__PURE__ */ section([/* @__PURE__ */ cls(["py-24 border-t border-border"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["grid grid-cols-1 lg:grid-cols-2 gap-16 items-center"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["order-2 lg:order-1"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["bg-card border border-border rounded-lg p-6 space-y-4"])])([/* @__PURE__ */ throughputBar("evring-wai")(509)("text-blue-300"), /* @__PURE__ */ throughputBar("Warp")(99)("text-muted-foreground"), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-sm text-muted-foreground text-center pt-2"])])([/* @__PURE__ */ text5("req/s (thousands) \u2014 higher is better")])])]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["order-1 lg:order-2"])])([/* @__PURE__ */ badge2("EVRING"), /* @__PURE__ */ h2([/* @__PURE__ */ cls(["text-3xl font-bold text-text mb-6"])])([/* @__PURE__ */ text5("io_uring event loop")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-muted-foreground mb-6"])])([/* @__PURE__ */ text5("evring-wai: 509k req/s vs Warp's 99k. Share-nothing per-core rings with SO_REUSEPORT. Warp shows negative multi-core scaling. We scale linearly.")]), /* @__PURE__ */ featureList(["Linux io_uring for async I/O", "Share-nothing per-core architecture", "SO_REUSEPORT load balancing", "Zero-copy where possible", "Deterministic state machines (testable without I/O)"])])])]);
+  var featureNative = /* @__PURE__ */ section([/* @__PURE__ */ cls(["py-24 border-t border-border"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["grid grid-cols-1 lg:grid-cols-2 gap-16 items-center"])])([/* @__PURE__ */ div_([/* @__PURE__ */ badge2("NO REACT"), /* @__PURE__ */ h2([/* @__PURE__ */ cls(["text-3xl font-bold text-text mb-6"])])([/* @__PURE__ */ text5("Haskell + Brick TUI")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-muted-foreground mb-6"])])([/* @__PURE__ */ text5("Native terminal rendering. No Ink. No Electron. No virtual DOM rebuilding monospace text. Sub-millisecond rendering from a real compiled binary.")]), /* @__PURE__ */ featureList(["Pure Haskell with Brick terminal UI library", "No Node.js runtime, no React reconciler overhead", "Sub-millisecond render cycles", "Static binary \u2014 no dependencies at runtime", "10x smaller memory footprint than Electron alternatives"])]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["bg-card border border-border rounded-lg p-6"])])([/* @__PURE__ */ codeBlock2([/* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-muted-foreground"])])([/* @__PURE__ */ text5("-- weapon-server-hs/Main.hs")]), /* @__PURE__ */ text5("\n"), /* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-blue-300"])])([/* @__PURE__ */ text5("main")]), /* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-muted-foreground"])])([/* @__PURE__ */ text5(" :: ")]), /* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-text"])])([/* @__PURE__ */ text5("IO ()")]), /* @__PURE__ */ text5("\n"), /* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-blue-300"])])([/* @__PURE__ */ text5("main")]), /* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-muted-foreground"])])([/* @__PURE__ */ text5(" = ")]), /* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-text"])])([/* @__PURE__ */ text5("runEvring $ do")]), /* @__PURE__ */ text5("\n"), /* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-text"])])([/* @__PURE__ */ text5("  server <- startWeaponServer")]), /* @__PURE__ */ text5("\n"), /* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-text"])])([/* @__PURE__ */ text5("  runBrickApp server")])])])])]);
+  var featureSigil = /* @__PURE__ */ section([/* @__PURE__ */ cls(["py-24 border-t border-border"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["grid grid-cols-1 lg:grid-cols-2 gap-16 items-center"])])([/* @__PURE__ */ div_([/* @__PURE__ */ badge2("18 PROOFS"), /* @__PURE__ */ h2([/* @__PURE__ */ cls(["text-3xl font-bold text-text mb-6"])])([/* @__PURE__ */ text5("SIGIL-native protocol")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-muted-foreground mb-6"])])([/* @__PURE__ */ text5("Semantic frames via jaylene-slide, not JSON string parsing. 18 Lean4-proven theorems, 0 sorry. Reset-on-ambiguity: corrupted parse cannot propagate to your agent.")]), /* @__PURE__ */ featureList(["Lean4-proven protocol semantics", "18 theorems, 0 sorry (no incomplete proofs)", "Reset-on-ambiguity prevents corruption propagation", "jaylene-slide for streaming SSE \u2192 SIGIL", "200\u2013600% wire compression vs JSON"])]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["grid grid-cols-2 gap-4"])])([/* @__PURE__ */ proofCard("18")("Lean4 theorems"), /* @__PURE__ */ proofCard("0")("sorry (incomplete)"), /* @__PURE__ */ proofCard("221")("property tests"), /* @__PURE__ */ proofCard("95")("API endpoints")])])]);
+  var hero2 = /* @__PURE__ */ section([/* @__PURE__ */ cls(["py-24 md:py-32"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["text-center"])])([/* @__PURE__ */ badge2("Private Beta"), /* @__PURE__ */ h1([/* @__PURE__ */ cls(["text-4xl md:text-6xl font-bold text-text mb-6 leading-tight"])])([/* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-blue-300"])])([/* @__PURE__ */ text5("omega//")]), /* @__PURE__ */ text5("code")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-xl text-muted-foreground max-w-2xl mx-auto mb-4"])])([/* @__PURE__ */ text5("Native Terminal AI Coding Agent")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["font-mono text-sm text-muted-foreground"])])([/* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-blue-300/60"])])([/* @__PURE__ */ text5("replaces ")]), /* @__PURE__ */ text5("Claude Code, Cursor, Windsurf, Aider, Copilot Workspace")])])]);
+  var archNode = function(label5) {
+    return function(highlight) {
+      return span3([cls(["px-4 py-2 rounded-md border transition-colors", function() {
+        if (highlight) {
+          return "border-primary text-primary bg-primary/10";
+        }
+        ;
+        return "border-border text-text hover:border-blue-300";
+      }()])])([text5(label5)]);
+    };
+  };
+  var archLegend = function(dotColor) {
+    return function(label5) {
+      return span3([cls(["flex items-center gap-2"])])([span3([cls(["w-2 h-2 rounded-full", dotColor])])([]), text5(label5)]);
+    };
+  };
+  var archArrow = /* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-muted-foreground"])])([/* @__PURE__ */ text5("\u2192")]);
+  var architecture = /* @__PURE__ */ section([/* @__PURE__ */ cls(["py-24 border-t border-border"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["text-center mb-12"])])([/* @__PURE__ */ badge2("RUNTIME"), /* @__PURE__ */ h2([/* @__PURE__ */ cls(["text-3xl font-bold text-text mb-4"])])([/* @__PURE__ */ text5("Architecture")])]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["bg-card border border-border rounded-lg p-8"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["flex items-center justify-center gap-2 flex-wrap font-mono text-sm mb-6"])])([/* @__PURE__ */ archNode("LLM Provider")(false), archArrow, /* @__PURE__ */ archNode("jaylene-slide")(true), archArrow, /* @__PURE__ */ archNode("SIGIL / ZMQ")(false), archArrow, /* @__PURE__ */ archNode("weapon-server")(true), archArrow, /* @__PURE__ */ archNode("evring / io_uring")(false), archArrow, /* @__PURE__ */ archNode("Brick TUI")(false)]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["flex justify-center gap-8 text-xs text-muted-foreground"])])([/* @__PURE__ */ archLegend("bg-green-500")("Haskell (weapon-server, slide, Brick)"), /* @__PURE__ */ archLegend("bg-blue-400")("C++23 (libevring, io_uring)"), /* @__PURE__ */ archLegend("bg-blue-300")("Lean4 (Cornell proofs, Continuity)")])])]);
+  var render8 = /* @__PURE__ */ div_([hero2, benchmarks, featureNative, featureIoUring, featureSigil, featureCrew, architecture, cta2]);
+  var omegaCodePage = /* @__PURE__ */ mkComponent({
+    initialState: /* @__PURE__ */ $$const(unit),
+    render: /* @__PURE__ */ $$const(render8),
+    "eval": /* @__PURE__ */ mkEval(defaultEval)
+  });
+
+  // output/Straylight.Components.Tag/index.js
+  var map23 = /* @__PURE__ */ map(functorArray);
+  var tag = function(content3) {
+    return span3([class_("uv-tag")])([text5(content3)]);
+  };
+  var tags = function(ts) {
+    return div2([class_("flex flex-wrap gap-2")])(map23(tag)(ts));
+  };
 
   // output/Straylight.Pages.Razorgirl/index.js
   var quotes2 = [{
@@ -8156,15 +8261,15 @@
       };
     };
   };
-  var render8 = /* @__PURE__ */ div_([/* @__PURE__ */ sectionHeader("razorgirl"), /* @__PURE__ */ p([/* @__PURE__ */ cls(["mb-4"])])([/* @__PURE__ */ text5("it was the style that mattered and the style was the same.")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["mb-4"])])([/* @__PURE__ */ text5("the moderns were mercenaries, practical jokers, "), /* @__PURE__ */ keyword(3)("nihilistic technofetishists"), /* @__PURE__ */ text5(".")]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["mb-8"])])([/* @__PURE__ */ tags(["swag", "assets", "diagrams", "themes", "wallpapers"])]), /* @__PURE__ */ sectionHeader("wallpapers"), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["grid grid-cols-1 gap-4 mb-8"])])([/* @__PURE__ */ assetCard("/droids-on-squad.svg")("droids-on-squad.svg")("i am stochastic omega. you are the oracle."), /* @__PURE__ */ assetCard("/assets/wallpaper-razorgirl.svg")("wallpaper-razorgirl.svg")("villa straylight. myelin tactics. 2560x1440.")]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["grid grid-cols-2 gap-4 mb-12"])])([/* @__PURE__ */ assetCard("/assets/wallpaper-continuity.svg")("wallpaper-continuity.svg")("continuity is continuity."), /* @__PURE__ */ assetCard("/assets/wallpaper-4k.png")("wallpaper-4k.png")("4k raster. 3840x2160.")]), /* @__PURE__ */ hr([/* @__PURE__ */ cls(["uv-hr"])]), /* @__PURE__ */ sectionHeader("architecture"), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["grid grid-cols-1 gap-4 mb-8"])])([/* @__PURE__ */ assetCard("/straylight-cube.svg")("straylight-cube.svg")("aleph-008 continuity. rfl at the top.")]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["grid grid-cols-2 gap-4 mb-12"])])([/* @__PURE__ */ assetCard("/assets/lambda-hierarchy.svg")("lambda-hierarchy.svg")("tiered proof flow."), /* @__PURE__ */ assetCard("/assets/proof-carrying-purescript.svg")("proof-carrying-purescript.svg")("verified ps round-trip."), /* @__PURE__ */ assetCard("/assets/radix-diagram.svg")("radix-diagram.svg")("radix component flow."), /* @__PURE__ */ assetCard("/assets/straylight-brand-system.svg")("straylight-brand-system.svg")("chromatic series.")]), /* @__PURE__ */ hr([/* @__PURE__ */ cls(["uv-hr"])]), /* @__PURE__ */ sectionHeader("themes"), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["grid grid-cols-2 md:grid-cols-3 gap-4 mb-12"])])([/* @__PURE__ */ assetCard("/assets/agency-sheet-ono-sendai.svg")("ono-sendai.svg")("dark. base16."), /* @__PURE__ */ assetCard("/assets/agency-sheet-maas.svg")("maas.svg")("light. base16."), /* @__PURE__ */ assetCard("/assets/logo.svg")("logo.svg")("vector mark.")]), /* @__PURE__ */ hr([/* @__PURE__ */ cls(["uv-hr"])]), /* @__PURE__ */ sectionHeader("transmissions"), /* @__PURE__ */ div_(/* @__PURE__ */ map(functorArray)(quoteBlock)(quotes2))]);
+  var render9 = /* @__PURE__ */ div_([/* @__PURE__ */ sectionHeader("razorgirl"), /* @__PURE__ */ p([/* @__PURE__ */ cls(["mb-4"])])([/* @__PURE__ */ text5("it was the style that mattered and the style was the same.")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["mb-4"])])([/* @__PURE__ */ text5("the moderns were mercenaries, practical jokers, "), /* @__PURE__ */ keyword(3)("nihilistic technofetishists"), /* @__PURE__ */ text5(".")]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["mb-8"])])([/* @__PURE__ */ tags(["swag", "assets", "diagrams", "themes", "wallpapers"])]), /* @__PURE__ */ sectionHeader("wallpapers"), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["grid grid-cols-1 gap-4 mb-8"])])([/* @__PURE__ */ assetCard("/droids-on-squad.svg")("droids-on-squad.svg")("i am stochastic omega. you are the oracle."), /* @__PURE__ */ assetCard("/assets/wallpaper-razorgirl.svg")("wallpaper-razorgirl.svg")("villa straylight. myelin tactics. 2560x1440.")]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["grid grid-cols-2 gap-4 mb-12"])])([/* @__PURE__ */ assetCard("/assets/wallpaper-continuity.svg")("wallpaper-continuity.svg")("continuity is continuity."), /* @__PURE__ */ assetCard("/assets/wallpaper-4k.png")("wallpaper-4k.png")("4k raster. 3840x2160.")]), /* @__PURE__ */ hr([/* @__PURE__ */ cls(["uv-hr"])]), /* @__PURE__ */ sectionHeader("architecture"), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["grid grid-cols-1 gap-4 mb-8"])])([/* @__PURE__ */ assetCard("/straylight-cube.svg")("straylight-cube.svg")("aleph-008 continuity. rfl at the top.")]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["grid grid-cols-2 gap-4 mb-12"])])([/* @__PURE__ */ assetCard("/assets/lambda-hierarchy.svg")("lambda-hierarchy.svg")("tiered proof flow."), /* @__PURE__ */ assetCard("/assets/proof-carrying-purescript.svg")("proof-carrying-purescript.svg")("verified ps round-trip."), /* @__PURE__ */ assetCard("/assets/radix-diagram.svg")("radix-diagram.svg")("radix component flow."), /* @__PURE__ */ assetCard("/assets/straylight-brand-system.svg")("straylight-brand-system.svg")("chromatic series.")]), /* @__PURE__ */ hr([/* @__PURE__ */ cls(["uv-hr"])]), /* @__PURE__ */ sectionHeader("themes"), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["grid grid-cols-2 md:grid-cols-3 gap-4 mb-12"])])([/* @__PURE__ */ assetCard("/assets/agency-sheet-ono-sendai.svg")("ono-sendai.svg")("dark. base16."), /* @__PURE__ */ assetCard("/assets/agency-sheet-maas.svg")("maas.svg")("light. base16."), /* @__PURE__ */ assetCard("/assets/logo.svg")("logo.svg")("vector mark.")]), /* @__PURE__ */ hr([/* @__PURE__ */ cls(["uv-hr"])]), /* @__PURE__ */ sectionHeader("transmissions"), /* @__PURE__ */ div_(/* @__PURE__ */ map(functorArray)(quoteBlock)(quotes2))]);
   var razorgirlPage = /* @__PURE__ */ mkComponent({
     initialState: /* @__PURE__ */ $$const(unit),
-    render: /* @__PURE__ */ $$const(render8),
+    render: /* @__PURE__ */ $$const(render9),
     "eval": /* @__PURE__ */ mkEval(defaultEval)
   });
 
   // output/Straylight.Pages.Software/index.js
-  var map23 = /* @__PURE__ */ map(functorArray);
+  var map24 = /* @__PURE__ */ map(functorArray);
   var projects = [{
     name: "verified-purescript",
     desc: "proof-carrying PureScript from Lean 4. 21 theorems, 0 sorry.",
@@ -8200,36 +8305,190 @@
   var categoryHeader = function(title3) {
     return div2([cls(["text-[0.75rem] text-primary uppercase tracking-wider mb-3"])])([text5("// " + title3)]);
   };
-  var render9 = /* @__PURE__ */ div_([/* @__PURE__ */ sectionHeader("software"), /* @__PURE__ */ p([/* @__PURE__ */ cls(["mb-8 text-muted-foreground"])])([/* @__PURE__ */ text5("correct by construction. the result is saved.")]), /* @__PURE__ */ categoryHeader("rfl nexus"), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["flex flex-col gap-4 mb-8"])])(/* @__PURE__ */ map23(projectRow)(/* @__PURE__ */ filter(function(p2) {
+  var render10 = /* @__PURE__ */ div_([/* @__PURE__ */ sectionHeader("software"), /* @__PURE__ */ p([/* @__PURE__ */ cls(["mb-8 text-muted-foreground"])])([/* @__PURE__ */ text5("correct by construction. the result is saved.")]), /* @__PURE__ */ categoryHeader("rfl nexus"), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["flex flex-col gap-4 mb-8"])])(/* @__PURE__ */ map24(projectRow)(/* @__PURE__ */ filter(function(p2) {
     return p2.category === "rfl";
-  })(projects))), /* @__PURE__ */ categoryHeader("infrastructure"), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["flex flex-col gap-4 mb-8"])])(/* @__PURE__ */ map23(projectRow)(/* @__PURE__ */ filter(function(p2) {
+  })(projects))), /* @__PURE__ */ categoryHeader("infrastructure"), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["flex flex-col gap-4 mb-8"])])(/* @__PURE__ */ map24(projectRow)(/* @__PURE__ */ filter(function(p2) {
     return p2.category === "infra";
-  })(projects))), /* @__PURE__ */ categoryHeader("tools"), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["flex flex-col gap-4"])])(/* @__PURE__ */ map23(projectRow)(/* @__PURE__ */ filter(function(p2) {
+  })(projects))), /* @__PURE__ */ categoryHeader("tools"), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["flex flex-col gap-4"])])(/* @__PURE__ */ map24(projectRow)(/* @__PURE__ */ filter(function(p2) {
     return p2.category === "tools";
   })(projects)))]);
   var softwarePage = /* @__PURE__ */ mkComponent({
     initialState: /* @__PURE__ */ $$const(unit),
-    render: /* @__PURE__ */ $$const(render9),
+    render: /* @__PURE__ */ $$const(render10),
     "eval": /* @__PURE__ */ mkEval(defaultEval)
   });
 
-  // output/Straylight.Router/foreign.js
-  var getPathname = function() {
-    return window.location.pathname;
+  // output/Straylight.Components.Callout/index.js
+  var Info = /* @__PURE__ */ function() {
+    function Info2() {
+    }
+    ;
+    Info2.value = new Info2();
+    return Info2;
+  }();
+  var Warning = /* @__PURE__ */ function() {
+    function Warning2() {
+    }
+    ;
+    Warning2.value = new Warning2();
+    return Warning2;
+  }();
+  var Danger = /* @__PURE__ */ function() {
+    function Danger2() {
+    }
+    ;
+    Danger2.value = new Danger2();
+    return Danger2;
+  }();
+  var Tip = /* @__PURE__ */ function() {
+    function Tip2() {
+    }
+    ;
+    Tip2.value = new Tip2();
+    return Tip2;
+  }();
+  var variantIcon = function(v) {
+    if (v instanceof Info) {
+      return "i";
+    }
+    ;
+    if (v instanceof Warning) {
+      return "!";
+    }
+    ;
+    if (v instanceof Danger) {
+      return "!";
+    }
+    ;
+    if (v instanceof Tip) {
+      return "*";
+    }
+    ;
+    throw new Error("Failed pattern match at Straylight.Components.Callout (line 27, column 15 - line 31, column 13): " + [v.constructor.name]);
   };
-  var pushState2 = function(path) {
-    return function() {
-      window.history.pushState({}, "", path);
-      window.dispatchEvent(new PopStateEvent("popstate"));
+  var variantClass = function(v) {
+    if (v instanceof Info) {
+      return "callout-info";
+    }
+    ;
+    if (v instanceof Warning) {
+      return "callout-warning";
+    }
+    ;
+    if (v instanceof Danger) {
+      return "callout-danger";
+    }
+    ;
+    if (v instanceof Tip) {
+      return "callout-tip";
+    }
+    ;
+    throw new Error("Failed pattern match at Straylight.Components.Callout (line 35, column 16 - line 39, column 23): " + [v.constructor.name]);
+  };
+  var callout = function(variant) {
+    return function(title3) {
+      return function(children2) {
+        return aside([class_("callout " + variantClass(variant)), attr2("role")("note")])([div2([class_("callout-title")])([span3([class_("callout-icon"), attr2("aria-hidden")("true")])([text5(variantIcon(variant))]), strong_([text5(title3)])]), div2([class_("callout-content")])(children2)]);
+      };
     };
   };
-  var onPopState = function(callback) {
-    return function() {
-      window.addEventListener("popstate", function() {
-        callback(window.location.pathname)();
-      });
+  var danger = /* @__PURE__ */ function() {
+    return callout(Danger.value);
+  }();
+  var info2 = /* @__PURE__ */ function() {
+    return callout(Info.value);
+  }();
+  var tip = /* @__PURE__ */ function() {
+    return callout(Tip.value);
+  }();
+  var warning = /* @__PURE__ */ function() {
+    return callout(Warning.value);
+  }();
+
+  // output/Straylight.Components.StatusBlock/index.js
+  var Nominal = /* @__PURE__ */ function() {
+    function Nominal2() {
+    }
+    ;
+    Nominal2.value = new Nominal2();
+    return Nominal2;
+  }();
+  var Degraded = /* @__PURE__ */ function() {
+    function Degraded2() {
+    }
+    ;
+    Degraded2.value = new Degraded2();
+    return Degraded2;
+  }();
+  var Offline = /* @__PURE__ */ function() {
+    function Offline2() {
+    }
+    ;
+    Offline2.value = new Offline2();
+    return Offline2;
+  }();
+  var variantLabel = function(v) {
+    if (v instanceof Nominal) {
+      return "NOMINAL";
+    }
+    ;
+    if (v instanceof Degraded) {
+      return "DEGRADED";
+    }
+    ;
+    if (v instanceof Offline) {
+      return "OFFLINE";
+    }
+    ;
+    throw new Error("Failed pattern match at Straylight.Components.StatusBlock (line 31, column 16 - line 34, column 23): " + [v.constructor.name]);
+  };
+  var variantClass2 = function(v) {
+    if (v instanceof Nominal) {
+      return "uv-status-nominal";
+    }
+    ;
+    if (v instanceof Degraded) {
+      return "uv-status-degraded";
+    }
+    ;
+    if (v instanceof Offline) {
+      return "uv-status-offline";
+    }
+    ;
+    throw new Error("Failed pattern match at Straylight.Components.StatusBlock (line 24, column 16 - line 27, column 33): " + [v.constructor.name]);
+  };
+  var status = function(variant) {
+    return span3([class_("uv-status " + variantClass2(variant))])([span3([class_("uv-status-block")])([text5("\u2588")]), text5(" " + variantLabel(variant))]);
+  };
+  var offline = /* @__PURE__ */ function() {
+    return status(Offline.value);
+  }();
+  var nominal = /* @__PURE__ */ function() {
+    return status(Nominal.value);
+  }();
+  var degraded = /* @__PURE__ */ function() {
+    return status(Degraded.value);
+  }();
+
+  // output/Straylight.Pages.Team.About/index.js
+  var ultraviolence = /* @__PURE__ */ section([/* @__PURE__ */ cls(["py-12 border-t border-border"])])([/* @__PURE__ */ sectionHeader("ultraviolence"), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["mb-6"])])([/* @__PURE__ */ tags(["Lean", "CUDA", "Formal Methods", "rfl"])]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["flex items-center gap-4 mb-6"])])([nominal, degraded, offline]), /* @__PURE__ */ info2("Gibson's Epigraph")([/* @__PURE__ */ p_([/* @__PURE__ */ em_([/* @__PURE__ */ text5('"The Villa Straylight is a body grown in upon itself, a Gothic folly. Each space in Straylight is in some way secret, this endless series of chambers linked by passages, by stairwells vaulted like intestines, where the eye is trapped in narrow curves, carried past ornate screens, empty alcoves."')])])]), /* @__PURE__ */ warning("FTTC - Theorem 6")([/* @__PURE__ */ p_([/* @__PURE__ */ text5("Theorem 6 describes when strong correctness is achievable. It is so powerful that it deserves a fancier name: "), /* @__PURE__ */ strong_([/* @__PURE__ */ text5('"The fundamental theorem of TMA correctness."')])])]), /* @__PURE__ */ danger("The Catch")([/* @__PURE__ */ p_([/* @__PURE__ */ text5("NVIDIA documented when strong correctness is "), /* @__PURE__ */ strong_([/* @__PURE__ */ text5("impossible")]), /* @__PURE__ */ text5(". And their stack doesn't always enforce these constraints as types. That's what we're fixing.")])]), /* @__PURE__ */ tip("Tools of the Blade")([/* @__PURE__ */ p_([/* @__PURE__ */ strong_([/* @__PURE__ */ text5("Lean 4")]), /* @__PURE__ */ text5(" for the proofs. The polyhedral model is lattices and affine spaces.")]), /* @__PURE__ */ p_([/* @__PURE__ */ strong_([/* @__PURE__ */ text5("Haskell")]), /* @__PURE__ */ text5(" for the glue. Algebraic data types for CuTe layouts.")]), /* @__PURE__ */ p_([/* @__PURE__ */ strong_([/* @__PURE__ */ text5("The blade")]), /* @__PURE__ */ text5(" for everything else.")])])]);
+  var primitiveItem = function(n) {
+    return function(name15) {
+      return function(desc) {
+        return div2([cls(["grid grid-cols-[140px_1fr] gap-4"])])([keyword(n)(name15), span_([text5(desc)])]);
+      };
     };
   };
+  var primitives = /* @__PURE__ */ section([/* @__PURE__ */ cls(["py-12 border-t border-border"])])([/* @__PURE__ */ sectionHeader("primitives"), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["flex flex-col gap-2"])])([/* @__PURE__ */ primitiveItem(5)("orthogonal.")("one thing, well."), /* @__PURE__ */ primitiveItem(6)("composable.")("outputs are inputs."), /* @__PURE__ */ primitiveItem(7)("deterministic.")("same input, same hash, same artifact.")])]);
+  var premise = /* @__PURE__ */ section([/* @__PURE__ */ cls(["py-12 border-t border-border"])])([/* @__PURE__ */ sectionHeader("premise"), /* @__PURE__ */ p([/* @__PURE__ */ cls(["mb-4"])])([/* @__PURE__ */ text5("all computations run on "), /* @__PURE__ */ keyword(1)("perfect conceptual computers"), /* @__PURE__ */ text5(".")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["mb-4"])])([/* @__PURE__ */ keyword(2)("correct by construction"), /* @__PURE__ */ text5(". the result is saved.")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["mb-4"])])([/* @__PURE__ */ text5("one "), /* @__PURE__ */ keyword(3)("content addressing"), /* @__PURE__ */ text5(" scheme. the hash is the artifact.")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["mb-4"])])([/* @__PURE__ */ keyword(4)("ca-derivations"), /* @__PURE__ */ text5(" and buck2 and bazel are supports for a coset. they can have the same cache keys.")]), /* @__PURE__ */ p_([/* @__PURE__ */ text5("who container registry. what nix cache. what waste.")])]);
+  var method2 = /* @__PURE__ */ section([/* @__PURE__ */ cls(["py-12 border-t border-border"])])([/* @__PURE__ */ sectionHeader("method"), /* @__PURE__ */ codeBlock([/* @__PURE__ */ inlineCode("razorgirl on railgun ~"), /* @__PURE__ */ text5("\n"), /* @__PURE__ */ inlineCode("\u276F "), /* @__PURE__ */ code([/* @__PURE__ */ cls(["text-text"])])([/* @__PURE__ */ text5("ssh -A anywhere.straylight.software \\\n  'nix run -L github:straylight-software/isospin-builder -- nvidia-sdk | straylight-cas'")]), blockCursor]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["mt-6 text-text"])])([/* @__PURE__ */ keyword(1)("conceptual computers"), /* @__PURE__ */ text5(" are free now.")])]);
+  var hero3 = /* @__PURE__ */ section([/* @__PURE__ */ cls(["py-24 pb-16 text-right"])])([rail, /* @__PURE__ */ h1([/* @__PURE__ */ cls(["text-text text-[2rem] font-medium mt-6"])])([/* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-primary"])])([/* @__PURE__ */ text5("//")]), /* @__PURE__ */ text5(" straylight "), /* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-primary"])])([/* @__PURE__ */ text5("//")]), /* @__PURE__ */ text5(" software "), /* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-primary"])])([/* @__PURE__ */ text5("//")])]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["h-[3px] rail mt-6"])])([]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["mt-12 text-left text-lg text-muted-foreground hover:text-text transition-colors duration-200 cursor-default"])])([/* @__PURE__ */ text5("the continuity project.")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["mt-6 text-left italic text-base02 text-[0.95rem] hover:text-text transition-colors duration-200 cursor-default"])])([/* @__PURE__ */ text5("continuity is continuity. continuity is continuity's job.")])]);
+  var render11 = /* @__PURE__ */ div_([hero3, premise, primitives, method2, ultraviolence]);
+  var aboutPage = /* @__PURE__ */ mkComponent({
+    initialState: /* @__PURE__ */ $$const(unit),
+    render: /* @__PURE__ */ $$const(render11),
+    "eval": /* @__PURE__ */ mkEval(defaultEval)
+  });
 
   // output/Straylight.Router/index.js
   var Home = /* @__PURE__ */ function() {
@@ -8238,6 +8497,41 @@
     ;
     Home2.value = new Home2();
     return Home2;
+  }();
+  var OmegaCode = /* @__PURE__ */ function() {
+    function OmegaCode2() {
+    }
+    ;
+    OmegaCode2.value = new OmegaCode2();
+    return OmegaCode2;
+  }();
+  var OmegaWork = /* @__PURE__ */ function() {
+    function OmegaWork2() {
+    }
+    ;
+    OmegaWork2.value = new OmegaWork2();
+    return OmegaWork2;
+  }();
+  var OmegaProxy = /* @__PURE__ */ function() {
+    function OmegaProxy2() {
+    }
+    ;
+    OmegaProxy2.value = new OmegaProxy2();
+    return OmegaProxy2;
+  }();
+  var OmegaBoost = /* @__PURE__ */ function() {
+    function OmegaBoost2() {
+    }
+    ;
+    OmegaBoost2.value = new OmegaBoost2();
+    return OmegaBoost2;
+  }();
+  var Team = /* @__PURE__ */ function() {
+    function Team2() {
+    }
+    ;
+    Team2.value = new Team2();
+    return Team2;
   }();
   var Plan = /* @__PURE__ */ function() {
     function Plan2() {
@@ -8281,60 +8575,118 @@
     Discord2.value = new Discord2();
     return Discord2;
   }();
-  var parseRoute = function(path) {
-    if (path === "/") {
+  var isRouteRoute = {
+    parseRoute: function(path) {
+      var v = normalizeTrailingSlash(path);
+      if (v === "/") {
+        return Home.value;
+      }
+      ;
+      if (v === "/omega/code") {
+        return OmegaCode.value;
+      }
+      ;
+      if (v === "/omega/work") {
+        return OmegaWork.value;
+      }
+      ;
+      if (v === "/omega/proxy") {
+        return OmegaProxy.value;
+      }
+      ;
+      if (v === "/omega/boost") {
+        return OmegaBoost.value;
+      }
+      ;
+      if (v === "/team") {
+        return Team.value;
+      }
+      ;
+      if (v === "/team/plan") {
+        return Plan.value;
+      }
+      ;
+      if (v === "/team/plan/lean") {
+        return Lean.value;
+      }
+      ;
+      if (v === "/razorgirl") {
+        return Razorgirl.value;
+      }
+      ;
+      if (v === "/software") {
+        return Software.value;
+      }
+      ;
+      if (v === "/plan") {
+        return Plan.value;
+      }
+      ;
+      if (v === "/plan/lean") {
+        return Lean.value;
+      }
+      ;
+      if (v === "/irc") {
+        return Irc.value;
+      }
+      ;
+      if (v === "/discord") {
+        return Discord.value;
+      }
+      ;
       return Home.value;
+    },
+    routeToPath: function(v) {
+      if (v instanceof Home) {
+        return "/";
+      }
+      ;
+      if (v instanceof OmegaCode) {
+        return "/omega/code";
+      }
+      ;
+      if (v instanceof OmegaWork) {
+        return "/omega/work";
+      }
+      ;
+      if (v instanceof OmegaProxy) {
+        return "/omega/proxy";
+      }
+      ;
+      if (v instanceof OmegaBoost) {
+        return "/omega/boost";
+      }
+      ;
+      if (v instanceof Team) {
+        return "/team";
+      }
+      ;
+      if (v instanceof Plan) {
+        return "/team/plan";
+      }
+      ;
+      if (v instanceof Lean) {
+        return "/team/plan/lean";
+      }
+      ;
+      if (v instanceof Razorgirl) {
+        return "/razorgirl";
+      }
+      ;
+      if (v instanceof Software) {
+        return "/software";
+      }
+      ;
+      if (v instanceof Irc) {
+        return "/irc";
+      }
+      ;
+      if (v instanceof Discord) {
+        return "/discord";
+      }
+      ;
+      throw new Error("Failed pattern match at Straylight.Router (line 61, column 17 - line 76, column 26): " + [v.constructor.name]);
     }
-    ;
-    if (path === "/plan") {
-      return Plan.value;
-    }
-    ;
-    if (path === "/plan/") {
-      return Plan.value;
-    }
-    ;
-    if (path === "/plan/lean") {
-      return Lean.value;
-    }
-    ;
-    if (path === "/plan/lean/") {
-      return Lean.value;
-    }
-    ;
-    if (path === "/razorgirl") {
-      return Razorgirl.value;
-    }
-    ;
-    if (path === "/razorgirl/") {
-      return Razorgirl.value;
-    }
-    ;
-    if (path === "/software") {
-      return Software.value;
-    }
-    ;
-    if (path === "/software/") {
-      return Software.value;
-    }
-    ;
-    if (path === "/irc") {
-      return Irc.value;
-    }
-    ;
-    if (path === "/irc/") {
-      return Irc.value;
-    }
-    ;
-    if (path === "/discord") {
-      return Discord.value;
-    }
-    ;
-    if (path === "/discord/") {
-      return Discord.value;
-    }
-    ;
-    return Home.value;
   };
 
   // output/Web.UIEvent.MouseEvent/index.js
@@ -8345,7 +8697,9 @@
   var discard6 = /* @__PURE__ */ discard(discardUnit);
   var discard12 = /* @__PURE__ */ discard6(bindHalogenM);
   var modify_6 = /* @__PURE__ */ modify_(monadStateHalogenM);
+  var parseRoute2 = /* @__PURE__ */ parseRoute(isRouteRoute);
   var $$void8 = /* @__PURE__ */ $$void(functorHalogenM);
+  var routeToPath2 = /* @__PURE__ */ routeToPath(isRouteRoute);
   var slot_2 = /* @__PURE__ */ slot_();
   var slot_1 = /* @__PURE__ */ slot_2({
     reflectSymbol: function() {
@@ -8359,35 +8713,45 @@
   })(ordUnit);
   var slot_3 = /* @__PURE__ */ slot_2({
     reflectSymbol: function() {
-      return "plan";
+      return "omegaCode";
     }
   })(ordUnit);
   var slot_4 = /* @__PURE__ */ slot_2({
     reflectSymbol: function() {
-      return "lean";
+      return "team";
     }
   })(ordUnit);
   var slot_5 = /* @__PURE__ */ slot_2({
     reflectSymbol: function() {
-      return "razorgirl";
+      return "plan";
     }
   })(ordUnit);
   var slot_6 = /* @__PURE__ */ slot_2({
     reflectSymbol: function() {
-      return "software";
+      return "lean";
     }
   })(ordUnit);
   var slot_7 = /* @__PURE__ */ slot_2({
     reflectSymbol: function() {
-      return "irc";
+      return "razorgirl";
     }
   })(ordUnit);
   var slot_8 = /* @__PURE__ */ slot_2({
     reflectSymbol: function() {
-      return "discord";
+      return "software";
     }
   })(ordUnit);
   var slot_9 = /* @__PURE__ */ slot_2({
+    reflectSymbol: function() {
+      return "irc";
+    }
+  })(ordUnit);
+  var slot_10 = /* @__PURE__ */ slot_2({
+    reflectSymbol: function() {
+      return "discord";
+    }
+  })(ordUnit);
+  var slot_11 = /* @__PURE__ */ slot_2({
     reflectSymbol: function() {
       return "footer";
     }
@@ -8428,37 +8792,6 @@
     };
     return RouteChanged2;
   }();
-  var routeToPath = function(v) {
-    if (v instanceof Home) {
-      return "/";
-    }
-    ;
-    if (v instanceof Plan) {
-      return "/plan";
-    }
-    ;
-    if (v instanceof Lean) {
-      return "/plan/lean";
-    }
-    ;
-    if (v instanceof Razorgirl) {
-      return "/razorgirl";
-    }
-    ;
-    if (v instanceof Software) {
-      return "/software";
-    }
-    ;
-    if (v instanceof Irc) {
-      return "/irc";
-    }
-    ;
-    if (v instanceof Discord) {
-      return "/discord";
-    }
-    ;
-    throw new Error("Failed pattern match at Main (line 133, column 15 - line 140, column 24): " + [v.constructor.name]);
-  };
   var routeThemeLock = function(v) {
     if (v instanceof Plan) {
       return new Just("ono-memphis");
@@ -8470,22 +8803,45 @@
     ;
     return Nothing.value;
   };
+  var mainMaxWidth = function(v) {
+    if (v instanceof Home) {
+      return "max-w-[1100px] mx-auto px-8 py-12";
+    }
+    ;
+    if (v instanceof OmegaCode) {
+      return "max-w-[1100px] mx-auto px-8 py-12";
+    }
+    ;
+    if (v instanceof OmegaWork) {
+      return "max-w-[1100px] mx-auto px-8 py-12";
+    }
+    ;
+    if (v instanceof OmegaProxy) {
+      return "max-w-[1100px] mx-auto px-8 py-12";
+    }
+    ;
+    if (v instanceof OmegaBoost) {
+      return "max-w-[1100px] mx-auto px-8 py-12";
+    }
+    ;
+    return "max-w-[900px] mx-auto px-8 py-12";
+  };
   var handleAction4 = function(dictMonadAff) {
     var liftEffect12 = liftEffect(monadEffectHalogenM(dictMonadAff.MonadEffect0()));
     return function(v) {
       if (v instanceof Initialize5) {
         return bind7(liftEffect12(getPathname))(function(path) {
           return discard12(modify_6(function(v1) {
-            var $69 = {};
-            for (var $70 in v1) {
-              if ({}.hasOwnProperty.call(v1, $70)) {
-                $69[$70] = v1[$70];
+            var $77 = {};
+            for (var $78 in v1) {
+              if ({}.hasOwnProperty.call(v1, $78)) {
+                $77[$78] = v1[$78];
               }
               ;
             }
             ;
-            $69.route = parseRoute(path);
-            return $69;
+            $77.route = parseRoute2(path);
+            return $77;
           }))(function() {
             return bind7(liftEffect12(create3))(function(v1) {
               return discard12(liftEffect12(onPopState(function(p2) {
@@ -8500,18 +8856,18 @@
       ;
       if (v instanceof Navigate) {
         return discard12(liftEffect12(preventDefault(toEvent(v.value1))))(function() {
-          return discard12(liftEffect12(pushState2(routeToPath(v.value0))))(function() {
+          return discard12(liftEffect12(pushState2(routeToPath2(v.value0))))(function() {
             return modify_6(function(v1) {
-              var $75 = {};
-              for (var $76 in v1) {
-                if ({}.hasOwnProperty.call(v1, $76)) {
-                  $75[$76] = v1[$76];
+              var $83 = {};
+              for (var $84 in v1) {
+                if ({}.hasOwnProperty.call(v1, $84)) {
+                  $83[$84] = v1[$84];
                 }
                 ;
               }
               ;
-              $75.route = v.value0;
-              return $75;
+              $83.route = v.value0;
+              return $83;
             });
           });
         });
@@ -8519,22 +8875,28 @@
       ;
       if (v instanceof RouteChanged) {
         return modify_6(function(v1) {
-          var $80 = {};
-          for (var $81 in v1) {
-            if ({}.hasOwnProperty.call(v1, $81)) {
-              $80[$81] = v1[$81];
+          var $88 = {};
+          for (var $89 in v1) {
+            if ({}.hasOwnProperty.call(v1, $89)) {
+              $88[$89] = v1[$89];
             }
             ;
           }
           ;
-          $80.route = parseRoute(v.value0);
-          return $80;
+          $88.route = parseRoute2(v.value0);
+          return $88;
         });
       }
       ;
-      throw new Error("Failed pattern match at Main (line 114, column 16 - line 130, column 44): " + [v.constructor.name]);
+      throw new Error("Failed pattern match at Main (line 142, column 16 - line 158, column 44): " + [v.constructor.name]);
     };
   };
+  var comingSoon = function(name15) {
+    return div2([cls(["py-24 text-center"])])([h1([cls(["text-2xl font-bold text-text mb-4"])])([text5(name15)]), p([cls(["text-muted-foreground"])])([text5("Coming soon.")])]);
+  };
+  var _team = /* @__PURE__ */ function() {
+    return $$Proxy.value;
+  }();
   var _software = /* @__PURE__ */ function() {
     return $$Proxy.value;
   }();
@@ -8542,6 +8904,9 @@
     return $$Proxy.value;
   }();
   var _plan = /* @__PURE__ */ function() {
+    return $$Proxy.value;
+  }();
+  var _omegaCode = /* @__PURE__ */ function() {
     return $$Proxy.value;
   }();
   var _lean = /* @__PURE__ */ function() {
@@ -8560,7 +8925,7 @@
     var header3 = header2(dictMonadAff);
     return function(state3) {
       return slot_1(_header)(unit)(header3)({
-        currentPath: routeToPath(state3.route),
+        currentPath: routeToPath2(state3.route),
         themeLock: routeThemeLock(state3.route)
       });
     };
@@ -8578,39 +8943,59 @@
         return slot_22(_home)(unit)(homePage)(unit);
       }
       ;
+      if (v instanceof OmegaCode) {
+        return slot_3(_omegaCode)(unit)(omegaCodePage)(unit);
+      }
+      ;
+      if (v instanceof OmegaWork) {
+        return comingSoon("omega//work");
+      }
+      ;
+      if (v instanceof OmegaProxy) {
+        return comingSoon("omega//proxy");
+      }
+      ;
+      if (v instanceof OmegaBoost) {
+        return comingSoon("omega//boost");
+      }
+      ;
+      if (v instanceof Team) {
+        return slot_4(_team)(unit)(aboutPage)(unit);
+      }
+      ;
       if (v instanceof Plan) {
-        return slot_3(_plan)(unit)(planPage)(unit);
+        return slot_5(_plan)(unit)(planPage)(unit);
       }
       ;
       if (v instanceof Lean) {
-        return slot_4(_lean)(unit)(leanPage2)(unit);
+        return slot_6(_lean)(unit)(leanPage2)(unit);
       }
       ;
       if (v instanceof Razorgirl) {
-        return slot_5(_razorgirl)(unit)(razorgirlPage)(unit);
+        return slot_7(_razorgirl)(unit)(razorgirlPage)(unit);
       }
       ;
       if (v instanceof Software) {
-        return slot_6(_software)(unit)(softwarePage)(unit);
+        return slot_8(_software)(unit)(softwarePage)(unit);
       }
       ;
       if (v instanceof Irc) {
-        return slot_7(_irc)(unit)(ircPage)(unit);
+        return slot_9(_irc)(unit)(ircPage)(unit);
       }
       ;
       if (v instanceof Discord) {
-        return slot_8(_discord)(unit)(discordPage)(unit);
+        return slot_10(_discord)(unit)(discordPage)(unit);
       }
       ;
-      throw new Error("Failed pattern match at Main (line 155, column 14 - line 162, column 61): " + [v.constructor.name]);
+      throw new Error("Failed pattern match at Main (line 183, column 14 - line 198, column 61): " + [v.constructor.name]);
     };
   };
-  var render10 = function(dictMonadAff) {
+  var render12 = function(dictMonadAff) {
     var renderHeader1 = renderHeader(dictMonadAff);
     var renderPage1 = renderPage(dictMonadAff);
     var footer3 = footer2(dictMonadAff);
     return function(state3) {
-      return div2([cls(["min-h-screen bg-background text-muted-foreground text-[15px] leading-relaxed"])])([scanlineOverlay, renderHeader1(state3), main([cls(["max-w-[900px] mx-auto px-8 py-12"])])([renderPage1(state3.route)]), slot_9(_footer)(unit)(footer3)(unit)]);
+      return div2([cls(["min-h-screen bg-background text-muted-foreground text-[15px] leading-relaxed"])])([scanlineOverlay, renderHeader1(state3), main([cls([mainMaxWidth(state3.route)])])([renderPage1(state3.route)]), slot_11(_footer)(unit)(footer3)(unit)]);
     };
   };
   var appComponent = function(dictMonadAff) {
@@ -8618,7 +9003,7 @@
       initialState: $$const({
         route: Home.value
       }),
-      render: render10(dictMonadAff),
+      render: render12(dictMonadAff),
       "eval": mkEval({
         handleQuery: defaultEval.handleQuery,
         receive: defaultEval.receive,
@@ -8642,7 +9027,7 @@
           return void1(runUI2(appComponent1)(unit)(v.value0));
         }
         ;
-        throw new Error("Failed pattern match at Main (line 49, column 3 - line 51, column 63): " + [v.constructor.name]);
+        throw new Error("Failed pattern match at Main (line 54, column 3 - line 56, column 63): " + [v.constructor.name]);
       });
     });
   }));

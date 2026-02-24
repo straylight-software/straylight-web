@@ -25,14 +25,19 @@ import Web.Event.Event (preventDefault)
 import Web.UIEvent.MouseEvent (MouseEvent, toEvent)
 
 import Straylight.UI (cls, scanlineOverlay)
-import Straylight.Router (Route(..), parseRoute, pushState, getPathname, onPopState)
+import Straylight.Router (Route(..), parseRoute, routeToPath, pushState, getPathname, onPopState)
 import Straylight.Layout.Header as Header
 import Straylight.Layout.Footer as Footer
+-- Product pages
 import Straylight.Pages.Home as Home
+import Straylight.Pages.Products.OmegaCode as OmegaCode
+-- Team pages
+import Straylight.Pages.Team.About as TeamAbout
 import Straylight.Pages.Plan as Plan
 import Straylight.Pages.Lean as Lean
 import Straylight.Pages.Razorgirl as Razorgirl
 import Straylight.Pages.Software as Software
+-- Community
 import Straylight.Pages.Irc as Irc
 import Straylight.Pages.Discord as Discord
 
@@ -64,11 +69,19 @@ data AppAction
 type AppSlots =
   ( header :: H.Slot (Const Void) Void Unit
   , footer :: H.Slot (Const Void) Void Unit
+  -- Product pages
   , home :: H.Slot (Const Void) Void Unit
+  , omegaCode :: H.Slot (Const Void) Void Unit
+  , omegaWork :: H.Slot (Const Void) Void Unit
+  , omegaProxy :: H.Slot (Const Void) Void Unit
+  , omegaBoost :: H.Slot (Const Void) Void Unit
+  -- Team pages
+  , team :: H.Slot (Const Void) Void Unit
   , plan :: H.Slot (Const Void) Void Unit
   , lean :: H.Slot (Const Void) Void Unit
   , razorgirl :: H.Slot (Const Void) Void Unit
   , software :: H.Slot (Const Void) Void Unit
+  -- Community
   , irc :: H.Slot (Const Void) Void Unit
   , discord :: H.Slot (Const Void) Void Unit
   )
@@ -81,6 +94,21 @@ _footer = Proxy
 
 _home :: Proxy "home"
 _home = Proxy
+
+_omegaCode :: Proxy "omegaCode"
+_omegaCode = Proxy
+
+_omegaWork :: Proxy "omegaWork"
+_omegaWork = Proxy
+
+_omegaProxy :: Proxy "omegaProxy"
+_omegaProxy = Proxy
+
+_omegaBoost :: Proxy "omegaBoost"
+_omegaBoost = Proxy
+
+_team :: Proxy "team"
+_team = Proxy
 
 _plan :: Proxy "plan"
 _plan = Proxy
@@ -129,16 +157,6 @@ handleAction = case _ of
   RouteChanged path -> do
     H.modify_ _ { route = parseRoute path }
 
-routeToPath :: Route -> String
-routeToPath = case _ of
-  Home -> "/"
-  Plan -> "/plan"
-  Lean -> "/plan/lean"
-  Razorgirl -> "/razorgirl"
-  Software -> "/software"
-  Irc -> "/irc"
-  Discord -> "/discord"
-
 render :: forall m. MonadAff m => AppState -> H.ComponentHTML AppAction AppSlots m
 render state =
   HH.div
@@ -146,20 +164,50 @@ render state =
     [ scanlineOverlay
     , renderHeader state
     , HH.main
-        [ cls [ "max-w-[900px] mx-auto px-8 py-12" ] ]
+        [ cls [ mainMaxWidth state.route ] ]
         [ renderPage state.route ]
     , HH.slot_ _footer unit Footer.footer unit
     ]
 
+-- | Product pages get wider container
+mainMaxWidth :: Route -> String
+mainMaxWidth = case _ of
+  Home -> "max-w-[1100px] mx-auto px-8 py-12"
+  OmegaCode -> "max-w-[1100px] mx-auto px-8 py-12"
+  OmegaWork -> "max-w-[1100px] mx-auto px-8 py-12"
+  OmegaProxy -> "max-w-[1100px] mx-auto px-8 py-12"
+  OmegaBoost -> "max-w-[1100px] mx-auto px-8 py-12"
+  _ -> "max-w-[900px] mx-auto px-8 py-12"
+
 renderPage :: forall m. MonadAff m => Route -> H.ComponentHTML AppAction AppSlots m
 renderPage = case _ of
+  -- Product pages
   Home -> HH.slot_ _home unit Home.homePage unit
+  OmegaCode -> HH.slot_ _omegaCode unit OmegaCode.omegaCodePage unit
+  OmegaWork -> comingSoon "omega//work"
+  OmegaProxy -> comingSoon "omega//proxy"
+  OmegaBoost -> comingSoon "omega//boost"
+  -- Team pages
+  Team -> HH.slot_ _team unit TeamAbout.aboutPage unit
   Plan -> HH.slot_ _plan unit Plan.planPage unit
   Lean -> HH.slot_ _lean unit Lean.leanPage unit
   Razorgirl -> HH.slot_ _razorgirl unit Razorgirl.razorgirlPage unit
   Software -> HH.slot_ _software unit Software.softwarePage unit
+  -- Community
   Irc -> HH.slot_ _irc unit Irc.ircPage unit
   Discord -> HH.slot_ _discord unit Discord.discordPage unit
+
+comingSoon :: forall w i. String -> HH.HTML w i
+comingSoon name =
+  HH.div
+    [ cls [ "py-24 text-center" ] ]
+    [ HH.h1
+        [ cls [ "text-2xl font-bold text-text mb-4" ] ]
+        [ HH.text name ]
+    , HH.p
+        [ cls [ "text-muted-foreground" ] ]
+        [ HH.text "Coming soon." ]
+    ]
 
 -- ============================================================
 -- HEADER (inline for nav actions)

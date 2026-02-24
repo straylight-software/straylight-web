@@ -1,88 +1,33 @@
 -- | Straylight UI Components for Halogen
--- | Minimal component library for the straylight aesthetic
-module Straylight.UI where
+-- | Extends Hydrogen.UI with the straylight aesthetic
+module Straylight.UI 
+  ( -- * Re-exports from Hydrogen.UI.Core
+    module Hydrogen.UI.Core
+    -- * Straylight-specific typography
+  , sectionHeader
+  , heading
+  , text
+  , quote
+  , keyword
+    -- * Straylight-specific decorative elements
+  , rail
+  , statusIndicator
+  , scanlineOverlay
+    -- * Straylight-specific links
+  , navLink
+  , externalLink
+  , footerLink
+    -- * Code blocks
+  , codeBlock
+  , inlineCode
+  , blockCursor
+  ) where
 
 import Prelude
 
-import Data.Array (filter, intercalate)
 import Halogen.HTML as HH
 import Halogen.HTML.Properties as HP
-
--- ============================================================
--- UTILITY
--- ============================================================
-
--- | Combine class names, filtering empty strings
-classes :: Array String -> String
-classes = intercalate " " <<< filter (_ /= "")
-
--- | Create HP.class_ from array of class strings
-cls :: forall r i. Array String -> HH.IProp (class :: String | r) i
-cls = HP.class_ <<< HH.ClassName <<< classes
-
--- ============================================================
--- SVG NAMESPACE
--- ============================================================
-
-svgNS :: HH.Namespace
-svgNS = HH.Namespace "http://www.w3.org/2000/svg"
-
--- ============================================================
--- LAYOUT COMPONENTS
--- ============================================================
-
--- | Flex container
-flex :: forall w i. 
-  { direction :: String
-  , gap :: String
-  , align :: String
-  , justify :: String
-  , className :: String
-  } -> 
-  Array (HH.HTML w i) -> 
-  HH.HTML w i
-flex opts children =
-  HH.div
-    [ cls 
-        [ "flex"
-        , case opts.direction of
-            "column" -> "flex-col"
-            _ -> "flex-row"
-        , opts.gap
-        , case opts.align of
-            "center" -> "items-center"
-            "end" -> "items-end"
-            "stretch" -> "items-stretch"
-            _ -> "items-start"
-        , case opts.justify of
-            "center" -> "justify-center"
-            "end" -> "justify-end"
-            "between" -> "justify-between"
-            _ -> "justify-start"
-        , opts.className
-        ]
-    ]
-    children
-
--- | Simple flex row
-row :: forall w i. String -> Array (HH.HTML w i) -> HH.HTML w i
-row gap = flex { direction: "row", gap, align: "center", justify: "start", className: "" }
-
--- | Simple flex column
-column :: forall w i. String -> Array (HH.HTML w i) -> HH.HTML w i
-column gap = flex { direction: "column", gap, align: "start", justify: "start", className: "" }
-
--- | Box container
-box :: forall w i. String -> Array (HH.HTML w i) -> HH.HTML w i
-box className = HH.div [ cls [ className ] ]
-
--- | Max-width container
-container :: forall w i. String -> Array (HH.HTML w i) -> HH.HTML w i
-container className = HH.div [ cls [ "max-w-[900px] mx-auto px-8", className ] ]
-
--- | Section wrapper
-section :: forall w i. String -> Array (HH.HTML w i) -> HH.HTML w i
-section className = HH.section [ cls [ className ] ]
+import Hydrogen.UI.Core (classes, cls, svgCls, flex, row, column, box, container, section, svgNS)
 
 -- ============================================================
 -- TYPOGRAPHY

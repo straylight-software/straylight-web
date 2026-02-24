@@ -131,12 +131,10 @@ render state =
               -- Desktop Nav
             , HH.nav
                 [ cls [ "hidden md:flex items-center gap-6" ] ]
-                [ navLink "/plan" ".plan"
-                , navLink "/razorgirl" "razorgirl"
+                [ navLink "/omega/code" "omega//code"
+                , navLink "/team" "team"
                 , navLink "/software" "software"
                 , externalLink "https://github.com/straylight-software" "github"
-                , externalLink "https://tangled.sh/straylight.software" "tangled"
-                , navLink "/irc" "irc"
                 , navLink "/discord" "discord"
                 ]
               
@@ -297,12 +295,10 @@ mobileMenu =
     [ cls [ "md:hidden py-4 border-t border-border mt-4" ] ]
     [ HH.div
         [ cls [ "flex flex-col gap-4" ] ]
-        [ navLink "/plan" ".plan"
-        , navLink "/razorgirl" "razorgirl"
+        [ navLink "/omega/code" "omega//code"
+        , navLink "/team" "team"
         , navLink "/software" "software"
         , externalLink "https://github.com/straylight-software" "github"
-        , externalLink "https://tangled.sh/straylight.software" "tangled"
-        , navLink "/irc" "irc"
         , navLink "/discord" "discord"
         ]
     ]

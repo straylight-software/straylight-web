@@ -1,15 +1,14 @@
--- | Home Page
+-- | Product Landing Page
+-- | Two product families. Ten external products. One attestation layer.
 module Straylight.Pages.Home where
 
 import Prelude
 
 import Halogen as H
 import Halogen.HTML as HH
+import Halogen.HTML.Properties as HP
 
-import Straylight.UI (cls, rail, keyword, sectionHeader, codeBlock, inlineCode, blockCursor)
-import Straylight.Components.Callout as Callout
-import Straylight.Components.Tag (tags)
-import Straylight.Components.StatusBlock as Status
+import Straylight.UI (cls)
 
 -- ============================================================
 -- COMPONENT
@@ -30,147 +29,252 @@ render :: forall w i. HH.HTML w i
 render =
   HH.div_
     [ hero
-    , premise
-    , primitives
-    , method
-    , ultraviolence
+    , productMap
+    , cta
     ]
 
 -- ============================================================
--- SECTIONS
+-- HERO
 -- ============================================================
 
 hero :: forall w i. HH.HTML w i
 hero =
   HH.section
-    [ cls [ "py-24 pb-16 text-right" ] ]
-    [ rail
-    , HH.h1
-        [ cls [ "text-text text-[2rem] font-medium mt-6" ] ]
-        [ HH.span [ cls [ "text-primary" ] ] [ HH.text "//" ]
-        , HH.text " straylight "
-        , HH.span [ cls [ "text-primary" ] ] [ HH.text "//" ]
-        , HH.text " software "
-        , HH.span [ cls [ "text-primary" ] ] [ HH.text "//" ]
+    [ cls [ "py-24 md:py-32" ] ]
+    [ HH.div
+        [ cls [ "text-center" ] ]
+        [ -- Badge
+          badge "Q1 2026 · February – March"
+        , HH.h1
+            [ cls [ "text-4xl md:text-6xl font-bold text-text mb-6 leading-tight" ] ]
+            [ HH.text "Product Map" ]
+        , HH.p
+            [ cls [ "text-xl text-primary max-w-2xl mx-auto" ] ]
+            [ HH.text "Two product families. Ten external products. One attestation layer." ]
         ]
-    , HH.div [ cls [ "h-[3px] rail mt-6" ] ] []
-    
-    , HH.p
-        [ cls [ "mt-12 text-left text-lg text-muted-foreground hover:text-text transition-colors duration-200 cursor-default" ] ]
-        [ HH.text "the continuity project." ]
-    , HH.p
-        [ cls [ "mt-6 text-left italic text-base02 text-[0.95rem] hover:text-text transition-colors duration-200 cursor-default" ] ]
-        [ HH.text "continuity is continuity. continuity is continuity's job." ]
     ]
 
-premise :: forall w i. HH.HTML w i
-premise =
+-- ============================================================
+-- PRODUCT MAP (Two columns)
+-- ============================================================
+
+productMap :: forall w i. HH.HTML w i
+productMap =
   HH.section
-    [ cls [ "py-12 border-t border-border" ] ]
-    [ sectionHeader "premise"
-    , HH.p
-        [ cls [ "mb-4" ] ]
-        [ HH.text "all computations run on "
-        , keyword 1 "perfect conceptual computers"
-        , HH.text "."
+    [ cls [ "py-16 border-t border-border" ] ]
+    [ HH.div
+        [ cls [ "grid grid-cols-1 lg:grid-cols-2 gap-12" ] ]
+        [ -- SENSE//NET column
+          HH.div_
+            [ brandHeader "SENSE // NET" "Build infrastructure" true
+            , HH.div
+                [ cls [ "flex flex-col gap-3" ] ]
+                [ productCard true "Cache" 
+                    "Attestation-aware binary cache & artifact store. Content-addressed. Post-quantum signatures."
+                    "Cachix, S3 artifact buckets"
+                , productCard true "Build"
+                    "Typed build system with formal verification. Dhall configs. Lean4-proven derivations."
+                    "Bazel, Buck2, Nix expressions"
+                , productCard true "Converge"
+                    "Typed infrastructure-as-code. Desired-state convergence. No state files, no drift."
+                    "Terraform, Pulumi, Ansible"
+                , productCard true "Confirm"
+                    "CI with proof obligations. Typed Dhall pipelines. Agent code faces higher review burden."
+                    "GitHub Actions, CircleCI, Jenkins"
+                , productCard true "Forge"
+                    "Code hosting + review. Stacked diffs, not PRs. jujutsu first-class. Agent-era design."
+                    "GitHub, Graphite, Phabricator"
+                , productCard true "Publish"
+                    "Scope-graph documentation. References resolve or the build fails. Cross-language. Machine-readable."
+                    "rustdoc, Haddock, typedoc, Doxygen"
+                ]
+            ]
+        , -- OMEGA column
+          HH.div_
+            [ brandHeader "// Ω //" "Agent infrastructure" false
+            , HH.div
+                [ cls [ "flex flex-col gap-3" ] ]
+                [ productCardLink false "code"
+                    "Native terminal AI coding agent. Haskell + Brick TUI. io_uring event loop. 509k req/s. SIGIL-native."
+                    "Claude Code, Cursor, Windsurf, Aider"
+                    "/omega/code"
+                , productCard false "work"
+                    "Electron desktop app for non-coders. Same agent engine, GUI surface. For PMs, designers, analysts, ops."
+                    "ChatGPT desktop, Claude desktop (for teams)"
+                , productCard false "proxy"
+                    "Verified inference proxy. jaylene-slide ingress: SSE → SIGIL over ZeroMQ. Reset-on-ambiguity. 200–600% wire compression."
+                    "LiteLLM, raw OpenAI SDK, broken tool calls"
+                , productCard false "boost"
+                    "Managed inference co-located with BYOK vendor. evring HTTP/1.1+2+3 stack. Custom CUTLASS 3.x sm_120 kernels."
+                    "Self-hosted vLLM, raw provider APIs"
+                ]
+            , -- Shared architecture box
+              sharedArchitecture
+            ]
         ]
-    , HH.p
-        [ cls [ "mb-4" ] ]
-        [ keyword 2 "correct by construction"
-        , HH.text ". the result is saved."
-        ]
-    , HH.p
-        [ cls [ "mb-4" ] ]
-        [ HH.text "one "
-        , keyword 3 "content addressing"
-        , HH.text " scheme. the hash is the artifact."
-        ]
-    , HH.p
-        [ cls [ "mb-4" ] ]
-        [ keyword 4 "ca-derivations"
-        , HH.text " and buck2 and bazel are supports for a coset. they can have the same cache keys."
-        ]
-    , HH.p_
-        [ HH.text "who container registry. what nix cache. what waste." ]
     ]
 
-primitives :: forall w i. HH.HTML w i
-primitives =
-  HH.section
-    [ cls [ "py-12 border-t border-border" ] ]
-    [ sectionHeader "primitives"
-    , HH.div
-        [ cls [ "flex flex-col gap-2" ] ]
-        [ primitiveItem 5 "orthogonal." "one thing, well."
-        , primitiveItem 6 "composable." "outputs are inputs."
-        , primitiveItem 7 "deterministic." "same input, same hash, same artifact."
-        ]
-    ]
-
-primitiveItem :: forall w i. Int -> String -> String -> HH.HTML w i
-primitiveItem n name desc =
+brandHeader :: forall w i. String -> String -> Boolean -> HH.HTML w i
+brandHeader name desc isSense =
   HH.div
-    [ cls [ "grid grid-cols-[140px_1fr] gap-4" ] ]
-    [ keyword n name
-    , HH.span_ [ HH.text desc ]
+    [ cls [ "flex items-baseline gap-3 mb-5" ] ]
+    [ HH.span
+        [ cls [ "font-mono font-bold text-sm tracking-wide"
+              , if isSense then "text-primary" else "text-blue-300" 
+              ] 
+        ]
+        [ HH.text name ]
+    , HH.span
+        [ cls [ "text-sm text-muted-foreground italic" ] ]
+        [ HH.text desc ]
     ]
 
-method :: forall w i. HH.HTML w i
-method =
-  HH.section
-    [ cls [ "py-12 border-t border-border" ] ]
-    [ sectionHeader "method"
-    , codeBlock
-        [ inlineCode "razorgirl on railgun ~"
-        , HH.text "\n"
-        , inlineCode "❯ "
-        , HH.code
-            [ cls [ "text-text" ] ]
-            [ HH.text "ssh -A anywhere.straylight.software \\\n  'nix run -L github:straylight-software/isospin-builder -- nvidia-sdk | straylight-cas'" ]
-        , blockCursor
+productCard :: forall w i. Boolean -> String -> String -> String -> HH.HTML w i
+productCard isSense name desc replaces =
+  HH.div
+    [ cls [ "p-4 bg-card border border-border rounded-md transition-all hover:border-opacity-50 group"
+          , if isSense then "hover:border-primary" else "hover:border-blue-300"
+          ]
+    ]
+    [ HH.div
+        [ cls [ "flex items-baseline gap-2 mb-2" ] ]
+        [ HH.span 
+            [ cls [ "font-mono font-bold text-sm"
+                  , if isSense then "text-primary" else "text-blue-300"
+                  ] 
+            ] 
+            [ HH.text "//" ]
+        , HH.span 
+            [ cls [ "font-semibold text-text" ] ] 
+            [ HH.text name ]
         ]
     , HH.p
-        [ cls [ "mt-6 text-text" ] ]
-        [ keyword 1 "conceptual computers"
-        , HH.text " are free now."
+        [ cls [ "text-sm text-muted-foreground leading-relaxed mb-2" ] ]
+        [ HH.text desc ]
+    , HH.p
+        [ cls [ "font-mono text-[10px] text-muted-foreground/60" ] ]
+        [ HH.span 
+            [ cls [ if isSense then "text-primary/50" else "text-blue-300/50" ] ] 
+            [ HH.text "replaces " ]
+        , HH.text replaces
         ]
     ]
 
-ultraviolence :: forall w i. HH.HTML w i
-ultraviolence =
-  HH.section
-    [ cls [ "py-12 border-t border-border" ] ]
-    [ sectionHeader "ultraviolence"
-    , HH.div
-        [ cls [ "mb-6" ] ]
-        [ tags ["Lean", "CUDA", "Formal Methods", "rfl"] ]
-    , HH.div
-        [ cls [ "flex items-center gap-4 mb-6" ] ]
-        [ Status.nominal
-        , Status.degraded
-        , Status.offline
+productCardLink :: forall w i. Boolean -> String -> String -> String -> String -> HH.HTML w i
+productCardLink isSense name desc replaces href =
+  HH.a
+    [ HP.href href
+    , cls [ "block p-4 bg-card border border-border rounded-md transition-all group"
+          , if isSense then "hover:border-primary hover:bg-primary/5" else "hover:border-blue-300 hover:bg-blue-300/5"
+          ]
+    ]
+    [ HH.div
+        [ cls [ "flex items-baseline gap-2 mb-2" ] ]
+        [ HH.span 
+            [ cls [ "font-mono font-bold text-sm"
+                  , if isSense then "text-primary" else "text-blue-300"
+                  ] 
+            ] 
+            [ HH.text "//" ]
+        , HH.span 
+            [ cls [ "font-semibold text-text group-hover:text-primary transition-colors"
+                  , if isSense then "group-hover:text-primary" else "group-hover:text-blue-300"
+                  ] 
+            ] 
+            [ HH.text name ]
+        , HH.span
+            [ cls [ "ml-auto text-xs text-muted-foreground group-hover:text-text transition-colors" ] ]
+            [ HH.text "→" ]
         ]
-    , Callout.info "Gibson's Epigraph"
-        [ HH.p_
-            [ HH.em_ [ HH.text "\"The Villa Straylight is a body grown in upon itself, a Gothic folly. Each space in Straylight is in some way secret, this endless series of chambers linked by passages, by stairwells vaulted like intestines, where the eye is trapped in narrow curves, carried past ornate screens, empty alcoves.\"" ]
-            ]
-        ]
-    , Callout.warning "FTTC - Theorem 6"
-        [ HH.p_
-            [ HH.text "Theorem 6 describes when strong correctness is achievable. It is so powerful that it deserves a fancier name: "
-            , HH.strong_ [ HH.text "\"The fundamental theorem of TMA correctness.\"" ]
-            ]
-        ]
-    , Callout.danger "The Catch"
-        [ HH.p_
-            [ HH.text "NVIDIA documented when strong correctness is "
-            , HH.strong_ [ HH.text "impossible" ]
-            , HH.text ". And their stack doesn't always enforce these constraints as types. That's what we're fixing."
-            ]
-        ]
-    , Callout.tip "Tools of the Blade"
-        [ HH.p_ [ HH.strong_ [ HH.text "Lean 4" ], HH.text " for the proofs. The polyhedral model is lattices and affine spaces." ]
-        , HH.p_ [ HH.strong_ [ HH.text "Haskell" ], HH.text " for the glue. Algebraic data types for CuTe layouts." ]
-        , HH.p_ [ HH.strong_ [ HH.text "The blade" ], HH.text " for everything else." ]
+    , HH.p
+        [ cls [ "text-sm text-muted-foreground leading-relaxed mb-2" ] ]
+        [ HH.text desc ]
+    , HH.p
+        [ cls [ "font-mono text-[10px] text-muted-foreground/60" ] ]
+        [ HH.span 
+            [ cls [ if isSense then "text-primary/50" else "text-blue-300/50" ] ] 
+            [ HH.text "replaces " ]
+        , HH.text replaces
         ]
     ]
+
+sharedArchitecture :: forall w i. HH.HTML w i
+sharedArchitecture =
+  HH.div
+    [ cls [ "mt-6 p-5 border border-border rounded-md bg-card" ] ]
+    [ HH.div
+        [ cls [ "font-mono text-[10px] text-muted-foreground text-center mb-4 tracking-widest" ] ]
+        [ HH.text "SHARED ARCHITECTURE" ]
+    , HH.div
+        [ cls [ "flex justify-center items-center gap-2 font-mono text-xs" ] ]
+        [ archPill "code" "TUI"
+        , HH.span [ cls [ "text-muted-foreground" ] ] [ HH.text "╲" ]
+        , HH.span [ cls [ "text-text px-4 py-2 border border-primary rounded-md bg-primary/10 font-medium" ] ] 
+            [ HH.text "Agent Engine" ]
+        , HH.span [ cls [ "text-muted-foreground" ] ] [ HH.text "╱" ]
+        , archPill "work" "Electron"
+        ]
+    , HH.div
+        [ cls [ "text-center mt-4 font-mono text-[9px] text-muted-foreground" ] ]
+        [ HH.text "weapon-server · 95 endpoints · 221 property tests · SIGIL protocol" ]
+    ]
+
+archPill :: forall w i. String -> String -> HH.HTML w i
+archPill name label =
+  HH.span 
+    [ cls [ "text-blue-300 px-3 py-1.5 border border-border rounded-md" ] ] 
+    [ HH.text $ name <> " "
+    , HH.span [ cls [ "text-muted-foreground text-[9px]" ] ] [ HH.text label ] 
+    ]
+
+-- ============================================================
+-- CTA
+-- ============================================================
+
+cta :: forall w i. HH.HTML w i
+cta =
+  HH.section
+    [ cls [ "py-24 border-t border-border" ] ]
+    [ HH.div
+        [ cls [ "text-center" ] ]
+        [ HH.h2
+            [ cls [ "text-3xl font-bold text-text mb-4" ] ]
+            [ HH.text "Ready to ship?" ]
+        , HH.p
+            [ cls [ "text-muted-foreground mb-8 max-w-xl mx-auto" ] ]
+            [ HH.text "omega//code is in private beta. Join the waitlist or check out our open source work." ]
+        , HH.div
+            [ cls [ "flex flex-col sm:flex-row items-center justify-center gap-4" ] ]
+            [ primaryButton "/omega/code" "Learn about omega//code"
+            , secondaryButton "https://github.com/straylight-software" "GitHub"
+            ]
+        ]
+    ]
+
+-- ============================================================
+-- HELPERS
+-- ============================================================
+
+badge :: forall w i. String -> HH.HTML w i
+badge label =
+  HH.span
+    [ cls [ "inline-block px-3 py-1 bg-primary/10 border border-primary/20 rounded-full text-primary text-sm font-medium mb-6" ] ]
+    [ HH.text label ]
+
+primaryButton :: forall w i. String -> String -> HH.HTML w i
+primaryButton href label =
+  HH.a
+    [ HP.href href
+    , cls [ "inline-flex items-center justify-center px-6 py-3 bg-primary text-background font-medium rounded-md hover:bg-primary/90 transition-colors" ]
+    ]
+    [ HH.text label ]
+
+secondaryButton :: forall w i. String -> String -> HH.HTML w i
+secondaryButton href label =
+  HH.a
+    [ HP.href href
+    , HP.target "_blank"
+    , HP.rel "noopener noreferrer"
+    , cls [ "inline-flex items-center justify-center px-6 py-3 border border-border text-text font-medium rounded-md hover:bg-card transition-colors" ]
+    ]
+    [ HH.text label ]

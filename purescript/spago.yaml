@@ -8,6 +8,7 @@ package:
     - foldable-traversable
     - halogen
     - halogen-vdom
+    - hydrogen
     - maybe
     - prelude
     - strings
@@ -22,5 +23,8 @@ package:
 
 workspace:
   package_set:
-    registry: 59.0.0
-  extra_packages: {}
+    registry: 73.2.0
+  extra_packages:
+    hydrogen:
+      git: https://github.com/straylight-software/hydrogen.git
+      ref: main
