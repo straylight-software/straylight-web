@@ -111,7 +111,7 @@ flowStep :: forall w i. String -> String -> String -> HH.HTML w i
 flowStep num label content =
   HH.div
     [ cls [ "flex items-start gap-3" ] ]
-    [ HH.span [ cls [ "text-purple-400 font-bold" ] ] [ HH.text num ]
+    [ HH.span [ cls [ "text-orange-400 font-bold" ] ] [ HH.text num ]
     , HH.div_
         [ HH.p [ cls [ "text-muted-foreground text-xs mb-1" ] ] [ HH.text label ]
         , HH.code [ cls [ "text-text" ] ] [ HH.text content ]
@@ -219,7 +219,7 @@ socketPattern :: forall w i. String -> String -> HH.HTML w i
 socketPattern pattern label =
   HH.div
     [ cls [ "p-4 bg-background rounded-lg" ] ]
-    [ HH.p [ cls [ "text-purple-400 font-mono font-bold mb-1" ] ] [ HH.text pattern ]
+    [ HH.p [ cls [ "text-orange-400 font-mono font-bold mb-1" ] ] [ HH.text pattern ]
     , HH.p [ cls [ "text-muted-foreground text-sm" ] ] [ HH.text label ]
     ]
 
@@ -260,7 +260,7 @@ providerSupport =
 providerCard :: forall w i. String -> String -> HH.HTML w i
 providerCard name models =
   HH.div
-    [ cls [ "bg-card border border-border rounded-lg p-6 text-center hover:border-purple-400/50 transition-colors" ] ]
+    [ cls [ "bg-card border border-border rounded-lg p-6 text-center hover:border-orange-400/50 transition-colors" ] ]
     [ HH.p [ cls [ "text-text font-medium mb-1" ] ] [ HH.text name ]
     , HH.p [ cls [ "text-sm text-muted-foreground" ] ] [ HH.text models ]
     ]
@@ -301,10 +301,10 @@ obsCard :: forall w i. String -> String -> String -> HH.HTML w i
 obsCard title tech description =
   HH.div
     [ cls [ "bg-card border border-border rounded-lg p-6" ] ]
-    [ HH.div
-        [ cls [ "flex items-center gap-2 mb-3" ] ]
-        [ HH.h3 [ cls [ "text-text font-semibold" ] ] [ HH.text title ]
-        , HH.span [ cls [ "text-xs px-2 py-0.5 bg-purple-400/20 text-purple-400 rounded" ] ] [ HH.text tech ]
+        [ HH.div
+            [ cls [ "flex items-center gap-2 mb-3" ] ]
+            [ HH.h3 [ cls [ "text-text font-semibold" ] ] [ HH.text title ]
+            , HH.span [ cls [ "text-xs px-2 py-0.5 bg-orange-400/20 text-orange-400 rounded" ] ] [ HH.text tech ]
         ]
     , HH.p [ cls [ "text-muted-foreground text-sm" ] ] [ HH.text description ]
     ]
@@ -329,7 +329,7 @@ cta =
             [ cls [ "flex flex-col sm:flex-row items-center justify-center gap-4" ] ]
             [ HH.a
                 [ HP.href "/omega/proxy/docs"
-                , cls [ "inline-flex items-center justify-center px-8 py-4 bg-purple-400 text-background font-medium rounded-md hover:bg-purple-400/90 transition-colors" ]
+                , cls [ "inline-flex items-center justify-center px-8 py-4 bg-orange-400 text-background font-medium rounded-md hover:bg-orange-400/90 transition-colors" ]
                 ]
                 [ HH.text "Get started" ]
             , HH.a
@@ -348,7 +348,7 @@ cta =
 badge :: forall w i. String -> HH.HTML w i
 badge label =
   HH.span
-    [ cls [ "inline-block px-3 py-1 bg-purple-400/10 border border-purple-400/20 rounded-full text-purple-400 text-sm font-medium mb-4" ] ]
+    [ cls [ "inline-block px-3 py-1 bg-orange-400/10 border border-orange-400/20 rounded-full text-orange-400 text-sm font-medium mb-4" ] ]
     [ HH.text label ]
 
 featureList :: forall w i. Array String -> HH.HTML w i
@@ -361,7 +361,7 @@ featureItem :: forall w i. String -> HH.HTML w i
 featureItem text =
   HH.li
     [ cls [ "flex items-start gap-3" ] ]
-    [ HH.span [ cls [ "text-purple-400 mt-1" ] ] [ HH.text "+" ]
+    [ HH.span [ cls [ "text-orange-400 mt-1" ] ] [ HH.text "+" ]
     , HH.span [ cls [ "text-muted-foreground" ] ] [ HH.text text ]
     ]
 

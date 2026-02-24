@@ -68,33 +68,34 @@ plans =
         [ HH.div
             [ cls [ "grid grid-cols-1 md:grid-cols-3 gap-6" ] ]
             [ pricingCard
-                { name: "Self-Hosted"
+                { name: "Starter"
                 , price: "$0"
                 , period: "/forever"
-                , description: "Run omega//proxy on your own infrastructure."
+                , description: "Self-host omega//proxy on your infrastructure."
                 , features:
-                    [ "Full source code access"
+                    [ "Unlimited requests"
                     , "All features included"
+                    , "SSE to SIGIL translation"
+                    , "Reset-on-ambiguity"
                     , "Docker & Nix deployment"
                     , "Community support"
-                    , "MIT licensed"
                     ]
                 , cta: "View source"
                 , ctaHref: "https://github.com/straylight-software/omega-proxy"
                 , highlighted: false
                 }
             , pricingCard
-                { name: "Managed"
-                , price: "$49"
+                { name: "Pro"
+                , price: "$79"
                 , period: "/month"
-                , description: "We run it for you. Focus on your agents."
+                , description: "Managed hosting with high throughput."
                 , features:
-                    [ "Fully managed infrastructure"
+                    [ "25M requests/month"
+                    , "500GB bandwidth/month"
+                    , "200-600% wire compression"
                     , "99.9% uptime SLA"
-                    , "10M requests/month included"
+                    , "Provider health monitoring"
                     , "Priority support"
-                    , "Custom domain"
-                    , "Dashboard & analytics"
                     ]
                 , cta: "Start free trial"
                 , ctaHref: "/omega/proxy/dashboard"
@@ -104,13 +105,13 @@ plans =
                 { name: "Enterprise"
                 , price: "Custom"
                 , period: ""
-                , description: "For teams with compliance requirements."
+                , description: "Unlimited scale with compliance."
                 , features:
-                    [ "Dedicated infrastructure"
+                    [ "Unlimited requests"
+                    , "Unlimited bandwidth"
+                    , "Dedicated ZeroMQ clusters"
+                    , "Custom verification rules"
                     , "SSO/SAML integration"
-                    , "Audit logging"
-                    , "Custom SLA"
-                    , "Dedicated support"
                     , "On-premise deployment"
                     ]
                 , cta: "Contact sales"
@@ -139,12 +140,12 @@ pricingCard :: forall w i. PricingCardProps -> HH.HTML w i
 pricingCard props =
   HH.div
     [ cls [ "bg-card border rounded-lg p-6"
-          , if props.highlighted then "border-purple-400" else "border-border"
+          , if props.highlighted then "border-orange-400" else "border-border"
           ]
     ]
     [ if props.highlighted
         then HH.div
-          [ cls [ "text-xs text-purple-400 font-medium mb-4" ] ]
+          [ cls [ "text-xs text-orange-400 font-medium mb-4" ] ]
           [ HH.text "MOST POPULAR" ]
         else HH.text ""
     , HH.h3
@@ -165,7 +166,7 @@ pricingCard props =
         [ HP.href props.ctaHref
         , cls [ "block w-full py-3 text-center font-medium rounded-md transition-colors"
               , if props.highlighted 
-                  then "bg-purple-400 text-background hover:bg-purple-400/90"
+                  then "bg-orange-400 text-background hover:bg-orange-400/90"
                   else "border border-border text-text hover:bg-card"
               ]
         ]
@@ -176,7 +177,7 @@ featureItem :: forall w i. String -> HH.HTML w i
 featureItem text =
   HH.li
     [ cls [ "flex items-start gap-3" ] ]
-    [ HH.span [ cls [ "text-purple-400" ] ] [ HH.text "+" ]
+    [ HH.span [ cls [ "text-orange-400" ] ] [ HH.text "+" ]
     , HH.span [ cls [ "text-muted-foreground text-sm" ] ] [ HH.text text ]
     ]
 
@@ -243,7 +244,7 @@ enterprise =
             [ HH.text "We work with enterprises on custom deployments, SLAs, and integrations. Let's talk." ]
         , HH.a
             [ HP.href "mailto:enterprise@straylight.software"
-            , cls [ "inline-flex items-center justify-center px-6 py-3 bg-purple-400 text-background font-medium rounded-md hover:bg-purple-400/90 transition-colors" ]
+            , cls [ "inline-flex items-center justify-center px-6 py-3 bg-orange-400 text-background font-medium rounded-md hover:bg-orange-400/90 transition-colors" ]
             ]
             [ HH.text "Contact sales" ]
         ]

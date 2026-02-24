@@ -211,7 +211,7 @@ comparisonRow feature us litellm openrouter direct =
   HH.tr
     [ cls [ "border-b border-border" ] ]
     [ HH.td [ cls [ "py-3 text-muted-foreground font-medium" ] ] [ HH.text feature ]
-    , HH.td [ cls [ "py-3 text-center text-purple-400 font-semibold" ] ] [ HH.text us ]
+    , HH.td [ cls [ "py-3 text-center text-orange-400 font-semibold" ] ] [ HH.text us ]
     , HH.td [ cls [ "py-3 text-center" ] ] [ compCell litellm ]
     , HH.td [ cls [ "py-3 text-center" ] ] [ compCell openrouter ]
     , HH.td [ cls [ "py-3 text-center" ] ] [ compCell direct ]
@@ -262,7 +262,7 @@ quickstart =
             [ cls [ "mt-8 text-center" ] ]
             [ HH.a
                 [ HP.href "/omega/proxy/docs"
-                , cls [ "text-purple-400 hover:text-purple-400/80 transition-colors" ]
+                , cls [ "text-orange-400 hover:text-orange-400/80 transition-colors" ]
                 ]
                 [ HH.text "Full deployment guide ->" ]
             ]
@@ -308,7 +308,7 @@ primaryButton :: forall w i. String -> String -> HH.HTML w i
 primaryButton href label =
   HH.a
     [ HP.href href
-    , cls [ "inline-flex items-center justify-center px-6 py-3 bg-purple-400 text-background font-medium rounded-md hover:bg-purple-400/90 transition-colors" ]
+    , cls [ "inline-flex items-center justify-center px-6 py-3 bg-orange-400 text-background font-medium rounded-md hover:bg-orange-400/90 transition-colors" ]
     ]
     [ HH.text label ]
 

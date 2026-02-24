@@ -152,7 +152,7 @@ contactCard title email description =
         [ HH.text title ]
     , HH.a
         [ HP.href $ "mailto:" <> email
-        , cls [ "text-amber-400 hover:text-amber-400/80 block mb-2" ]
+        , cls [ "text-indigo-400 hover:text-indigo-400/80 block mb-2" ]
         ]
         [ HH.text email ]
     , HH.p

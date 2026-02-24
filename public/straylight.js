@@ -1680,8 +1680,8 @@
       if (aff.tag === Aff.Pure.tag) {
         return Aff.Pure(f(aff._1));
       } else {
-        return Aff.Bind(aff, function(value21) {
-          return Aff.Pure(f(value21));
+        return Aff.Bind(aff, function(value20) {
+          return Aff.Pure(f(value20));
         });
       }
     };
@@ -2733,10 +2733,10 @@
   };
 
   // output/Web.HTML.HTMLElement/foreign.js
-  function _read(nothing, just, value21) {
-    var tag2 = Object.prototype.toString.call(value21);
+  function _read(nothing, just, value20) {
+    var tag2 = Object.prototype.toString.call(value20);
     if (tag2.indexOf("[object HTML") === 0 && tag2.indexOf("Element]") === tag2.length - 8) {
-      return just(value21);
+      return just(value20);
     } else {
       return nothing;
     }
@@ -2764,13 +2764,13 @@
           return function(f) {
             return function(b2) {
               var result = [];
-              var value21 = b2;
+              var value20 = b2;
               while (true) {
-                var maybe2 = f(value21);
+                var maybe2 = f(value20);
                 if (isNothing2(maybe2)) return result;
                 var tuple = fromJust5(maybe2);
                 result.push(fst2(tuple));
-                value21 = snd2(tuple);
+                value20 = snd2(tuple);
               }
             };
           };
@@ -2787,13 +2787,13 @@
           return function(f) {
             return function(b2) {
               var result = [];
-              var value21 = b2;
+              var value20 = b2;
               while (true) {
-                var tuple = f(value21);
+                var tuple = f(value20);
                 result.push(fst2(tuple));
                 var maybe2 = snd2(tuple);
                 if (isNothing2(maybe2)) return result;
-                value21 = fromJust5(maybe2);
+                value20 = fromJust5(maybe2);
               }
             };
           };
@@ -4051,18 +4051,18 @@
   }();
 
   // output/Data.Array/foreign.js
-  var replicateFill = function(count, value21) {
+  var replicateFill = function(count, value20) {
     if (count < 1) {
       return [];
     }
     var result = new Array(count);
-    return result.fill(value21);
+    return result.fill(value20);
   };
-  var replicatePolyfill = function(count, value21) {
+  var replicatePolyfill = function(count, value20) {
     var result = [];
     var n = 0;
     for (var i2 = 0; i2 < count; i2++) {
-      result[n++] = value21;
+      result[n++] = value20;
     }
     return result;
   };
@@ -4784,14 +4784,14 @@
   };
 
   // output/Foreign/foreign.js
-  function typeOf(value21) {
-    return typeof value21;
+  function typeOf(value20) {
+    return typeof value20;
   }
-  function tagOf(value21) {
-    return Object.prototype.toString.call(value21).slice(8, -1);
+  function tagOf(value20) {
+    return Object.prototype.toString.call(value20).slice(8, -1);
   }
-  var isArray = Array.isArray || function(value21) {
-    return Object.prototype.toString.call(value21) === "[object Array]";
+  var isArray = Array.isArray || function(value20) {
+    return Object.prototype.toString.call(value20) === "[object Array]";
   };
 
   // output/Data.List/index.js
@@ -4945,16 +4945,16 @@
     var pure12 = pure(applicativeExceptT(dictMonad));
     var fail1 = fail(dictMonad);
     return function(tag2) {
-      return function(value21) {
-        if (tagOf(value21) === tag2) {
-          return pure12(unsafeFromForeign(value21));
+      return function(value20) {
+        if (tagOf(value20) === tag2) {
+          return pure12(unsafeFromForeign(value20));
         }
         ;
         if (otherwise) {
-          return fail1(new TypeMismatch(tag2, tagOf(value21)));
+          return fail1(new TypeMismatch(tag2, tagOf(value20)));
         }
         ;
-        throw new Error("Failed pattern match at Foreign (line 123, column 1 - line 123, column 104): " + [tag2.constructor.name, value21.constructor.name]);
+        throw new Error("Failed pattern match at Foreign (line 123, column 1 - line 123, column 104): " + [tag2.constructor.name, value20.constructor.name]);
       };
     };
   };
@@ -6404,6 +6404,9 @@
   var tbody = /* @__PURE__ */ element2("tbody");
   var tbody_ = /* @__PURE__ */ tbody([]);
   var td = /* @__PURE__ */ element2("td");
+  var textarea = function(es) {
+    return element2("textarea")(es)([]);
+  };
   var th = /* @__PURE__ */ element2("th");
   var thead = /* @__PURE__ */ element2("thead");
   var thead_ = /* @__PURE__ */ thead([]);
@@ -7608,8 +7611,8 @@
   };
 
   // output/Foreign.Index/foreign.js
-  function unsafeReadPropImpl(f, s, key, value21) {
-    return value21 == null ? f : s(value21[key]);
+  function unsafeReadPropImpl(f, s, key, value20) {
+    return value20 == null ? f : s(value20[key]);
   }
 
   // output/Foreign.Index/index.js
@@ -7617,8 +7620,8 @@
     var fail2 = fail(dictMonad);
     var pure10 = pure(applicativeExceptT(dictMonad));
     return function(k) {
-      return function(value21) {
-        return unsafeReadPropImpl(fail2(new TypeMismatch("object", typeOf(value21))), pure10, k, value21);
+      return function(value20) {
+        return unsafeReadPropImpl(fail2(new TypeMismatch("object", typeOf(value20))), pure10, k, value20);
       };
     };
   };
@@ -8253,8 +8256,8 @@
   // output/Straylight.Pages.Irc/index.js
   var webchatUrl = "https://web.libera.chat/#straylight";
   var row2 = function(label5) {
-    return function(value21) {
-      return div2([cls(["grid grid-cols-[100px_1fr] gap-4 items-baseline"])])([span3([cls(["text-text"])])([text5(label5)]), span3([cls(["text-muted-foreground"])])([text5(value21)])]);
+    return function(value20) {
+      return div2([cls(["grid grid-cols-[100px_1fr] gap-4 items-baseline"])])([span3([cls(["text-text"])])([text5(label5)]), span3([cls(["text-muted-foreground"])])([text5(value20)])]);
     };
   };
   var render5 = /* @__PURE__ */ div_([/* @__PURE__ */ sectionHeader("irc"), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["flex flex-col gap-4 mb-6"])])([/* @__PURE__ */ row2("network")("libera.chat"), /* @__PURE__ */ row2("channel")("#straylight")]), /* @__PURE__ */ a([/* @__PURE__ */ href4(webchatUrl), /* @__PURE__ */ target5("_blank"), /* @__PURE__ */ rel4("noopener"), /* @__PURE__ */ cls(["inline-block px-4 py-2 border border-border text-text hover:bg-accent transition-colors"])])([/* @__PURE__ */ text5("open webchat")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["mt-6 text-[0.85rem] text-muted-foreground"])])([/* @__PURE__ */ text5("or connect with your client:")]), /* @__PURE__ */ codeBlock([/* @__PURE__ */ inlineCode("/connect"), /* @__PURE__ */ text5(" irc.libera.chat\n"), /* @__PURE__ */ inlineCode("/join"), /* @__PURE__ */ text5(" #straylight")])]);
@@ -9119,11 +9122,11 @@
     })])([text5("+ New Key")])]), div2([cls(["space-y-4"])])([apiKeyCard("Production")("boost_live_prod_***abc")("inference")("2 hours ago"), apiKeyCard("Development")("boost_live_dev_***xyz")("inference")("Yesterday"), apiKeyCard("CI Pipeline")("boost_live_ci_***def")("metrics")("3 days ago")])]);
   };
   var analyticsTab = /* @__PURE__ */ div_([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["grid grid-cols-1 md:grid-cols-2 gap-6 mb-8"])])([/* @__PURE__ */ metricsCard("Token Throughput")("11.8k/s")("+18% vs last week"), /* @__PURE__ */ metricsCard("p99 TTFT")("4.2ms")("2.1x faster than vLLM")]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["bg-card border border-border rounded-lg p-6 mb-8"])])([/* @__PURE__ */ h3([/* @__PURE__ */ cls(["text-lg font-semibold text-text mb-4"])])([/* @__PURE__ */ text5("GPU Utilization")]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["space-y-4"])])([/* @__PURE__ */ breakdownRow("Compute")(94)("CUTLASS kernel active"), /* @__PURE__ */ breakdownRow("Memory")(78)("PagedAttention KV cache"), /* @__PURE__ */ breakdownRow("Tensor Core")(89)("sm_120 utilization")])]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["bg-card border border-border rounded-lg p-6"])])([/* @__PURE__ */ h3([/* @__PURE__ */ cls(["text-lg font-semibold text-text mb-4"])])([/* @__PURE__ */ text5("Tokens by Model")]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["space-y-3"])])([/* @__PURE__ */ modelRow("gpt-4-turbo")(5842e3)("47%"), /* @__PURE__ */ modelRow("claude-3-opus")(4231e3)("34%"), /* @__PURE__ */ modelRow("llama-70b")(2327e3)("19%")])])]);
-  var activityItem = function(type_115) {
+  var activityItem = function(type_114) {
     return function(description) {
       return function(time3) {
         return function(status2) {
-          return div2([cls(["flex items-center justify-between py-2 border-b border-border last:border-0"])])([div2([cls(["flex items-center gap-3"])])([span3([cls(["text-xs px-2 py-0.5 rounded font-medium bg-yellow-400/10 text-yellow-400"])])([text5(type_115)]), span3([cls(["text-sm text-text"])])([text5(description)]), function() {
+          return div2([cls(["flex items-center justify-between py-2 border-b border-border last:border-0"])])([div2([cls(["flex items-center gap-3"])])([span3([cls(["text-xs px-2 py-0.5 rounded font-medium bg-yellow-400/10 text-yellow-400"])])([text5(type_114)]), span3([cls(["text-sm text-text"])])([text5(description)]), function() {
             var $54 = status2 !== "";
             if ($54) {
               return span3([cls(["text-xs px-2 py-0.5 rounded", function() {
@@ -9389,9 +9392,9 @@
     };
   };
   var kernelMetric = function(label5) {
-    return function(value21) {
+    return function(value20) {
       return function(note) {
-        return div2([cls(["flex items-center justify-between p-3 bg-background rounded-md"])])([span3([cls(["text-text font-medium"])])([text5(label5)]), div2([cls(["flex items-center gap-2"])])([span3([cls(["text-yellow-400 font-bold font-mono"])])([text5(value21)]), span3([cls(["text-xs text-muted-foreground"])])([text5(note)])])]);
+        return div2([cls(["flex items-center justify-between p-3 bg-background rounded-md"])])([span3([cls(["text-text font-medium"])])([text5(label5)]), div2([cls(["flex items-center gap-2"])])([span3([cls(["text-yellow-400 font-bold font-mono"])])([text5(value20)]), span3([cls(["text-xs text-muted-foreground"])])([text5(note)])])]);
       };
     };
   };
@@ -9451,9 +9454,9 @@
       return a([href4(href5), cls(["inline-flex items-center justify-center px-6 py-3 bg-yellow-400 text-background font-medium rounded-md hover:bg-yellow-400/90 transition-colors"])])([text5(label5)]);
     };
   };
-  var metricBadge = function(value21) {
+  var metricBadge = function(value20) {
     return function(label5) {
-      return div2([cls(["flex items-baseline gap-2"])])([span3([cls(["text-3xl font-bold text-yellow-400"])])([text5(value21)]), span3([cls(["text-muted-foreground text-sm"])])([text5(label5)])]);
+      return div2([cls(["flex items-baseline gap-2"])])([span3([cls(["text-3xl font-bold text-yellow-400"])])([text5(value20)]), span3([cls(["text-muted-foreground text-sm"])])([text5(label5)])]);
     };
   };
   var howItWorks = /* @__PURE__ */ section([/* @__PURE__ */ cls(["py-24 border-t border-border"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["max-w-[1100px] mx-auto px-6"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["text-center mb-16"])])([/* @__PURE__ */ h2([/* @__PURE__ */ cls(["text-3xl font-bold text-text mb-4"])])([/* @__PURE__ */ text5("How it works")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-muted-foreground max-w-xl mx-auto"])])([/* @__PURE__ */ text5("Three steps to managed inference with custom kernels.")])]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["grid grid-cols-1 md:grid-cols-3 gap-8"])])([/* @__PURE__ */ stepCard("01")("Connect your keys")("Add your OpenAI, Anthropic, or other provider API keys. We co-locate with your vendor for optimal routing."), /* @__PURE__ */ stepCard("02")("Point to boost.omega.dev")("Replace your provider's base URL. Our CUTLASS kernels and evring stack handle the rest."), /* @__PURE__ */ stepCard("03")("Scale without ops")("Auto-scaling, continuous batching, failover. No GPU clusters to manage. No vLLM configs to tune.")])])]);
@@ -9811,19 +9814,19 @@
     return div2([cls(["flex-1 bg-blue-400/60 rounded-t"]), style("height: " + (show5(height8) + "%"))])([]);
   };
   var tokenStatCard = function(label5) {
-    return function(value21) {
+    return function(value20) {
       return function(subtitle) {
         return function(color) {
-          return div2([cls(["bg-card border border-border rounded-lg p-4"])])([p([cls(["text-sm text-muted-foreground mb-1"])])([text5(label5)]), p([cls(["text-2xl font-bold", color])])([text5(value21)]), p([cls(["text-xs text-muted-foreground"])])([text5(subtitle)])]);
+          return div2([cls(["bg-card border border-border rounded-lg p-4"])])([p([cls(["text-sm text-muted-foreground mb-1"])])([text5(label5)]), p([cls(["text-2xl font-bold", color])])([text5(value20)]), p([cls(["text-xs text-muted-foreground"])])([text5(subtitle)])]);
         };
       };
     };
   };
   var tabButton2 = function(state3) {
-    return function(value21) {
+    return function(value20) {
       return function(label5) {
         return button([cls(["px-4 py-2 text-sm font-medium transition-colors -mb-px cursor-pointer", function() {
-          var $12 = state3.activeTab === value21;
+          var $12 = state3.activeTab === value20;
           if ($12) {
             return "text-blue-300 border-b-2 border-blue-300";
           }
@@ -9837,9 +9840,9 @@
     return div2([cls(["flex gap-1 mb-8 border-b border-border"])])([tabButton2(state3)("overview")("Overview"), tabButton2(state3)("sessions")("Sessions"), tabButton2(state3)("agents")("Agents"), tabButton2(state3)("tokens")("Token Usage"), tabButton2(state3)("contexts")("Contexts"), tabButton2(state3)("attestations")("Attestations")]);
   };
   var statCard2 = function(label5) {
-    return function(value21) {
+    return function(value20) {
       return function(subtitle) {
-        return div2([cls(["bg-card border border-border rounded-lg p-4"])])([p([cls(["text-sm text-muted-foreground mb-1"])])([text5(label5)]), p([cls(["text-2xl font-bold text-text"])])([text5(value21)]), p([cls(["text-xs text-muted-foreground"])])([text5(subtitle)])]);
+        return div2([cls(["bg-card border border-border rounded-lg p-4"])])([p([cls(["text-sm text-muted-foreground mb-1"])])([text5(label5)]), p([cls(["text-2xl font-bold text-text"])])([text5(value20)]), p([cls(["text-xs text-muted-foreground"])])([text5(subtitle)])]);
       };
     };
   };
@@ -9892,8 +9895,8 @@
     });
   };
   var contextStatBox = function(label5) {
-    return function(value21) {
-      return div_([p([cls(["text-xs text-muted-foreground"])])([text5(label5)]), p([cls(["text-lg font-bold text-text"])])([text5(value21)])]);
+    return function(value20) {
+      return div_([p([cls(["text-xs text-muted-foreground"])])([text5(label5)]), p([cls(["text-lg font-bold text-text"])])([text5(value20)])]);
     };
   };
   var contextCard = function(id2) {
@@ -10215,16 +10218,16 @@
     };
   };
   var perfBar = function(label5) {
-    return function(value21) {
+    return function(value20) {
       return function(color) {
-        return div_([div2([cls(["flex justify-between text-sm mb-2"])])([span3([cls(["text-muted-foreground"])])([text5(label5)]), span3([cls([color])])([text5(show6(value21) + "k")])]), div2([cls(["h-4 bg-muted rounded-full overflow-hidden"])])([div2([cls(["h-full rounded-full transition-all duration-1000", function() {
-          var $6 = value21 > 200;
+        return div_([div2([cls(["flex justify-between text-sm mb-2"])])([span3([cls(["text-muted-foreground"])])([text5(label5)]), span3([cls([color])])([text5(show6(value20) + "k")])]), div2([cls(["h-4 bg-muted rounded-full overflow-hidden"])])([div2([cls(["h-full rounded-full transition-all duration-1000", function() {
+          var $6 = value20 > 200;
           if ($6) {
             return "bg-blue-300";
           }
           ;
           return "bg-muted-foreground/50";
-        }()]), style("width: " + (show6(div6(value21 * 100 | 0)(509)) + "%"))])([])])]);
+        }()]), style("width: " + (show6(div6(value20 * 100 | 0)(509)) + "%"))])([])])]);
       };
     };
   };
@@ -10298,15 +10301,15 @@
     };
   };
   var quickstart = /* @__PURE__ */ section([/* @__PURE__ */ cls(["py-24 border-t border-border"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["max-w-[800px] mx-auto px-6"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["text-center mb-12"])])([/* @__PURE__ */ h2([/* @__PURE__ */ cls(["text-3xl font-bold text-text mb-4"])])([/* @__PURE__ */ text5("Get started in 30 seconds")])]), /* @__PURE__ */ codeBlock([/* @__PURE__ */ codeLine8("# ")("Install (Nix)"), /* @__PURE__ */ codeLine8("$ ")("nix profile install github:straylight-software/omega-code"), /* @__PURE__ */ text5("\n"), /* @__PURE__ */ codeLine8("# ")("Or via curl"), /* @__PURE__ */ codeLine8("$ ")("curl -fsSL https://omega.straylight.software/install.sh | sh"), /* @__PURE__ */ text5("\n"), /* @__PURE__ */ codeLine8("# ")("Authenticate"), /* @__PURE__ */ codeLine8("$ ")("omega auth login"), /* @__PURE__ */ text5("\n"), /* @__PURE__ */ codeLine8("# ")("Start coding"), /* @__PURE__ */ codeLine8("$ ")("omega")]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["mt-8 text-center"])])([/* @__PURE__ */ a([/* @__PURE__ */ href4("/omega/code/docs"), /* @__PURE__ */ cls(["text-blue-300 hover:text-blue-300/80 transition-colors"])])([/* @__PURE__ */ text5("Full documentation ->")])])])]);
-  var cell = function(value21) {
+  var cell = function(value20) {
     return span3([cls([function() {
-      var $1 = value21 === "no";
+      var $1 = value20 === "no";
       if ($1) {
         return "text-muted-foreground/50";
       }
       ;
       return "text-muted-foreground";
-    }()])])([text5(value21)]);
+    }()])])([text5(value20)]);
   };
   var comparisonRow = function(feature) {
     return function(us) {
@@ -10672,15 +10675,13 @@
   // output/Straylight.Pages.Products.OmegaProxy.Dashboard/index.js
   var type_24 = /* @__PURE__ */ type_17(isPropButtonType);
   var modify_12 = /* @__PURE__ */ modify_(monadStateHalogenM);
-  var usageTab2 = /* @__PURE__ */ div_([/* @__PURE__ */ text5("Usage statistics")]);
-  var trafficTab = /* @__PURE__ */ div_([/* @__PURE__ */ text5("Traffic analytics")]);
   var tabButton3 = function(state3) {
-    return function(value21) {
+    return function(value20) {
       return function(label5) {
         return button([cls(["px-4 py-2 text-sm font-medium transition-colors -mb-px cursor-pointer", function() {
-          var $6 = state3.activeTab === value21;
-          if ($6) {
-            return "text-purple-400 border-b-2 border-purple-400";
+          var $7 = state3.activeTab === value20;
+          if ($7) {
+            return "text-orange-400 border-b-2 border-orange-400";
           }
           ;
           return "text-muted-foreground hover:text-text";
@@ -10689,52 +10690,102 @@
     };
   };
   var tabs3 = function(state3) {
-    return div2([cls(["flex gap-1 mb-8 border-b border-border"])])([tabButton3(state3)("overview")("Overview"), tabButton3(state3)("endpoints")("Endpoints"), tabButton3(state3)("traffic")("Traffic"), tabButton3(state3)("apikeys")("API Keys"), tabButton3(state3)("usage")("Usage")]);
+    return div2([cls(["flex gap-1 mb-8 border-b border-border"])])([tabButton3(state3)("overview")("Overview"), tabButton3(state3)("requests")("Requests"), tabButton3(state3)("compression")("Compression"), tabButton3(state3)("providers")("Providers"), tabButton3(state3)("resets")("Resets")]);
   };
   var statCard3 = function(label5) {
-    return function(value21) {
+    return function(value20) {
       return function(subtitle) {
-        return div2([cls(["bg-card border border-border rounded-lg p-4"])])([p([cls(["text-sm text-muted-foreground mb-1"])])([text5(label5)]), p([cls(["text-2xl font-bold text-text"])])([text5(value21)]), p([cls(["text-xs text-muted-foreground"])])([text5(subtitle)])]);
+        return div2([cls(["bg-card border border-border rounded-lg p-4"])])([p([cls(["text-sm text-muted-foreground mb-1"])])([text5(label5)]), p([cls(["text-2xl font-bold text-text"])])([text5(value20)]), p([cls(["text-xs text-muted-foreground"])])([text5(subtitle)])]);
       };
     };
   };
-  var overviewTab3 = /* @__PURE__ */ div_([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["grid grid-cols-1 md:grid-cols-4 gap-4 mb-8"])])([/* @__PURE__ */ statCard3("Requests Today")("12,847")("\u2191 8% from yesterday"), /* @__PURE__ */ statCard3("Avg Latency")("23ms")("p99: 89ms"), /* @__PURE__ */ statCard3("Error Rate")("0.02%")("Last 24 hours"), /* @__PURE__ */ statCard3("Ambiguity Resets")("3")("Last 24 hours")])]);
-  var header5 = /* @__PURE__ */ div2([/* @__PURE__ */ cls(["mb-8"])])([/* @__PURE__ */ h1([/* @__PURE__ */ cls(["text-2xl font-bold text-text mb-2"])])([/* @__PURE__ */ text5("omega//proxy Dashboard")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-muted-foreground"])])([/* @__PURE__ */ text5("Manage your endpoints, traffic, and API keys.")])]);
+  var resetRow = function(reason) {
+    return function(confidence) {
+      return function(model) {
+        return function(time3) {
+          return div2([cls(["flex items-center justify-between py-3 border-b border-border last:border-0"])])([div_([p([cls(["text-text font-medium"])])([text5(reason)]), p([cls(["text-muted-foreground text-sm"])])([text5(model)])]), div2([cls(["flex items-center gap-4"])])([span3([cls(["text-orange-400 font-mono text-sm"])])([text5(confidence)]), span3([cls(["text-muted-foreground text-xs"])])([text5(time3)])])]);
+        };
+      };
+    };
+  };
+  var resetsTab = /* @__PURE__ */ div2([/* @__PURE__ */ cls(["bg-card border border-border rounded-lg p-6"])])([/* @__PURE__ */ h3([/* @__PURE__ */ cls(["text-lg font-semibold text-text mb-4"])])([/* @__PURE__ */ text5("Reset-on-Ambiguity Events")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-muted-foreground text-sm mb-6"])])([/* @__PURE__ */ text5("Automatic context resets triggered when response confidence drops below threshold.")]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["space-y-4"])])([/* @__PURE__ */ resetRow("Low confidence")("0.23")("gpt-4")("2 hours ago"), /* @__PURE__ */ resetRow("Multiple parse paths")("0.31")("claude-3-5-sonnet")("6 hours ago"), /* @__PURE__ */ resetRow("Schema mismatch")("0.28")("gpt-4o")("18 hours ago")])]);
+  var requestRow = function(model) {
+    return function(endpoint) {
+      return function(status2) {
+        return function(latency) {
+          return function(time3) {
+            return div2([cls(["flex items-center justify-between py-3 border-b border-border last:border-0"])])([div2([cls(["flex items-center gap-4"])])([span3([cls(["text-text font-mono text-sm"])])([text5(model)]), span3([cls(["text-muted-foreground text-sm"])])([text5(endpoint)])]), div2([cls(["flex items-center gap-4"])])([span3([cls(["text-xs px-2 py-0.5 rounded", function() {
+              var $8 = status2 === "verified";
+              if ($8) {
+                return "bg-green-400/10 text-green-400";
+              }
+              ;
+              return "bg-orange-400/10 text-orange-400";
+            }()])])([text5(status2)]), span3([cls(["text-muted-foreground text-sm w-16 text-right"])])([text5(latency)]), span3([cls(["text-muted-foreground text-xs w-20 text-right"])])([text5(time3)])])]);
+          };
+        };
+      };
+    };
+  };
+  var requestsTab = /* @__PURE__ */ div2([/* @__PURE__ */ cls(["bg-card border border-border rounded-lg p-6"])])([/* @__PURE__ */ h3([/* @__PURE__ */ cls(["text-lg font-semibold text-text mb-4"])])([/* @__PURE__ */ text5("Request History")]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["space-y-4"])])([/* @__PURE__ */ requestRow("gpt-4o")("chat.completions")("verified")("23ms")("2 min ago"), /* @__PURE__ */ requestRow("claude-3-5-sonnet")("chat.completions")("verified")("45ms")("5 min ago"), /* @__PURE__ */ requestRow("gpt-4")("tool.call")("repaired")("67ms")("8 min ago"), /* @__PURE__ */ requestRow("claude-3-5-sonnet")("chat.completions")("verified")("38ms")("12 min ago")])]);
+  var providerRow = function(name16) {
+    return function(status2) {
+      return function(latency) {
+        return function(requests) {
+          return div2([cls(["flex items-center justify-between py-3 border-b border-border last:border-0"])])([div2([cls(["flex items-center gap-3"])])([span3([cls(["w-2 h-2 rounded-full bg-green-400"])])([]), span3([cls(["text-text font-medium"])])([text5(name16)])]), div2([cls(["flex items-center gap-6 text-sm"])])([span3([cls(["text-muted-foreground"])])([text5(latency + " avg")]), span3([cls(["text-muted-foreground"])])([text5(requests + " reqs")])])]);
+        };
+      };
+    };
+  };
+  var providersTab3 = /* @__PURE__ */ div2([/* @__PURE__ */ cls(["bg-card border border-border rounded-lg p-6"])])([/* @__PURE__ */ h3([/* @__PURE__ */ cls(["text-lg font-semibold text-text mb-4"])])([/* @__PURE__ */ text5("Provider Health")]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["space-y-4"])])([/* @__PURE__ */ providerRow("OpenAI")("healthy")("23ms")("5,432"), /* @__PURE__ */ providerRow("Anthropic")("healthy")("45ms")("4,891"), /* @__PURE__ */ providerRow("Google")("healthy")("67ms")("1,203"), /* @__PURE__ */ providerRow("Ollama (local)")("healthy")("12ms")("1,321")])]);
+  var metricRow = function(label5) {
+    return function(value20) {
+      return div2([cls(["flex items-center justify-between"])])([span3([cls(["text-muted-foreground text-sm"])])([text5(label5)]), span3([cls(["text-text font-medium"])])([text5(value20)])]);
+    };
+  };
+  var overviewTab3 = /* @__PURE__ */ div_([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["grid grid-cols-1 md:grid-cols-4 gap-4 mb-8"])])([/* @__PURE__ */ statCard3("Requests Today")("12,847")("\u2191 8% from yesterday"), /* @__PURE__ */ statCard3("Compression Ratio")("4.2x")("Avg wire savings"), /* @__PURE__ */ statCard3("Provider Health")("100%")("All providers up"), /* @__PURE__ */ statCard3("Ambiguity Resets")("3")("Last 24 hours")]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["grid grid-cols-1 lg:grid-cols-2 gap-6"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["bg-card border border-border rounded-lg p-6"])])([/* @__PURE__ */ h3([/* @__PURE__ */ cls(["text-lg font-semibold text-text mb-4"])])([/* @__PURE__ */ text5("Request Metrics")]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["space-y-3"])])([/* @__PURE__ */ metricRow("Total requests (24h)")("12,847"), /* @__PURE__ */ metricRow("Verified responses")("12,844 (99.98%)"), /* @__PURE__ */ metricRow("Tool calls repaired")("23"), /* @__PURE__ */ metricRow("Avg latency")("23ms (p99: 89ms)")])]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["bg-card border border-border rounded-lg p-6"])])([/* @__PURE__ */ h3([/* @__PURE__ */ cls(["text-lg font-semibold text-text mb-4"])])([/* @__PURE__ */ text5("Wire Compression")]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["space-y-3"])])([/* @__PURE__ */ metricRow("Bytes received (SSE)")("847.2 MB"), /* @__PURE__ */ metricRow("Bytes sent (SIGIL)")("201.7 MB"), /* @__PURE__ */ metricRow("Compression ratio")("4.2x"), /* @__PURE__ */ metricRow("Bandwidth saved")("645.5 MB")])])])]);
+  var header5 = /* @__PURE__ */ div2([/* @__PURE__ */ cls(["mb-8"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["flex items-center gap-3 mb-2"])])([/* @__PURE__ */ h1([/* @__PURE__ */ cls(["text-2xl font-bold text-text"])])([/* @__PURE__ */ text5("omega//proxy Dashboard")]), /* @__PURE__ */ span3([/* @__PURE__ */ cls(["px-2 py-0.5 bg-orange-400/10 text-orange-400 text-xs rounded-full"])])([/* @__PURE__ */ text5("Verified")])]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-muted-foreground"])])([/* @__PURE__ */ text5("Request metrics, compression ratios, and provider health.")])]);
   var handleAction10 = function(v) {
     return modify_12(function(v1) {
-      var $8 = {};
-      for (var $9 in v1) {
-        if ({}.hasOwnProperty.call(v1, $9)) {
-          $8[$9] = v1[$9];
+      var $10 = {};
+      for (var $11 in v1) {
+        if ({}.hasOwnProperty.call(v1, $11)) {
+          $10[$11] = v1[$11];
         }
         ;
       }
       ;
-      $8.activeTab = v.value0;
-      return $8;
+      $10.activeTab = v.value0;
+      return $10;
     });
   };
-  var endpointsTab = /* @__PURE__ */ div_([/* @__PURE__ */ text5("Endpoints management")]);
-  var apiKeysTab = /* @__PURE__ */ div_([/* @__PURE__ */ text5("API keys management")]);
+  var compressionStat = function(period) {
+    return function(ratio) {
+      return function(saved) {
+        return div2([cls(["text-center p-4 bg-background rounded-lg"])])([p([cls(["text-muted-foreground text-sm mb-1"])])([text5(period)]), p([cls(["text-2xl font-bold text-orange-400"])])([text5(ratio)]), p([cls(["text-muted-foreground text-xs"])])([text5(saved)])]);
+      };
+    };
+  };
+  var compressionTab = /* @__PURE__ */ div2([/* @__PURE__ */ cls(["bg-card border border-border rounded-lg p-6"])])([/* @__PURE__ */ h3([/* @__PURE__ */ cls(["text-lg font-semibold text-text mb-4"])])([/* @__PURE__ */ text5("Compression Analytics")]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["grid grid-cols-1 md:grid-cols-3 gap-6 mb-6"])])([/* @__PURE__ */ compressionStat("Today")("4.2x")("645 MB saved"), /* @__PURE__ */ compressionStat("This Week")("3.8x")("4.2 GB saved"), /* @__PURE__ */ compressionStat("This Month")("4.1x")("18.7 GB saved")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-muted-foreground text-sm"])])([/* @__PURE__ */ text5("SIGIL protocol achieves 200-600% compression by optimizing token representation and eliminating SSE overhead.")])]);
   var content7 = function(state3) {
     if (state3.activeTab === "overview") {
       return overviewTab3;
     }
     ;
-    if (state3.activeTab === "endpoints") {
-      return endpointsTab;
+    if (state3.activeTab === "requests") {
+      return requestsTab;
     }
     ;
-    if (state3.activeTab === "traffic") {
-      return trafficTab;
+    if (state3.activeTab === "compression") {
+      return compressionTab;
     }
     ;
-    if (state3.activeTab === "apikeys") {
-      return apiKeysTab;
+    if (state3.activeTab === "providers") {
+      return providersTab3;
     }
     ;
-    if (state3.activeTab === "usage") {
-      return usageTab2;
+    if (state3.activeTab === "resets") {
+      return resetsTab;
     }
     ;
     return overviewTab3;
@@ -10770,6 +10821,7 @@
     };
     return Receive13;
   }();
+  var sigilProtocolContent = /* @__PURE__ */ article([/* @__PURE__ */ cls(["prose prose-invert max-w-none"])])([/* @__PURE__ */ h1([/* @__PURE__ */ cls(["text-3xl font-bold text-text mb-6"])])([/* @__PURE__ */ text5("SIGIL Protocol")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-muted-foreground mb-6"])])([/* @__PURE__ */ text5("SIGIL is a wire-optimized protocol for verified LLM inference. It achieves 200-600% compression over raw JSON SSE.")]), /* @__PURE__ */ h2([/* @__PURE__ */ cls(["text-xl font-semibold text-text mt-8 mb-4"])])([/* @__PURE__ */ text5("Frame Structure")]), /* @__PURE__ */ codeBlock([/* @__PURE__ */ text5("(sigil-frame\n"), /* @__PURE__ */ text5("  :type token\n"), /* @__PURE__ */ text5('  :content "Hello"\n'), /* @__PURE__ */ text5("  :verified true\n"), /* @__PURE__ */ text5("  :confidence 0.97\n"), /* @__PURE__ */ text5("  :seq 42)")]), /* @__PURE__ */ h2([/* @__PURE__ */ cls(["text-xl font-semibold text-text mt-8 mb-4"])])([/* @__PURE__ */ text5("Verification")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-muted-foreground"])])([/* @__PURE__ */ text5("Each frame includes verification metadata. When confidence drops below threshold, reset-on-ambiguity triggers automatic context recovery.")])]);
   var sidebarSection3 = function(title3) {
     return function(children2) {
       return div_([h3([cls(["text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3"])])([text5(title3)]), ul([cls(["space-y-1"])])(children2)]);
@@ -10781,7 +10833,7 @@
         return li_([a([href4(href5), cls(["block py-1.5 px-3 rounded text-sm transition-colors", function() {
           var $6 = href5 === currentPath;
           if ($6) {
-            return "bg-purple-400/10 text-purple-400 font-medium";
+            return "bg-orange-400/10 text-orange-400 font-medium";
           }
           ;
           return "text-muted-foreground hover:text-text hover:bg-card";
@@ -10790,10 +10842,27 @@
     };
   };
   var sidebar5 = function(currentPath) {
-    return nav([cls(["lg:sticky lg:top-24 lg:self-start"])])([div2([cls(["space-y-6"])])([sidebarSection3("Getting Started")([sidebarLink5("/omega/proxy/docs")("Overview")(currentPath), sidebarLink5("/omega/proxy/docs/quickstart")("Quick Start")(currentPath), sidebarLink5("/omega/proxy/docs/installation")("Installation")(currentPath)]), sidebarSection3("Guides")([sidebarLink5("/omega/proxy/docs/sigil")("SIGIL Protocol")(currentPath), sidebarLink5("/omega/proxy/docs/zeromq")("ZeroMQ Transport")(currentPath), sidebarLink5("/omega/proxy/docs/sse")("SSE Translation")(currentPath), sidebarLink5("/omega/proxy/docs/ambiguity")("Reset-on-Ambiguity")(currentPath)]), sidebarSection3("Reference")([sidebarLink5("/omega/proxy/docs/cli")("CLI Reference")(currentPath), sidebarLink5("/omega/proxy/docs/api")("API Reference")(currentPath), sidebarLink5("/omega/proxy/docs/config")("Configuration")(currentPath)])])]);
+    return nav([cls(["lg:sticky lg:top-24 lg:self-start"])])([div2([cls(["space-y-6"])])([sidebarSection3("Getting Started")([sidebarLink5("/omega/proxy/docs")("Overview")(currentPath), sidebarLink5("/omega/proxy/docs/quickstart")("Quick Start")(currentPath), sidebarLink5("/omega/proxy/docs/installation")("Installation")(currentPath)]), sidebarSection3("Core Concepts")([sidebarLink5("/omega/proxy/docs/sigil-protocol")("SIGIL Protocol")(currentPath), sidebarLink5("/omega/proxy/docs/sse-translation")("SSE Translation")(currentPath), sidebarLink5("/omega/proxy/docs/reset-on-ambiguity")("Reset-on-Ambiguity")(currentPath), sidebarLink5("/omega/proxy/docs/tool-call-repair")("Tool Call Repair")(currentPath)]), sidebarSection3("Providers")([sidebarLink5("/omega/proxy/docs/providers")("Provider Setup")(currentPath), sidebarLink5("/omega/proxy/docs/providers/openai")("OpenAI")(currentPath), sidebarLink5("/omega/proxy/docs/providers/anthropic")("Anthropic")(currentPath), sidebarLink5("/omega/proxy/docs/providers/ollama")("Ollama (Local)")(currentPath)]), sidebarSection3("Deployment")([sidebarLink5("/omega/proxy/docs/deployment")("Deployment Guide")(currentPath), sidebarLink5("/omega/proxy/docs/deployment/docker")("Docker")(currentPath), sidebarLink5("/omega/proxy/docs/deployment/kubernetes")("Kubernetes")(currentPath), sidebarLink5("/omega/proxy/docs/deployment/zeromq")("ZeroMQ Setup")(currentPath)]), sidebarSection3("Reference")([sidebarLink5("/omega/proxy/docs/api")("API Reference")(currentPath), sidebarLink5("/omega/proxy/docs/cli")("CLI Reference")(currentPath), sidebarLink5("/omega/proxy/docs/config")("Configuration")(currentPath)])])]);
   };
-  var quickstartContent3 = /* @__PURE__ */ article([/* @__PURE__ */ cls(["prose prose-invert max-w-none"])])([/* @__PURE__ */ h1([/* @__PURE__ */ cls(["text-3xl font-bold text-text mb-6"])])([/* @__PURE__ */ text5("Quick Start")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-muted-foreground mb-4"])])([/* @__PURE__ */ text5("Get omega//proxy running in under a minute.")]), /* @__PURE__ */ codeBlock([/* @__PURE__ */ text5("# Install omega//proxy\n"), /* @__PURE__ */ text5("nix profile install github:straylight-software/omega-proxy\n\n"), /* @__PURE__ */ text5("# Start the proxy\n"), /* @__PURE__ */ text5("omega-proxy --listen tcp://127.0.0.1:5555 --upstream https://api.anthropic.com")])]);
-  var overviewContent3 = /* @__PURE__ */ article([/* @__PURE__ */ cls(["prose prose-invert max-w-none"])])([/* @__PURE__ */ h1([/* @__PURE__ */ cls(["text-3xl font-bold text-text mb-6"])])([/* @__PURE__ */ text5("omega//proxy Documentation")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-muted-foreground mb-4"])])([/* @__PURE__ */ text5("Verified inference proxy with SSE to SIGIL protocol translation over ZeroMQ.")]), /* @__PURE__ */ h2([/* @__PURE__ */ cls(["text-2xl font-semibold text-text mt-12 mb-4"])])([/* @__PURE__ */ text5("What is omega//proxy?")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-muted-foreground mb-4"])])([/* @__PURE__ */ text5("omega//proxy sits between your LLM provider and your applications, translating Server-Sent Events (SSE) into the SIGIL protocol over ZeroMQ. It provides verified inference with reset-on-ambiguity semantics.")])]);
+  var quickstartContent3 = /* @__PURE__ */ article([/* @__PURE__ */ cls(["prose prose-invert max-w-none"])])([/* @__PURE__ */ h1([/* @__PURE__ */ cls(["text-3xl font-bold text-text mb-6"])])([/* @__PURE__ */ text5("Quick Start")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-muted-foreground mb-6"])])([/* @__PURE__ */ text5("Get omega//proxy running in under 60 seconds.")]), /* @__PURE__ */ h2([/* @__PURE__ */ cls(["text-xl font-semibold text-text mt-8 mb-4"])])([/* @__PURE__ */ text5("Docker (Recommended)")]), /* @__PURE__ */ codeBlock([/* @__PURE__ */ text5("docker run -p 8080:8080 -p 5555:5555 \\\n"), /* @__PURE__ */ text5("  -e OPENAI_API_KEY=$OPENAI_API_KEY \\\n"), /* @__PURE__ */ text5("  -e ANTHROPIC_API_KEY=$ANTHROPIC_API_KEY \\\n"), /* @__PURE__ */ text5("  straylight/omega-proxy")]), /* @__PURE__ */ h2([/* @__PURE__ */ cls(["text-xl font-semibold text-text mt-8 mb-4"])])([/* @__PURE__ */ text5("Nix")]), /* @__PURE__ */ codeBlock([/* @__PURE__ */ text5("nix run github:straylight-software/omega-proxy")]), /* @__PURE__ */ h2([/* @__PURE__ */ cls(["text-xl font-semibold text-text mt-8 mb-4"])])([/* @__PURE__ */ text5("Connect via ZeroMQ")]), /* @__PURE__ */ codeBlock([/* @__PURE__ */ text5("# Subscribe to SIGIL frames\n"), /* @__PURE__ */ text5("zmq-sub tcp://localhost:5555\n\n"), /* @__PURE__ */ text5("# Or use the HTTP API\n"), /* @__PURE__ */ text5("curl http://localhost:8080/v1/chat/completions \\\n"), /* @__PURE__ */ text5('  -H "Content-Type: application/json" \\\n'), /* @__PURE__ */ text5(`  -d '{"model": "gpt-4", "messages": [...]}'`)])]);
+  var providersContent2 = /* @__PURE__ */ article([/* @__PURE__ */ cls(["prose prose-invert max-w-none"])])([/* @__PURE__ */ h1([/* @__PURE__ */ cls(["text-3xl font-bold text-text mb-6"])])([/* @__PURE__ */ text5("Provider Setup")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-muted-foreground mb-6"])])([/* @__PURE__ */ text5("omega//proxy supports all major LLM providers with a unified API.")]), /* @__PURE__ */ h2([/* @__PURE__ */ cls(["text-xl font-semibold text-text mt-8 mb-4"])])([/* @__PURE__ */ text5("Supported Providers")]), /* @__PURE__ */ ul([/* @__PURE__ */ cls(["list-disc list-inside text-muted-foreground space-y-2 mb-6"])])([/* @__PURE__ */ li_([/* @__PURE__ */ text5("OpenAI (GPT-4, GPT-4o, o1)")]), /* @__PURE__ */ li_([/* @__PURE__ */ text5("Anthropic (Claude 3.5 Sonnet, Opus)")]), /* @__PURE__ */ li_([/* @__PURE__ */ text5("Google (Gemini)")]), /* @__PURE__ */ li_([/* @__PURE__ */ text5("Mistral (Mistral Large)")]), /* @__PURE__ */ li_([/* @__PURE__ */ text5("Ollama (local models)")]), /* @__PURE__ */ li_([/* @__PURE__ */ text5("Custom endpoints")])]), /* @__PURE__ */ h2([/* @__PURE__ */ cls(["text-xl font-semibold text-text mt-8 mb-4"])])([/* @__PURE__ */ text5("Configuration")]), /* @__PURE__ */ codeBlock([/* @__PURE__ */ text5("# config.yaml\n"), /* @__PURE__ */ text5("providers:\n"), /* @__PURE__ */ text5("  openai:\n"), /* @__PURE__ */ text5("    api_key: ${OPENAI_API_KEY}\n"), /* @__PURE__ */ text5("    models: [gpt-4, gpt-4o]\n"), /* @__PURE__ */ text5("  anthropic:\n"), /* @__PURE__ */ text5("    api_key: ${ANTHROPIC_API_KEY}\n"), /* @__PURE__ */ text5("    models: [claude-3-5-sonnet]")])]);
+  var overviewContent3 = /* @__PURE__ */ article([/* @__PURE__ */ cls(["prose prose-invert max-w-none"])])([/* @__PURE__ */ h1([/* @__PURE__ */ cls(["text-3xl font-bold text-text mb-6"])])([/* @__PURE__ */ text5("omega//proxy Documentation")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-muted-foreground mb-6"])])([/* @__PURE__ */ text5("Verified inference proxy. jaylene-slide ingress: SSE to SIGIL over ZeroMQ. Reset-on-ambiguity. 200-600% wire compression.")]), /* @__PURE__ */ h2([/* @__PURE__ */ cls(["text-2xl font-semibold text-text mt-12 mb-4"])])([/* @__PURE__ */ text5("What is omega//proxy?")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-muted-foreground mb-4"])])([/* @__PURE__ */ text5("omega//proxy sits between your LLM provider and your applications, translating Server-Sent Events (SSE) into the SIGIL protocol over ZeroMQ. It provides verified inference with reset-on-ambiguity semantics, fixing broken tool calls automatically.")]), /* @__PURE__ */ h2([/* @__PURE__ */ cls(["text-2xl font-semibold text-text mt-12 mb-4"])])([/* @__PURE__ */ text5("Key Features")]), /* @__PURE__ */ ul([/* @__PURE__ */ cls(["list-disc list-inside text-muted-foreground space-y-2 mb-6"])])([/* @__PURE__ */ li_([/* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-orange-400"])])([/* @__PURE__ */ text5("SSE to SIGIL")]), /* @__PURE__ */ text5(" \u2014 Real-time translation via jaylene-slide ingress")]), /* @__PURE__ */ li_([/* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-orange-400"])])([/* @__PURE__ */ text5("Reset-on-ambiguity")]), /* @__PURE__ */ text5(" \u2014 Prevents hallucination cascades")]), /* @__PURE__ */ li_([/* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-orange-400"])])([/* @__PURE__ */ text5("200-600% compression")]), /* @__PURE__ */ text5(" \u2014 Wire-level SIGIL optimization")]), /* @__PURE__ */ li_([/* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-orange-400"])])([/* @__PURE__ */ text5("Tool call repair")]), /* @__PURE__ */ text5(" \u2014 Fixes malformed LLM tool responses")]), /* @__PURE__ */ li_([/* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-orange-400"])])([/* @__PURE__ */ text5("Multi-provider")]), /* @__PURE__ */ text5(" \u2014 OpenAI, Anthropic, Google, Ollama, custom")])]), /* @__PURE__ */ h2([/* @__PURE__ */ cls(["text-2xl font-semibold text-text mt-12 mb-4"])])([/* @__PURE__ */ text5("Replaces")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-muted-foreground"])])([/* @__PURE__ */ text5("LiteLLM, raw OpenAI SDK, broken tool calls, custom proxy scripts.")])]);
+  var handleAction11 = function(v) {
+    return modify_13(function(v1) {
+      var $8 = {};
+      for (var $9 in v1) {
+        if ({}.hasOwnProperty.call(v1, $9)) {
+          $8[$9] = v1[$9];
+        }
+        ;
+      }
+      ;
+      $8.path = v.value0.path;
+      return $8;
+    });
+  };
+  var deploymentContent2 = /* @__PURE__ */ article([/* @__PURE__ */ cls(["prose prose-invert max-w-none"])])([/* @__PURE__ */ h1([/* @__PURE__ */ cls(["text-3xl font-bold text-text mb-6"])])([/* @__PURE__ */ text5("Deployment Guide")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-muted-foreground mb-6"])])([/* @__PURE__ */ text5("Deploy omega//proxy to production with Docker, Kubernetes, or bare metal.")]), /* @__PURE__ */ h2([/* @__PURE__ */ cls(["text-xl font-semibold text-text mt-8 mb-4"])])([/* @__PURE__ */ text5("Production Checklist")]), /* @__PURE__ */ ul([/* @__PURE__ */ cls(["list-disc list-inside text-muted-foreground space-y-2 mb-6"])])([/* @__PURE__ */ li_([/* @__PURE__ */ text5("Configure ZeroMQ bind addresses")]), /* @__PURE__ */ li_([/* @__PURE__ */ text5("Set up provider API keys")]), /* @__PURE__ */ li_([/* @__PURE__ */ text5("Configure reset-on-ambiguity thresholds")]), /* @__PURE__ */ li_([/* @__PURE__ */ text5("Enable TLS for HTTP endpoints")]), /* @__PURE__ */ li_([/* @__PURE__ */ text5("Set up monitoring (Prometheus, Grafana)")])]), /* @__PURE__ */ h2([/* @__PURE__ */ cls(["text-xl font-semibold text-text mt-8 mb-4"])])([/* @__PURE__ */ text5("Docker Compose")]), /* @__PURE__ */ codeBlock([/* @__PURE__ */ text5("version: '3.8'\n"), /* @__PURE__ */ text5("services:\n"), /* @__PURE__ */ text5("  omega-proxy:\n"), /* @__PURE__ */ text5("    image: straylight/omega-proxy:latest\n"), /* @__PURE__ */ text5("    ports:\n"), /* @__PURE__ */ text5('      - "8080:8080"\n'), /* @__PURE__ */ text5('      - "5555:5555"\n'), /* @__PURE__ */ text5("    environment:\n"), /* @__PURE__ */ text5("      - OPENAI_API_KEY\n"), /* @__PURE__ */ text5("      - ANTHROPIC_API_KEY\n"), /* @__PURE__ */ text5("      - OMEGA_AMBIGUITY_THRESHOLD=0.3")])]);
+  var apiContent3 = /* @__PURE__ */ article([/* @__PURE__ */ cls(["prose prose-invert max-w-none"])])([/* @__PURE__ */ h1([/* @__PURE__ */ cls(["text-3xl font-bold text-text mb-6"])])([/* @__PURE__ */ text5("API Reference")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-muted-foreground mb-6"])])([/* @__PURE__ */ text5("omega//proxy exposes an OpenAI-compatible HTTP API and SIGIL frames over ZeroMQ.")]), /* @__PURE__ */ h2([/* @__PURE__ */ cls(["text-xl font-semibold text-text mt-8 mb-4"])])([/* @__PURE__ */ text5("HTTP Endpoints")]), /* @__PURE__ */ h3([/* @__PURE__ */ cls(["text-lg font-medium text-text mt-6 mb-2"])])([/* @__PURE__ */ text5("POST /v1/chat/completions")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-muted-foreground mb-4"])])([/* @__PURE__ */ text5("OpenAI-compatible chat completions endpoint with verified inference.")]), /* @__PURE__ */ h3([/* @__PURE__ */ cls(["text-lg font-medium text-text mt-6 mb-2"])])([/* @__PURE__ */ text5("GET /health")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-muted-foreground mb-4"])])([/* @__PURE__ */ text5("Health check endpoint for load balancers.")]), /* @__PURE__ */ h3([/* @__PURE__ */ cls(["text-lg font-medium text-text mt-6 mb-2"])])([/* @__PURE__ */ text5("GET /metrics")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-muted-foreground mb-4"])])([/* @__PURE__ */ text5("Prometheus metrics endpoint.")]), /* @__PURE__ */ h2([/* @__PURE__ */ cls(["text-xl font-semibold text-text mt-8 mb-4"])])([/* @__PURE__ */ text5("ZeroMQ Sockets")]), /* @__PURE__ */ h3([/* @__PURE__ */ cls(["text-lg font-medium text-text mt-6 mb-2"])])([/* @__PURE__ */ text5("PUB tcp://*:5555")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-muted-foreground"])])([/* @__PURE__ */ text5("SIGIL frames published for all inference responses. Subscribe to receive verified tokens in real-time.")])]);
   var renderContent3 = function(path) {
     if (path === "/omega/proxy/docs") {
       return overviewContent3;
@@ -10803,24 +10872,26 @@
       return quickstartContent3;
     }
     ;
+    if (path === "/omega/proxy/docs/sigil-protocol") {
+      return sigilProtocolContent;
+    }
+    ;
+    if (path === "/omega/proxy/docs/providers") {
+      return providersContent2;
+    }
+    ;
+    if (path === "/omega/proxy/docs/deployment") {
+      return deploymentContent2;
+    }
+    ;
+    if (path === "/omega/proxy/docs/api") {
+      return apiContent3;
+    }
+    ;
     return overviewContent3;
   };
   var render21 = function(state3) {
     return div2([cls(["max-w-[1100px] mx-auto px-6 py-12"])])([div2([cls(["grid grid-cols-1 lg:grid-cols-[250px_1fr] gap-12"])])([sidebar5(state3.path), renderContent3(state3.path)])]);
-  };
-  var handleAction11 = function(v) {
-    return modify_13(function(v1) {
-      var $9 = {};
-      for (var $10 in v1) {
-        if ({}.hasOwnProperty.call(v1, $10)) {
-          $9[$10] = v1[$10];
-        }
-        ;
-      }
-      ;
-      $9.path = v.value0.path;
-      return $9;
-    });
   };
   var docsPage3 = /* @__PURE__ */ function() {
     return mkComponent({
@@ -10846,18 +10917,18 @@
   var map28 = /* @__PURE__ */ map(functorArray);
   var socketPattern = function(pattern2) {
     return function(label5) {
-      return div2([cls(["p-4 bg-background rounded-lg"])])([p([cls(["text-purple-400 font-mono font-bold mb-1"])])([text5(pattern2)]), p([cls(["text-muted-foreground text-sm"])])([text5(label5)])]);
+      return div2([cls(["p-4 bg-background rounded-lg"])])([p([cls(["text-orange-400 font-mono font-bold mb-1"])])([text5(pattern2)]), p([cls(["text-muted-foreground text-sm"])])([text5(label5)])]);
     };
   };
   var providerCard3 = function(name16) {
     return function(models) {
-      return div2([cls(["bg-card border border-border rounded-lg p-6 text-center hover:border-purple-400/50 transition-colors"])])([p([cls(["text-text font-medium mb-1"])])([text5(name16)]), p([cls(["text-sm text-muted-foreground"])])([text5(models)])]);
+      return div2([cls(["bg-card border border-border rounded-lg p-6 text-center hover:border-orange-400/50 transition-colors"])])([p([cls(["text-text font-medium mb-1"])])([text5(name16)]), p([cls(["text-sm text-muted-foreground"])])([text5(models)])]);
     };
   };
   var obsCard = function(title3) {
     return function(tech) {
       return function(description) {
-        return div2([cls(["bg-card border border-border rounded-lg p-6"])])([div2([cls(["flex items-center gap-2 mb-3"])])([h3([cls(["text-text font-semibold"])])([text5(title3)]), span3([cls(["text-xs px-2 py-0.5 bg-purple-400/20 text-purple-400 rounded"])])([text5(tech)])]), p([cls(["text-muted-foreground text-sm"])])([text5(description)])]);
+        return div2([cls(["bg-card border border-border rounded-lg p-6"])])([div2([cls(["flex items-center gap-2 mb-3"])])([h3([cls(["text-text font-semibold"])])([text5(title3)]), span3([cls(["text-xs px-2 py-0.5 bg-orange-400/20 text-orange-400 rounded"])])([text5(tech)])]), p([cls(["text-muted-foreground text-sm"])])([text5(description)])]);
       };
     };
   };
@@ -10865,25 +10936,25 @@
   var flowStep = function(num) {
     return function(label5) {
       return function(content23) {
-        return div2([cls(["flex items-start gap-3"])])([span3([cls(["text-purple-400 font-bold"])])([text5(num)]), div_([p([cls(["text-muted-foreground text-xs mb-1"])])([text5(label5)]), code([cls(["text-text"])])([text5(content23)])])]);
+        return div2([cls(["flex items-start gap-3"])])([span3([cls(["text-orange-400 font-bold"])])([text5(num)]), div_([p([cls(["text-muted-foreground text-xs mb-1"])])([text5(label5)]), code([cls(["text-text"])])([text5(content23)])])]);
       };
     };
   };
   var flowArrow = /* @__PURE__ */ div2([/* @__PURE__ */ cls(["text-center text-muted-foreground"])])([/* @__PURE__ */ text5("|")]);
   var featureItem4 = function(text6) {
-    return li([cls(["flex items-start gap-3"])])([span3([cls(["text-purple-400 mt-1"])])([text5("+")]), span3([cls(["text-muted-foreground"])])([text5(text6)])]);
+    return li([cls(["flex items-start gap-3"])])([span3([cls(["text-orange-400 mt-1"])])([text5("+")]), span3([cls(["text-muted-foreground"])])([text5(text6)])]);
   };
   var featureList3 = function(items2) {
     return ul([cls(["space-y-3"])])(map28(featureItem4)(items2));
   };
-  var cta6 = /* @__PURE__ */ section([/* @__PURE__ */ cls(["py-24 border-t border-border"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["max-w-[800px] mx-auto px-6 text-center"])])([/* @__PURE__ */ h2([/* @__PURE__ */ cls(["text-3xl font-bold text-text mb-4"])])([/* @__PURE__ */ text5("Ready for verified inference?")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-muted-foreground mb-8"])])([/* @__PURE__ */ text5("Deploy omega//proxy today. Open source and free to self-host.")]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["flex flex-col sm:flex-row items-center justify-center gap-4"])])([/* @__PURE__ */ a([/* @__PURE__ */ href4("/omega/proxy/docs"), /* @__PURE__ */ cls(["inline-flex items-center justify-center px-8 py-4 bg-purple-400 text-background font-medium rounded-md hover:bg-purple-400/90 transition-colors"])])([/* @__PURE__ */ text5("Get started")]), /* @__PURE__ */ a([/* @__PURE__ */ href4("/omega/proxy/pricing"), /* @__PURE__ */ cls(["inline-flex items-center justify-center px-8 py-4 border border-border text-text font-medium rounded-md hover:bg-card transition-colors"])])([/* @__PURE__ */ text5("View pricing")])])])]);
+  var cta6 = /* @__PURE__ */ section([/* @__PURE__ */ cls(["py-24 border-t border-border"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["max-w-[800px] mx-auto px-6 text-center"])])([/* @__PURE__ */ h2([/* @__PURE__ */ cls(["text-3xl font-bold text-text mb-4"])])([/* @__PURE__ */ text5("Ready for verified inference?")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-muted-foreground mb-8"])])([/* @__PURE__ */ text5("Deploy omega//proxy today. Open source and free to self-host.")]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["flex flex-col sm:flex-row items-center justify-center gap-4"])])([/* @__PURE__ */ a([/* @__PURE__ */ href4("/omega/proxy/docs"), /* @__PURE__ */ cls(["inline-flex items-center justify-center px-8 py-4 bg-orange-400 text-background font-medium rounded-md hover:bg-orange-400/90 transition-colors"])])([/* @__PURE__ */ text5("Get started")]), /* @__PURE__ */ a([/* @__PURE__ */ href4("/omega/proxy/pricing"), /* @__PURE__ */ cls(["inline-flex items-center justify-center px-8 py-4 border border-border text-text font-medium rounded-md hover:bg-card transition-colors"])])([/* @__PURE__ */ text5("View pricing")])])])]);
   var codeLine9 = function(prompt) {
     return function(content23) {
       return div_([span3([cls(["text-muted-foreground"])])([text5(prompt)]), span3([cls(["text-text"])])([text5(content23)])]);
     };
   };
   var badge4 = function(label5) {
-    return span3([cls(["inline-block px-3 py-1 bg-purple-400/10 border border-purple-400/20 rounded-full text-purple-400 text-sm font-medium mb-4"])])([text5(label5)]);
+    return span3([cls(["inline-block px-3 py-1 bg-orange-400/10 border border-orange-400/20 rounded-full text-orange-400 text-sm font-medium mb-4"])])([text5(label5)]);
   };
   var observability2 = /* @__PURE__ */ section([/* @__PURE__ */ cls(["py-24 border-t border-border"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["max-w-[1100px] mx-auto px-6"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["text-center mb-16"])])([/* @__PURE__ */ badge4("Observability"), /* @__PURE__ */ h2([/* @__PURE__ */ cls(["text-3xl font-bold text-text mb-4"])])([/* @__PURE__ */ text5("Full visibility")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-muted-foreground max-w-2xl mx-auto"])])([/* @__PURE__ */ text5("OpenTelemetry traces, Prometheus metrics, structured logs. See exactly what your proxy is doing.")])]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["grid grid-cols-1 md:grid-cols-3 gap-6"])])([/* @__PURE__ */ obsCard("Tracing")("OpenTelemetry")("Distributed traces across the entire request path. Jaeger and Zipkin compatible."), /* @__PURE__ */ obsCard("Metrics")("Prometheus")("Request latency, token counts, error rates. Pre-built Grafana dashboards."), /* @__PURE__ */ obsCard("Logs")("Structured JSON")("Every request and response captured. ELK-ready formatting.")])])]);
   var providerSupport = /* @__PURE__ */ section([/* @__PURE__ */ cls(["py-24 border-t border-border"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["max-w-[1100px] mx-auto px-6"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["text-center mb-16"])])([/* @__PURE__ */ badge4("Provider Support"), /* @__PURE__ */ h2([/* @__PURE__ */ cls(["text-3xl font-bold text-text mb-4"])])([/* @__PURE__ */ text5("Every provider, one API")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-muted-foreground max-w-2xl mx-auto"])])([/* @__PURE__ */ text5("Unified interface across all major providers. Hot-swap between them without changing your code.")])]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["grid grid-cols-2 md:grid-cols-4 gap-6"])])([/* @__PURE__ */ providerCard3("OpenAI")("GPT-4, GPT-4o"), /* @__PURE__ */ providerCard3("Anthropic")("Claude 3.5"), /* @__PURE__ */ providerCard3("Google")("Gemini"), /* @__PURE__ */ providerCard3("Mistral")("Mistral Large"), /* @__PURE__ */ providerCard3("Meta")("Llama 3"), /* @__PURE__ */ providerCard3("Ollama")("Local models"), /* @__PURE__ */ providerCard3("Together")("Open models"), /* @__PURE__ */ providerCard3("Custom")("Your endpoint")])])]);
@@ -10905,7 +10976,7 @@
   };
   var primaryButton4 = function(href5) {
     return function(label5) {
-      return a([href4(href5), cls(["inline-flex items-center justify-center px-6 py-3 bg-purple-400 text-background font-medium rounded-md hover:bg-purple-400/90 transition-colors"])])([text5(label5)]);
+      return a([href4(href5), cls(["inline-flex items-center justify-center px-6 py-3 bg-orange-400 text-background font-medium rounded-md hover:bg-orange-400/90 transition-colors"])])([text5(label5)]);
     };
   };
   var hero9 = /* @__PURE__ */ section([/* @__PURE__ */ cls(["py-24 md:py-32"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["max-w-[1100px] mx-auto px-6 text-center"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["inline-flex items-center gap-2 px-3 py-1 bg-orange-400/10 border border-orange-400/20 rounded-full text-orange-400 text-sm mb-8"])])([/* @__PURE__ */ span3([/* @__PURE__ */ cls(["w-2 h-2 bg-orange-400 rounded-full animate-pulse"])])([]), /* @__PURE__ */ text5("Verified Inference Proxy")]), /* @__PURE__ */ h1([/* @__PURE__ */ cls(["text-4xl md:text-6xl font-bold text-text mb-6 leading-tight"])])([/* @__PURE__ */ text5("Verified inference"), br_, /* @__PURE__ */ text5("with "), /* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-orange-400"])])([/* @__PURE__ */ text5("200-600% compression")])]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-xl text-muted-foreground mb-10 max-w-2xl mx-auto"])])([/* @__PURE__ */ text5("jaylene-slide ingress: SSE to SIGIL over ZeroMQ. Reset-on-ambiguity prevents hallucination cascades. Fixes broken tool calls. Replaces LiteLLM, raw OpenAI SDK, and custom proxy scripts.")]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["flex flex-col sm:flex-row items-center justify-center gap-4"])])([/* @__PURE__ */ primaryButton4("/omega/proxy/docs")("Get started"), /* @__PURE__ */ secondaryButton4("https://github.com/straylight-software/omega-proxy")("View source")]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["mt-12 flex flex-col sm:flex-row items-center justify-center gap-3"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["bg-[#0a0c0f] border border-[#2a3038] rounded-lg px-5 py-3 font-mono text-sm flex items-center gap-6"])])([/* @__PURE__ */ code([/* @__PURE__ */ cls(["text-[#dde6f0] whitespace-nowrap"])])([/* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-[#596775]"])])([/* @__PURE__ */ text5("$ ")]), /* @__PURE__ */ text5("docker run -p 8080:8080 straylight/omega-proxy")]), /* @__PURE__ */ button([/* @__PURE__ */ cls(["text-[#596775] hover:text-orange-400 transition-colors text-xs shrink-0"])])([/* @__PURE__ */ text5("copy")])]), /* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-muted-foreground text-sm"])])([/* @__PURE__ */ text5("or")]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["bg-[#0a0c0f] border border-[#2a3038] rounded-lg px-5 py-3 font-mono text-sm flex items-center gap-6"])])([/* @__PURE__ */ code([/* @__PURE__ */ cls(["text-[#dde6f0] whitespace-nowrap"])])([/* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-[#596775]"])])([/* @__PURE__ */ text5("$ ")]), /* @__PURE__ */ text5("nix run github:straylight-software/omega-proxy")]), /* @__PURE__ */ button([/* @__PURE__ */ cls(["text-[#596775] hover:text-orange-400 transition-colors text-xs shrink-0"])])([/* @__PURE__ */ text5("copy")])])]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["mt-8 font-mono text-sm text-muted-foreground"])])([/* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-orange-400/60"])])([/* @__PURE__ */ text5("replaces ")]), /* @__PURE__ */ text5("LiteLLM, raw OpenAI SDK, broken tool calls, custom proxy scripts")])])]);
@@ -10918,29 +10989,29 @@
   };
   var features3 = /* @__PURE__ */ section([/* @__PURE__ */ cls(["py-24 border-t border-border"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["max-w-[1100px] mx-auto px-6"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["text-center mb-16"])])([/* @__PURE__ */ h2([/* @__PURE__ */ cls(["text-3xl font-bold text-text mb-4"])])([/* @__PURE__ */ text5("Why omega//proxy?")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-muted-foreground max-w-xl mx-auto"])])([/* @__PURE__ */ text5("Built for agents that need verified inference, wire compression, and reliable tool calls.")])]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"])])([/* @__PURE__ */ featureCard3(">")("SSE to SIGIL")("jaylene-slide ingress translates Server-Sent Events to SIGIL frames over ZeroMQ. No intermediate buffering. Real-time verified tokens."), /* @__PURE__ */ featureCard3("!")("Reset-on-ambiguity")("Prevents hallucination cascades. Automatic state reset on ambiguous responses. No corrupt context propagation. Clean recovery."), /* @__PURE__ */ featureCard3("\u25CE")("200-600% Compression")("Wire-level compression reduces bandwidth dramatically. SIGIL protocol optimizes token transmission. Lower latency, lower costs."), /* @__PURE__ */ featureCard3("\u26A1")("Fixes Broken Tool Calls")("LLM providers often return malformed tool calls. omega//proxy validates, repairs, and ensures structured responses work every time."), /* @__PURE__ */ featureCard3("\u2194")("Multi-Provider")("OpenAI, Anthropic, Google, Mistral, local models via Ollama. Single unified API. Hot-swap providers without code changes."), /* @__PURE__ */ featureCard3("\u2234")("Verified Inference")("SIGIL protocol ensures structured, verified communication. Every response validated against schema. Tamper-evident audit logs.")])])]);
   var cta7 = /* @__PURE__ */ section([/* @__PURE__ */ cls(["py-24 border-t border-border"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["max-w-[800px] mx-auto px-6 text-center"])])([/* @__PURE__ */ h2([/* @__PURE__ */ cls(["text-3xl font-bold text-text mb-4"])])([/* @__PURE__ */ text5("Ready for verified inference?")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-muted-foreground mb-8"])])([/* @__PURE__ */ text5("omega//proxy is open source and free to self-host. Managed hosting available for teams.")]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["flex flex-col sm:flex-row items-center justify-center gap-4"])])([/* @__PURE__ */ primaryButton4("/omega/proxy/docs")("Deploy now"), /* @__PURE__ */ secondaryButton4("/omega/proxy/pricing")("View pricing")])])]);
-  var compCell = function(value21) {
+  var compCell = function(value20) {
     return span3([cls([function() {
-      if (value21 === "no") {
+      if (value20 === "no") {
         return "text-muted-foreground/50";
       }
       ;
-      if (value21 === "none") {
+      if (value20 === "none") {
         return "text-muted-foreground/50";
       }
       ;
-      if (value21 === "n/a") {
+      if (value20 === "n/a") {
         return "text-muted-foreground/50";
       }
       ;
       return "text-muted-foreground";
-    }()])])([text5(value21)]);
+    }()])])([text5(value20)]);
   };
   var comparisonRow2 = function(feature) {
     return function(us) {
       return function(litellm) {
         return function(openrouter) {
           return function(direct) {
-            return tr([cls(["border-b border-border"])])([td([cls(["py-3 text-muted-foreground font-medium"])])([text5(feature)]), td([cls(["py-3 text-center text-purple-400 font-semibold"])])([text5(us)]), td([cls(["py-3 text-center"])])([compCell(litellm)]), td([cls(["py-3 text-center"])])([compCell(openrouter)]), td([cls(["py-3 text-center"])])([compCell(direct)])]);
+            return tr([cls(["border-b border-border"])])([td([cls(["py-3 text-muted-foreground font-medium"])])([text5(feature)]), td([cls(["py-3 text-center text-orange-400 font-semibold"])])([text5(us)]), td([cls(["py-3 text-center"])])([compCell(litellm)]), td([cls(["py-3 text-center"])])([compCell(openrouter)]), td([cls(["py-3 text-center"])])([compCell(direct)])]);
           };
         };
       };
@@ -10952,7 +11023,7 @@
       return div_([span3([cls(["text-muted-foreground"])])([text5(prompt)]), span3([cls(["text-text"])])([text5(content23)])]);
     };
   };
-  var quickstart2 = /* @__PURE__ */ section([/* @__PURE__ */ cls(["py-24 border-t border-border"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["max-w-[800px] mx-auto px-6"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["text-center mb-12"])])([/* @__PURE__ */ h2([/* @__PURE__ */ cls(["text-3xl font-bold text-text mb-4"])])([/* @__PURE__ */ text5("Deploy in 60 seconds")])]), /* @__PURE__ */ codeBlock([/* @__PURE__ */ codeLine10("# ")("Docker (quickest)"), /* @__PURE__ */ codeLine10("$ ")("docker run -p 8080:8080 \\"), /* @__PURE__ */ codeLine10("    ")("-e OPENAI_API_KEY=$OPENAI_API_KEY \\"), /* @__PURE__ */ codeLine10("    ")("-e ANTHROPIC_API_KEY=$ANTHROPIC_API_KEY \\"), /* @__PURE__ */ codeLine10("    ")("straylight/omega-proxy"), /* @__PURE__ */ text5("\n"), /* @__PURE__ */ codeLine10("# ")("Or via Nix"), /* @__PURE__ */ codeLine10("$ ")("nix run github:straylight-software/omega-proxy"), /* @__PURE__ */ text5("\n"), /* @__PURE__ */ codeLine10("# ")("Connect via ZeroMQ for SIGIL frames"), /* @__PURE__ */ codeLine10("$ ")("zmq-sub tcp://localhost:5555")]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["mt-8 text-center"])])([/* @__PURE__ */ a([/* @__PURE__ */ href4("/omega/proxy/docs"), /* @__PURE__ */ cls(["text-purple-400 hover:text-purple-400/80 transition-colors"])])([/* @__PURE__ */ text5("Full deployment guide ->")])])])]);
+  var quickstart2 = /* @__PURE__ */ section([/* @__PURE__ */ cls(["py-24 border-t border-border"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["max-w-[800px] mx-auto px-6"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["text-center mb-12"])])([/* @__PURE__ */ h2([/* @__PURE__ */ cls(["text-3xl font-bold text-text mb-4"])])([/* @__PURE__ */ text5("Deploy in 60 seconds")])]), /* @__PURE__ */ codeBlock([/* @__PURE__ */ codeLine10("# ")("Docker (quickest)"), /* @__PURE__ */ codeLine10("$ ")("docker run -p 8080:8080 \\"), /* @__PURE__ */ codeLine10("    ")("-e OPENAI_API_KEY=$OPENAI_API_KEY \\"), /* @__PURE__ */ codeLine10("    ")("-e ANTHROPIC_API_KEY=$ANTHROPIC_API_KEY \\"), /* @__PURE__ */ codeLine10("    ")("straylight/omega-proxy"), /* @__PURE__ */ text5("\n"), /* @__PURE__ */ codeLine10("# ")("Or via Nix"), /* @__PURE__ */ codeLine10("$ ")("nix run github:straylight-software/omega-proxy"), /* @__PURE__ */ text5("\n"), /* @__PURE__ */ codeLine10("# ")("Connect via ZeroMQ for SIGIL frames"), /* @__PURE__ */ codeLine10("$ ")("zmq-sub tcp://localhost:5555")]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["mt-8 text-center"])])([/* @__PURE__ */ a([/* @__PURE__ */ href4("/omega/proxy/docs"), /* @__PURE__ */ cls(["text-orange-400 hover:text-orange-400/80 transition-colors"])])([/* @__PURE__ */ text5("Full deployment guide ->")])])])]);
   var render23 = /* @__PURE__ */ div_([hero9, features3, comparison2, quickstart2, cta7]);
   var homePage4 = /* @__PURE__ */ mkComponent({
     initialState: /* @__PURE__ */ $$const(unit),
@@ -10966,7 +11037,7 @@
       return div_([h2([cls(["text-lg font-semibold text-text mb-2"])])([text5(title3)]), p([cls(["text-muted-foreground"])])([text5(content23)])]);
     };
   };
-  var renderPrivacy3 = /* @__PURE__ */ div2([/* @__PURE__ */ cls(["max-w-[800px] mx-auto px-6 py-12"])])([/* @__PURE__ */ h1([/* @__PURE__ */ cls(["text-3xl font-bold text-text mb-8"])])([/* @__PURE__ */ text5("Privacy Policy")]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["prose prose-invert max-w-none space-y-6"])])([/* @__PURE__ */ section5("Last updated")("February 2026"), /* @__PURE__ */ section5("Overview")("omega//proxy is operated by Straylight Software. This privacy policy explains how we handle your data when using our verified inference proxy."), /* @__PURE__ */ section5("Data Processing")("omega//proxy processes inference requests in transit. Request data is not stored beyond the active session. We log metadata for debugging but not request content."), /* @__PURE__ */ section5("Contact")("Questions? Email privacy@straylight.software")])]);
+  var renderPrivacy3 = /* @__PURE__ */ div2([/* @__PURE__ */ cls(["max-w-[800px] mx-auto px-6 py-12"])])([/* @__PURE__ */ h1([/* @__PURE__ */ cls(["text-3xl font-bold text-text mb-8"])])([/* @__PURE__ */ text5("Privacy Policy")]), /* @__PURE__ */ span3([/* @__PURE__ */ cls(["inline-block px-3 py-1 bg-orange-400/10 text-orange-400 text-sm rounded-full mb-8"])])([/* @__PURE__ */ text5("omega//proxy")]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["prose prose-invert max-w-none space-y-6"])])([/* @__PURE__ */ section5("Last updated")("February 2026"), /* @__PURE__ */ section5("Overview")("omega//proxy is operated by Straylight Software. This privacy policy explains how we handle your data when using our verified inference proxy."), /* @__PURE__ */ section5("Data Processing")("omega//proxy processes inference requests in transit. SSE streams are translated to SIGIL frames in real-time. Request data is not stored beyond the active session."), /* @__PURE__ */ section5("SIGIL Frames")("SIGIL frames contain verified tokens and metadata. Verification data includes confidence scores but not user-identifiable information."), /* @__PURE__ */ section5("Reset-on-Ambiguity")("When ambiguity resets occur, context windows are cleared. No request content is retained after the session ends."), /* @__PURE__ */ section5("ZeroMQ Transport")("SIGIL frames transmitted over ZeroMQ are encrypted in transit. We do not log frame content."), /* @__PURE__ */ section5("Provider Data")("API keys for upstream providers (OpenAI, Anthropic, etc.) are stored encrypted and never logged."), /* @__PURE__ */ section5("Contact")("Questions? Email privacy@straylight.software")])]);
   var privacyPage3 = /* @__PURE__ */ mkComponent({
     initialState: /* @__PURE__ */ $$const(unit),
     render: /* @__PURE__ */ $$const(renderPrivacy3),
@@ -10977,44 +11048,44 @@
   var map29 = /* @__PURE__ */ map(functorArray);
   var hero10 = /* @__PURE__ */ section([/* @__PURE__ */ cls(["py-24"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["max-w-[1100px] mx-auto px-6 text-center"])])([/* @__PURE__ */ h1([/* @__PURE__ */ cls(["text-4xl md:text-5xl font-bold text-text mb-6"])])([/* @__PURE__ */ text5("Simple, transparent pricing")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-xl text-muted-foreground max-w-2xl mx-auto"])])([/* @__PURE__ */ text5("Self-host for free. Use managed hosting for convenience. Pay only for what you use.")])])]);
   var featureItem5 = function(text6) {
-    return li([cls(["flex items-start gap-3"])])([span3([cls(["text-purple-400"])])([text5("+")]), span3([cls(["text-muted-foreground text-sm"])])([text5(text6)])]);
+    return li([cls(["flex items-start gap-3"])])([span3([cls(["text-orange-400"])])([text5("+")]), span3([cls(["text-muted-foreground text-sm"])])([text5(text6)])]);
   };
   var pricingCard3 = function(props) {
     return div2([cls(["bg-card border rounded-lg p-6", function() {
       if (props.highlighted) {
-        return "border-purple-400";
+        return "border-orange-400";
       }
       ;
       return "border-border";
     }()])])([function() {
       if (props.highlighted) {
-        return div2([cls(["text-xs text-purple-400 font-medium mb-4"])])([text5("MOST POPULAR")]);
+        return div2([cls(["text-xs text-orange-400 font-medium mb-4"])])([text5("MOST POPULAR")]);
       }
       ;
       return text5("");
     }(), h3([cls(["text-xl font-bold text-text mb-2"])])([text5(props.name)]), div2([cls(["flex items-baseline gap-1 mb-4"])])([span3([cls(["text-3xl font-bold text-text"])])([text5(props.price)]), span3([cls(["text-muted-foreground"])])([text5(props.period)])]), p([cls(["text-muted-foreground text-sm mb-6"])])([text5(props.description)]), ul([cls(["space-y-3 mb-8"])])(map29(featureItem5)(props.features)), a([href4(props.ctaHref), cls(["block w-full py-3 text-center font-medium rounded-md transition-colors", function() {
       if (props.highlighted) {
-        return "bg-purple-400 text-background hover:bg-purple-400/90";
+        return "bg-orange-400 text-background hover:bg-orange-400/90";
       }
       ;
       return "border border-border text-text hover:bg-card";
     }()])])([text5(props.cta)])]);
   };
   var plans3 = /* @__PURE__ */ section([/* @__PURE__ */ cls(["pb-24"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["max-w-[1100px] mx-auto px-6"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["grid grid-cols-1 md:grid-cols-3 gap-6"])])([/* @__PURE__ */ pricingCard3({
-    name: "Self-Hosted",
+    name: "Starter",
     price: "$0",
     period: "/forever",
-    description: "Run omega//proxy on your own infrastructure.",
-    features: ["Full source code access", "All features included", "Docker & Nix deployment", "Community support", "MIT licensed"],
+    description: "Self-host omega//proxy on your infrastructure.",
+    features: ["Unlimited requests", "All features included", "SSE to SIGIL translation", "Reset-on-ambiguity", "Docker & Nix deployment", "Community support"],
     cta: "View source",
     ctaHref: "https://github.com/straylight-software/omega-proxy",
     highlighted: false
   }), /* @__PURE__ */ pricingCard3({
-    name: "Managed",
-    price: "$49",
+    name: "Pro",
+    price: "$79",
     period: "/month",
-    description: "We run it for you. Focus on your agents.",
-    features: ["Fully managed infrastructure", "99.9% uptime SLA", "10M requests/month included", "Priority support", "Custom domain", "Dashboard & analytics"],
+    description: "Managed hosting with high throughput.",
+    features: ["25M requests/month", "500GB bandwidth/month", "200-600% wire compression", "99.9% uptime SLA", "Provider health monitoring", "Priority support"],
     cta: "Start free trial",
     ctaHref: "/omega/proxy/dashboard",
     highlighted: true
@@ -11022,8 +11093,8 @@
     name: "Enterprise",
     price: "Custom",
     period: "",
-    description: "For teams with compliance requirements.",
-    features: ["Dedicated infrastructure", "SSO/SAML integration", "Audit logging", "Custom SLA", "Dedicated support", "On-premise deployment"],
+    description: "Unlimited scale with compliance.",
+    features: ["Unlimited requests", "Unlimited bandwidth", "Dedicated ZeroMQ clusters", "Custom verification rules", "SSO/SAML integration", "On-premise deployment"],
     cta: "Contact sales",
     ctaHref: "mailto:enterprise@straylight.software",
     highlighted: false
@@ -11034,7 +11105,7 @@
     };
   };
   var faq3 = /* @__PURE__ */ section([/* @__PURE__ */ cls(["py-24 border-t border-border"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["max-w-[800px] mx-auto px-6"])])([/* @__PURE__ */ h2([/* @__PURE__ */ cls(["text-2xl font-bold text-text mb-12 text-center"])])([/* @__PURE__ */ text5("Frequently asked questions")]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["space-y-8"])])([/* @__PURE__ */ faqItem3("What's included in self-hosted?")("Everything. The full source code with all features: SSE to SIGIL translation, reset-on-ambiguity, ZeroMQ transport, verified inference, all provider integrations. MIT licensed, no strings attached."), /* @__PURE__ */ faqItem3("How does managed hosting work?")("We run omega//proxy for you on dedicated infrastructure. You get an endpoint URL, configure your agents to use it, and we handle scaling, uptime, and maintenance."), /* @__PURE__ */ faqItem3("What happens if I exceed my request limit?")("You'll get a notification at 80% usage. If you exceed the limit, we'll work with you on a custom plan. We don't cut you off mid-request."), /* @__PURE__ */ faqItem3("Can I migrate between plans?")("Yes. Move from self-hosted to managed (or vice versa) anytime. Your configuration exports cleanly between environments."), /* @__PURE__ */ faqItem3("Is verified inference available on all plans?")("Yes. Cryptographic attestation is a core feature, not a premium add-on. Every request through omega//proxy is verified.")])])]);
-  var enterprise3 = /* @__PURE__ */ section([/* @__PURE__ */ cls(["py-24 border-t border-border"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["max-w-[800px] mx-auto px-6 text-center"])])([/* @__PURE__ */ h2([/* @__PURE__ */ cls(["text-2xl font-bold text-text mb-4"])])([/* @__PURE__ */ text5("Need something custom?")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-muted-foreground mb-8"])])([/* @__PURE__ */ text5("We work with enterprises on custom deployments, SLAs, and integrations. Let's talk.")]), /* @__PURE__ */ a([/* @__PURE__ */ href4("mailto:enterprise@straylight.software"), /* @__PURE__ */ cls(["inline-flex items-center justify-center px-6 py-3 bg-purple-400 text-background font-medium rounded-md hover:bg-purple-400/90 transition-colors"])])([/* @__PURE__ */ text5("Contact sales")])])]);
+  var enterprise3 = /* @__PURE__ */ section([/* @__PURE__ */ cls(["py-24 border-t border-border"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["max-w-[800px] mx-auto px-6 text-center"])])([/* @__PURE__ */ h2([/* @__PURE__ */ cls(["text-2xl font-bold text-text mb-4"])])([/* @__PURE__ */ text5("Need something custom?")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-muted-foreground mb-8"])])([/* @__PURE__ */ text5("We work with enterprises on custom deployments, SLAs, and integrations. Let's talk.")]), /* @__PURE__ */ a([/* @__PURE__ */ href4("mailto:enterprise@straylight.software"), /* @__PURE__ */ cls(["inline-flex items-center justify-center px-6 py-3 bg-orange-400 text-background font-medium rounded-md hover:bg-orange-400/90 transition-colors"])])([/* @__PURE__ */ text5("Contact sales")])])]);
   var render24 = /* @__PURE__ */ div_([hero10, plans3, faq3, enterprise3]);
   var pricingPage3 = /* @__PURE__ */ mkComponent({
     initialState: /* @__PURE__ */ $$const(unit),
@@ -11055,61 +11126,92 @@
     };
     return SetTab12;
   }();
-  var teamTab3 = /* @__PURE__ */ div_([/* @__PURE__ */ text5("Team settings")]);
   var sidebarLink6 = function(state3) {
-    return function(value21) {
+    return function(value20) {
       return function(label5) {
         return button([cls(["block w-full text-left px-3 py-2 rounded text-sm transition-colors cursor-pointer", function() {
-          var $7 = state3.activeTab === value21;
+          var $7 = state3.activeTab === value20;
           if ($7) {
-            return "bg-purple-400/10 text-purple-400 font-medium";
+            return "bg-orange-400/10 text-orange-400 font-medium";
           }
           ;
           return "text-muted-foreground hover:text-text hover:bg-card";
         }()]), type_25(ButtonButton.value), onClick(function(v) {
-          return new SetTab2(value21);
+          return new SetTab2(value20);
         })])([text5(label5)]);
       };
     };
   };
   var sidebar6 = function(state3) {
-    return nav([cls(["space-y-1"])])([sidebarLink6(state3)("account")("Account"), sidebarLink6(state3)("billing")("Billing"), sidebarLink6(state3)("team")("Team"), sidebarLink6(state3)("security")("Security")]);
+    return nav([cls(["space-y-1"])])([sidebarLink6(state3)("providers")("Providers"), sidebarLink6(state3)("verification")("Verification"), sidebarLink6(state3)("ratelimits")("Rate Limits"), sidebarLink6(state3)("zeromq")("ZeroMQ"), sidebarLink6(state3)("account")("Account")]);
   };
-  var securityTab3 = /* @__PURE__ */ div_([/* @__PURE__ */ text5("Security settings")]);
+  var settingRow2 = function(label5) {
+    return function(value20) {
+      return function(description) {
+        return div2([cls(["flex items-center justify-between py-3 border-b border-border last:border-0"])])([div_([p([cls(["text-text font-medium"])])([text5(label5)]), p([cls(["text-muted-foreground text-sm"])])([text5(description)])]), div2([cls(["bg-background border border-border rounded px-3 py-1.5 text-text text-sm font-mono"])])([text5(value20)])]);
+      };
+    };
+  };
+  var verificationTab = /* @__PURE__ */ div2([/* @__PURE__ */ cls(["bg-card border border-border rounded-lg p-6"])])([/* @__PURE__ */ h3([/* @__PURE__ */ cls(["text-lg font-semibold text-text mb-4"])])([/* @__PURE__ */ text5("Verification Rules")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-muted-foreground mb-6"])])([/* @__PURE__ */ text5("Configure reset-on-ambiguity thresholds and verification behavior.")]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["space-y-6"])])([/* @__PURE__ */ settingRow2("Ambiguity Threshold")("0.30")("Confidence below this triggers reset"), /* @__PURE__ */ settingRow2("Max Reset Attempts")("3")("Maximum retries before failing"), /* @__PURE__ */ settingRow2("Tool Call Repair")("Enabled")("Automatically fix malformed tool calls"), /* @__PURE__ */ settingRow2("Schema Validation")("Strict")("Validate responses against SIGIL schema")])]);
+  var zeromqTab = /* @__PURE__ */ div2([/* @__PURE__ */ cls(["bg-card border border-border rounded-lg p-6"])])([/* @__PURE__ */ h3([/* @__PURE__ */ cls(["text-lg font-semibold text-text mb-4"])])([/* @__PURE__ */ text5("ZeroMQ Configuration")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-muted-foreground mb-6"])])([/* @__PURE__ */ text5("Configure SIGIL frame transport over ZeroMQ.")]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["space-y-6"])])([/* @__PURE__ */ settingRow2("PUB Socket")("tcp://*:5555")("SIGIL frame broadcast address"), /* @__PURE__ */ settingRow2("REP Socket")("tcp://*:5556")("Synchronous request/reply address"), /* @__PURE__ */ settingRow2("High Water Mark")("10000")("Maximum queued messages"), /* @__PURE__ */ settingRow2("Reconnect Interval")("1000ms")("Automatic reconnection delay")])]);
+  var rateLimitsTab = /* @__PURE__ */ div2([/* @__PURE__ */ cls(["bg-card border border-border rounded-lg p-6"])])([/* @__PURE__ */ h3([/* @__PURE__ */ cls(["text-lg font-semibold text-text mb-4"])])([/* @__PURE__ */ text5("Rate Limits")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-muted-foreground mb-6"])])([/* @__PURE__ */ text5("Configure request rate limits per provider and globally.")]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["space-y-6"])])([/* @__PURE__ */ settingRow2("Global Rate Limit")("1000 req/min")("Maximum requests per minute across all providers"), /* @__PURE__ */ settingRow2("Per-Provider Limit")("500 req/min")("Maximum requests per provider per minute"), /* @__PURE__ */ settingRow2("Burst Limit")("50 req/sec")("Maximum burst requests per second"), /* @__PURE__ */ settingRow2("Backpressure")("Enabled")("Apply backpressure when limits approached")])]);
+  var providerConfig = function(name16) {
+    return function(keyHint) {
+      return function(configured) {
+        return div2([cls(["flex items-center justify-between py-3 border-b border-border last:border-0"])])([div_([p([cls(["text-text font-medium"])])([text5(name16)]), p([cls(["text-muted-foreground text-sm font-mono"])])([text5(keyHint)])]), div2([cls(["flex items-center gap-3"])])([span3([cls(["text-xs px-2 py-0.5 rounded", function() {
+          if (configured) {
+            return "bg-green-400/10 text-green-400";
+          }
+          ;
+          return "bg-muted text-muted-foreground";
+        }()])])([text5(function() {
+          if (configured) {
+            return "Configured";
+          }
+          ;
+          return "Not configured";
+        }())]), button([cls(["text-sm text-orange-400 hover:text-orange-300"]), type_25(ButtonButton.value)])([text5("Edit")])])]);
+      };
+    };
+  };
+  var providersTab4 = /* @__PURE__ */ div2([/* @__PURE__ */ cls(["space-y-6"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["bg-card border border-border rounded-lg p-6"])])([/* @__PURE__ */ h3([/* @__PURE__ */ cls(["text-lg font-semibold text-text mb-4"])])([/* @__PURE__ */ text5("Provider Configuration")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-muted-foreground mb-6"])])([/* @__PURE__ */ text5("Configure API keys and settings for each LLM provider.")]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["space-y-4"])])([/* @__PURE__ */ providerConfig("OpenAI")("OPENAI_API_KEY")(true), /* @__PURE__ */ providerConfig("Anthropic")("ANTHROPIC_API_KEY")(true), /* @__PURE__ */ providerConfig("Google")("GOOGLE_API_KEY")(false), /* @__PURE__ */ providerConfig("Ollama")("http://localhost:11434")(true)])])]);
   var handleAction12 = function(v) {
     return modify_14(function(v1) {
-      var $9 = {};
-      for (var $10 in v1) {
-        if ({}.hasOwnProperty.call(v1, $10)) {
-          $9[$10] = v1[$10];
+      var $11 = {};
+      for (var $12 in v1) {
+        if ({}.hasOwnProperty.call(v1, $12)) {
+          $11[$12] = v1[$12];
         }
         ;
       }
       ;
-      $9.activeTab = v.value0;
-      return $9;
+      $11.activeTab = v.value0;
+      return $11;
     });
   };
-  var billingTab3 = /* @__PURE__ */ div_([/* @__PURE__ */ text5("Billing settings")]);
-  var accountTab2 = /* @__PURE__ */ div2([/* @__PURE__ */ cls(["bg-card border border-border rounded-lg p-6"])])([/* @__PURE__ */ h3([/* @__PURE__ */ cls(["text-lg font-semibold text-text mb-4"])])([/* @__PURE__ */ text5("Account Settings")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-muted-foreground"])])([/* @__PURE__ */ text5("Manage your omega//proxy account.")])]);
+  var accountTab2 = /* @__PURE__ */ div2([/* @__PURE__ */ cls(["bg-card border border-border rounded-lg p-6"])])([/* @__PURE__ */ h3([/* @__PURE__ */ cls(["text-lg font-semibold text-text mb-4"])])([/* @__PURE__ */ text5("Account Settings")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-muted-foreground mb-6"])])([/* @__PURE__ */ text5("Manage your omega//proxy account and API keys.")]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["space-y-6"])])([/* @__PURE__ */ settingRow2("API Key")("op_live_xxxx...xxxx")("Your omega//proxy API key"), /* @__PURE__ */ settingRow2("Endpoint")("https://proxy.straylight.software")("Your managed proxy endpoint"), /* @__PURE__ */ settingRow2("Plan")("Pro")("Current subscription plan")])]);
   var content8 = function(state3) {
+    if (state3.activeTab === "providers") {
+      return providersTab4;
+    }
+    ;
+    if (state3.activeTab === "verification") {
+      return verificationTab;
+    }
+    ;
+    if (state3.activeTab === "ratelimits") {
+      return rateLimitsTab;
+    }
+    ;
+    if (state3.activeTab === "zeromq") {
+      return zeromqTab;
+    }
+    ;
     if (state3.activeTab === "account") {
       return accountTab2;
     }
     ;
-    if (state3.activeTab === "billing") {
-      return billingTab3;
-    }
-    ;
-    if (state3.activeTab === "team") {
-      return teamTab3;
-    }
-    ;
-    if (state3.activeTab === "security") {
-      return securityTab3;
-    }
-    ;
-    return accountTab2;
+    return providersTab4;
   };
   var render25 = function(state3) {
     return div2([cls(["max-w-[1100px] mx-auto px-6 py-8"])])([div2([cls(["mb-8"])])([h1([cls(["text-2xl font-bold text-text"])])([text5("Settings")])]), div2([cls(["grid grid-cols-1 lg:grid-cols-[200px_1fr] gap-8"])])([sidebar6(state3), content8(state3)])]);
@@ -11117,7 +11219,7 @@
   var settingsPage3 = /* @__PURE__ */ function() {
     return mkComponent({
       initialState: $$const({
-        activeTab: "account"
+        activeTab: "providers"
       }),
       render: render25,
       "eval": mkEval({
@@ -11132,7 +11234,6 @@
 
   // output/Straylight.Pages.Products.OmegaWork.Dashboard/index.js
   var show7 = /* @__PURE__ */ show(showInt);
-  var div7 = /* @__PURE__ */ div(euclideanRingInt);
   var type_26 = /* @__PURE__ */ type_17(isPropButtonType);
   var modify_15 = /* @__PURE__ */ modify_(monadStateHalogenM);
   var SetActiveTab3 = /* @__PURE__ */ function() {
@@ -11145,53 +11246,93 @@
     };
     return SetActiveTab6;
   }();
+  var workspaceUsageRow = function(name16) {
+    return function(conversations) {
+      return function(percentage) {
+        return div2([cls(["flex items-center justify-between py-2 border-b border-border last:border-0"])])([span3([cls(["text-sm text-text"])])([text5(name16)]), div2([cls(["flex items-center gap-4"])])([span3([cls(["text-sm text-muted-foreground"])])([text5(show7(conversations) + " conversations")]), span3([cls(["text-sm text-indigo-400"])])([text5(show7(percentage) + "%")])])]);
+      };
+    };
+  };
   var usageCard2 = function(label5) {
     return function(current) {
       return function(limit) {
         return function(unit2) {
-          return div2([cls(["bg-card border border-border rounded-lg p-6"])])([div2([cls(["flex items-center justify-between mb-4"])])([span3([cls(["text-sm font-medium text-text"])])([text5(label5)]), span3([cls(["text-sm text-muted-foreground"])])([text5(show7(current) + (" / " + (show7(limit) + (" " + unit2))))])]), div2([cls(["h-2 bg-muted rounded-full overflow-hidden"])])([div2([cls(["h-full bg-amber-400 rounded-full"]), style("width: " + (show7(div7(current * 100 | 0)(limit)) + "%"))])([])])]);
+          return div2([cls(["bg-card border border-border rounded-lg p-6"])])([div2([cls(["flex items-center justify-between mb-2"])])([span3([cls(["text-sm font-medium text-text"])])([text5(label5)])]), div2([cls(["flex items-baseline gap-2"])])([span3([cls(["text-2xl font-bold text-indigo-400"])])([text5(show7(current))]), span3([cls(["text-sm text-muted-foreground"])])([text5(unit2)])])]);
         };
       };
     };
   };
-  var tabButton4 = function(value21) {
+  var teamActivityRow = function(name16) {
+    return function(role) {
+      return function(action2) {
+        return function(time3) {
+          return div2([cls(["flex items-start justify-between py-3 border-b border-border last:border-0"])])([div_([div2([cls(["flex items-center gap-2 mb-1"])])([span3([cls(["text-text font-medium"])])([text5(name16)]), span3([cls(["text-xs px-2 py-0.5 rounded bg-indigo-400/10 text-indigo-400"])])([text5(role)])]), p([cls(["text-sm text-muted-foreground"])])([text5(action2)])]), span3([cls(["text-xs text-muted-foreground whitespace-nowrap"])])([text5(time3)])]);
+        };
+      };
+    };
+  };
+  var tabButton4 = function(value20) {
     return function(label5) {
       return function(activeTab) {
         return button([cls(["px-4 py-2 text-sm font-medium transition-colors -mb-px", function() {
-          var $12 = value21 === activeTab;
-          if ($12) {
-            return "text-amber-400 border-b-2 border-amber-400";
+          var $11 = value20 === activeTab;
+          if ($11) {
+            return "text-indigo-400 border-b-2 border-indigo-400";
           }
           ;
           return "text-muted-foreground hover:text-text";
         }()]), type_26(ButtonButton.value), onClick(function(v) {
-          return new SetActiveTab3(value21);
+          return new SetActiveTab3(value20);
         })])([text5(label5)]);
       };
     };
   };
   var tabs4 = function(state3) {
-    return div2([cls(["flex gap-1 border-b border-border mb-8"])])([tabButton4("overview")("Overview")(state3.activeTab), tabButton4("downloads")("Downloads")(state3.activeTab), tabButton4("usage")("Usage")(state3.activeTab), tabButton4("devices")("Devices")(state3.activeTab)]);
+    return div2([cls(["flex gap-1 border-b border-border mb-8"])])([tabButton4("overview")("Overview")(state3.activeTab), tabButton4("activity")("Team Activity")(state3.activeTab), tabButton4("conversations")("Shared Conversations")(state3.activeTab), tabButton4("usage")("Usage Stats")(state3.activeTab)]);
   };
   var statCard4 = function(label5) {
-    return function(value21) {
+    return function(value20) {
       return function(subtitle) {
-        return div2([cls(["bg-card border border-border rounded-lg p-4"])])([p([cls(["text-sm text-muted-foreground mb-1"])])([text5(label5)]), p([cls(["text-2xl font-bold text-text"])])([text5(value21)]), p([cls(["text-xs text-muted-foreground"])])([text5(subtitle)])]);
+        return div2([cls(["bg-card border border-border rounded-lg p-4"])])([p([cls(["text-sm text-muted-foreground mb-1"])])([text5(label5)]), p([cls(["text-2xl font-bold text-text"])])([text5(value20)]), p([cls(["text-xs text-muted-foreground"])])([text5(subtitle)])]);
       };
     };
   };
-  var projectUsageRow = function(name16) {
+  var sharedConvoRow = function(title3) {
+    return function(author) {
+      return function(workspace) {
+        return function(time3) {
+          return div2([cls(["flex items-center justify-between py-3 border-b border-border last:border-0 cursor-pointer hover:bg-card/50"])])([div_([p([cls(["text-text font-medium mb-1"])])([text5(title3)]), div2([cls(["flex items-center gap-2 text-xs text-muted-foreground"])])([span_([text5(author)]), span_([text5("in")]), span3([cls(["text-indigo-400"])])([text5(workspace)])])]), span3([cls(["text-xs text-muted-foreground"])])([text5(time3)])]);
+        };
+      };
+    };
+  };
+  var memberUsageRow = function(name16) {
     return function(conversations) {
       return function(percentage) {
-        return div2([cls(["flex items-center justify-between py-2 border-b border-border last:border-0"])])([span3([cls(["text-sm text-text"])])([text5(name16)]), div2([cls(["flex items-center gap-4"])])([span3([cls(["text-sm text-muted-foreground"])])([text5(show7(conversations) + " conversations")]), span3([cls(["text-sm text-amber-400"])])([text5(show7(percentage) + "%")])])]);
+        return div2([cls(["flex items-center justify-between py-2 border-b border-border last:border-0"])])([span3([cls(["text-sm text-text"])])([text5(name16)]), div2([cls(["flex items-center gap-4"])])([span3([cls(["text-sm text-muted-foreground"])])([text5(show7(conversations) + " conversations")]), span3([cls(["text-sm text-indigo-400"])])([text5(show7(percentage) + "%")])])]);
       };
     };
   };
-  var usageTab3 = /* @__PURE__ */ div_([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["grid grid-cols-1 md:grid-cols-2 gap-6 mb-8"])])([/* @__PURE__ */ usageCard2("Conversations")(247)(500)("this month"), /* @__PURE__ */ usageCard2("Cloud Storage")(128)(1e3)("MB used")]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["bg-card border border-border rounded-lg p-6"])])([/* @__PURE__ */ h3([/* @__PURE__ */ cls(["text-lg font-semibold text-text mb-4"])])([/* @__PURE__ */ text5("Usage by Project")]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["space-y-4"])])([/* @__PURE__ */ projectUsageRow("my-project")(89)(35), /* @__PURE__ */ projectUsageRow("new-website")(67)(27), /* @__PURE__ */ projectUsageRow("docs-site")(45)(18), /* @__PURE__ */ projectUsageRow("Other")(46)(20)])])]);
+  var usageTab2 = /* @__PURE__ */ function() {
+    return div_([div2([cls(["grid grid-cols-1 md:grid-cols-3 gap-6 mb-8"])])([usageCard2("Team Conversations")(847)(-1 | 0)("this month"), usageCard2("Shared Contexts")(23)(-1 | 0)("files"), usageCard2("Integrations Used")(156)(-1 | 0)("syncs this week")]), div2([cls(["bg-card border border-border rounded-lg p-6 mb-6"])])([h3([cls(["text-lg font-semibold text-text mb-4"])])([text5("Usage by Workspace")]), div2([cls(["space-y-4"])])([workspaceUsageRow("Marketing")(312)(37), workspaceUsageRow("Product")(245)(29), workspaceUsageRow("Design")(178)(21), workspaceUsageRow("Operations")(112)(13)])]), div2([cls(["bg-card border border-border rounded-lg p-6"])])([h3([cls(["text-lg font-semibold text-text mb-4"])])([text5("Usage by Team Member")]), div2([cls(["space-y-4"])])([memberUsageRow("Sarah Chen")(156)(18), memberUsageRow("Mike Johnson")(134)(16), memberUsageRow("Lisa Park")(98)(12), memberUsageRow("Tom Wilson")(87)(10)])])]);
+  }();
+  var memberCard = function(name16) {
+    return function(role) {
+      return function(online) {
+        return div2([cls(["p-3 bg-card border border-border rounded-lg"])])([div2([cls(["flex items-center gap-2"])])([span3([cls(["w-2 h-2 rounded-full", function() {
+          if (online) {
+            return "bg-green-400";
+          }
+          ;
+          return "bg-muted-foreground";
+        }()])])([]), span3([cls(["text-sm text-text font-medium"])])([text5(name16)])]), p([cls(["text-xs text-muted-foreground mt-1"])])([text5(role)])]);
+      };
+    };
+  };
   var initialState4 = {
     activeTab: "overview"
   };
-  var header6 = /* @__PURE__ */ div2([/* @__PURE__ */ cls(["mb-8"])])([/* @__PURE__ */ h1([/* @__PURE__ */ cls(["text-2xl font-bold text-text mb-2"])])([/* @__PURE__ */ text5("Dashboard")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-muted-foreground"])])([/* @__PURE__ */ text5("Manage your omega//work account and usage.")])]);
+  var header6 = /* @__PURE__ */ div2([/* @__PURE__ */ cls(["mb-8"])])([/* @__PURE__ */ h1([/* @__PURE__ */ cls(["text-2xl font-bold text-text mb-2"])])([/* @__PURE__ */ text5("Team Dashboard")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-muted-foreground"])])([/* @__PURE__ */ text5("Monitor team activity, shared conversations, and workspace usage.")])]);
   var handleAction13 = function(v) {
     return modify_15(function(v1) {
       var $14 = {};
@@ -11206,73 +11347,38 @@
       return $14;
     });
   };
-  var downloadCard = function(platform2) {
-    return function(description) {
-      return function(filename) {
-        return function(size4) {
-          return div2([cls(["bg-card border border-border rounded-lg p-6"])])([h3([cls(["text-lg font-semibold text-text mb-2"])])([text5(platform2)]), p([cls(["text-sm text-muted-foreground mb-4"])])([text5(description)]), div2([cls(["flex items-center justify-between"])])([span3([cls(["text-xs text-muted-foreground"])])([text5(size4)]), a([href4("/downloads/" + filename), cls(["px-4 py-2 bg-amber-400 text-background text-sm font-medium rounded-md hover:bg-amber-400/90 transition-colors"])])([text5("Download")])])]);
-        };
-      };
-    };
-  };
-  var downloadsTab = /* @__PURE__ */ div_([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["grid grid-cols-1 md:grid-cols-3 gap-6"])])([/* @__PURE__ */ downloadCard("macOS")("Universal (Intel + Apple Silicon)")("omega-work-1.0.0.dmg")("45 MB"), /* @__PURE__ */ downloadCard("Windows")("Windows 10/11 (64-bit)")("omega-work-1.0.0.exe")("52 MB"), /* @__PURE__ */ downloadCard("Linux")("AppImage (64-bit)")("omega-work-1.0.0.AppImage")("48 MB")]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["mt-8 p-4 bg-card border border-border rounded-lg"])])([/* @__PURE__ */ h3([/* @__PURE__ */ cls(["text-sm font-medium text-text mb-2"])])([/* @__PURE__ */ text5("Previous Versions")]), /* @__PURE__ */ a([/* @__PURE__ */ href4("/omega/work/docs"), /* @__PURE__ */ cls(["text-sm text-amber-400 hover:text-amber-400/80"])])([/* @__PURE__ */ text5("View all releases ->")])])]);
-  var deviceCard = function(name16) {
-    return function(os) {
-      return function(lastActive) {
-        return function(current) {
-          return div2([cls(["bg-card border rounded-lg p-4 flex items-center justify-between", function() {
-            if (current) {
-              return "border-amber-400/30";
-            }
-            ;
-            return "border-border";
-          }()])])([div_([div2([cls(["flex items-center gap-2"])])([span3([cls(["text-text font-medium"])])([text5(name16)]), function() {
-            if (current) {
-              return span3([cls(["text-xs px-2 py-0.5 rounded bg-amber-400/10 text-amber-400"])])([text5("Current")]);
-            }
-            ;
-            return text5("");
-          }()]), p([cls(["text-sm text-muted-foreground"])])([text5(os)])]), div2([cls(["text-right"])])([p([cls(["text-sm text-muted-foreground"])])([text5(lastActive)]), function() {
-            var $20 = !current;
-            if ($20) {
-              return button([cls(["text-xs text-danger hover:text-danger/80 cursor-pointer"]), type_26(ButtonButton.value)])([text5("Remove")]);
-            }
-            ;
-            return text5("");
-          }()])]);
-        };
-      };
-    };
-  };
-  var devicesTab = /* @__PURE__ */ div_([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["space-y-4"])])([/* @__PURE__ */ deviceCard("MacBook Pro")("macOS 14.2")("Active now")(true), /* @__PURE__ */ deviceCard("Windows Desktop")("Windows 11")("2 hours ago")(true), /* @__PURE__ */ deviceCard("Linux Laptop")("Ubuntu 22.04")("3 days ago")(false)]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["mt-8 p-4 bg-card border border-border rounded-lg"])])([/* @__PURE__ */ p([/* @__PURE__ */ cls(["text-sm text-muted-foreground"])])([/* @__PURE__ */ text5("Your Pro plan includes sync across unlimited devices.")])])]);
-  var activityItem3 = function(type_115) {
+  var conversationsTab = /* @__PURE__ */ function() {
+    return div_([div2([cls(["bg-card border border-border rounded-lg p-6 mb-6"])])([div2([cls(["flex items-center justify-between mb-4"])])([h3([cls(["text-lg font-semibold text-text"])])([text5("Shared Conversations")]), input2([type_17(isPropInputType)(InputText.value), placeholder3("Search conversations..."), cls(["px-3 py-2 bg-background border border-border rounded-md text-sm text-text w-64"])])]), div2([cls(["space-y-3"])])([sharedConvoRow("Q1 Planning Brief")("Sarah Chen")("Product")("2 hours ago"), sharedConvoRow("Homepage Redesign Ideas")("Mike Johnson")("Design")("5 hours ago"), sharedConvoRow("Monthly Metrics Analysis")("Lisa Park")("Marketing")("Yesterday"), sharedConvoRow("Customer Feedback Summary")("Emma Davis")("Product")("2 days ago"), sharedConvoRow("Social Media Calendar Draft")("Tom Wilson")("Marketing")("3 days ago")])]), div2([cls(["bg-card border border-border rounded-lg p-6"])])([h3([cls(["text-lg font-semibold text-text mb-4"])])([text5("Recently Viewed")]), div2([cls(["space-y-3"])])([sharedConvoRow("Brand Guidelines v2")("Mike Johnson")("Design")("Viewed 1 hour ago"), sharedConvoRow("Onboarding Checklist")("Tom Wilson")("Ops")("Viewed yesterday")])])]);
+  }();
+  var activityTab = /* @__PURE__ */ div_([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["bg-card border border-border rounded-lg p-6 mb-6"])])([/* @__PURE__ */ h3([/* @__PURE__ */ cls(["text-lg font-semibold text-text mb-4"])])([/* @__PURE__ */ text5("Team Activity Feed")]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["space-y-4"])])([/* @__PURE__ */ teamActivityRow("Sarah Chen")("PM")("Shared 'Product Roadmap Q2' to Product workspace")("10 min ago"), /* @__PURE__ */ teamActivityRow("Mike Johnson")("Designer")("Created conversation 'Homepage Redesign Ideas'")("1 hour ago"), /* @__PURE__ */ teamActivityRow("Lisa Park")("Analyst")("Exported 'Monthly Revenue Report' to Google Docs")("2 hours ago"), /* @__PURE__ */ teamActivityRow("Tom Wilson")("Ops")("Updated shared context 'SOP Templates'")("3 hours ago"), /* @__PURE__ */ teamActivityRow("Emma Davis")("PM")("Invited Alex to Marketing workspace")("Yesterday"), /* @__PURE__ */ teamActivityRow("James Lee")("Designer")("Shared 'Brand Color Exploration' with team")("Yesterday")])]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["bg-card border border-border rounded-lg p-6"])])([/* @__PURE__ */ h3([/* @__PURE__ */ cls(["text-lg font-semibold text-text mb-4"])])([/* @__PURE__ */ text5("Active Team Members")]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["grid grid-cols-2 md:grid-cols-4 gap-4"])])([/* @__PURE__ */ memberCard("Sarah Chen")("PM")(true), /* @__PURE__ */ memberCard("Mike Johnson")("Designer")(true), /* @__PURE__ */ memberCard("Lisa Park")("Analyst")(false), /* @__PURE__ */ memberCard("Tom Wilson")("Ops")(true)])])]);
+  var activityItem3 = function(member) {
     return function(description) {
       return function(time3) {
-        return div2([cls(["flex items-center justify-between py-2 border-b border-border last:border-0"])])([div2([cls(["flex items-center gap-3"])])([span3([cls(["text-xs px-2 py-0.5 rounded font-medium bg-amber-400/10 text-amber-400"])])([text5(type_115)]), span3([cls(["text-sm text-text"])])([text5(description)])]), span3([cls(["text-sm text-muted-foreground"])])([text5(time3)])]);
+        return div2([cls(["flex items-center justify-between py-2 border-b border-border last:border-0"])])([div2([cls(["flex items-center gap-3"])])([span3([cls(["text-xs px-2 py-0.5 rounded font-medium bg-indigo-400/10 text-indigo-400"])])([text5(member)]), span3([cls(["text-sm text-text"])])([text5(description)])]), span3([cls(["text-sm text-muted-foreground"])])([text5(time3)])]);
       };
     };
   };
   var actionButton = function(label5) {
     return function(href5) {
-      return a([href4(href5), cls(["px-4 py-2 bg-amber-400/10 text-amber-400 text-sm font-medium rounded-md hover:bg-amber-400/20 transition-colors"])])([text5(label5)]);
+      return a([href4(href5), cls(["px-4 py-2 bg-indigo-400/10 text-indigo-400 text-sm font-medium rounded-md hover:bg-indigo-400/20 transition-colors"])])([text5(label5)]);
     };
   };
-  var overviewTab4 = /* @__PURE__ */ div_([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["grid grid-cols-1 md:grid-cols-4 gap-4 mb-8"])])([/* @__PURE__ */ statCard4("Plan")("Pro")("Active"), /* @__PURE__ */ statCard4("Conversations")("247")("This month"), /* @__PURE__ */ statCard4("Projects")("12")("Active"), /* @__PURE__ */ statCard4("Devices")("3")("Synced")]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["bg-card border border-border rounded-lg p-6 mb-8"])])([/* @__PURE__ */ h3([/* @__PURE__ */ cls(["text-lg font-semibold text-text mb-4"])])([/* @__PURE__ */ text5("Quick Actions")]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["flex flex-wrap gap-3"])])([/* @__PURE__ */ actionButton("Download App")("/omega/work/download"), /* @__PURE__ */ actionButton("View Docs")("/omega/work/docs"), /* @__PURE__ */ actionButton("Manage Billing")("/omega/work/settings#billing")])]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["bg-card border border-border rounded-lg p-6"])])([/* @__PURE__ */ h3([/* @__PURE__ */ cls(["text-lg font-semibold text-text mb-4"])])([/* @__PURE__ */ text5("Recent Activity")]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["space-y-3"])])([/* @__PURE__ */ activityItem3("Conversation")("Updated README.md in my-project")("2 hours ago"), /* @__PURE__ */ activityItem3("Project")("Created new-website project")("Yesterday"), /* @__PURE__ */ activityItem3("Sync")("Synced from MacBook Pro")("Yesterday"), /* @__PURE__ */ activityItem3("Conversation")("Refactored utils.ts")("2 days ago")])])]);
+  var overviewTab4 = /* @__PURE__ */ div_([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["grid grid-cols-1 md:grid-cols-4 gap-4 mb-8"])])([/* @__PURE__ */ statCard4("Plan")("Team")("12 seats"), /* @__PURE__ */ statCard4("Team Members")("12")("Active"), /* @__PURE__ */ statCard4("Workspaces")("4")("Marketing, Product, Design, Ops"), /* @__PURE__ */ statCard4("Conversations")("847")("This month")]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["bg-card border border-border rounded-lg p-6 mb-8"])])([/* @__PURE__ */ h3([/* @__PURE__ */ cls(["text-lg font-semibold text-text mb-4"])])([/* @__PURE__ */ text5("Quick Actions")]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["flex flex-wrap gap-3"])])([/* @__PURE__ */ actionButton("Invite Team Member")("/omega/work/settings#team"), /* @__PURE__ */ actionButton("Create Workspace")("/omega/work/settings#workspaces"), /* @__PURE__ */ actionButton("View Docs")("/omega/work/docs"), /* @__PURE__ */ actionButton("Manage Billing")("/omega/work/settings#billing")])]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["bg-card border border-border rounded-lg p-6"])])([/* @__PURE__ */ h3([/* @__PURE__ */ cls(["text-lg font-semibold text-text mb-4"])])([/* @__PURE__ */ text5("Recent Team Activity")]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["space-y-3"])])([/* @__PURE__ */ activityItem3("Sarah")("Shared conversation 'Q1 Planning Brief'")("2 hours ago"), /* @__PURE__ */ activityItem3("Mike")("Created workspace 'Brand Guidelines'")("Yesterday"), /* @__PURE__ */ activityItem3("Lisa")("Generated report 'Monthly Metrics'")("Yesterday"), /* @__PURE__ */ activityItem3("Tom")("Added context 'Style Guide v2' to Design workspace")("2 days ago")])])]);
   var content9 = function(state3) {
     if (state3.activeTab === "overview") {
       return overviewTab4;
     }
     ;
-    if (state3.activeTab === "downloads") {
-      return downloadsTab;
+    if (state3.activeTab === "activity") {
+      return activityTab;
+    }
+    ;
+    if (state3.activeTab === "conversations") {
+      return conversationsTab;
     }
     ;
     if (state3.activeTab === "usage") {
-      return usageTab3;
-    }
-    ;
-    if (state3.activeTab === "devices") {
-      return devicesTab;
+      return usageTab2;
     }
     ;
     return overviewTab4;
@@ -11428,7 +11534,7 @@
       };
     };
   };
-  var apiContent3 = /* @__PURE__ */ article4([/* @__PURE__ */ h14("API Reference"), /* @__PURE__ */ p4("omega//work provides a REST API for building custom integrations (Enterprise plan)."), /* @__PURE__ */ h24("Authentication"), /* @__PURE__ */ p4("API requests require a Bearer token. Generate tokens in Settings > API > Create Token."), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["bg-card border border-border rounded-lg p-4 my-4 font-mono text-sm text-muted-foreground"])])([/* @__PURE__ */ text5("Authorization: Bearer your-api-token")]), /* @__PURE__ */ h24("Endpoints"), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["space-y-4 my-6"])])([/* @__PURE__ */ apiEndpoint("GET")("/api/v1/workspaces")("List all workspaces"), /* @__PURE__ */ apiEndpoint("GET")("/api/v1/conversations")("List conversations"), /* @__PURE__ */ apiEndpoint("POST")("/api/v1/conversations")("Create a conversation"), /* @__PURE__ */ apiEndpoint("GET")("/api/v1/conversations/:id")("Get conversation details"), /* @__PURE__ */ apiEndpoint("POST")("/api/v1/conversations/:id/messages")("Add a message")]), /* @__PURE__ */ h24("Rate Limits"), /* @__PURE__ */ p4("API requests are limited to 1000 per hour per token. Contact support for higher limits."), /* @__PURE__ */ h24("SDKs"), /* @__PURE__ */ p4("Official SDKs available for Python, JavaScript, and Go. See the GitHub repo for installation instructions.")]);
+  var apiContent4 = /* @__PURE__ */ article4([/* @__PURE__ */ h14("API Reference"), /* @__PURE__ */ p4("omega//work provides a REST API for building custom integrations (Enterprise plan)."), /* @__PURE__ */ h24("Authentication"), /* @__PURE__ */ p4("API requests require a Bearer token. Generate tokens in Settings > API > Create Token."), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["bg-card border border-border rounded-lg p-4 my-4 font-mono text-sm text-muted-foreground"])])([/* @__PURE__ */ text5("Authorization: Bearer your-api-token")]), /* @__PURE__ */ h24("Endpoints"), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["space-y-4 my-6"])])([/* @__PURE__ */ apiEndpoint("GET")("/api/v1/workspaces")("List all workspaces"), /* @__PURE__ */ apiEndpoint("GET")("/api/v1/conversations")("List conversations"), /* @__PURE__ */ apiEndpoint("POST")("/api/v1/conversations")("Create a conversation"), /* @__PURE__ */ apiEndpoint("GET")("/api/v1/conversations/:id")("Get conversation details"), /* @__PURE__ */ apiEndpoint("POST")("/api/v1/conversations/:id/messages")("Add a message")]), /* @__PURE__ */ h24("Rate Limits"), /* @__PURE__ */ p4("API requests are limited to 1000 per hour per token. Contact support for higher limits."), /* @__PURE__ */ h24("SDKs"), /* @__PURE__ */ p4("Official SDKs available for Python, JavaScript, and Go. See the GitHub repo for installation instructions.")]);
   var renderContent4 = function(path) {
     if (path === "/omega/work/docs") {
       return overviewContent4;
@@ -11471,7 +11577,7 @@
     }
     ;
     if (path === "/omega/work/docs/api") {
-      return apiContent3;
+      return apiContent4;
     }
     ;
     if (path === "/omega/work/docs/webhooks") {
@@ -11708,10 +11814,9 @@
   });
 
   // output/Straylight.Pages.Products.OmegaWork.Settings/index.js
+  var show8 = /* @__PURE__ */ show(showInt);
   var type_27 = /* @__PURE__ */ type_17(isPropButtonType);
   var modify_17 = /* @__PURE__ */ modify_(monadStateHalogenM);
-  var type_110 = /* @__PURE__ */ type_17(isPropInputType);
-  var value16 = /* @__PURE__ */ value12(isPropString);
   var SetActiveTab4 = /* @__PURE__ */ function() {
     function SetActiveTab6(value0) {
       this.value0 = value0;
@@ -11722,49 +11827,61 @@
     };
     return SetActiveTab6;
   }();
-  var sidebarButton = function(value1) {
+  var workspaceRow = function(name16) {
+    return function(members) {
+      return function(activity) {
+        return function(active) {
+          return div2([cls(["flex items-center justify-between py-3 border-b border-border last:border-0"])])([div_([div2([cls(["flex items-center gap-2"])])([span3([cls(["text-text font-medium"])])([text5(name16)]), span3([cls(["text-xs text-muted-foreground"])])([text5(show8(members) + " members")])]), p([cls(["text-xs text-muted-foreground"])])([text5(activity)])]), div2([cls(["flex items-center gap-3"])])([function() {
+            if (active) {
+              return span3([cls(["text-xs px-2 py-1 rounded bg-green-400/10 text-green-400"])])([text5("Active")]);
+            }
+            ;
+            return span3([cls(["text-xs px-2 py-1 rounded bg-muted text-muted-foreground"])])([text5("Quiet")]);
+          }(), button([cls(["text-xs text-indigo-400 hover:text-indigo-400/80 cursor-pointer"]), type_27(ButtonButton.value)])([text5("Settings")])])]);
+        };
+      };
+    };
+  };
+  var teamMemberRow3 = function(name16) {
+    return function(email) {
+      return function(role) {
+        return function(active) {
+          return div2([cls(["flex items-center justify-between py-3 border-b border-border last:border-0"])])([div2([cls(["flex items-center gap-3"])])([span3([cls(["w-2 h-2 rounded-full", function() {
+            if (active) {
+              return "bg-green-400";
+            }
+            ;
+            return "bg-muted-foreground";
+          }()])])([]), div_([p([cls(["text-text font-medium"])])([text5(name16)]), p([cls(["text-xs text-muted-foreground"])])([text5(email)])])]), div2([cls(["flex items-center gap-3"])])([span3([cls(["text-xs px-2 py-1 rounded bg-indigo-400/10 text-indigo-400"])])([text5(role)]), button([cls(["text-xs text-muted-foreground hover:text-text cursor-pointer"]), type_27(ButtonButton.value)])([text5("Edit")])])]);
+        };
+      };
+    };
+  };
+  var sidebarButton = function(value20) {
     return function(label5) {
       return function(activeTab) {
         return button([cls(["w-full text-left px-3 py-2 rounded text-sm transition-colors", function() {
-          var $9 = value1 === activeTab;
-          if ($9) {
-            return "bg-amber-400/10 text-amber-400 font-medium";
+          var $12 = value20 === activeTab;
+          if ($12) {
+            return "bg-indigo-400/10 text-indigo-400 font-medium";
           }
           ;
           return "text-muted-foreground hover:text-text hover:bg-card";
         }()]), type_27(ButtonButton.value), onClick(function(v) {
-          return new SetActiveTab4(value1);
+          return new SetActiveTab4(value20);
         })])([text5(label5)]);
       };
     };
   };
   var sidebar8 = function(state3) {
-    return nav([cls(["space-y-1"])])([sidebarButton("account")("Account")(state3.activeTab), sidebarButton("billing")("Billing")(state3.activeTab), sidebarButton("preferences")("Preferences")(state3.activeTab), sidebarButton("api-keys")("API Keys")(state3.activeTab), sidebarButton("security")("Security")(state3.activeTab)]);
+    return nav([cls(["space-y-1"])])([sidebarButton("team")("Team Management")(state3.activeTab), sidebarButton("workspaces")("Workspaces")(state3.activeTab), sidebarButton("sso")("SSO / Security")(state3.activeTab), sidebarButton("integrations")("Integrations")(state3.activeTab), sidebarButton("billing")("Billing")(state3.activeTab)]);
   };
-  var sessionRow3 = function(device) {
-    return function(location2) {
-      return function(time3) {
-        return function(current) {
-          return div2([cls(["flex items-center justify-between py-2 border-b border-border last:border-0"])])([div_([div2([cls(["flex items-center gap-2"])])([span3([cls(["text-sm text-text"])])([text5(device)]), function() {
-            if (current) {
-              return span3([cls(["text-xs px-1.5 py-0.5 rounded bg-green-500/10 text-green-400"])])([text5("Current")]);
-            }
-            ;
-            return text5("");
-          }()]), p([cls(["text-xs text-muted-foreground"])])([text5(location2)])]), span3([cls(["text-sm text-muted-foreground"])])([text5(time3)])]);
-        };
-      };
-    };
-  };
-  var securityTab4 = /* @__PURE__ */ function() {
-    return div2([cls(["space-y-6"])])([div2([cls(["bg-card border border-border rounded-lg p-6"])])([h3([cls(["text-lg font-semibold text-text mb-4"])])([text5("Two-Factor Authentication")]), p([cls(["text-sm text-muted-foreground mb-4"])])([text5("Add an extra layer of security to your account.")]), button([cls(["px-4 py-2 border border-border text-text text-sm font-medium rounded-md hover:bg-card transition-colors cursor-pointer"]), type_27(ButtonButton.value)])([text5("Enable 2FA")])]), div2([cls(["bg-card border border-border rounded-lg p-6"])])([h3([cls(["text-lg font-semibold text-text mb-4"])])([text5("Active Sessions")]), p([cls(["text-sm text-muted-foreground mb-4"])])([text5("Manage your active sessions across devices.")]), div2([cls(["space-y-2"])])([sessionRow3("MacBook Pro")("San Francisco, US")("Active now")(true), sessionRow3("Windows Desktop")("San Francisco, US")("2 hours ago")(false)]), button([cls(["mt-4 text-sm text-red-400 hover:text-red-400/80 cursor-pointer"]), type_27(ButtonButton.value)])([text5("Sign out all other sessions")])])]);
-  }();
-  var preferenceToggle = function(label5) {
+  var settingToggle = function(label5) {
     return function(description) {
       return function(enabled) {
         return div2([cls(["flex items-center justify-between py-2"])])([div_([p([cls(["text-sm text-text font-medium"])])([text5(label5)]), p([cls(["text-xs text-muted-foreground"])])([text5(description)])]), div2([cls(["w-10 h-6 rounded-full cursor-pointer transition-colors", function() {
           if (enabled) {
-            return "bg-amber-400";
+            return "bg-indigo-400";
           }
           ;
           return "bg-muted";
@@ -11778,12 +11895,29 @@
       };
     };
   };
-  var preferencesTab = /* @__PURE__ */ div2([/* @__PURE__ */ cls(["space-y-6"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["bg-card border border-border rounded-lg p-6"])])([/* @__PURE__ */ h3([/* @__PURE__ */ cls(["text-lg font-semibold text-text mb-4"])])([/* @__PURE__ */ text5("Appearance")]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["space-y-4"])])([/* @__PURE__ */ preferenceToggle("Dark mode")("Use dark theme throughout the app")(true), /* @__PURE__ */ preferenceToggle("Compact view")("Reduce spacing in the interface")(false)])]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["bg-card border border-border rounded-lg p-6"])])([/* @__PURE__ */ h3([/* @__PURE__ */ cls(["text-lg font-semibold text-text mb-4"])])([/* @__PURE__ */ text5("Behavior")]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["space-y-4"])])([/* @__PURE__ */ preferenceToggle("Auto-save")("Automatically save conversations")(true), /* @__PURE__ */ preferenceToggle("Sound effects")("Play sounds for notifications")(false), /* @__PURE__ */ preferenceToggle("Show diff preview")("Preview changes before accepting")(true)])])]);
-  var planDetail = function(label5) {
-    return function(value1) {
-      return div_([p([cls(["text-xs text-muted-foreground"])])([text5(label5)]), p([cls(["text-sm text-text font-medium"])])([text5(value1)])]);
+  var workspacesTab = /* @__PURE__ */ function() {
+    return div2([cls(["space-y-6"])])([div2([cls(["bg-card border border-border rounded-lg p-6"])])([div2([cls(["flex items-center justify-between mb-4"])])([h3([cls(["text-lg font-semibold text-text"])])([text5("Team Workspaces")]), button([cls(["px-4 py-2 bg-indigo-400 text-background text-sm font-medium rounded-md hover:bg-indigo-400/90 transition-colors cursor-pointer"]), type_27(ButtonButton.value)])([text5("Create Workspace")])]), div2([cls(["space-y-3"])])([workspaceRow("Marketing")(5)("12 conversations this week")(true), workspaceRow("Product")(4)("8 conversations this week")(true), workspaceRow("Design")(3)("6 conversations this week")(true), workspaceRow("Operations")(4)("4 conversations this week")(false)])]), div2([cls(["bg-card border border-border rounded-lg p-6"])])([h3([cls(["text-lg font-semibold text-text mb-4"])])([text5("Default Settings")]), div2([cls(["space-y-4"])])([settingToggle("Auto-share to workspace")("New conversations are automatically shared with workspace members")(true), settingToggle("Allow external sharing")("Members can share conversations via link")(false), settingToggle("Searchable history")("All shared conversations appear in workspace search")(true)])])]);
+  }();
+  var roleDescription = function(role) {
+    return function(desc) {
+      return div2([cls(["flex items-start gap-3 py-2"])])([span3([cls(["text-indigo-400 font-medium w-20"])])([text5(role)]), span3([cls(["text-muted-foreground"])])([text5(desc)])]);
     };
   };
+  var planDetail = function(label5) {
+    return function(value20) {
+      return div_([p([cls(["text-xs text-muted-foreground"])])([text5(label5)]), p([cls(["text-sm text-text font-medium"])])([text5(value20)])]);
+    };
+  };
+  var pendingInviteRow = function(email) {
+    return function(role) {
+      return function(sentAgo) {
+        return div2([cls(["flex items-center justify-between py-3 border-b border-border last:border-0"])])([div_([p([cls(["text-text"])])([text5(email)]), p([cls(["text-xs text-muted-foreground"])])([text5("Sent " + sentAgo)])]), div2([cls(["flex items-center gap-3"])])([span3([cls(["text-xs text-muted-foreground"])])([text5(role)]), button([cls(["text-xs text-indigo-400 hover:text-indigo-400/80 cursor-pointer"]), type_27(ButtonButton.value)])([text5("Resend")]), button([cls(["text-xs text-danger hover:text-danger/80 cursor-pointer"]), type_27(ButtonButton.value)])([text5("Cancel")])])]);
+      };
+    };
+  };
+  var teamTab3 = /* @__PURE__ */ function() {
+    return div2([cls(["space-y-6"])])([div2([cls(["bg-card border border-border rounded-lg p-6"])])([div2([cls(["flex items-center justify-between mb-4"])])([h3([cls(["text-lg font-semibold text-text"])])([text5("Team Members")]), button([cls(["px-4 py-2 bg-indigo-400 text-background text-sm font-medium rounded-md hover:bg-indigo-400/90 transition-colors cursor-pointer"]), type_27(ButtonButton.value)])([text5("Invite Member")])]), div2([cls(["space-y-3"])])([teamMemberRow3("Sarah Chen")("sarah@company.com")("Admin")(true), teamMemberRow3("Mike Johnson")("mike@company.com")("Member")(true), teamMemberRow3("Lisa Park")("lisa@company.com")("Member")(true), teamMemberRow3("Tom Wilson")("tom@company.com")("Member")(false), teamMemberRow3("Emma Davis")("emma@company.com")("Viewer")(true)])]), div2([cls(["bg-card border border-border rounded-lg p-6"])])([h3([cls(["text-lg font-semibold text-text mb-4"])])([text5("Pending Invitations")]), div2([cls(["space-y-3"])])([pendingInviteRow("alex@company.com")("Member")("2 days ago"), pendingInviteRow("jordan@company.com")("Viewer")("5 days ago")])]), div2([cls(["bg-card border border-border rounded-lg p-6"])])([h3([cls(["text-lg font-semibold text-text mb-4"])])([text5("Role Permissions")]), div2([cls(["space-y-3 text-sm"])])([roleDescription("Admin")("Full access to all settings, billing, and team management"), roleDescription("Member")("Create conversations, share to workspaces, use integrations"), roleDescription("Viewer")("View shared conversations only, no creation access")])])]);
+  }();
   var invoiceRow2 = function(date) {
     return function(amount) {
       return function(status2) {
@@ -11791,22 +11925,29 @@
       };
     };
   };
+  var integrationRow = function(name16) {
+    return function(status2) {
+      return function(connected) {
+        return div2([cls(["flex items-center justify-between py-3 border-b border-border last:border-0"])])([div_([p([cls(["text-text font-medium"])])([text5(name16)]), p([cls(["text-xs text-muted-foreground"])])([text5(status2)])]), div2([cls(["flex items-center gap-3"])])([span3([cls(["w-2 h-2 rounded-full bg-green-400"])])([]), button([cls(["text-xs text-muted-foreground hover:text-text cursor-pointer"]), type_27(ButtonButton.value)])([text5("Configure")]), button([cls(["text-xs text-danger hover:text-danger/80 cursor-pointer"]), type_27(ButtonButton.value)])([text5("Disconnect")])])]);
+      };
+    };
+  };
   var initialState5 = {
-    activeTab: "account"
+    activeTab: "team"
   };
   var header7 = /* @__PURE__ */ div2([/* @__PURE__ */ cls(["mb-8"])])([/* @__PURE__ */ h1([/* @__PURE__ */ cls(["text-2xl font-bold text-text"])])([/* @__PURE__ */ text5("Settings")])]);
   var handleAction15 = function(v) {
     return modify_17(function(v1) {
-      var $14 = {};
-      for (var $15 in v1) {
-        if ({}.hasOwnProperty.call(v1, $15)) {
-          $14[$15] = v1[$15];
+      var $16 = {};
+      for (var $17 in v1) {
+        if ({}.hasOwnProperty.call(v1, $17)) {
+          $16[$17] = v1[$17];
         }
         ;
       }
       ;
-      $14.activeTab = v.value0;
-      return $14;
+      $16.activeTab = v.value0;
+      return $16;
     });
   };
   var formField2 = function(label5) {
@@ -11814,54 +11955,40 @@
       return div_([label4([cls(["block text-sm font-medium text-text mb-1"])])([text5(label5)]), input3]);
     };
   };
-  var billingTab4 = /* @__PURE__ */ function() {
-    return div2([cls(["space-y-6"])])([div2([cls(["bg-card border border-border rounded-lg p-6"])])([div2([cls(["flex items-center justify-between mb-4"])])([h3([cls(["text-lg font-semibold text-text"])])([text5("Current Plan")]), a([href4("/omega/work/pricing"), cls(["text-sm text-amber-400 hover:text-amber-400/80"])])([text5("Change plan")])]), div2([cls(["flex items-center gap-4 mb-4"])])([span3([cls(["text-2xl font-bold text-text"])])([text5("Pro")]), span3([cls(["text-muted-foreground"])])([text5("$39/month")])]), div2([cls(["grid grid-cols-2 md:grid-cols-4 gap-4"])])([planDetail("Conversations")("Unlimited"), planDetail("Cloud Sync")("Included"), planDetail("Devices")("Unlimited"), planDetail("Support")("Priority")])]), div2([cls(["bg-card border border-border rounded-lg p-6"])])([h3([cls(["text-lg font-semibold text-text mb-4"])])([text5("Payment Method")]), div2([cls(["flex items-center justify-between p-3 border border-border rounded-md"])])([div2([cls(["flex items-center gap-3"])])([span3([cls(["text-text"])])([text5("Visa ending in 4242")]), span3([cls(["text-xs text-muted-foreground"])])([text5("Expires 12/26")])]), button([cls(["text-sm text-amber-400 hover:text-amber-400/80 cursor-pointer"]), type_27(ButtonButton.value)])([text5("Update")])])]), div2([cls(["bg-card border border-border rounded-lg p-6"])])([h3([cls(["text-lg font-semibold text-text mb-4"])])([text5("Billing History")]), div2([cls(["space-y-2"])])([invoiceRow2("Feb 1, 2026")("$39.00")("Paid"), invoiceRow2("Jan 1, 2026")("$39.00")("Paid"), invoiceRow2("Dec 1, 2025")("$39.00")("Paid")])])]);
+  var ssoTab = /* @__PURE__ */ function() {
+    return div2([cls(["space-y-6"])])([div2([cls(["bg-card border border-border rounded-lg p-6"])])([h3([cls(["text-lg font-semibold text-text mb-4"])])([text5("Single Sign-On (SSO)")]), p([cls(["text-sm text-muted-foreground mb-4"])])([text5("Configure SAML-based SSO for your organization. Available on Enterprise plan.")]), div2([cls(["space-y-4"])])([formField2("Identity Provider")(select3([cls(["w-full px-3 py-2 bg-background border border-border rounded-md text-text text-sm"])])([option_([text5("Okta")]), option_([text5("Azure AD")]), option_([text5("Google Workspace")]), option_([text5("OneLogin")]), option_([text5("Other SAML 2.0")])])), formField2("SSO URL")(input2([type_17(isPropInputType)(InputText.value), placeholder3("https://your-idp.com/saml/sso"), cls(["w-full px-3 py-2 bg-background border border-border rounded-md text-text text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400"])])), formField2("Certificate")(textarea([placeholder3("Paste your SAML certificate here"), cls(["w-full px-3 py-2 bg-background border border-border rounded-md text-text text-sm h-24 focus:outline-none focus:ring-2 focus:ring-indigo-400"])]))]), div2([cls(["mt-4"])])([button([cls(["px-4 py-2 bg-indigo-400 text-background text-sm font-medium rounded-md hover:bg-indigo-400/90 transition-colors cursor-pointer"]), type_27(ButtonButton.value)])([text5("Save SSO Configuration")])])]), div2([cls(["bg-card border border-border rounded-lg p-6"])])([h3([cls(["text-lg font-semibold text-text mb-4"])])([text5("Security Settings")]), div2([cls(["space-y-4"])])([settingToggle("Require SSO for all users")("Users must sign in via SSO, no password login allowed")(false), settingToggle("Enforce 2FA")("All team members must enable two-factor authentication")(true), settingToggle("Session timeout")("Automatically sign out inactive users after 8 hours")(true)])]), div2([cls(["bg-card border border-border rounded-lg p-6"])])([h3([cls(["text-lg font-semibold text-text mb-4"])])([text5("Audit Logs")]), p([cls(["text-sm text-muted-foreground mb-4"])])([text5("Track team activity for compliance and security. Enterprise plan required.")]), button([cls(["px-4 py-2 border border-border text-text text-sm font-medium rounded-md hover:bg-card transition-colors cursor-pointer"]), type_27(ButtonButton.value)])([text5("View Audit Logs")])])]);
   }();
-  var apiKeyField = function(provider) {
-    return function(value1) {
-      return function(configured) {
-        return div2([cls(["flex items-center justify-between py-2 border-b border-border last:border-0"])])([div_([p([cls(["text-sm text-text font-medium"])])([text5(provider)]), p([cls(["text-xs font-mono", function() {
-          if (configured) {
-            return "text-muted-foreground";
-          }
-          ;
-          return "text-muted-foreground/50";
-        }()])])([text5(value1)])]), button([cls(["text-sm text-amber-400 hover:text-amber-400/80 cursor-pointer"]), type_27(ButtonButton.value)])([text5(function() {
-          if (configured) {
-            return "Update";
-          }
-          ;
-          return "Add";
-        }())])]);
-      };
+  var billingTab3 = /* @__PURE__ */ function() {
+    return div2([cls(["space-y-6"])])([div2([cls(["bg-card border border-border rounded-lg p-6"])])([div2([cls(["flex items-center justify-between mb-4"])])([h3([cls(["text-lg font-semibold text-text"])])([text5("Current Plan")]), a([href4("/omega/work/pricing"), cls(["text-sm text-indigo-400 hover:text-indigo-400/80"])])([text5("Change plan")])]), div2([cls(["flex items-center gap-4 mb-4"])])([span3([cls(["text-2xl font-bold text-text"])])([text5("Team")]), span3([cls(["text-muted-foreground"])])([text5("$25/seat/month")]), span3([cls(["text-muted-foreground"])])([text5("(12 seats = $300/month)")])]), div2([cls(["grid grid-cols-2 md:grid-cols-4 gap-4"])])([planDetail("Seats")("12 active"), planDetail("Conversations")("Unlimited"), planDetail("Workspaces")("Unlimited"), planDetail("Support")("Priority")])]), div2([cls(["bg-card border border-border rounded-lg p-6"])])([h3([cls(["text-lg font-semibold text-text mb-4"])])([text5("Seat Management")]), p([cls(["text-sm text-muted-foreground mb-4"])])([text5("Add or remove seats. Changes take effect immediately and are prorated.")]), div2([cls(["flex items-center gap-4"])])([button([cls(["px-4 py-2 border border-border text-text text-sm font-medium rounded-md hover:bg-card transition-colors cursor-pointer"]), type_27(ButtonButton.value)])([text5("Remove Seat")]), button([cls(["px-4 py-2 bg-indigo-400 text-background text-sm font-medium rounded-md hover:bg-indigo-400/90 transition-colors cursor-pointer"]), type_27(ButtonButton.value)])([text5("Add Seat ($25/month)")])])]), div2([cls(["bg-card border border-border rounded-lg p-6"])])([h3([cls(["text-lg font-semibold text-text mb-4"])])([text5("Payment Method")]), div2([cls(["flex items-center justify-between p-3 border border-border rounded-md"])])([div2([cls(["flex items-center gap-3"])])([span3([cls(["text-text"])])([text5("Visa ending in 4242")]), span3([cls(["text-xs text-muted-foreground"])])([text5("Expires 12/26")])]), button([cls(["text-sm text-indigo-400 hover:text-indigo-400/80 cursor-pointer"]), type_27(ButtonButton.value)])([text5("Update")])])]), div2([cls(["bg-card border border-border rounded-lg p-6"])])([h3([cls(["text-lg font-semibold text-text mb-4"])])([text5("Billing History")]), div2([cls(["space-y-2"])])([invoiceRow2("Feb 1, 2026")("$300.00")("Paid"), invoiceRow2("Jan 1, 2026")("$275.00")("Paid"), invoiceRow2("Dec 1, 2025")("$250.00")("Paid")])])]);
+  }();
+  var availableIntegration = function(name16) {
+    return function(description) {
+      return div2([cls(["flex items-center justify-between p-4 border border-border rounded-lg hover:border-indigo-400/30 transition-colors"])])([div_([p([cls(["text-text font-medium"])])([text5(name16)]), p([cls(["text-xs text-muted-foreground"])])([text5(description)])]), button([cls(["px-3 py-1 text-xs bg-indigo-400/10 text-indigo-400 rounded-md hover:bg-indigo-400/20 transition-colors cursor-pointer"]), type_27(ButtonButton.value)])([text5("Connect")])]);
     };
   };
-  var apiKeysTab2 = /* @__PURE__ */ div2([/* @__PURE__ */ cls(["space-y-6"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["bg-card border border-border rounded-lg p-6"])])([/* @__PURE__ */ h3([/* @__PURE__ */ cls(["text-lg font-semibold text-text mb-2"])])([/* @__PURE__ */ text5("Bring Your Own Key")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-sm text-muted-foreground mb-4"])])([/* @__PURE__ */ text5("Use your own API keys instead of the included access. Keys are stored locally.")]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["space-y-4"])])([/* @__PURE__ */ apiKeyField("OpenAI")("sk-...xxxx")(true), /* @__PURE__ */ apiKeyField("Anthropic")("Not configured")(false), /* @__PURE__ */ apiKeyField("Azure OpenAI")("Not configured")(false)])]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["p-4 bg-amber-400/5 border border-amber-400/20 rounded-lg"])])([/* @__PURE__ */ p([/* @__PURE__ */ cls(["text-sm text-amber-400"])])([/* @__PURE__ */ text5("Your API keys are stored locally on your device and never sent to our servers.")])])]);
-  var accountTab3 = /* @__PURE__ */ function() {
-    return div2([cls(["space-y-6"])])([div2([cls(["bg-card border border-border rounded-lg p-6"])])([h3([cls(["text-lg font-semibold text-text mb-4"])])([text5("Profile")]), div2([cls(["space-y-4"])])([formField2("Name")(input2([type_110(InputText.value), value16("Alex Johnson"), cls(["w-full px-3 py-2 bg-background border border-border rounded-md text-text text-sm focus:outline-none focus:ring-2 focus:ring-amber-400"])])), formField2("Email")(input2([type_110(InputEmail.value), value16("alex@example.com"), disabled10(true), cls(["w-full px-3 py-2 bg-background border border-border rounded-md text-muted-foreground text-sm"])]))]), div2([cls(["mt-4"])])([button([cls(["px-4 py-2 bg-amber-400 text-background text-sm font-medium rounded-md hover:bg-amber-400/90 transition-colors cursor-pointer"]), type_27(ButtonButton.value)])([text5("Save Changes")])])]), div2([cls(["bg-card border border-red-500/30 rounded-lg p-6"])])([h3([cls(["text-lg font-semibold text-red-400 mb-4"])])([text5("Danger Zone")]), p([cls(["text-sm text-muted-foreground mb-4"])])([text5("Once you delete your account, there is no going back. Please be certain.")]), button([cls(["px-4 py-2 border border-red-500 text-red-400 text-sm font-medium rounded-md hover:bg-red-500/10 transition-colors cursor-pointer"]), type_27(ButtonButton.value)])([text5("Delete Account")])])]);
-  }();
+  var integrationsTab = /* @__PURE__ */ div2([/* @__PURE__ */ cls(["space-y-6"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["bg-card border border-border rounded-lg p-6"])])([/* @__PURE__ */ h3([/* @__PURE__ */ cls(["text-lg font-semibold text-text mb-4"])])([/* @__PURE__ */ text5("Connected Integrations")]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["space-y-4"])])([/* @__PURE__ */ integrationRow("Slack")("Connected to #general, #product")(true), /* @__PURE__ */ integrationRow("Notion")("Syncing 3 databases")(true), /* @__PURE__ */ integrationRow("Google Workspace")("Connected as team@company.com")(true)])]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["bg-card border border-border rounded-lg p-6"])])([/* @__PURE__ */ h3([/* @__PURE__ */ cls(["text-lg font-semibold text-text mb-4"])])([/* @__PURE__ */ text5("Available Integrations")]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["grid grid-cols-1 md:grid-cols-2 gap-4"])])([/* @__PURE__ */ availableIntegration("Linear")("Create issues from conversations"), /* @__PURE__ */ availableIntegration("Jira")("Link to tickets and projects"), /* @__PURE__ */ availableIntegration("Figma")("Import designs as context"), /* @__PURE__ */ availableIntegration("Confluence")("Sync with your wiki"), /* @__PURE__ */ availableIntegration("GitHub")("Access repo files"), /* @__PURE__ */ availableIntegration("Airtable")("Connect databases")])]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["bg-card border border-border rounded-lg p-6"])])([/* @__PURE__ */ h3([/* @__PURE__ */ cls(["text-lg font-semibold text-text mb-4"])])([/* @__PURE__ */ text5("API Access")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-sm text-muted-foreground mb-4"])])([/* @__PURE__ */ text5("Build custom integrations with the omega//work API. Enterprise plan required.")]), /* @__PURE__ */ a([/* @__PURE__ */ href4("/omega/work/docs/api"), /* @__PURE__ */ cls(["text-sm text-indigo-400 hover:text-indigo-400/80"])])([/* @__PURE__ */ text5("View API Documentation ->")])])]);
   var content10 = function(state3) {
-    if (state3.activeTab === "account") {
-      return accountTab3;
+    if (state3.activeTab === "team") {
+      return teamTab3;
+    }
+    ;
+    if (state3.activeTab === "workspaces") {
+      return workspacesTab;
+    }
+    ;
+    if (state3.activeTab === "sso") {
+      return ssoTab;
+    }
+    ;
+    if (state3.activeTab === "integrations") {
+      return integrationsTab;
     }
     ;
     if (state3.activeTab === "billing") {
-      return billingTab4;
+      return billingTab3;
     }
     ;
-    if (state3.activeTab === "preferences") {
-      return preferencesTab;
-    }
-    ;
-    if (state3.activeTab === "api-keys") {
-      return apiKeysTab2;
-    }
-    ;
-    if (state3.activeTab === "security") {
-      return securityTab4;
-    }
-    ;
-    return accountTab3;
+    return teamTab3;
   };
   var render31 = function(state3) {
     return div2([cls(["max-w-[1100px] mx-auto px-6 py-8"])])([header7, div2([cls(["grid grid-cols-1 lg:grid-cols-[200px_1fr] gap-8"])])([sidebar8(state3), content10(state3)])]);
@@ -11881,7 +12008,7 @@
   }();
 
   // output/Straylight.Pages.Products.SensenetBuild.Dashboard/index.js
-  var show8 = /* @__PURE__ */ show(showInt);
+  var show9 = /* @__PURE__ */ show(showInt);
   var type_28 = /* @__PURE__ */ type_17(isPropButtonType);
   var map33 = /* @__PURE__ */ map(functorArray);
   var modify_18 = /* @__PURE__ */ modify_(monadStateHalogenM);
@@ -11893,18 +12020,18 @@
     };
   };
   var usageBar2 = function(day) {
-    return function(value21) {
-      return div2([cls(["flex items-center gap-3"])])([span3([cls(["w-8 text-xs text-muted-foreground"])])([text5(day)]), div2([cls(["flex-1 bg-background rounded-full h-2"])])([div2([cls(["bg-green-400/60 h-2 rounded-full"]), style("width: " + (show8(value21) + "%"))])([])]), span3([cls(["w-8 text-xs text-muted-foreground text-right"])])([text5(show8(value21))])]);
+    return function(value20) {
+      return div2([cls(["flex items-center gap-3"])])([span3([cls(["w-8 text-xs text-muted-foreground"])])([text5(day)]), div2([cls(["flex-1 bg-background rounded-full h-2"])])([div2([cls(["bg-green-400/60 h-2 rounded-full"]), style("width: " + (show9(value20) + "%"))])([])]), span3([cls(["w-8 text-xs text-muted-foreground text-right"])])([text5(show9(value20))])]);
     };
   };
   var theoremItem = function(name16) {
     return li([cls(["flex items-center gap-2"])])([span3([cls(["text-green-400 text-xs"])])([text5("\u2713")]), code([cls(["text-xs text-muted-foreground font-mono"])])([text5(name16)])]);
   };
   var tabButton5 = function(state3) {
-    return function(value21) {
+    return function(value20) {
       return function(label5) {
         return button([cls(["px-4 py-2 text-sm font-medium transition-colors -mb-px cursor-pointer", function() {
-          var $9 = state3.activeTab === value21;
+          var $9 = state3.activeTab === value20;
           if ($9) {
             return "text-green-400 border-b-2 border-green-400";
           }
@@ -11943,9 +12070,9 @@
     }()])])([text5(status2)]);
   };
   var statCard5 = function(label5) {
-    return function(value21) {
+    return function(value20) {
       return function(subtitle) {
-        return div2([cls(["bg-card border border-border rounded-lg p-4"])])([p([cls(["text-sm text-muted-foreground mb-1"])])([text5(label5)]), p([cls(["text-2xl font-bold text-text"])])([text5(value21)]), p([cls(["text-xs text-muted-foreground"])])([text5(subtitle)])]);
+        return div2([cls(["bg-card border border-border rounded-lg p-4"])])([p([cls(["text-sm text-muted-foreground mb-1"])])([text5(label5)]), p([cls(["text-2xl font-bold text-text"])])([text5(value20)]), p([cls(["text-xs text-muted-foreground"])])([text5(subtitle)])]);
       };
     };
   };
@@ -11975,7 +12102,7 @@
       return function(worker) {
         return function(elapsed) {
           return function(progress2) {
-            return div2([cls(["border border-border rounded-lg p-4"])])([div2([cls(["flex items-center justify-between mb-3"])])([code([cls(["text-sm text-text font-mono"])])([text5(target7)]), span3([cls(["text-xs px-2 py-0.5 rounded bg-green-400/20 text-green-400"])])([text5(phase)])]), div2([cls(["w-full bg-background rounded-full h-2 mb-3"])])([div2([cls(["bg-green-400 h-2 rounded-full"]), style("width: " + (show8(progress2) + "%"))])([])]), div2([cls(["flex items-center justify-between text-xs text-muted-foreground"])])([span_([text5(worker)]), span_([text5(elapsed + " elapsed")])])]);
+            return div2([cls(["border border-border rounded-lg p-4"])])([div2([cls(["flex items-center justify-between mb-3"])])([code([cls(["text-sm text-text font-mono"])])([text5(target7)]), span3([cls(["text-xs px-2 py-0.5 rounded bg-green-400/20 text-green-400"])])([text5(phase)])]), div2([cls(["w-full bg-background rounded-full h-2 mb-3"])])([div2([cls(["bg-green-400 h-2 rounded-full"]), style("width: " + (show9(progress2) + "%"))])([])]), div2([cls(["flex items-center justify-between text-xs text-muted-foreground"])])([span_([text5(worker)]), span_([text5(elapsed + " elapsed")])])]);
           };
         };
       };
@@ -12009,13 +12136,13 @@
     };
   };
   var cacheMetric = function(label5) {
-    return function(value21) {
+    return function(value20) {
       return function(detail) {
-        return div2([cls(["flex items-center justify-between"])])([span3([cls(["text-sm text-muted-foreground"])])([text5(label5)]), div2([cls(["text-right"])])([span3([cls(["text-lg font-semibold text-text"])])([text5(value21)]), span3([cls(["text-xs text-muted-foreground ml-2"])])([text5(detail)])])]);
+        return div2([cls(["flex items-center justify-between"])])([span3([cls(["text-sm text-muted-foreground"])])([text5(label5)]), div2([cls(["text-right"])])([span3([cls(["text-lg font-semibold text-text"])])([text5(value20)]), span3([cls(["text-xs text-muted-foreground ml-2"])])([text5(detail)])])]);
       };
     };
   };
-  var usageTab4 = /* @__PURE__ */ div_([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["grid grid-cols-1 md:grid-cols-4 gap-4 mb-8"])])([/* @__PURE__ */ statCard5("Builds")("1,247")("This month"), /* @__PURE__ */ statCard5("Remote Hours")("42.3 hrs")("of 100 hrs"), /* @__PURE__ */ statCard5("Cache Hits")("89%")("Saved 127 hrs"), /* @__PURE__ */ statCard5("Artifacts")("3.2 GB")("Content-addressed")]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["bg-card border border-border rounded-lg p-6"])])([/* @__PURE__ */ h3([/* @__PURE__ */ cls(["text-lg font-semibold text-text mb-4"])])([/* @__PURE__ */ text5("Build Volume")]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["space-y-3"])])([/* @__PURE__ */ usageBar2("Mon")(45), /* @__PURE__ */ usageBar2("Tue")(62), /* @__PURE__ */ usageBar2("Wed")(78), /* @__PURE__ */ usageBar2("Thu")(54), /* @__PURE__ */ usageBar2("Fri")(89), /* @__PURE__ */ usageBar2("Sat")(23), /* @__PURE__ */ usageBar2("Sun")(12)])]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["bg-card border border-border rounded-lg p-6"])])([/* @__PURE__ */ h3([/* @__PURE__ */ cls(["text-lg font-semibold text-text mb-4"])])([/* @__PURE__ */ text5("Cache Performance")]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["space-y-4"])])([/* @__PURE__ */ cacheMetric("Local Cache")("94%")("2.1 GB"), /* @__PURE__ */ cacheMetric("Remote Cache")("87%")("1.1 GB"), /* @__PURE__ */ cacheMetric("Total Savings")("127 hrs")("This month")])])]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["bg-card border border-border rounded-lg p-6"])])([/* @__PURE__ */ h3([/* @__PURE__ */ cls(["text-lg font-semibold text-text mb-4"])])([/* @__PURE__ */ text5("Plan Usage")]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["mb-4"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["flex items-center justify-between mb-2"])])([/* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-sm text-muted-foreground"])])([/* @__PURE__ */ text5("Remote build hours")]), /* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-sm text-text"])])([/* @__PURE__ */ text5("42.3 / 100 hrs")])]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["w-full bg-background rounded-full h-2"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["bg-green-400 h-2 rounded-full"]), /* @__PURE__ */ style("width: 42%")])([])])]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-sm text-muted-foreground"])])([/* @__PURE__ */ text5("Resets in 8 days. "), /* @__PURE__ */ a([/* @__PURE__ */ cls(["text-green-400 hover:text-green-300"])])([/* @__PURE__ */ text5("Upgrade plan")])])])]);
+  var usageTab3 = /* @__PURE__ */ div_([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["grid grid-cols-1 md:grid-cols-4 gap-4 mb-8"])])([/* @__PURE__ */ statCard5("Builds")("1,247")("This month"), /* @__PURE__ */ statCard5("Remote Hours")("42.3 hrs")("of 100 hrs"), /* @__PURE__ */ statCard5("Cache Hits")("89%")("Saved 127 hrs"), /* @__PURE__ */ statCard5("Artifacts")("3.2 GB")("Content-addressed")]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["bg-card border border-border rounded-lg p-6"])])([/* @__PURE__ */ h3([/* @__PURE__ */ cls(["text-lg font-semibold text-text mb-4"])])([/* @__PURE__ */ text5("Build Volume")]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["space-y-3"])])([/* @__PURE__ */ usageBar2("Mon")(45), /* @__PURE__ */ usageBar2("Tue")(62), /* @__PURE__ */ usageBar2("Wed")(78), /* @__PURE__ */ usageBar2("Thu")(54), /* @__PURE__ */ usageBar2("Fri")(89), /* @__PURE__ */ usageBar2("Sat")(23), /* @__PURE__ */ usageBar2("Sun")(12)])]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["bg-card border border-border rounded-lg p-6"])])([/* @__PURE__ */ h3([/* @__PURE__ */ cls(["text-lg font-semibold text-text mb-4"])])([/* @__PURE__ */ text5("Cache Performance")]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["space-y-4"])])([/* @__PURE__ */ cacheMetric("Local Cache")("94%")("2.1 GB"), /* @__PURE__ */ cacheMetric("Remote Cache")("87%")("1.1 GB"), /* @__PURE__ */ cacheMetric("Total Savings")("127 hrs")("This month")])])]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["bg-card border border-border rounded-lg p-6"])])([/* @__PURE__ */ h3([/* @__PURE__ */ cls(["text-lg font-semibold text-text mb-4"])])([/* @__PURE__ */ text5("Plan Usage")]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["mb-4"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["flex items-center justify-between mb-2"])])([/* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-sm text-muted-foreground"])])([/* @__PURE__ */ text5("Remote build hours")]), /* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-sm text-text"])])([/* @__PURE__ */ text5("42.3 / 100 hrs")])]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["w-full bg-background rounded-full h-2"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["bg-green-400 h-2 rounded-full"]), /* @__PURE__ */ style("width: 42%")])([])])]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-sm text-muted-foreground"])])([/* @__PURE__ */ text5("Resets in 8 days. "), /* @__PURE__ */ a([/* @__PURE__ */ cls(["text-green-400 hover:text-green-300"])])([/* @__PURE__ */ text5("Upgrade plan")])])])]);
   var buildTableRow = function(target7) {
     return function(status2) {
       return function(duration2) {
@@ -12057,7 +12184,7 @@
     }
     ;
     if (state3.activeTab === "usage") {
-      return usageTab4;
+      return usageTab3;
     }
     ;
     return overviewTab5;
@@ -12134,7 +12261,7 @@
   };
   var dhallContent = /* @__PURE__ */ article([/* @__PURE__ */ cls(["prose prose-invert max-w-none"])])([/* @__PURE__ */ h1([/* @__PURE__ */ cls(["text-3xl font-bold text-text mb-6"])])([/* @__PURE__ */ text5("Dhall Configuration")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-muted-foreground mb-8"])])([/* @__PURE__ */ text5("sensenet//build uses Dhall for type-safe, programmable build configurations.")]), /* @__PURE__ */ h2([/* @__PURE__ */ cls(["text-xl font-semibold text-text mt-8 mb-4"])])([/* @__PURE__ */ text5("Basic derivation")]), /* @__PURE__ */ codeBlock([/* @__PURE__ */ text5('let Build = https://build.sensenet.dev/schemas/v1.dhall\n\nin Build.derivation {\n  name = "my-package",\n  version = "1.0.0",\n  src = ./src,\n  builder = Build.builders.cargo\n}')])]);
   var cliContent2 = /* @__PURE__ */ article([/* @__PURE__ */ cls(["prose prose-invert max-w-none"])])([/* @__PURE__ */ h1([/* @__PURE__ */ cls(["text-3xl font-bold text-text mb-6"])])([/* @__PURE__ */ text5("CLI Reference")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-muted-foreground mb-8"])])([/* @__PURE__ */ text5("Complete reference for the sensenet-build command-line interface.")]), /* @__PURE__ */ h2([/* @__PURE__ */ cls(["text-xl font-semibold text-text mt-8 mb-4"])])([/* @__PURE__ */ text5("Commands")]), /* @__PURE__ */ codeBlock([/* @__PURE__ */ text5("sensenet-build [OPTIONS] [COMMAND]\n\nCommands:\n  init      Initialize a new project\n  build     Build the project\n  verify    Verify build proofs\n  clean     Clean build artifacts\n  publish   Publish to cache")])]);
-  var apiContent4 = /* @__PURE__ */ article([/* @__PURE__ */ cls(["prose prose-invert max-w-none"])])([/* @__PURE__ */ h1([/* @__PURE__ */ cls(["text-3xl font-bold text-text mb-6"])])([/* @__PURE__ */ text5("API Reference")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-muted-foreground mb-8"])])([/* @__PURE__ */ text5("HTTP API for programmatic access to sensenet//build.")]), /* @__PURE__ */ h2([/* @__PURE__ */ cls(["text-xl font-semibold text-text mt-8 mb-4"])])([/* @__PURE__ */ text5("Endpoints")]), /* @__PURE__ */ codeBlock([/* @__PURE__ */ text5("POST /api/v1/build\nGET  /api/v1/derivation/:hash\nGET  /api/v1/attestation/:hash\nPOST /api/v1/verify")])]);
+  var apiContent5 = /* @__PURE__ */ article([/* @__PURE__ */ cls(["prose prose-invert max-w-none"])])([/* @__PURE__ */ h1([/* @__PURE__ */ cls(["text-3xl font-bold text-text mb-6"])])([/* @__PURE__ */ text5("API Reference")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-muted-foreground mb-8"])])([/* @__PURE__ */ text5("HTTP API for programmatic access to sensenet//build.")]), /* @__PURE__ */ h2([/* @__PURE__ */ cls(["text-xl font-semibold text-text mt-8 mb-4"])])([/* @__PURE__ */ text5("Endpoints")]), /* @__PURE__ */ codeBlock([/* @__PURE__ */ text5("POST /api/v1/build\nGET  /api/v1/derivation/:hash\nGET  /api/v1/attestation/:hash\nPOST /api/v1/verify")])]);
   var renderContent5 = function(path) {
     if (path === "/sensenet/build/docs") {
       return overviewContent5;
@@ -12157,7 +12284,7 @@
     }
     ;
     if (path === "/sensenet/build/docs/api") {
-      return apiContent4;
+      return apiContent5;
     }
     ;
     if (otherwise) {
@@ -12285,15 +12412,15 @@
   };
   var features5 = /* @__PURE__ */ section([/* @__PURE__ */ cls(["py-24 border-t border-border"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["max-w-[1100px] mx-auto px-6"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["text-center mb-16"])])([/* @__PURE__ */ h2([/* @__PURE__ */ cls(["text-3xl font-bold text-text mb-4"])])([/* @__PURE__ */ text5("Why sensenet//build?")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-muted-foreground max-w-xl mx-auto"])])([/* @__PURE__ */ text5("Built for engineers who demand mathematical certainty from their build infrastructure.")])]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"])])([/* @__PURE__ */ featureCard5("lambda")("Dhall configuration")("Total functions, no Turing-completeness, no escape hatches. Your config terminates or it doesn't typecheck."), /* @__PURE__ */ featureCard5("proof")("Lean4 proofs")("Derivation semantics formalized in Lean4. Build correctness is a proven property, not a hope."), /* @__PURE__ */ featureCard5("lock")("Hermetic builds")("Content-addressed filesystem sandbox. No network, no ambient state. Inputs are hashed, outputs are deterministic."), /* @__PURE__ */ featureCard5("parallel")("Distributed execution")("Remote build cluster with capability-based scheduling. Work-stealing, speculative execution, automatic retries."), /* @__PURE__ */ featureCard5("universal")("Language-agnostic")("First-class support for Rust, Go, Haskell, PureScript, TypeScript, C++, Python. Unified dependency graph."), /* @__PURE__ */ featureCard5("checkmark")("Reproducibility guarantees")("Bit-for-bit identical outputs. Cryptographic attestation chain from source to artifact.")])])]);
   var cta11 = /* @__PURE__ */ section([/* @__PURE__ */ cls(["py-24 border-t border-border"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["max-w-[800px] mx-auto px-6 text-center"])])([/* @__PURE__ */ h2([/* @__PURE__ */ cls(["text-3xl font-bold text-text mb-4"])])([/* @__PURE__ */ text5("Ready for builds you can trust?")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-muted-foreground mb-8"])])([/* @__PURE__ */ text5("Start free. No credit card required. Unlimited local builds.")]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["flex flex-col sm:flex-row items-center justify-center gap-4"])])([/* @__PURE__ */ primaryButton6("/sensenet/build/pricing")("Get started free"), /* @__PURE__ */ secondaryButton6("/sensenet/build/features")("See all features")])])]);
-  var compCell2 = function(value21) {
+  var compCell2 = function(value20) {
     return span3([cls([function() {
-      var $3 = value21 === "no";
+      var $3 = value20 === "no";
       if ($3) {
         return "text-muted-foreground/50";
       }
       ;
       return "text-muted-foreground";
-    }()])])([text5(value21)]);
+    }()])])([text5(value20)]);
   };
   var comparisonRow5 = function(feature) {
     return function(us) {
@@ -12435,17 +12562,17 @@
     };
   };
   var sidebarLink9 = function(state3) {
-    return function(value21) {
+    return function(value20) {
       return function(label5) {
         return button([cls(["block w-full text-left px-3 py-2 rounded text-sm transition-colors cursor-pointer", function() {
-          var $10 = state3.activeTab === value21;
+          var $10 = state3.activeTab === value20;
           if ($10) {
             return "bg-green-400/10 text-green-400 font-medium";
           }
           ;
           return "text-muted-foreground hover:text-text hover:bg-card";
         }()]), type_29(ButtonButton.value), onClick(function(v) {
-          return new SetTab3(value21);
+          return new SetTab3(value20);
         })])([text5(label5)]);
       };
     };
@@ -12458,7 +12585,7 @@
       return div2([cls(["bg-card border border-border rounded-lg p-6"])])([h3([cls(["text-lg font-semibold text-text mb-4"])])([text5(title3)]), div2([cls(["space-y-4"])])(children2)]);
     };
   };
-  var settingToggle = function(label5) {
+  var settingToggle2 = function(label5) {
     return function(enabled) {
       return div2([cls(["flex items-center justify-between py-2"])])([span3([cls(["text-sm text-text"])])([text5(label5)]), div2([cls(["w-10 h-5 rounded-full relative cursor-pointer transition-colors", function() {
         if (enabled) {
@@ -12475,16 +12602,16 @@
       }()])])([])])]);
     };
   };
-  var settingRow2 = function(label5) {
-    return function(value21) {
+  var settingRow3 = function(label5) {
+    return function(value20) {
       return function(description) {
-        return div2([cls(["flex items-center justify-between py-2 border-b border-border last:border-0"])])([div_([p([cls(["text-sm text-text"])])([text5(label5)]), p([cls(["text-xs text-muted-foreground"])])([text5(description)])]), span3([cls(["text-sm text-muted-foreground font-mono"])])([text5(value21)])]);
+        return div2([cls(["flex items-center justify-between py-2 border-b border-border last:border-0"])])([div_([p([cls(["text-sm text-text"])])([text5(label5)]), p([cls(["text-xs text-muted-foreground"])])([text5(description)])]), span3([cls(["text-sm text-muted-foreground font-mono"])])([text5(value20)])]);
       };
     };
   };
-  var verificationSettings = /* @__PURE__ */ div2([/* @__PURE__ */ cls(["space-y-6"])])([/* @__PURE__ */ settingsCard("Proof Verification Level")([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["space-y-3"])])([/* @__PURE__ */ verificationLevel("Full")("Verify all 47 theorems on every build")(true), /* @__PURE__ */ verificationLevel("Standard")("Verify core derivation properties")(false), /* @__PURE__ */ verificationLevel("Minimal")("Verify critical proofs only")(false), /* @__PURE__ */ verificationLevel("Off")("Skip verification (not recommended)")(false)])]), /* @__PURE__ */ settingsCard("Lean4 Integration")([/* @__PURE__ */ settingRow2("Lean4 version")("v4.3.0")("Lean4 toolchain version"), /* @__PURE__ */ settingRow2("Proof cache")("enabled")("Cache verified proofs"), /* @__PURE__ */ settingRow2("Proof timeout")("30s")("Maximum time per proof")]), /* @__PURE__ */ settingsCard("Verification Reporting")([/* @__PURE__ */ settingToggle("Generate proof reports")(true), /* @__PURE__ */ settingToggle("Include in build logs")(true), /* @__PURE__ */ settingToggle("Fail build on unverified")(true)])]);
-  var remoteSettings = /* @__PURE__ */ div2([/* @__PURE__ */ cls(["space-y-6"])])([/* @__PURE__ */ settingsCard("Remote Execution")([/* @__PURE__ */ settingToggle("Enable remote builds")(true), /* @__PURE__ */ settingRow2("Cluster endpoint")("build.sensenet.dev")("Remote build cluster"), /* @__PURE__ */ settingRow2("Max workers")("16")("Maximum concurrent remote workers")]), /* @__PURE__ */ settingsCard("Execution Policy")([/* @__PURE__ */ settingRow2("Strategy")("hybrid")("local, remote, or hybrid"), /* @__PURE__ */ settingRow2("Fallback")("enabled")("Fall back to local on remote failure"), /* @__PURE__ */ settingRow2("Priority")("normal")("Job queue priority")]), /* @__PURE__ */ settingsCard("Resource Limits")([/* @__PURE__ */ settingRow2("CPU limit")("4 cores")("Per-job CPU limit"), /* @__PURE__ */ settingRow2("Memory limit")("8 GB")("Per-job memory limit"), /* @__PURE__ */ settingRow2("Timeout")("30 min")("Maximum job duration")])]);
-  var integrationRow = function(name16) {
+  var verificationSettings = /* @__PURE__ */ div2([/* @__PURE__ */ cls(["space-y-6"])])([/* @__PURE__ */ settingsCard("Proof Verification Level")([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["space-y-3"])])([/* @__PURE__ */ verificationLevel("Full")("Verify all 47 theorems on every build")(true), /* @__PURE__ */ verificationLevel("Standard")("Verify core derivation properties")(false), /* @__PURE__ */ verificationLevel("Minimal")("Verify critical proofs only")(false), /* @__PURE__ */ verificationLevel("Off")("Skip verification (not recommended)")(false)])]), /* @__PURE__ */ settingsCard("Lean4 Integration")([/* @__PURE__ */ settingRow3("Lean4 version")("v4.3.0")("Lean4 toolchain version"), /* @__PURE__ */ settingRow3("Proof cache")("enabled")("Cache verified proofs"), /* @__PURE__ */ settingRow3("Proof timeout")("30s")("Maximum time per proof")]), /* @__PURE__ */ settingsCard("Verification Reporting")([/* @__PURE__ */ settingToggle2("Generate proof reports")(true), /* @__PURE__ */ settingToggle2("Include in build logs")(true), /* @__PURE__ */ settingToggle2("Fail build on unverified")(true)])]);
+  var remoteSettings = /* @__PURE__ */ div2([/* @__PURE__ */ cls(["space-y-6"])])([/* @__PURE__ */ settingsCard("Remote Execution")([/* @__PURE__ */ settingToggle2("Enable remote builds")(true), /* @__PURE__ */ settingRow3("Cluster endpoint")("build.sensenet.dev")("Remote build cluster"), /* @__PURE__ */ settingRow3("Max workers")("16")("Maximum concurrent remote workers")]), /* @__PURE__ */ settingsCard("Execution Policy")([/* @__PURE__ */ settingRow3("Strategy")("hybrid")("local, remote, or hybrid"), /* @__PURE__ */ settingRow3("Fallback")("enabled")("Fall back to local on remote failure"), /* @__PURE__ */ settingRow3("Priority")("normal")("Job queue priority")]), /* @__PURE__ */ settingsCard("Resource Limits")([/* @__PURE__ */ settingRow3("CPU limit")("4 cores")("Per-job CPU limit"), /* @__PURE__ */ settingRow3("Memory limit")("8 GB")("Per-job memory limit"), /* @__PURE__ */ settingRow3("Timeout")("30 min")("Maximum job duration")])]);
+  var integrationRow2 = function(name16) {
     return function(status2) {
       return function(connected) {
         return div2([cls(["flex items-center justify-between py-3 border-b border-border last:border-0"])])([span3([cls(["text-sm text-text"])])([text5(name16)]), div2([cls(["flex items-center gap-3"])])([span3([cls(["text-xs", function() {
@@ -12503,7 +12630,7 @@
       };
     };
   };
-  var integrationsSettings = /* @__PURE__ */ div2([/* @__PURE__ */ cls(["space-y-6"])])([/* @__PURE__ */ settingsCard("Version Control")([/* @__PURE__ */ integrationRow("GitHub")("Connected")(true), /* @__PURE__ */ integrationRow("GitLab")("Not connected")(false), /* @__PURE__ */ integrationRow("Bitbucket")("Not connected")(false)]), /* @__PURE__ */ settingsCard("CI/CD")([/* @__PURE__ */ integrationRow("GitHub Actions")("Connected")(true), /* @__PURE__ */ integrationRow("CircleCI")("Not connected")(false), /* @__PURE__ */ integrationRow("Jenkins")("Not connected")(false)]), /* @__PURE__ */ settingsCard("Notifications")([/* @__PURE__ */ integrationRow("Slack")("Connected")(true), /* @__PURE__ */ integrationRow("Discord")("Not connected")(false), /* @__PURE__ */ integrationRow("Email")("Connected")(true)]), /* @__PURE__ */ settingsCard("Package Registries")([/* @__PURE__ */ integrationRow("Crates.io")("Connected")(true), /* @__PURE__ */ integrationRow("npm")("Not connected")(false), /* @__PURE__ */ integrationRow("PyPI")("Not connected")(false)])]);
+  var integrationsSettings = /* @__PURE__ */ div2([/* @__PURE__ */ cls(["space-y-6"])])([/* @__PURE__ */ settingsCard("Version Control")([/* @__PURE__ */ integrationRow2("GitHub")("Connected")(true), /* @__PURE__ */ integrationRow2("GitLab")("Not connected")(false), /* @__PURE__ */ integrationRow2("Bitbucket")("Not connected")(false)]), /* @__PURE__ */ settingsCard("CI/CD")([/* @__PURE__ */ integrationRow2("GitHub Actions")("Connected")(true), /* @__PURE__ */ integrationRow2("CircleCI")("Not connected")(false), /* @__PURE__ */ integrationRow2("Jenkins")("Not connected")(false)]), /* @__PURE__ */ settingsCard("Notifications")([/* @__PURE__ */ integrationRow2("Slack")("Connected")(true), /* @__PURE__ */ integrationRow2("Discord")("Not connected")(false), /* @__PURE__ */ integrationRow2("Email")("Connected")(true)]), /* @__PURE__ */ settingsCard("Package Registries")([/* @__PURE__ */ integrationRow2("Crates.io")("Connected")(true), /* @__PURE__ */ integrationRow2("npm")("Not connected")(false), /* @__PURE__ */ integrationRow2("PyPI")("Not connected")(false)])]);
   var handleAction18 = function(v) {
     return modify_20(function(v1) {
       var $16 = {};
@@ -12518,9 +12645,9 @@
       return $16;
     });
   };
-  var cacheSettings = /* @__PURE__ */ div2([/* @__PURE__ */ cls(["space-y-6"])])([/* @__PURE__ */ settingsCard("Local Cache")([/* @__PURE__ */ settingRow2("Cache directory")("~/.cache/sensenet")("Local cache location"), /* @__PURE__ */ settingRow2("Max size")("10 GB")("Maximum cache size"), /* @__PURE__ */ settingRow2("TTL")("30 days")("Cache entry expiration")]), /* @__PURE__ */ settingsCard("Remote Cache")([/* @__PURE__ */ settingToggle("Enable remote cache")(true), /* @__PURE__ */ settingRow2("Cache URL")("cache.sensenet.dev")("Remote cache endpoint"), /* @__PURE__ */ settingRow2("Auth method")("API key")("Authentication method")]), /* @__PURE__ */ settingsCard("Cache Policy")([/* @__PURE__ */ settingToggle("Cache intermediate artifacts")(true), /* @__PURE__ */ settingToggle("Cache test results")(false), /* @__PURE__ */ settingToggle("Share cache across branches")(true)])]);
-  var buildSettings = /* @__PURE__ */ div2([/* @__PURE__ */ cls(["space-y-6"])])([/* @__PURE__ */ settingsCard("Build Configuration")([/* @__PURE__ */ settingRow2("Default target")("//...")("Build target when none specified"), /* @__PURE__ */ settingRow2("Parallelism")("auto")("Number of concurrent build jobs"), /* @__PURE__ */ settingRow2("Sandbox mode")("strict")("Hermetic isolation level")]), /* @__PURE__ */ settingsCard("Dhall Configuration")([/* @__PURE__ */ settingRow2("Config path")("./build.dhall")("Root Dhall configuration file"), /* @__PURE__ */ settingRow2("Type checking")("strict")("Dhall type checking mode"), /* @__PURE__ */ settingRow2("Import resolution")("cached")("How imports are resolved")]), /* @__PURE__ */ settingsCard("Output")([/* @__PURE__ */ settingRow2("Output directory")("./dist")("Build artifact destination"), /* @__PURE__ */ settingRow2("Content addressing")("enabled")("SHA256 content-addressed outputs"), /* @__PURE__ */ settingRow2("Attestation")("enabled")("Generate cryptographic attestations")])]);
-  var accountSettings = /* @__PURE__ */ div2([/* @__PURE__ */ cls(["space-y-6"])])([/* @__PURE__ */ settingsCard("Profile")([/* @__PURE__ */ settingRow2("Email")("user@example.com")("Account email"), /* @__PURE__ */ settingRow2("Organization")("Acme Corp")("Team organization"), /* @__PURE__ */ settingRow2("Plan")("Pro")("$49/month")]), /* @__PURE__ */ settingsCard("API Access")([/* @__PURE__ */ settingRow2("API Key")("snb_\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022")("For programmatic access"), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["pt-2"])])([/* @__PURE__ */ button([/* @__PURE__ */ cls(["text-sm px-4 py-2 rounded border border-border text-muted-foreground hover:text-text hover:bg-card transition-colors"])])([/* @__PURE__ */ text5("Regenerate API Key")])])]), /* @__PURE__ */ settingsCard("Danger Zone")([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["flex items-center justify-between"])])([/* @__PURE__ */ div_([/* @__PURE__ */ p([/* @__PURE__ */ cls(["text-sm text-text"])])([/* @__PURE__ */ text5("Delete account")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-xs text-muted-foreground"])])([/* @__PURE__ */ text5("Permanently delete your account and all data")])]), /* @__PURE__ */ button([/* @__PURE__ */ cls(["text-sm px-4 py-2 rounded bg-red-400/10 text-red-400 hover:bg-red-400/20 transition-colors"])])([/* @__PURE__ */ text5("Delete Account")])])])]);
+  var cacheSettings = /* @__PURE__ */ div2([/* @__PURE__ */ cls(["space-y-6"])])([/* @__PURE__ */ settingsCard("Local Cache")([/* @__PURE__ */ settingRow3("Cache directory")("~/.cache/sensenet")("Local cache location"), /* @__PURE__ */ settingRow3("Max size")("10 GB")("Maximum cache size"), /* @__PURE__ */ settingRow3("TTL")("30 days")("Cache entry expiration")]), /* @__PURE__ */ settingsCard("Remote Cache")([/* @__PURE__ */ settingToggle2("Enable remote cache")(true), /* @__PURE__ */ settingRow3("Cache URL")("cache.sensenet.dev")("Remote cache endpoint"), /* @__PURE__ */ settingRow3("Auth method")("API key")("Authentication method")]), /* @__PURE__ */ settingsCard("Cache Policy")([/* @__PURE__ */ settingToggle2("Cache intermediate artifacts")(true), /* @__PURE__ */ settingToggle2("Cache test results")(false), /* @__PURE__ */ settingToggle2("Share cache across branches")(true)])]);
+  var buildSettings = /* @__PURE__ */ div2([/* @__PURE__ */ cls(["space-y-6"])])([/* @__PURE__ */ settingsCard("Build Configuration")([/* @__PURE__ */ settingRow3("Default target")("//...")("Build target when none specified"), /* @__PURE__ */ settingRow3("Parallelism")("auto")("Number of concurrent build jobs"), /* @__PURE__ */ settingRow3("Sandbox mode")("strict")("Hermetic isolation level")]), /* @__PURE__ */ settingsCard("Dhall Configuration")([/* @__PURE__ */ settingRow3("Config path")("./build.dhall")("Root Dhall configuration file"), /* @__PURE__ */ settingRow3("Type checking")("strict")("Dhall type checking mode"), /* @__PURE__ */ settingRow3("Import resolution")("cached")("How imports are resolved")]), /* @__PURE__ */ settingsCard("Output")([/* @__PURE__ */ settingRow3("Output directory")("./dist")("Build artifact destination"), /* @__PURE__ */ settingRow3("Content addressing")("enabled")("SHA256 content-addressed outputs"), /* @__PURE__ */ settingRow3("Attestation")("enabled")("Generate cryptographic attestations")])]);
+  var accountSettings = /* @__PURE__ */ div2([/* @__PURE__ */ cls(["space-y-6"])])([/* @__PURE__ */ settingsCard("Profile")([/* @__PURE__ */ settingRow3("Email")("user@example.com")("Account email"), /* @__PURE__ */ settingRow3("Organization")("Acme Corp")("Team organization"), /* @__PURE__ */ settingRow3("Plan")("Pro")("$49/month")]), /* @__PURE__ */ settingsCard("API Access")([/* @__PURE__ */ settingRow3("API Key")("snb_\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022")("For programmatic access"), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["pt-2"])])([/* @__PURE__ */ button([/* @__PURE__ */ cls(["text-sm px-4 py-2 rounded border border-border text-muted-foreground hover:text-text hover:bg-card transition-colors"])])([/* @__PURE__ */ text5("Regenerate API Key")])])]), /* @__PURE__ */ settingsCard("Danger Zone")([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["flex items-center justify-between"])])([/* @__PURE__ */ div_([/* @__PURE__ */ p([/* @__PURE__ */ cls(["text-sm text-text"])])([/* @__PURE__ */ text5("Delete account")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-xs text-muted-foreground"])])([/* @__PURE__ */ text5("Permanently delete your account and all data")])]), /* @__PURE__ */ button([/* @__PURE__ */ cls(["text-sm px-4 py-2 rounded bg-red-400/10 text-red-400 hover:bg-red-400/20 transition-colors"])])([/* @__PURE__ */ text5("Delete Account")])])])]);
   var content12 = function(state3) {
     if (state3.activeTab === "build") {
       return buildSettings;
@@ -12568,7 +12695,7 @@
   }();
 
   // output/Straylight.Pages.Products.SensenetCache.Dashboard/index.js
-  var show9 = /* @__PURE__ */ show(showInt);
+  var show10 = /* @__PURE__ */ show(showInt);
   var type_30 = /* @__PURE__ */ type_17(isPropButtonType);
   var modify_21 = /* @__PURE__ */ modify_(monadStateHalogenM);
   var SetTab4 = /* @__PURE__ */ function() {
@@ -12592,12 +12719,12 @@
     return function(used) {
       return function(total) {
         return function(percent) {
-          return div2([cls(["bg-card border border-border rounded-lg p-6"])])([div2([cls(["flex items-center justify-between mb-4"])])([h3([cls(["text-lg font-semibold text-text"])])([text5(label5)]), span3([cls(["text-sm text-muted-foreground"])])([text5(show9(percent) + "% used")])]), div2([cls(["h-2 bg-border rounded-full overflow-hidden mb-4"])])([div2([cls(["h-full bg-cyan-400 rounded-full"]), style("width: " + (show9(percent) + "%"))])([])]), div2([cls(["flex items-baseline gap-1"])])([span3([cls(["text-2xl font-bold text-text"])])([text5(used)]), span3([cls(["text-muted-foreground"])])([text5(" / " + total)])])]);
+          return div2([cls(["bg-card border border-border rounded-lg p-6"])])([div2([cls(["flex items-center justify-between mb-4"])])([h3([cls(["text-lg font-semibold text-text"])])([text5(label5)]), span3([cls(["text-sm text-muted-foreground"])])([text5(show10(percent) + "% used")])]), div2([cls(["h-2 bg-border rounded-full overflow-hidden mb-4"])])([div2([cls(["h-full bg-cyan-400 rounded-full"]), style("width: " + (show10(percent) + "%"))])([])]), div2([cls(["flex items-baseline gap-1"])])([span3([cls(["text-2xl font-bold text-text"])])([text5(used)]), span3([cls(["text-muted-foreground"])])([text5(" / " + total)])])]);
         };
       };
     };
   };
-  var usageTab5 = /* @__PURE__ */ div_([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["grid grid-cols-1 md:grid-cols-2 gap-6 mb-8"])])([/* @__PURE__ */ usageCard3("Storage")("12.4 GB")("100 GB")(12), /* @__PURE__ */ usageCard3("Transfer")("45.2 GB")("500 GB")(9)]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["bg-card border border-border rounded-lg p-6"])])([/* @__PURE__ */ h3([/* @__PURE__ */ cls(["text-lg font-semibold text-text mb-4"])])([/* @__PURE__ */ text5("Usage History")]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["space-y-4"])])([/* @__PURE__ */ usageHistoryRow("February 2026")("45.2 GB transfer")("12.4 GB storage"), /* @__PURE__ */ usageHistoryRow("January 2026")("38.7 GB transfer")("11.8 GB storage"), /* @__PURE__ */ usageHistoryRow("December 2025")("52.1 GB transfer")("10.2 GB storage"), /* @__PURE__ */ usageHistoryRow("November 2025")("41.3 GB transfer")("9.4 GB storage")])]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["mt-6 p-4 bg-cyan-400/5 border border-cyan-400/20 rounded-lg"])])([/* @__PURE__ */ p([/* @__PURE__ */ cls(["text-sm text-cyan-400 font-medium mb-1"])])([/* @__PURE__ */ text5("Need more capacity?")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-sm text-muted-foreground"])])([/* @__PURE__ */ text5("Upgrade to Pro for 100GB storage and 500GB transfer. "), /* @__PURE__ */ a([/* @__PURE__ */ href4("/sensenet/cache/pricing"), /* @__PURE__ */ cls(["text-cyan-400 hover:text-cyan-300"])])([/* @__PURE__ */ text5("View plans ->")])])])]);
+  var usageTab4 = /* @__PURE__ */ div_([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["grid grid-cols-1 md:grid-cols-2 gap-6 mb-8"])])([/* @__PURE__ */ usageCard3("Storage")("12.4 GB")("100 GB")(12), /* @__PURE__ */ usageCard3("Transfer")("45.2 GB")("500 GB")(9)]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["bg-card border border-border rounded-lg p-6"])])([/* @__PURE__ */ h3([/* @__PURE__ */ cls(["text-lg font-semibold text-text mb-4"])])([/* @__PURE__ */ text5("Usage History")]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["space-y-4"])])([/* @__PURE__ */ usageHistoryRow("February 2026")("45.2 GB transfer")("12.4 GB storage"), /* @__PURE__ */ usageHistoryRow("January 2026")("38.7 GB transfer")("11.8 GB storage"), /* @__PURE__ */ usageHistoryRow("December 2025")("52.1 GB transfer")("10.2 GB storage"), /* @__PURE__ */ usageHistoryRow("November 2025")("41.3 GB transfer")("9.4 GB storage")])]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["mt-6 p-4 bg-cyan-400/5 border border-cyan-400/20 rounded-lg"])])([/* @__PURE__ */ p([/* @__PURE__ */ cls(["text-sm text-cyan-400 font-medium mb-1"])])([/* @__PURE__ */ text5("Need more capacity?")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-sm text-muted-foreground"])])([/* @__PURE__ */ text5("Upgrade to Pro for 100GB storage and 500GB transfer. "), /* @__PURE__ */ a([/* @__PURE__ */ href4("/sensenet/cache/pricing"), /* @__PURE__ */ cls(["text-cyan-400 hover:text-cyan-300"])])([/* @__PURE__ */ text5("View plans ->")])])])]);
   var uploadItem = function(hash2) {
     return function(name16) {
       return function(time3) {
@@ -12608,17 +12735,17 @@
     };
   };
   var tabButton6 = function(state3) {
-    return function(value21) {
+    return function(value20) {
       return function(label5) {
         return button([cls(["px-4 py-2 text-sm font-medium transition-colors -mb-px cursor-pointer", function() {
-          var $11 = state3.activeTab === value21;
+          var $11 = state3.activeTab === value20;
           if ($11) {
             return "text-cyan-400 border-b-2 border-cyan-400";
           }
           ;
           return "text-muted-foreground hover:text-text";
         }()]), type_30(ButtonButton.value), onClick(function(v) {
-          return new SetTab4(value21);
+          return new SetTab4(value20);
         })])([text5(label5)]);
       };
     };
@@ -12627,12 +12754,12 @@
     return div2([cls(["flex gap-1 mb-8 border-b border-border"])])([tabButton6(state3)("overview")("Overview"), tabButton6(state3)("caches")("Caches"), tabButton6(state3)("artifacts")("Artifacts"), tabButton6(state3)("attestations")("Attestations"), tabButton6(state3)("usage")("Usage")]);
   };
   var statCard6 = function(label5) {
-    return function(value21) {
+    return function(value20) {
       return function(subtitle) {
         return function(maybePercent) {
-          return div2([cls(["bg-card border border-border rounded-lg p-4"])])([p([cls(["text-sm text-muted-foreground mb-1"])])([text5(label5)]), p([cls(["text-2xl font-bold text-text mb-1"])])([text5(value21)]), p([cls(["text-xs text-muted-foreground"])])([text5(subtitle)]), function() {
+          return div2([cls(["bg-card border border-border rounded-lg p-4"])])([p([cls(["text-sm text-muted-foreground mb-1"])])([text5(label5)]), p([cls(["text-2xl font-bold text-text mb-1"])])([text5(value20)]), p([cls(["text-xs text-muted-foreground"])])([text5(subtitle)]), function() {
             if (maybePercent instanceof Just) {
-              return div2([cls(["mt-3 h-1.5 bg-border rounded-full overflow-hidden"])])([div2([cls(["h-full bg-cyan-400 rounded-full"]), style("width: " + (show9(maybePercent.value0) + "%"))])([])]);
+              return div2([cls(["mt-3 h-1.5 bg-border rounded-full overflow-hidden"])])([div2([cls(["h-full bg-cyan-400 rounded-full"]), style("width: " + (show10(maybePercent.value0) + "%"))])([])]);
             }
             ;
             if (maybePercent instanceof Nothing) {
@@ -12712,7 +12839,7 @@
                 }
                 ;
                 return "bg-red-400/10 text-red-400";
-              }()])])([text5("SLSA L" + show9(slsa))]), span3([cls(["px-2 py-0.5 text-xs rounded-full", function() {
+              }()])])([text5("SLSA L" + show10(slsa))]), span3([cls(["px-2 py-0.5 text-xs rounded-full", function() {
                 if (valid) {
                   return "bg-green-400/10 text-green-400";
                 }
@@ -12737,7 +12864,7 @@
       return function(size4) {
         return function(uploaded) {
           return function(slsa) {
-            return tr([cls(["border-b border-border hover:bg-card/50"])])([td([cls(["py-3 px-4 font-mono text-sm text-cyan-400"])])([text5(hash2)]), td([cls(["py-3 px-4 text-sm text-text"])])([text5(name16)]), td([cls(["py-3 px-4 text-sm text-muted-foreground"])])([text5(size4)]), td([cls(["py-3 px-4 text-sm text-muted-foreground"])])([text5(uploaded)]), td([cls(["py-3 px-4"])])([span3([cls(["px-2 py-0.5 text-xs rounded-full bg-green-400/10 text-green-400"])])([text5("L" + show9(slsa))])])]);
+            return tr([cls(["border-b border-border hover:bg-card/50"])])([td([cls(["py-3 px-4 font-mono text-sm text-cyan-400"])])([text5(hash2)]), td([cls(["py-3 px-4 text-sm text-text"])])([text5(name16)]), td([cls(["py-3 px-4 text-sm text-muted-foreground"])])([text5(size4)]), td([cls(["py-3 px-4 text-sm text-muted-foreground"])])([text5(uploaded)]), td([cls(["py-3 px-4"])])([span3([cls(["px-2 py-0.5 text-xs rounded-full bg-green-400/10 text-green-400"])])([text5("L" + show10(slsa))])])]);
           };
         };
       };
@@ -12773,7 +12900,7 @@
     }
     ;
     if (state3.activeTab === "usage") {
-      return usageTab5;
+      return usageTab4;
     }
     ;
     return overviewTab6;
@@ -12850,7 +12977,7 @@
   };
   var cliContent3 = /* @__PURE__ */ article([/* @__PURE__ */ cls(["prose prose-invert max-w-none"])])([/* @__PURE__ */ h1([/* @__PURE__ */ cls(["text-3xl font-bold text-text mb-6"])])([/* @__PURE__ */ text5("CLI Reference")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-muted-foreground mb-8"])])([/* @__PURE__ */ text5("Complete reference for the sensenet-cache command-line interface.")]), /* @__PURE__ */ h2([/* @__PURE__ */ cls(["text-xl font-semibold text-text mt-8 mb-4"])])([/* @__PURE__ */ text5("Global Options")]), /* @__PURE__ */ codeBlock([/* @__PURE__ */ text5("sensenet-cache [OPTIONS] <COMMAND>\n\nOptions:\n  --config <PATH>    Config file path (default: ~/.config/sensenet-cache/config.toml)\n  --cache <NAME>     Target cache name (default: from config)\n  --verbose, -v      Increase verbosity (can be repeated)\n  --quiet, -q        Suppress non-error output\n  --help, -h         Show help\n  --version          Show version")]), /* @__PURE__ */ h2([/* @__PURE__ */ cls(["text-xl font-semibold text-text mt-8 mb-4"])])([/* @__PURE__ */ text5("Commands")]), /* @__PURE__ */ h3([/* @__PURE__ */ cls(["text-lg font-semibold text-text mt-6 mb-3"])])([/* @__PURE__ */ text5("login")]), /* @__PURE__ */ codeBlock([/* @__PURE__ */ text5("sensenet-cache login [OPTIONS]\n\nAuthenticate with sensenet//cache.\n\nOptions:\n  --token <TOKEN>    Use API token instead of OAuth\n  --no-browser       Print URL instead of opening browser")]), /* @__PURE__ */ h3([/* @__PURE__ */ cls(["text-lg font-semibold text-text mt-6 mb-3"])])([/* @__PURE__ */ text5("push")]), /* @__PURE__ */ codeBlock([/* @__PURE__ */ text5("sensenet-cache push [OPTIONS] <PATH>...\n\nUpload artifacts to the cache.\n\nOptions:\n  --attest           Generate attestation (default: true)\n  --builder <NAME>   Builder identity for attestation\n  --source <REF>     Source reference (e.g., git commit)\n  --sign <MODE>      Signature mode: sphincs, ed25519, hybrid (default: sphincs)\n  --jobs, -j <N>     Parallel upload jobs (default: 4)")]), /* @__PURE__ */ h3([/* @__PURE__ */ cls(["text-lg font-semibold text-text mt-6 mb-3"])])([/* @__PURE__ */ text5("verify")]), /* @__PURE__ */ codeBlock([/* @__PURE__ */ text5("sensenet-cache verify [OPTIONS] <PATH|HASH>\n\nVerify artifact integrity and attestation.\n\nOptions:\n  --require <MODE>   Required signature mode: sphincs, ed25519, hybrid, any\n  --slsa <LEVEL>     Require minimum SLSA level (1-3)\n  --json             Output verification result as JSON")]), /* @__PURE__ */ h3([/* @__PURE__ */ cls(["text-lg font-semibold text-text mt-6 mb-3"])])([/* @__PURE__ */ text5("attest")]), /* @__PURE__ */ codeBlock([/* @__PURE__ */ text5("sensenet-cache attest <SUBCOMMAND>\n\nSubcommands:\n  show <HASH>        Display attestation for an artifact\n  verify <HASH>      Verify attestation signature\n  export <HASH>      Export attestation (--format json|intoto)")]), /* @__PURE__ */ h3([/* @__PURE__ */ cls(["text-lg font-semibold text-text mt-6 mb-3"])])([/* @__PURE__ */ text5("config")]), /* @__PURE__ */ codeBlock([/* @__PURE__ */ text5("sensenet-cache config <SUBCOMMAND>\n\nSubcommands:\n  get <KEY>          Get config value\n  set <KEY> <VALUE>  Set config value\n  list               List all config values\n  --substituter      Configure as Nix substituter")]), /* @__PURE__ */ h3([/* @__PURE__ */ cls(["text-lg font-semibold text-text mt-6 mb-3"])])([/* @__PURE__ */ text5("migrate")]), /* @__PURE__ */ codeBlock([/* @__PURE__ */ text5("sensenet-cache migrate [OPTIONS]\n\nMigrate from another cache provider.\n\nOptions:\n  --from <PROVIDER>  Source provider: cachix, s3, attic\n  --source <URL>     Source cache URL\n  --dry-run          Show what would be migrated")])]);
   var attestationContent2 = /* @__PURE__ */ article([/* @__PURE__ */ cls(["prose prose-invert max-w-none"])])([/* @__PURE__ */ h1([/* @__PURE__ */ cls(["text-3xl font-bold text-text mb-6"])])([/* @__PURE__ */ text5("Attestation")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-muted-foreground mb-8"])])([/* @__PURE__ */ text5("Every artifact in sensenet//cache carries cryptographically signed provenance metadata. Know exactly where your binaries came from.")]), /* @__PURE__ */ h2([/* @__PURE__ */ cls(["text-xl font-semibold text-text mt-8 mb-4"])])([/* @__PURE__ */ text5("What is Attestation?")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-muted-foreground mb-6"])])([/* @__PURE__ */ text5("An attestation is a signed statement about an artifact's provenance. It answers: Who built this? When? From what source? On which system? sensenet//cache implements SLSA (Supply-chain Levels for Software Artifacts) attestations.")]), /* @__PURE__ */ h2([/* @__PURE__ */ cls(["text-xl font-semibold text-text mt-8 mb-4"])])([/* @__PURE__ */ text5("Attestation Structure")]), /* @__PURE__ */ codeBlock([/* @__PURE__ */ text5('{\n  "subject": {\n    "hash": "blake3://7f83b1657ff1fc53...",\n    "size": 12847592\n  },\n  "predicate": {\n    "builder": "ci.example.com",\n    "buildType": "nix-build",\n    "invocation": {\n      "configSource": "github.com/org/repo@abc123"\n    },\n    "buildConfig": {\n      "system": "x86_64-linux",\n      "nixVersion": "2.18.1"\n    },\n    "timestamp": "2026-02-24T10:30:00Z"\n  },\n  "signature": "SPHINCS+-256s:..."\n}')]), /* @__PURE__ */ h2([/* @__PURE__ */ cls(["text-xl font-semibold text-text mt-8 mb-4"])])([/* @__PURE__ */ text5("SLSA Compliance")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-muted-foreground mb-4"])])([/* @__PURE__ */ text5("sensenet//cache provides SLSA Level 3 compliance out of the box:")]), /* @__PURE__ */ ul([/* @__PURE__ */ cls(["list-disc list-inside text-muted-foreground space-y-2 mb-8"])])([/* @__PURE__ */ li_([/* @__PURE__ */ text5("Level 1: Attestation exists and is signed")]), /* @__PURE__ */ li_([/* @__PURE__ */ text5("Level 2: Attestation is generated by a hosted build service")]), /* @__PURE__ */ li_([/* @__PURE__ */ text5("Level 3: Source and build platform are hardened against tampering")])]), /* @__PURE__ */ h2([/* @__PURE__ */ cls(["text-xl font-semibold text-text mt-8 mb-4"])])([/* @__PURE__ */ text5("Generating Attestations")]), /* @__PURE__ */ codeBlock([/* @__PURE__ */ text5('# Push with full attestation (default)\nsensenet-cache push --attest ./result\n\n# Push with custom builder identity\nsensenet-cache push --attest --builder "my-ci.example.com" ./result\n\n# Push with source reference\nsensenet-cache push --attest --source "github.com/org/repo@$(git rev-parse HEAD)" ./result')]), /* @__PURE__ */ h2([/* @__PURE__ */ cls(["text-xl font-semibold text-text mt-8 mb-4"])])([/* @__PURE__ */ text5("Verifying Attestations")]), /* @__PURE__ */ codeBlock([/* @__PURE__ */ text5("# View attestation for an artifact\nsensenet-cache attest show blake3://7f83b1657ff1fc53...\n\n# Verify attestation signature\nsensenet-cache attest verify blake3://7f83b1657ff1fc53...\n\n# Export attestation as JSON\nsensenet-cache attest export --format json blake3://7f83b1657ff1fc53...")])]);
-  var apiContent5 = /* @__PURE__ */ article([/* @__PURE__ */ cls(["prose prose-invert max-w-none"])])([/* @__PURE__ */ h1([/* @__PURE__ */ cls(["text-3xl font-bold text-text mb-6"])])([/* @__PURE__ */ text5("API Reference")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-muted-foreground mb-8"])])([/* @__PURE__ */ text5("HTTP API for programmatic access to sensenet//cache.")]), /* @__PURE__ */ h2([/* @__PURE__ */ cls(["text-xl font-semibold text-text mt-8 mb-4"])])([/* @__PURE__ */ text5("Authentication")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-muted-foreground mb-4"])])([/* @__PURE__ */ text5("All API requests require authentication via Bearer token:")]), /* @__PURE__ */ codeBlock([/* @__PURE__ */ text5('curl -H "Authorization: Bearer $SENSENET_TOKEN" \\\n  https://api.cache.sensenet.dev/v1/...')]), /* @__PURE__ */ h2([/* @__PURE__ */ cls(["text-xl font-semibold text-text mt-8 mb-4"])])([/* @__PURE__ */ text5("Endpoints")]), /* @__PURE__ */ h3([/* @__PURE__ */ cls(["text-lg font-semibold text-text mt-6 mb-3"])])([/* @__PURE__ */ text5("Upload Artifact")]), /* @__PURE__ */ codeBlock([/* @__PURE__ */ text5('POST /v1/artifacts\nContent-Type: application/octet-stream\nX-Sensenet-Hash: blake3://<hash>\nX-Sensenet-Attest: true\n\n<binary data>\n\nResponse:\n{\n  "hash": "blake3://7f83b1657ff1fc53...",\n  "size": 12847592,\n  "attestation": "https://api.cache.sensenet.dev/v1/attestations/7f83b1657ff1fc53"\n}')]), /* @__PURE__ */ h3([/* @__PURE__ */ cls(["text-lg font-semibold text-text mt-6 mb-3"])])([/* @__PURE__ */ text5("Download Artifact")]), /* @__PURE__ */ codeBlock([/* @__PURE__ */ text5("GET /v1/artifacts/:hash\n\nResponse: Binary artifact data\n\nHeaders:\n  X-Sensenet-Signature: <SPHINCS+ signature>\n  X-Sensenet-Attestation: <attestation URL>")]), /* @__PURE__ */ h3([/* @__PURE__ */ cls(["text-lg font-semibold text-text mt-6 mb-3"])])([/* @__PURE__ */ text5("Get Attestation")]), /* @__PURE__ */ codeBlock([/* @__PURE__ */ text5('GET /v1/attestations/:hash\n\nResponse:\n{\n  "subject": { "hash": "blake3://...", "size": 12847592 },\n  "predicate": {\n    "builder": "ci.example.com",\n    "buildType": "nix-build",\n    "timestamp": "2026-02-24T10:30:00Z"\n  },\n  "signature": "SPHINCS+-256s:..."\n}')]), /* @__PURE__ */ h3([/* @__PURE__ */ cls(["text-lg font-semibold text-text mt-6 mb-3"])])([/* @__PURE__ */ text5("Verify Artifact")]), /* @__PURE__ */ codeBlock([/* @__PURE__ */ text5('POST /v1/verify\nContent-Type: application/json\n\n{\n  "hash": "blake3://7f83b1657ff1fc53...",\n  "require_signature": "sphincs",\n  "require_slsa": 3\n}\n\nResponse:\n{\n  "valid": true,\n  "signature": { "algorithm": "SPHINCS+-256s", "valid": true },\n  "attestation": { "slsa_level": 3, "valid": true }\n}')]), /* @__PURE__ */ h3([/* @__PURE__ */ cls(["text-lg font-semibold text-text mt-6 mb-3"])])([/* @__PURE__ */ text5("List Cache Contents")]), /* @__PURE__ */ codeBlock([/* @__PURE__ */ text5('GET /v1/caches/:name/artifacts?limit=100&cursor=...\n\nResponse:\n{\n  "artifacts": [\n    { "hash": "blake3://...", "size": 12847592, "uploaded_at": "2026-02-24T10:30:00Z" }\n  ],\n  "next_cursor": "eyJvZmZzZXQiOjEwMH0="\n}')]), /* @__PURE__ */ h2([/* @__PURE__ */ cls(["text-xl font-semibold text-text mt-8 mb-4"])])([/* @__PURE__ */ text5("Nix Binary Cache Protocol")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-muted-foreground mb-4"])])([/* @__PURE__ */ text5("sensenet//cache implements the standard Nix binary cache protocol:")]), /* @__PURE__ */ codeBlock([/* @__PURE__ */ text5("GET /nix-cache-info\nGET /:hash.narinfo\nGET /nar/:hash.nar.zst")])]);
+  var apiContent6 = /* @__PURE__ */ article([/* @__PURE__ */ cls(["prose prose-invert max-w-none"])])([/* @__PURE__ */ h1([/* @__PURE__ */ cls(["text-3xl font-bold text-text mb-6"])])([/* @__PURE__ */ text5("API Reference")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-muted-foreground mb-8"])])([/* @__PURE__ */ text5("HTTP API for programmatic access to sensenet//cache.")]), /* @__PURE__ */ h2([/* @__PURE__ */ cls(["text-xl font-semibold text-text mt-8 mb-4"])])([/* @__PURE__ */ text5("Authentication")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-muted-foreground mb-4"])])([/* @__PURE__ */ text5("All API requests require authentication via Bearer token:")]), /* @__PURE__ */ codeBlock([/* @__PURE__ */ text5('curl -H "Authorization: Bearer $SENSENET_TOKEN" \\\n  https://api.cache.sensenet.dev/v1/...')]), /* @__PURE__ */ h2([/* @__PURE__ */ cls(["text-xl font-semibold text-text mt-8 mb-4"])])([/* @__PURE__ */ text5("Endpoints")]), /* @__PURE__ */ h3([/* @__PURE__ */ cls(["text-lg font-semibold text-text mt-6 mb-3"])])([/* @__PURE__ */ text5("Upload Artifact")]), /* @__PURE__ */ codeBlock([/* @__PURE__ */ text5('POST /v1/artifacts\nContent-Type: application/octet-stream\nX-Sensenet-Hash: blake3://<hash>\nX-Sensenet-Attest: true\n\n<binary data>\n\nResponse:\n{\n  "hash": "blake3://7f83b1657ff1fc53...",\n  "size": 12847592,\n  "attestation": "https://api.cache.sensenet.dev/v1/attestations/7f83b1657ff1fc53"\n}')]), /* @__PURE__ */ h3([/* @__PURE__ */ cls(["text-lg font-semibold text-text mt-6 mb-3"])])([/* @__PURE__ */ text5("Download Artifact")]), /* @__PURE__ */ codeBlock([/* @__PURE__ */ text5("GET /v1/artifacts/:hash\n\nResponse: Binary artifact data\n\nHeaders:\n  X-Sensenet-Signature: <SPHINCS+ signature>\n  X-Sensenet-Attestation: <attestation URL>")]), /* @__PURE__ */ h3([/* @__PURE__ */ cls(["text-lg font-semibold text-text mt-6 mb-3"])])([/* @__PURE__ */ text5("Get Attestation")]), /* @__PURE__ */ codeBlock([/* @__PURE__ */ text5('GET /v1/attestations/:hash\n\nResponse:\n{\n  "subject": { "hash": "blake3://...", "size": 12847592 },\n  "predicate": {\n    "builder": "ci.example.com",\n    "buildType": "nix-build",\n    "timestamp": "2026-02-24T10:30:00Z"\n  },\n  "signature": "SPHINCS+-256s:..."\n}')]), /* @__PURE__ */ h3([/* @__PURE__ */ cls(["text-lg font-semibold text-text mt-6 mb-3"])])([/* @__PURE__ */ text5("Verify Artifact")]), /* @__PURE__ */ codeBlock([/* @__PURE__ */ text5('POST /v1/verify\nContent-Type: application/json\n\n{\n  "hash": "blake3://7f83b1657ff1fc53...",\n  "require_signature": "sphincs",\n  "require_slsa": 3\n}\n\nResponse:\n{\n  "valid": true,\n  "signature": { "algorithm": "SPHINCS+-256s", "valid": true },\n  "attestation": { "slsa_level": 3, "valid": true }\n}')]), /* @__PURE__ */ h3([/* @__PURE__ */ cls(["text-lg font-semibold text-text mt-6 mb-3"])])([/* @__PURE__ */ text5("List Cache Contents")]), /* @__PURE__ */ codeBlock([/* @__PURE__ */ text5('GET /v1/caches/:name/artifacts?limit=100&cursor=...\n\nResponse:\n{\n  "artifacts": [\n    { "hash": "blake3://...", "size": 12847592, "uploaded_at": "2026-02-24T10:30:00Z" }\n  ],\n  "next_cursor": "eyJvZmZzZXQiOjEwMH0="\n}')]), /* @__PURE__ */ h2([/* @__PURE__ */ cls(["text-xl font-semibold text-text mt-8 mb-4"])])([/* @__PURE__ */ text5("Nix Binary Cache Protocol")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-muted-foreground mb-4"])])([/* @__PURE__ */ text5("sensenet//cache implements the standard Nix binary cache protocol:")]), /* @__PURE__ */ codeBlock([/* @__PURE__ */ text5("GET /nix-cache-info\nGET /:hash.narinfo\nGET /nar/:hash.nar.zst")])]);
   var renderContent6 = function(path) {
     if (path === "/sensenet/cache/docs") {
       return overviewContent6;
@@ -12873,7 +13000,7 @@
     }
     ;
     if (path === "/sensenet/cache/docs/api") {
-      return apiContent5;
+      return apiContent6;
     }
     ;
     if (otherwise) {
@@ -12912,10 +13039,10 @@
       return div2([cls(["bg-card border border-border rounded-lg p-6 hover:border-cyan-400/30 transition-colors"])])([h3([cls(["text-text font-semibold mb-2"])])([text5(title3)]), p([cls(["text-muted-foreground text-sm"])])([text5(description)])]);
     };
   };
-  var perfCard = function(value21) {
+  var perfCard = function(value20) {
     return function(label5) {
       return function(sublabel) {
-        return div2([cls(["bg-card border border-border rounded-lg p-6 text-center"])])([p([cls(["text-3xl font-bold text-cyan-400 mb-1"])])([text5(value21)]), p([cls(["text-text font-medium mb-1"])])([text5(label5)]), p([cls(["text-sm text-muted-foreground"])])([text5(sublabel)])]);
+        return div2([cls(["bg-card border border-border rounded-lg p-6 text-center"])])([p([cls(["text-3xl font-bold text-cyan-400 mb-1"])])([text5(value20)]), p([cls(["text-text font-medium mb-1"])])([text5(label5)]), p([cls(["text-sm text-muted-foreground"])])([text5(sublabel)])]);
       };
     };
   };
@@ -12980,14 +13107,14 @@
     };
   };
   var quickstart5 = /* @__PURE__ */ section([/* @__PURE__ */ cls(["py-24 border-t border-border"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["max-w-[800px] mx-auto px-6"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["text-center mb-12"])])([/* @__PURE__ */ h2([/* @__PURE__ */ cls(["text-3xl font-bold text-text mb-4"])])([/* @__PURE__ */ text5("Get started in 30 seconds")])]), /* @__PURE__ */ codeBlock([/* @__PURE__ */ codeLine14("# ")("Install the CLI"), /* @__PURE__ */ codeLine14("$ ")("nix profile install github:straylight-software/sensenet-cache"), /* @__PURE__ */ text5("\n"), /* @__PURE__ */ codeLine14("# ")("Authenticate"), /* @__PURE__ */ codeLine14("$ ")("sensenet-cache login"), /* @__PURE__ */ text5("\n"), /* @__PURE__ */ codeLine14("# ")("Push your first artifact"), /* @__PURE__ */ codeLine14("$ ")("nix build .#mypackage && sensenet-cache push ./result"), /* @__PURE__ */ text5("\n"), /* @__PURE__ */ codeLine14("# ")("Configure as substituter"), /* @__PURE__ */ codeLine14("$ ")("sensenet-cache config --substituter")]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["mt-8 text-center"])])([/* @__PURE__ */ a([/* @__PURE__ */ href4("/sensenet/cache/docs/quickstart"), /* @__PURE__ */ cls(["text-cyan-400 hover:text-cyan-400/80 transition-colors"])])([/* @__PURE__ */ text5("Full quickstart guide ->")])])])]);
-  var cell2 = function(value21) {
+  var cell2 = function(value20) {
     return function(isUs) {
       var textColor = function() {
-        if (value21 === "yes") {
+        if (value20 === "yes") {
           return "text-text";
         }
         ;
-        if (value21 === "no") {
+        if (value20 === "no") {
           return "text-muted-foreground/50";
         }
         ;
@@ -12999,7 +13126,7 @@
         }
         ;
         return textColor;
-      }()])])([text5(value21)]);
+      }()])])([text5(value20)]);
     };
   };
   var comparisonRow6 = function(feature) {
@@ -13107,9 +13234,9 @@
   // output/Straylight.Pages.Products.SensenetCache.Settings/index.js
   var type_31 = /* @__PURE__ */ type_17(isPropButtonType);
   var append13 = /* @__PURE__ */ append(semigroupArray);
-  var type_111 = /* @__PURE__ */ type_17(isPropInputType);
+  var type_110 = /* @__PURE__ */ type_17(isPropInputType);
   var modify_23 = /* @__PURE__ */ modify_(monadStateHalogenM);
-  var value17 = /* @__PURE__ */ value12(isPropString);
+  var value16 = /* @__PURE__ */ value12(isPropString);
   var SetTab5 = /* @__PURE__ */ function() {
     function SetTab12(value0) {
       this.value0 = value0;
@@ -13127,7 +13254,7 @@
       };
     };
   };
-  var teamMemberRow3 = function(email) {
+  var teamMemberRow4 = function(email) {
     return function(role) {
       return function(joined) {
         return function(canRemove) {
@@ -13176,13 +13303,13 @@
       return div2([cls(["bg-card border border-border rounded-lg p-6"])])(append13([h3([cls(["text-lg font-semibold text-text mb-4"])])([text5(title3)])])(children2));
     };
   };
-  var roleDescription = function(role) {
+  var roleDescription2 = function(role) {
     return function(description) {
       return div2([cls(["flex items-start gap-3"])])([span3([cls(["text-cyan-400 font-medium text-sm w-20"])])([text5(role)]), span3([cls(["text-muted-foreground text-sm"])])([text5(description)])]);
     };
   };
   var teamTab4 = /* @__PURE__ */ function() {
-    return div2([cls(["space-y-6"])])([div2([cls(["flex items-center justify-between"])])([div_([h2([cls(["text-lg font-semibold text-text"])])([text5("Team Members")]), p([cls(["text-sm text-muted-foreground"])])([text5("3 of 5 seats used on your Pro plan.")])]), button([cls(["px-4 py-2 bg-cyan-400 text-background rounded-md text-sm hover:bg-cyan-400/90 transition-colors"]), type_31(ButtonButton.value)])([text5("+ Invite member")])]), div2([cls(["bg-card border border-border rounded-lg overflow-hidden"])])([table([cls(["w-full"])])([thead_([tr([cls(["border-b border-border"])])([th([cls(["text-left py-3 px-4 text-xs font-medium text-muted-foreground uppercase"])])([text5("Member")]), th([cls(["text-left py-3 px-4 text-xs font-medium text-muted-foreground uppercase"])])([text5("Role")]), th([cls(["text-left py-3 px-4 text-xs font-medium text-muted-foreground uppercase"])])([text5("Joined")]), th([cls(["text-left py-3 px-4 text-xs font-medium text-muted-foreground uppercase"])])([text5("")])])]), tbody_([teamMemberRow3("alice@acme-corp.com")("Owner")("Jan 2025")(false), teamMemberRow3("bob@acme-corp.com")("Admin")("Jan 2025")(true), teamMemberRow3("charlie@acme-corp.com")("Member")("Feb 2026")(true)])])]), settingsCard2("Roles")([div2([cls(["space-y-3"])])([roleDescription("Owner")("Full access. Can delete organization and manage billing."), roleDescription("Admin")("Can manage caches, API keys, and team members."), roleDescription("Member")("Can push and pull artifacts. Cannot manage settings.")])])]);
+    return div2([cls(["space-y-6"])])([div2([cls(["flex items-center justify-between"])])([div_([h2([cls(["text-lg font-semibold text-text"])])([text5("Team Members")]), p([cls(["text-sm text-muted-foreground"])])([text5("3 of 5 seats used on your Pro plan.")])]), button([cls(["px-4 py-2 bg-cyan-400 text-background rounded-md text-sm hover:bg-cyan-400/90 transition-colors"]), type_31(ButtonButton.value)])([text5("+ Invite member")])]), div2([cls(["bg-card border border-border rounded-lg overflow-hidden"])])([table([cls(["w-full"])])([thead_([tr([cls(["border-b border-border"])])([th([cls(["text-left py-3 px-4 text-xs font-medium text-muted-foreground uppercase"])])([text5("Member")]), th([cls(["text-left py-3 px-4 text-xs font-medium text-muted-foreground uppercase"])])([text5("Role")]), th([cls(["text-left py-3 px-4 text-xs font-medium text-muted-foreground uppercase"])])([text5("Joined")]), th([cls(["text-left py-3 px-4 text-xs font-medium text-muted-foreground uppercase"])])([text5("")])])]), tbody_([teamMemberRow4("alice@acme-corp.com")("Owner")("Jan 2025")(false), teamMemberRow4("bob@acme-corp.com")("Admin")("Jan 2025")(true), teamMemberRow4("charlie@acme-corp.com")("Member")("Feb 2026")(true)])])]), settingsCard2("Roles")([div2([cls(["space-y-3"])])([roleDescription2("Owner")("Full access. Can delete organization and manage billing."), roleDescription2("Admin")("Can manage caches, API keys, and team members."), roleDescription2("Member")("Can push and pull artifacts. Cannot manage settings.")])])]);
   }();
   var notificationToggle = function(label5) {
     return function(description) {
@@ -13204,7 +13331,7 @@
     };
   };
   var notificationsTab = /* @__PURE__ */ function() {
-    return div2([cls(["space-y-6"])])([settingsCard2("Email Notifications")([div2([cls(["space-y-4"])])([notificationToggle("Usage alerts")("Get notified when you reach 80% and 95% of your limits.")(true), notificationToggle("Security alerts")("Failed attestation verifications and suspicious activity.")(true), notificationToggle("Weekly digest")("Summary of cache usage, top artifacts, and team activity.")(false), notificationToggle("Product updates")("New features, improvements, and maintenance notices.")(true)])]), settingsCard2("Webhook Notifications")([div2([cls(["mb-4"])])([p([cls(["text-sm text-muted-foreground mb-4"])])([text5("Send real-time notifications to your own endpoints.")]), div2([cls(["flex gap-2"])])([input2([type_111(InputUrl.value), placeholder3("https://api.example.com/webhooks/sensenet"), cls(["flex-1 px-3 py-2 bg-background border border-border rounded-md text-sm text-text placeholder:text-muted-foreground"])]), button([cls(["px-4 py-2 bg-cyan-400 text-background rounded-md text-sm hover:bg-cyan-400/90 transition-colors"]), type_31(ButtonButton.value)])([text5("Add webhook")])])])])]);
+    return div2([cls(["space-y-6"])])([settingsCard2("Email Notifications")([div2([cls(["space-y-4"])])([notificationToggle("Usage alerts")("Get notified when you reach 80% and 95% of your limits.")(true), notificationToggle("Security alerts")("Failed attestation verifications and suspicious activity.")(true), notificationToggle("Weekly digest")("Summary of cache usage, top artifacts, and team activity.")(false), notificationToggle("Product updates")("New features, improvements, and maintenance notices.")(true)])]), settingsCard2("Webhook Notifications")([div2([cls(["mb-4"])])([p([cls(["text-sm text-muted-foreground mb-4"])])([text5("Send real-time notifications to your own endpoints.")]), div2([cls(["flex gap-2"])])([input2([type_110(InputUrl.value), placeholder3("https://api.example.com/webhooks/sensenet"), cls(["flex-1 px-3 py-2 bg-background border border-border rounded-md text-sm text-text placeholder:text-muted-foreground"])]), button([cls(["px-4 py-2 bg-cyan-400 text-background rounded-md text-sm hover:bg-cyan-400/90 transition-colors"]), type_31(ButtonButton.value)])([text5("Add webhook")])])])])]);
   }();
   var invoiceRow3 = function(date) {
     return function(amount) {
@@ -13230,7 +13357,7 @@
   var formField3 = function(label5) {
     return function(value1) {
       return function(inputType) {
-        return div2([cls(["mb-4"])])([label4([cls(["block text-sm font-medium text-text mb-2"])])([text5(label5)]), input2([type_111(function() {
+        return div2([cls(["mb-4"])])([label4([cls(["block text-sm font-medium text-text mb-2"])])([text5(label5)]), input2([type_110(function() {
           if (inputType === "email") {
             return InputEmail.value;
           }
@@ -13240,11 +13367,11 @@
           }
           ;
           return InputText.value;
-        }()), value17(value1), cls(["w-full px-3 py-2 bg-background border border-border rounded-md text-sm text-text"])])]);
+        }()), value16(value1), cls(["w-full px-3 py-2 bg-background border border-border rounded-md text-sm text-text"])])]);
       };
     };
   };
-  var billingTab5 = /* @__PURE__ */ function() {
+  var billingTab4 = /* @__PURE__ */ function() {
     return div2([cls(["space-y-6"])])([settingsCard2("Current Plan")([div2([cls(["flex items-center justify-between mb-4"])])([div_([div2([cls(["flex items-center gap-2 mb-1"])])([h3([cls(["text-xl font-bold text-text"])])([text5("Pro")]), span3([cls(["px-2 py-0.5 text-xs rounded-full bg-cyan-400/10 text-cyan-400"])])([text5("Active")])]), p([cls(["text-muted-foreground"])])([text5("$29/month - 100GB storage, 500GB transfer, 5 seats")])]), button([cls(["px-4 py-2 border border-border text-text rounded-md text-sm hover:bg-card transition-colors"]), type_31(ButtonButton.value)])([text5("Change plan")])]), div2([cls(["grid grid-cols-3 gap-4 pt-4 border-t border-border"])])([usageMetric("Storage")("12.4 GB")("100 GB"), usageMetric("Transfer")("45.2 GB")("500 GB"), usageMetric("Seats")("3")("5")])]), settingsCard2("Payment Method")([div2([cls(["flex items-center justify-between"])])([div2([cls(["flex items-center gap-3"])])([div2([cls(["w-12 h-8 bg-card border border-border rounded flex items-center justify-center"])])([span3([cls(["text-xs font-bold text-text"])])([text5("VISA")])]), div_([p([cls(["text-text text-sm"])])([text5("**** **** **** 4242")]), p([cls(["text-muted-foreground text-xs"])])([text5("Expires 12/2028")])])]), button([cls(["text-cyan-400 hover:text-cyan-300 text-sm"]), type_31(ButtonButton.value)])([text5("Update")])])]), settingsCard2("Billing History")([div2([cls(["space-y-3"])])([invoiceRow3("February 2026")("$29.00")("Paid"), invoiceRow3("January 2026")("$29.00")("Paid"), invoiceRow3("December 2025")("$29.00")("Paid")])])]);
   }();
   var auditLogRow = function(action2) {
@@ -13254,7 +13381,7 @@
       };
     };
   };
-  var securityTab5 = /* @__PURE__ */ function() {
+  var securityTab3 = /* @__PURE__ */ function() {
     return div2([cls(["space-y-6"])])([settingsCard2("Signing Keys")([div2([cls(["mb-4"])])([p([cls(["text-sm text-muted-foreground mb-4"])])([text5("Your organization's SPHINCS+ public key for artifact verification.")]), div2([cls(["p-3 bg-background border border-border rounded-md font-mono text-xs text-text overflow-x-auto"])])([text5("acme-corp.cache.sensenet.dev:sph256s1q2w3e4r5t6y7u8i9o0p...")])]), div2([cls(["flex gap-3"])])([button([cls(["px-4 py-2 border border-border text-text rounded-md text-sm hover:bg-card transition-colors"]), type_31(ButtonButton.value)])([text5("Copy public key")]), button([cls(["px-4 py-2 border border-border text-text rounded-md text-sm hover:bg-card transition-colors"]), type_31(ButtonButton.value)])([text5("Rotate keys")])])]), settingsCard2("Two-Factor Authentication")([div2([cls(["flex items-center justify-between"])])([div_([p([cls(["text-text font-medium"])])([text5("2FA enabled")]), p([cls(["text-sm text-muted-foreground"])])([text5("Require two-factor authentication for all team members.")])]), div2([cls(["flex items-center"])])([span3([cls(["text-green-400 text-sm mr-2"])])([text5("Enabled")]), div2([cls(["w-10 h-6 bg-green-400 rounded-full relative cursor-pointer"])])([div2([cls(["w-4 h-4 bg-white rounded-full absolute right-1 top-1"])])([])])])])]), settingsCard2("Audit Logs")([p([cls(["text-sm text-muted-foreground mb-4"])])([text5("90-day retention of all API access and configuration changes.")]), div2([cls(["space-y-2"])])([auditLogRow("API key created: CI Production")("alice@acme-corp.com")("2 hours ago"), auditLogRow("Artifact pushed: blake3://7f83b165...")("CI Production")("2 hours ago"), auditLogRow("Team member invited: charlie@acme-corp.com")("alice@acme-corp.com")("3 days ago")]), a([href4("#"), cls(["block text-center text-sm text-cyan-400 hover:text-cyan-300 mt-4"])])([text5("View full audit log ->")])]), settingsCard2("SSO Configuration")([div2([cls(["flex items-center justify-between"])])([div_([p([cls(["text-text font-medium"])])([text5("SAML SSO")]), p([cls(["text-sm text-muted-foreground"])])([text5("Configure SAML-based single sign-on for your organization.")])]), span3([cls(["px-2 py-0.5 text-xs rounded-full bg-muted-foreground/10 text-muted-foreground"])])([text5("Enterprise")])])])]);
   }();
   var apiKeyRow2 = function(name16) {
@@ -13266,19 +13393,19 @@
       };
     };
   };
-  var apiKeysTab3 = /* @__PURE__ */ function() {
+  var apiKeysTab = /* @__PURE__ */ function() {
     return div2([cls(["space-y-6"])])([div2([cls(["flex items-center justify-between"])])([div_([h2([cls(["text-lg font-semibold text-text"])])([text5("API Keys")]), p([cls(["text-sm text-muted-foreground"])])([text5("Manage API keys for programmatic access to sensenet//cache.")])]), button([cls(["px-4 py-2 bg-cyan-400 text-background rounded-md text-sm hover:bg-cyan-400/90 transition-colors"]), type_31(ButtonButton.value)])([text5("+ Create API Key")])]), div2([cls(["bg-card border border-border rounded-lg overflow-hidden"])])([table([cls(["w-full"])])([thead_([tr([cls(["border-b border-border"])])([th([cls(["text-left py-3 px-4 text-xs font-medium text-muted-foreground uppercase"])])([text5("Name")]), th([cls(["text-left py-3 px-4 text-xs font-medium text-muted-foreground uppercase"])])([text5("Key")]), th([cls(["text-left py-3 px-4 text-xs font-medium text-muted-foreground uppercase"])])([text5("Permissions")]), th([cls(["text-left py-3 px-4 text-xs font-medium text-muted-foreground uppercase"])])([text5("Last used")]), th([cls(["text-left py-3 px-4 text-xs font-medium text-muted-foreground uppercase"])])([text5("")])])]), tbody_([apiKeyRow2("CI Production")("snc_prod_****7f8a")("read, write")("2 hours ago"), apiKeyRow2("CI Staging")("snc_stg_****3b2c")("read, write")("1 day ago"), apiKeyRow2("Read-only")("snc_ro_****9d4e")("read")("3 days ago")])])]), div2([cls(["p-4 bg-cyan-400/5 border border-cyan-400/20 rounded-lg"])])([p([cls(["text-sm text-cyan-400 font-medium mb-1"])])([text5("Security tip")]), p([cls(["text-sm text-muted-foreground"])])([text5("Use separate API keys for different environments. Rotate keys regularly and never commit them to version control.")])])]);
   }();
-  var accountTab4 = /* @__PURE__ */ function() {
-    return div2([cls(["space-y-6"])])([settingsCard2("Account Information")([formField3("Organization name")("acme-corp")("text"), formField3("Email")("admin@acme-corp.com")("email"), formField3("Organization URL")("https://acme-corp.com")("url")]), settingsCard2("Cache Namespace")([div2([cls(["mb-4"])])([label4([cls(["block text-sm font-medium text-text mb-2"])])([text5("Namespace")]), div2([cls(["flex items-center gap-2"])])([span3([cls(["text-muted-foreground"])])([text5("https://cache.sensenet.dev/")]), input2([type_111(InputText.value), value17("acme-corp"), cls(["px-3 py-2 bg-background border border-border rounded-md text-sm text-text w-40"])])]), p([cls(["text-xs text-muted-foreground mt-2"])])([text5("This is your organization's unique namespace for all caches.")])])]), settingsCard2("Danger Zone")([div2([cls(["flex items-center justify-between"])])([div_([p([cls(["text-text font-medium"])])([text5("Delete organization")]), p([cls(["text-sm text-muted-foreground"])])([text5("Permanently delete all caches, artifacts, and data.")])]), button([cls(["px-4 py-2 bg-red-500/10 text-red-400 border border-red-500/20 rounded-md text-sm hover:bg-red-500/20 transition-colors"]), type_31(ButtonButton.value)])([text5("Delete organization")])])])]);
+  var accountTab3 = /* @__PURE__ */ function() {
+    return div2([cls(["space-y-6"])])([settingsCard2("Account Information")([formField3("Organization name")("acme-corp")("text"), formField3("Email")("admin@acme-corp.com")("email"), formField3("Organization URL")("https://acme-corp.com")("url")]), settingsCard2("Cache Namespace")([div2([cls(["mb-4"])])([label4([cls(["block text-sm font-medium text-text mb-2"])])([text5("Namespace")]), div2([cls(["flex items-center gap-2"])])([span3([cls(["text-muted-foreground"])])([text5("https://cache.sensenet.dev/")]), input2([type_110(InputText.value), value16("acme-corp"), cls(["px-3 py-2 bg-background border border-border rounded-md text-sm text-text w-40"])])]), p([cls(["text-xs text-muted-foreground mt-2"])])([text5("This is your organization's unique namespace for all caches.")])])]), settingsCard2("Danger Zone")([div2([cls(["flex items-center justify-between"])])([div_([p([cls(["text-text font-medium"])])([text5("Delete organization")]), p([cls(["text-sm text-muted-foreground"])])([text5("Permanently delete all caches, artifacts, and data.")])]), button([cls(["px-4 py-2 bg-red-500/10 text-red-400 border border-red-500/20 rounded-md text-sm hover:bg-red-500/20 transition-colors"]), type_31(ButtonButton.value)])([text5("Delete organization")])])])]);
   }();
   var content14 = function(state3) {
     if (state3.activeTab === "account") {
-      return accountTab4;
+      return accountTab3;
     }
     ;
     if (state3.activeTab === "api-keys") {
-      return apiKeysTab3;
+      return apiKeysTab;
     }
     ;
     if (state3.activeTab === "team") {
@@ -13286,18 +13413,18 @@
     }
     ;
     if (state3.activeTab === "billing") {
-      return billingTab5;
+      return billingTab4;
     }
     ;
     if (state3.activeTab === "security") {
-      return securityTab5;
+      return securityTab3;
     }
     ;
     if (state3.activeTab === "notifications") {
       return notificationsTab;
     }
     ;
-    return accountTab4;
+    return accountTab3;
   };
   var render43 = function(state3) {
     return div2([cls(["max-w-[1100px] mx-auto px-6 py-8"])])([div2([cls(["mb-8"])])([h1([cls(["text-2xl font-bold text-text"])])([text5("Settings")])]), div2([cls(["grid grid-cols-1 lg:grid-cols-[200px_1fr] gap-8"])])([sidebar12(state3), content14(state3)])]);
@@ -13321,7 +13448,7 @@
   // output/Straylight.Pages.Products.SensenetConfirm.Dashboard/index.js
   var type_32 = /* @__PURE__ */ type_17(isPropButtonType);
   var modify_24 = /* @__PURE__ */ modify_(monadStateHalogenM);
-  var show10 = /* @__PURE__ */ show(showInt);
+  var show11 = /* @__PURE__ */ show(showInt);
   var SetTab6 = /* @__PURE__ */ function() {
     function SetTab12(value0) {
       this.value0 = value0;
@@ -13334,17 +13461,17 @@
   }();
   var tabButton7 = function(dictMonadAff) {
     return function(state3) {
-      return function(value21) {
+      return function(value20) {
         return function(label5) {
           return button([cls(["px-4 py-2 text-sm font-medium transition-colors cursor-pointer -mb-px", function() {
-            var $36 = state3.activeTab === value21;
+            var $36 = state3.activeTab === value20;
             if ($36) {
               return "text-amber-400 border-b-2 border-amber-400";
             }
             ;
             return "text-muted-foreground hover:text-text";
           }()]), type_32(ButtonButton.value), onClick(function(v) {
-            return new SetTab6(value21);
+            return new SetTab6(value20);
           })])([text5(label5)]);
         };
       };
@@ -13357,16 +13484,16 @@
     };
   };
   var statCard7 = function(label5) {
-    return function(value21) {
+    return function(value20) {
       return function(subtitle) {
-        return div2([cls(["bg-card border border-border rounded-lg p-4"])])([p([cls(["text-sm text-muted-foreground mb-1"])])([text5(label5)]), p([cls(["text-2xl font-bold text-text"])])([text5(value21)]), p([cls(["text-xs text-muted-foreground"])])([text5(subtitle)])]);
+        return div2([cls(["bg-card border border-border rounded-lg p-4"])])([p([cls(["text-sm text-muted-foreground mb-1"])])([text5(label5)]), p([cls(["text-2xl font-bold text-text"])])([text5(value20)]), p([cls(["text-xs text-muted-foreground"])])([text5(subtitle)])]);
       };
     };
   };
   var proofStatCard = function(label5) {
-    return function(value21) {
+    return function(value20) {
       return function(color) {
-        return div2([cls(["bg-card border border-border rounded-lg p-4 text-center"])])([p([cls(["text-sm text-muted-foreground mb-1"])])([text5(label5)]), p([cls(["text-2xl font-bold", color])])([text5(value21)])]);
+        return div2([cls(["bg-card border border-border rounded-lg p-4 text-center"])])([p([cls(["text-sm text-muted-foreground mb-1"])])([text5(label5)]), p([cls(["text-2xl font-bold", color])])([text5(value20)])]);
       };
     };
   };
@@ -13453,7 +13580,7 @@
                 }
                 ;
                 return "bg-amber-400/20 text-amber-400";
-              }()])])([text5(status2)])]), div2([cls(["col-span-2"])])([p([cls(["text-sm text-text"])])([text5(branch)]), p([cls(["text-xs text-muted-foreground font-mono"])])([text5(commit)])]), span3([cls(["flex items-center text-sm text-muted-foreground"])])([text5(duration2)]), span3([cls(["flex items-center text-sm text-amber-400"])])([text5(show10(proofs) + " verified")]), span3([cls(["flex items-center justify-end"])])([a([href4(logUrl), cls(["text-xs text-amber-400 hover:underline"])])([text5("View logs")])])]);
+              }()])])([text5(status2)])]), div2([cls(["col-span-2"])])([p([cls(["text-sm text-text"])])([text5(branch)]), p([cls(["text-xs text-muted-foreground font-mono"])])([text5(commit)])]), span3([cls(["flex items-center text-sm text-muted-foreground"])])([text5(duration2)]), span3([cls(["flex items-center text-sm text-amber-400"])])([text5(show11(proofs) + " verified")]), span3([cls(["flex items-center justify-end"])])([a([href4(logUrl), cls(["text-xs text-amber-400 hover:underline"])])([text5("View logs")])])]);
             };
           };
         };
@@ -13501,13 +13628,13 @@
       };
     };
   };
-  var apiKeysTab4 = function(dictMonadAff) {
+  var apiKeysTab2 = function(dictMonadAff) {
     return div_([div2([cls(["flex items-center justify-between mb-6"])])([h2([cls(["text-lg font-semibold text-text"])])([text5("API Keys")]), button([cls(["px-4 py-2 bg-amber-400 text-background text-sm font-medium rounded-md hover:bg-amber-400/90 transition-colors cursor-pointer"]), type_32(ButtonButton.value)])([text5("+ New Key")])]), div2([cls(["space-y-4"])])([apiKeyCard2("CI Pipeline")("confirm_live_ci_***")("push, build")("2 days ago"), apiKeyCard2("Local Dev")("confirm_live_dev_***")("build")("1 week ago")])]);
   };
   var agentStatCard = function(label5) {
-    return function(value21) {
+    return function(value20) {
       return function(color) {
-        return div2([cls(["bg-card border border-border rounded-lg p-4 text-center"])])([p([cls(["text-sm text-muted-foreground mb-1"])])([text5(label5)]), p([cls(["text-2xl font-bold", color])])([text5(value21)])]);
+        return div2([cls(["bg-card border border-border rounded-lg p-4 text-center"])])([p([cls(["text-sm text-muted-foreground mb-1"])])([text5(label5)]), p([cls(["text-2xl font-bold", color])])([text5(value20)])]);
       };
     };
   };
@@ -13531,7 +13658,7 @@
     var pipelinesTab1 = pipelinesTab(dictMonadAff);
     var proofsTab1 = proofsTab2(dictMonadAff);
     var agentReviewsTab1 = agentReviewsTab(dictMonadAff);
-    var apiKeysTab1 = apiKeysTab4(dictMonadAff);
+    var apiKeysTab1 = apiKeysTab2(dictMonadAff);
     return function(state3) {
       if (state3.activeTab === "overview") {
         return overviewTab1;
@@ -13679,7 +13806,7 @@
   var pipelinesContent = /* @__PURE__ */ article5([/* @__PURE__ */ h15("Dhall Pipelines"), /* @__PURE__ */ p5("sensenet//confirm uses Dhall for pipeline definitions. Dhall is a typed configuration language that catches errors at compile time."), /* @__PURE__ */ h25("Why Dhall?"), /* @__PURE__ */ ul([/* @__PURE__ */ cls(["space-y-2 text-muted-foreground mb-6"])])([/* @__PURE__ */ li$prime4("Type safety \u2014 Errors caught before execution"), /* @__PURE__ */ li$prime4("No string interpolation \u2014 No injection vulnerabilities"), /* @__PURE__ */ li$prime4("Composable \u2014 Import and reuse pipeline fragments"), /* @__PURE__ */ li$prime4("IDE support \u2014 LSP for autocompletion and errors")]), /* @__PURE__ */ h25("Basic structure"), /* @__PURE__ */ codeBlock([/* @__PURE__ */ codeLine16("")("let Pipeline = ./types.dhall"), /* @__PURE__ */ codeLine16("")(""), /* @__PURE__ */ codeLine16("")("let testStep = Pipeline.step {"), /* @__PURE__ */ codeLine16("")('  name = "test",'), /* @__PURE__ */ codeLine16("")('  run = "cargo test"'), /* @__PURE__ */ codeLine16("")("}"), /* @__PURE__ */ codeLine16("")(""), /* @__PURE__ */ codeLine16("")("in Pipeline.build {"), /* @__PURE__ */ codeLine16("")("  steps = [ testStep ]"), /* @__PURE__ */ codeLine16("")("}")]), /* @__PURE__ */ h25("Step dependencies"), /* @__PURE__ */ codeBlock([/* @__PURE__ */ codeLine16("")("let buildStep = Pipeline.step {"), /* @__PURE__ */ codeLine16("")('  name = "build",'), /* @__PURE__ */ codeLine16("")('  run = "cargo build --release",'), /* @__PURE__ */ codeLine16("")("  needs = [ testStep ]  -- runs after testStep"), /* @__PURE__ */ codeLine16("")("}")])]);
   var proofsContent = /* @__PURE__ */ article5([/* @__PURE__ */ h15("Proof Obligations"), /* @__PURE__ */ p5("Proof obligations are preconditions and postconditions that must be satisfied before a pipeline completes."), /* @__PURE__ */ h25("Built-in proofs"), /* @__PURE__ */ codeBlock([/* @__PURE__ */ codeLine16("")("Pipeline.proof.testsPass      -- all tests passed"), /* @__PURE__ */ codeLine16("")("Pipeline.proof.noWarnings     -- zero compiler warnings"), /* @__PURE__ */ codeLine16("")("Pipeline.proof.coverageMin 80 -- 80% test coverage"), /* @__PURE__ */ codeLine16("")("Pipeline.proof.noSecrets      -- no secrets in code")]), /* @__PURE__ */ h25("Step-level proofs"), /* @__PURE__ */ codeBlock([/* @__PURE__ */ codeLine16("")("Pipeline.step {"), /* @__PURE__ */ codeLine16("")('  name = "deploy",'), /* @__PURE__ */ codeLine16("")('  run = "kubectl apply -f manifests/",'), /* @__PURE__ */ codeLine16("")("  requires = [ Pipeline.proof.testsPass ],"), /* @__PURE__ */ codeLine16("")("  ensures = [ Pipeline.proof.healthCheckPasses ]"), /* @__PURE__ */ codeLine16("")("}")]), /* @__PURE__ */ h25("Custom proofs"), /* @__PURE__ */ codeBlock([/* @__PURE__ */ codeLine16("")("let myProof = Pipeline.customProof {"), /* @__PURE__ */ codeLine16("")('  name = "no-todos",'), /* @__PURE__ */ codeLine16("")('  check = "! grep -r TODO src/"'), /* @__PURE__ */ codeLine16("")("}")])]);
   var quickstartContent7 = /* @__PURE__ */ article5([/* @__PURE__ */ h15("Quick Start"), /* @__PURE__ */ p5("Get sensenet//confirm working in 60 seconds."), /* @__PURE__ */ h25("1. Install the CLI"), /* @__PURE__ */ codeBlock([/* @__PURE__ */ codeLine16("# ")("Using Nix (recommended)"), /* @__PURE__ */ codeLine16("$ ")("nix profile install github:straylight-software/sensenet-confirm"), /* @__PURE__ */ text5("\n"), /* @__PURE__ */ codeLine16("# ")("Or via curl"), /* @__PURE__ */ codeLine16("$ ")("curl -fsSL https://confirm.straylight.software/install.sh | sh")]), /* @__PURE__ */ h25("2. Initialize your project"), /* @__PURE__ */ codeBlock([/* @__PURE__ */ codeLine16("$ ")("cd your-project"), /* @__PURE__ */ codeLine16("$ ")("confirm init"), /* @__PURE__ */ codeLine16("")("Creating pipeline.dhall..."), /* @__PURE__ */ codeLine16("")("Creating types.dhall..."), /* @__PURE__ */ codeLine16("")("Done! Run 'confirm run' to execute your pipeline.")]), /* @__PURE__ */ h25("3. Define your pipeline"), /* @__PURE__ */ codeBlock([/* @__PURE__ */ codeLine16("-- ")("pipeline.dhall"), /* @__PURE__ */ codeLine16("")("let Pipeline = ./types.dhall"), /* @__PURE__ */ codeLine16("")(""), /* @__PURE__ */ codeLine16("")("in Pipeline.build {"), /* @__PURE__ */ codeLine16("")("  steps = ["), /* @__PURE__ */ codeLine16("")('    Pipeline.step { name = "test", run = "cargo test" },'), /* @__PURE__ */ codeLine16("")('    Pipeline.step { name = "build", run = "cargo build --release" }'), /* @__PURE__ */ codeLine16("")("  ],"), /* @__PURE__ */ codeLine16("")("  proofs = [ Pipeline.proof.testsPass ]"), /* @__PURE__ */ codeLine16("")("}")]), /* @__PURE__ */ h25("4. Run your pipeline"), /* @__PURE__ */ codeBlock([/* @__PURE__ */ codeLine16("$ ")("confirm run"), /* @__PURE__ */ codeLine16("")("[step: test] Running cargo test..."), /* @__PURE__ */ codeLine16("")("[step: test] All tests passed"), /* @__PURE__ */ codeLine16("")("[step: build] Running cargo build --release..."), /* @__PURE__ */ codeLine16("")("[step: build] Build complete"), /* @__PURE__ */ codeLine16("")("[proof: testsPass] Verified"), /* @__PURE__ */ codeLine16("")("Pipeline complete. All proofs satisfied.")]), /* @__PURE__ */ h25("Next steps"), /* @__PURE__ */ ul([/* @__PURE__ */ cls(["space-y-2 text-muted-foreground"])])([/* @__PURE__ */ li4(link5)("/sensenet/confirm/docs/pipelines")("Learn Dhall pipelines"), /* @__PURE__ */ li4(link5)("/sensenet/confirm/docs/proofs")("Add proof obligations"), /* @__PURE__ */ li4(link5)("/sensenet/confirm/docs/cli")("Explore the CLI")])]);
-  var apiContent6 = /* @__PURE__ */ article5([/* @__PURE__ */ h15("REST API"), /* @__PURE__ */ p5("Programmatic access to sensenet//confirm."), /* @__PURE__ */ h25("Authentication"), /* @__PURE__ */ codeBlock([/* @__PURE__ */ codeLine16("")("Authorization: Bearer <API_TOKEN>")]), /* @__PURE__ */ h25("Trigger build"), /* @__PURE__ */ codeBlock([/* @__PURE__ */ codeLine16("")("POST /api/v1/builds"), /* @__PURE__ */ codeLine16("")("{"), /* @__PURE__ */ codeLine16("")('  "repo": "github.com/org/repo",'), /* @__PURE__ */ codeLine16("")('  "ref": "main"'), /* @__PURE__ */ codeLine16("")("}")]), /* @__PURE__ */ h25("Get build status"), /* @__PURE__ */ codeBlock([/* @__PURE__ */ codeLine16("")("GET /api/v1/builds/{id}")])]);
+  var apiContent7 = /* @__PURE__ */ article5([/* @__PURE__ */ h15("REST API"), /* @__PURE__ */ p5("Programmatic access to sensenet//confirm."), /* @__PURE__ */ h25("Authentication"), /* @__PURE__ */ codeBlock([/* @__PURE__ */ codeLine16("")("Authorization: Bearer <API_TOKEN>")]), /* @__PURE__ */ h25("Trigger build"), /* @__PURE__ */ codeBlock([/* @__PURE__ */ codeLine16("")("POST /api/v1/builds"), /* @__PURE__ */ codeLine16("")("{"), /* @__PURE__ */ codeLine16("")('  "repo": "github.com/org/repo",'), /* @__PURE__ */ codeLine16("")('  "ref": "main"'), /* @__PURE__ */ codeLine16("")("}")]), /* @__PURE__ */ h25("Get build status"), /* @__PURE__ */ codeBlock([/* @__PURE__ */ codeLine16("")("GET /api/v1/builds/{id}")])]);
   var agentsContent = /* @__PURE__ */ article5([/* @__PURE__ */ h15("Agent Code Review"), /* @__PURE__ */ p5("sensenet//confirm automatically detects AI-generated code and applies stricter review requirements."), /* @__PURE__ */ h25("How it works"), /* @__PURE__ */ p5("Commits are analyzed for markers indicating AI generation (Copilot metadata, common patterns). Agent-generated code faces higher proof thresholds."), /* @__PURE__ */ h25("Configuration"), /* @__PURE__ */ codeBlock([/* @__PURE__ */ codeLine16("")("# confirm.toml"), /* @__PURE__ */ codeLine16("")("[agent_review]"), /* @__PURE__ */ codeLine16("")("enabled = true"), /* @__PURE__ */ codeLine16("")("human_approvals = 2"), /* @__PURE__ */ codeLine16("")("agent_approvals = 4"), /* @__PURE__ */ codeLine16("")("require_security_review = true")]), /* @__PURE__ */ h25("Taint tracking"), /* @__PURE__ */ p5("Code provenance is tracked through the system. If tainted code touches critical paths, additional review is required.")]);
   var renderContent7 = function(path) {
     if (path === "/sensenet/confirm/docs") {
@@ -13715,7 +13842,7 @@
     }
     ;
     if (path === "/sensenet/confirm/docs/api") {
-      return apiContent6;
+      return apiContent7;
     }
     ;
     if (path === "/sensenet/confirm/docs/config") {
@@ -13749,9 +13876,9 @@
 
   // output/Straylight.Pages.Products.SensenetConfirm.Features/index.js
   var map38 = /* @__PURE__ */ map(functorArray);
-  var statCard8 = function(value21) {
+  var statCard8 = function(value20) {
     return function(label5) {
-      return div2([cls(["bg-card border border-border rounded-lg p-6 text-center"])])([p([cls(["text-2xl font-bold text-amber-400 mb-1"])])([text5(value21)]), p([cls(["text-sm text-muted-foreground"])])([text5(label5)])]);
+      return div2([cls(["bg-card border border-border rounded-lg p-6 text-center"])])([p([cls(["text-2xl font-bold text-amber-400 mb-1"])])([text5(value20)]), p([cls(["text-sm text-muted-foreground"])])([text5(label5)])]);
     };
   };
   var reviewStatus = function(source2) {
@@ -13825,15 +13952,15 @@
   };
   var features7 = /* @__PURE__ */ section([/* @__PURE__ */ cls(["py-24 border-t border-border"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["max-w-[1100px] mx-auto px-6"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["text-center mb-16"])])([/* @__PURE__ */ h2([/* @__PURE__ */ cls(["text-3xl font-bold text-text mb-4"])])([/* @__PURE__ */ text5("Why sensenet//confirm?")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-muted-foreground max-w-xl mx-auto"])])([/* @__PURE__ */ text5("Built by engineers who understand that CI is a security boundary, not a script runner.")])]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"])])([/* @__PURE__ */ featureCard7("?")("Proof obligations")("Every pipeline step carries preconditions and postconditions. Proofs checked at merge time."), /* @__PURE__ */ featureCard7("{}")("Typed Dhall pipelines")("No YAML. No string interpolation bugs. Dhall's type system catches pipeline errors before they run."), /* @__PURE__ */ featureCard7("!")("Agent code review")("AI-generated commits face stricter review burden. Automatic taint tracking for untrusted sources."), /* @__PURE__ */ featureCard7("#")("Cryptographic attestation")("Every build step signed. Reproducible outputs anchored to input hashes. Post-quantum signatures."), /* @__PURE__ */ featureCard7("||")("Parallel execution")("Dependency-aware parallelization. Share-nothing isolation per job. Linear scaling to 256 cores."), /* @__PURE__ */ featureCard7("=")("Reproducible CI")("Hermetic builds by default. Nix integration. Content-addressed caching.")])])]);
   var cta15 = /* @__PURE__ */ section([/* @__PURE__ */ cls(["py-24 border-t border-border"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["max-w-[800px] mx-auto px-6 text-center"])])([/* @__PURE__ */ h2([/* @__PURE__ */ cls(["text-3xl font-bold text-text mb-4"])])([/* @__PURE__ */ text5("Ready for CI that actually works?")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-muted-foreground mb-8"])])([/* @__PURE__ */ text5("Free tier includes unlimited public repos. No credit card required.")]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["flex flex-col sm:flex-row items-center justify-center gap-4"])])([/* @__PURE__ */ primaryButton8("/sensenet/confirm/pricing")("Create free account"), /* @__PURE__ */ secondaryButton8("/sensenet/confirm/pricing")("See all plans")])])]);
-  var compCell3 = function(value21) {
+  var compCell3 = function(value20) {
     return span3([cls([function() {
-      var $1 = value21 === "no";
+      var $1 = value20 === "no";
       if ($1) {
         return "text-muted-foreground/50";
       }
       ;
       return "text-muted-foreground";
-    }()])])([text5(value21)]);
+    }()])])([text5(value20)]);
   };
   var comparisonRow7 = function(feature) {
     return function(us) {
@@ -13944,11 +14071,11 @@
 
   // output/Straylight.Pages.Products.SensenetConfirm.Settings/index.js
   var type_33 = /* @__PURE__ */ type_17(isPropButtonType);
-  var show11 = /* @__PURE__ */ show(showInt);
-  var div8 = /* @__PURE__ */ div(euclideanRingInt);
+  var show12 = /* @__PURE__ */ show(showInt);
+  var div7 = /* @__PURE__ */ div(euclideanRingInt);
   var modify_26 = /* @__PURE__ */ modify_(monadStateHalogenM);
-  var value18 = /* @__PURE__ */ value12(isPropString);
-  var type_112 = /* @__PURE__ */ type_17(isPropInputType);
+  var value17 = /* @__PURE__ */ value12(isPropString);
+  var type_111 = /* @__PURE__ */ type_17(isPropInputType);
   var SetTab7 = /* @__PURE__ */ function() {
     function SetTab12(value0) {
       this.value0 = value0;
@@ -13967,7 +14094,7 @@
   var usageBar3 = function(label5) {
     return function(used) {
       return function(total) {
-        return div_([div2([cls(["flex items-center justify-between mb-2"])])([span3([cls(["text-sm text-muted-foreground"])])([text5(label5)]), span3([cls(["text-sm text-text"])])([text5(show11(used) + (" / " + show11(total)))])]), div2([cls(["h-2 bg-muted rounded-full overflow-hidden"])])([div2([cls(["h-full bg-amber-400 rounded-full"]), style("width: " + (show11(div8(used * 100 | 0)(total)) + "%"))])([])])]);
+        return div_([div2([cls(["flex items-center justify-between mb-2"])])([span3([cls(["text-sm text-muted-foreground"])])([text5(label5)]), span3([cls(["text-sm text-text"])])([text5(show12(used) + (" / " + show12(total)))])]), div2([cls(["h-2 bg-muted rounded-full overflow-hidden"])])([div2([cls(["h-full bg-amber-400 rounded-full"]), style("width: " + (show12(div7(used * 100 | 0)(total)) + "%"))])([])])]);
       };
     };
   };
@@ -13990,7 +14117,7 @@
       };
     };
   };
-  var teamMemberRow4 = function(name16) {
+  var teamMemberRow5 = function(name16) {
     return function(email) {
       return function(role) {
         return div2([cls(["flex items-center justify-between py-3 border-b border-border last:border-0"])])([div_([p([cls(["text-sm text-text font-medium"])])([text5(name16)]), p([cls(["text-xs text-muted-foreground"])])([text5(email)])]), span3([cls(["text-xs px-2 py-1 rounded bg-muted text-muted-foreground"])])([text5(role)])]);
@@ -13998,7 +14125,7 @@
     };
   };
   var teamTab5 = function(dictMonadAff) {
-    return div2([cls(["space-y-6"])])([div2([cls(["bg-card border border-border rounded-lg p-6"])])([div2([cls(["flex items-center justify-between mb-4"])])([h3([cls(["text-lg font-semibold text-text"])])([text5("Team Members")]), button([cls(["px-4 py-2 bg-amber-400 text-background text-sm font-medium rounded-md hover:bg-amber-400/90 transition-colors cursor-pointer"]), type_33(ButtonButton.value)])([text5("+ Invite Member")])]), div2([cls(["space-y-3"])])([teamMemberRow4("You")("you@example.com")("Owner")]), p([cls(["mt-4 text-sm text-muted-foreground"])])([text5("Upgrade to Team plan to invite more members.")])])]);
+    return div2([cls(["space-y-6"])])([div2([cls(["bg-card border border-border rounded-lg p-6"])])([div2([cls(["flex items-center justify-between mb-4"])])([h3([cls(["text-lg font-semibold text-text"])])([text5("Team Members")]), button([cls(["px-4 py-2 bg-amber-400 text-background text-sm font-medium rounded-md hover:bg-amber-400/90 transition-colors cursor-pointer"]), type_33(ButtonButton.value)])([text5("+ Invite Member")])]), div2([cls(["space-y-3"])])([teamMemberRow5("You")("you@example.com")("Owner")]), p([cls(["mt-4 text-sm text-muted-foreground"])])([text5("Upgrade to Team plan to invite more members.")])])]);
   };
   var sidebarButton2 = function(dictMonadAff) {
     return function(state3) {
@@ -14113,31 +14240,31 @@
     };
   };
   var pipelinesTab2 = function(dictMonadAff) {
-    return div2([cls(["space-y-6"])])([div2([cls(["bg-card border border-border rounded-lg p-6"])])([h3([cls(["text-lg font-semibold text-text mb-4"])])([text5("Default Pipeline Settings")]), div2([cls(["space-y-4"])])([formField4("Pipeline file")(input2([cls(["w-full px-3 py-2 bg-background border border-border rounded-md text-text text-sm font-mono"]), value18("pipeline.dhall")])), formField4("Parallelism")(select3([cls(["w-full px-3 py-2 bg-background border border-border rounded-md text-text text-sm"])])([option_([text5("4 cores")]), option_([text5("8 cores")]), option_([text5("16 cores")]), option_([text5("32 cores")])])), formField4("Timeout")(input2([cls(["w-full px-3 py-2 bg-background border border-border rounded-md text-text text-sm"]), value18("30m")]))]), div2([cls(["mt-6"])])([button([cls(["px-4 py-2 bg-amber-400 text-background text-sm font-medium rounded-md hover:bg-amber-400/90 transition-colors cursor-pointer"]), type_33(ButtonButton.value)])([text5("Save Settings")])])]), div2([cls(["bg-card border border-amber-400/30 rounded-lg p-6"])])([h3([cls(["text-lg font-semibold text-text mb-2"])])([text5("Agent Code Detection")]), p([cls(["text-sm text-muted-foreground mb-4"])])([text5("Configure how AI-generated code is detected and handled in your pipelines.")]), div2([cls(["space-y-4"])])([toggleSetting("Enable agent detection")("Automatically detect AI-generated commits")(true), toggleSetting("Require elevated review")("Agent code requires additional approvals")(true), toggleSetting("Block untrusted agents")("Reject commits from unknown AI sources")(false)])]), div2([cls(["bg-card border border-border rounded-lg p-6"])])([h3([cls(["text-lg font-semibold text-text mb-4"])])([text5("Caching")]), div2([cls(["space-y-4"])])([toggleSetting("Enable build caching")("Cache build outputs for faster rebuilds")(true), toggleSetting("Content-addressed caching")("Use Nix-style content addressing")(true), formField4("Cache TTL")(input2([cls(["w-full px-3 py-2 bg-background border border-border rounded-md text-text text-sm"]), value18("7d")]))])])]);
+    return div2([cls(["space-y-6"])])([div2([cls(["bg-card border border-border rounded-lg p-6"])])([h3([cls(["text-lg font-semibold text-text mb-4"])])([text5("Default Pipeline Settings")]), div2([cls(["space-y-4"])])([formField4("Pipeline file")(input2([cls(["w-full px-3 py-2 bg-background border border-border rounded-md text-text text-sm font-mono"]), value17("pipeline.dhall")])), formField4("Parallelism")(select3([cls(["w-full px-3 py-2 bg-background border border-border rounded-md text-text text-sm"])])([option_([text5("4 cores")]), option_([text5("8 cores")]), option_([text5("16 cores")]), option_([text5("32 cores")])])), formField4("Timeout")(input2([cls(["w-full px-3 py-2 bg-background border border-border rounded-md text-text text-sm"]), value17("30m")]))]), div2([cls(["mt-6"])])([button([cls(["px-4 py-2 bg-amber-400 text-background text-sm font-medium rounded-md hover:bg-amber-400/90 transition-colors cursor-pointer"]), type_33(ButtonButton.value)])([text5("Save Settings")])])]), div2([cls(["bg-card border border-amber-400/30 rounded-lg p-6"])])([h3([cls(["text-lg font-semibold text-text mb-2"])])([text5("Agent Code Detection")]), p([cls(["text-sm text-muted-foreground mb-4"])])([text5("Configure how AI-generated code is detected and handled in your pipelines.")]), div2([cls(["space-y-4"])])([toggleSetting("Enable agent detection")("Automatically detect AI-generated commits")(true), toggleSetting("Require elevated review")("Agent code requires additional approvals")(true), toggleSetting("Block untrusted agents")("Reject commits from unknown AI sources")(false)])]), div2([cls(["bg-card border border-border rounded-lg p-6"])])([h3([cls(["text-lg font-semibold text-text mb-4"])])([text5("Caching")]), div2([cls(["space-y-4"])])([toggleSetting("Enable build caching")("Cache build outputs for faster rebuilds")(true), toggleSetting("Content-addressed caching")("Use Nix-style content addressing")(true), formField4("Cache TTL")(input2([cls(["w-full px-3 py-2 bg-background border border-border rounded-md text-text text-sm"]), value17("7d")]))])])]);
   };
   var proofsTab3 = function(dictMonadAff) {
-    return div2([cls(["space-y-6"])])([div2([cls(["bg-card border border-border rounded-lg p-6"])])([h3([cls(["text-lg font-semibold text-text mb-4"])])([text5("Global Proof Requirements")]), p([cls(["text-sm text-muted-foreground mb-4"])])([text5("These proofs are required for all pipelines in your organization.")]), div2([cls(["space-y-3"])])([proofRequirement("testsPass")("All tests must pass")(true), proofRequirement("noSecrets")("No secrets in code")(true), proofRequirement("coverageMin(80)")("Minimum 80% test coverage")(false), proofRequirement("noWarnings")("No compiler warnings")(false)]), button([cls(["mt-4 text-sm text-amber-400 hover:text-amber-400/80 cursor-pointer"]), type_33(ButtonButton.value)])([text5("+ Add proof requirement")])]), div2([cls(["bg-card border border-amber-400/30 rounded-lg p-6"])])([h3([cls(["text-lg font-semibold text-text mb-2"])])([text5("Agent Code Proof Burden")]), p([cls(["text-sm text-muted-foreground mb-4"])])([text5("Additional requirements for AI-generated code.")]), div2([cls(["space-y-4"])])([formField4("Human approvals required")(select3([cls(["w-full px-3 py-2 bg-background border border-border rounded-md text-text text-sm"])])([option_([text5("2 approvals")]), option_([text5("3 approvals")]), option_([text5("4 approvals")])])), toggleSetting("Require security review")("Agent commits need security team approval")(true), toggleSetting("Require proof of correctness")("Agent code must include formal proofs")(false)])]), div2([cls(["bg-card border border-border rounded-lg p-6"])])([h3([cls(["text-lg font-semibold text-text mb-4"])])([text5("Proof Verification Mode")]), div2([cls(["space-y-3"])])([label4([cls(["flex items-start gap-3 p-3 rounded-lg border border-border hover:border-amber-400/30 cursor-pointer"])])([input2([type_112(InputRadio.value), name15("proof-mode"), checked2(true), cls(["mt-1"])]), div_([p([cls(["text-sm text-text font-medium"])])([text5("Strict")]), p([cls(["text-xs text-muted-foreground"])])([text5("All proofs must pass. Failures block merge.")])])]), label4([cls(["flex items-start gap-3 p-3 rounded-lg border border-border hover:border-amber-400/30 cursor-pointer"])])([input2([type_112(InputRadio.value), name15("proof-mode"), cls(["mt-1"])]), div_([p([cls(["text-sm text-text font-medium"])])([text5("Advisory")]), p([cls(["text-xs text-muted-foreground"])])([text5("Proof failures are warnings only.")])])])])])]);
+    return div2([cls(["space-y-6"])])([div2([cls(["bg-card border border-border rounded-lg p-6"])])([h3([cls(["text-lg font-semibold text-text mb-4"])])([text5("Global Proof Requirements")]), p([cls(["text-sm text-muted-foreground mb-4"])])([text5("These proofs are required for all pipelines in your organization.")]), div2([cls(["space-y-3"])])([proofRequirement("testsPass")("All tests must pass")(true), proofRequirement("noSecrets")("No secrets in code")(true), proofRequirement("coverageMin(80)")("Minimum 80% test coverage")(false), proofRequirement("noWarnings")("No compiler warnings")(false)]), button([cls(["mt-4 text-sm text-amber-400 hover:text-amber-400/80 cursor-pointer"]), type_33(ButtonButton.value)])([text5("+ Add proof requirement")])]), div2([cls(["bg-card border border-amber-400/30 rounded-lg p-6"])])([h3([cls(["text-lg font-semibold text-text mb-2"])])([text5("Agent Code Proof Burden")]), p([cls(["text-sm text-muted-foreground mb-4"])])([text5("Additional requirements for AI-generated code.")]), div2([cls(["space-y-4"])])([formField4("Human approvals required")(select3([cls(["w-full px-3 py-2 bg-background border border-border rounded-md text-text text-sm"])])([option_([text5("2 approvals")]), option_([text5("3 approvals")]), option_([text5("4 approvals")])])), toggleSetting("Require security review")("Agent commits need security team approval")(true), toggleSetting("Require proof of correctness")("Agent code must include formal proofs")(false)])]), div2([cls(["bg-card border border-border rounded-lg p-6"])])([h3([cls(["text-lg font-semibold text-text mb-4"])])([text5("Proof Verification Mode")]), div2([cls(["space-y-3"])])([label4([cls(["flex items-start gap-3 p-3 rounded-lg border border-border hover:border-amber-400/30 cursor-pointer"])])([input2([type_111(InputRadio.value), name15("proof-mode"), checked2(true), cls(["mt-1"])]), div_([p([cls(["text-sm text-text font-medium"])])([text5("Strict")]), p([cls(["text-xs text-muted-foreground"])])([text5("All proofs must pass. Failures block merge.")])])]), label4([cls(["flex items-start gap-3 p-3 rounded-lg border border-border hover:border-amber-400/30 cursor-pointer"])])([input2([type_111(InputRadio.value), name15("proof-mode"), cls(["mt-1"])]), div_([p([cls(["text-sm text-text font-medium"])])([text5("Advisory")]), p([cls(["text-xs text-muted-foreground"])])([text5("Proof failures are warnings only.")])])])])])]);
   };
-  var billingTab6 = function(dictMonadAff) {
+  var billingTab5 = function(dictMonadAff) {
     return div2([cls(["space-y-6"])])([div2([cls(["bg-card border border-border rounded-lg p-6"])])([div2([cls(["flex items-center justify-between mb-4"])])([h3([cls(["text-lg font-semibold text-text"])])([text5("Current Plan")]), a([href4("/sensenet/confirm/pricing"), cls(["text-sm text-amber-400 hover:text-amber-400/80"])])([text5("View all plans")])]), div2([cls(["flex items-center gap-4 mb-4"])])([span3([cls(["text-2xl font-bold text-text"])])([text5("Pro")]), span3([cls(["text-muted-foreground"])])([text5("$29/month")])]), div2([cls(["grid grid-cols-2 md:grid-cols-4 gap-4"])])([planStat3("Build Minutes")("4,521 / 5,000"), planStat3("Repos")("Unlimited"), planStat3("Team Seats")("1"), planStat3("Proofs")("Full")])]), div2([cls(["bg-card border border-border rounded-lg p-6"])])([h3([cls(["text-lg font-semibold text-text mb-4"])])([text5("Usage This Month")]), usageBar3("Build Minutes")(4521)(5e3)]), div2([cls(["bg-card border border-border rounded-lg p-6"])])([h3([cls(["text-lg font-semibold text-text mb-4"])])([text5("Payment Method")]), div2([cls(["flex items-center justify-between"])])([div2([cls(["flex items-center gap-3"])])([span3([cls(["text-text"])])([text5("**** **** **** 4242")]), span3([cls(["text-muted-foreground text-sm"])])([text5("Expires 12/27")])]), button([cls(["text-sm text-amber-400 hover:text-amber-400/80 cursor-pointer"]), type_33(ButtonButton.value)])([text5("Update")])])])]);
   };
-  var availableIntegration = function(name16) {
+  var availableIntegration2 = function(name16) {
     return function(description) {
       return div2([cls(["flex items-center justify-between p-4 bg-background rounded-lg"])])([div_([p([cls(["text-sm text-text font-medium"])])([text5(name16)]), p([cls(["text-xs text-muted-foreground"])])([text5(description)])]), button([cls(["px-3 py-1 text-sm border border-amber-400 text-amber-400 rounded hover:bg-amber-400/10 transition-colors cursor-pointer"]), type_33(ButtonButton.value)])([text5("Connect")])]);
     };
   };
-  var integrationsTab = function(dictMonadAff) {
-    return div2([cls(["space-y-6"])])([div2([cls(["bg-card border border-border rounded-lg p-6"])])([h3([cls(["text-lg font-semibold text-text mb-4"])])([text5("Connected Integrations")]), div2([cls(["space-y-4"])])([integrationCard2("GitHub")("Connected")("github.com/my-org")(true), integrationCard2("Slack")("Connected")("#builds channel")(true)])]), div2([cls(["bg-card border border-border rounded-lg p-6"])])([h3([cls(["text-lg font-semibold text-text mb-4"])])([text5("Available Integrations")]), div2([cls(["grid grid-cols-1 md:grid-cols-2 gap-4"])])([availableIntegration("GitLab")("Connect GitLab repositories"), availableIntegration("Jira")("Link builds to Jira tickets"), availableIntegration("PagerDuty")("Alert on build failures"), availableIntegration("Datadog")("Export build metrics")])]), div2([cls(["bg-card border border-border rounded-lg p-6"])])([div2([cls(["flex items-center justify-between mb-4"])])([h3([cls(["text-lg font-semibold text-text"])])([text5("Webhooks")]), button([cls(["px-4 py-2 bg-amber-400 text-background text-sm font-medium rounded-md hover:bg-amber-400/90 transition-colors cursor-pointer"]), type_33(ButtonButton.value)])([text5("+ Add Webhook")])]), div2([cls(["space-y-3"])])([webhookRow("https://api.example.com/builds")("build.completed, proof.verified"), webhookRow("https://hooks.slack.com/...")("build.failed")])])]);
+  var integrationsTab2 = function(dictMonadAff) {
+    return div2([cls(["space-y-6"])])([div2([cls(["bg-card border border-border rounded-lg p-6"])])([h3([cls(["text-lg font-semibold text-text mb-4"])])([text5("Connected Integrations")]), div2([cls(["space-y-4"])])([integrationCard2("GitHub")("Connected")("github.com/my-org")(true), integrationCard2("Slack")("Connected")("#builds channel")(true)])]), div2([cls(["bg-card border border-border rounded-lg p-6"])])([h3([cls(["text-lg font-semibold text-text mb-4"])])([text5("Available Integrations")]), div2([cls(["grid grid-cols-1 md:grid-cols-2 gap-4"])])([availableIntegration2("GitLab")("Connect GitLab repositories"), availableIntegration2("Jira")("Link builds to Jira tickets"), availableIntegration2("PagerDuty")("Alert on build failures"), availableIntegration2("Datadog")("Export build metrics")])]), div2([cls(["bg-card border border-border rounded-lg p-6"])])([div2([cls(["flex items-center justify-between mb-4"])])([h3([cls(["text-lg font-semibold text-text"])])([text5("Webhooks")]), button([cls(["px-4 py-2 bg-amber-400 text-background text-sm font-medium rounded-md hover:bg-amber-400/90 transition-colors cursor-pointer"]), type_33(ButtonButton.value)])([text5("+ Add Webhook")])]), div2([cls(["space-y-3"])])([webhookRow("https://api.example.com/builds")("build.completed, proof.verified"), webhookRow("https://hooks.slack.com/...")("build.failed")])])]);
   };
-  var accountTab5 = function(dictMonadAff) {
-    return div2([cls(["space-y-6"])])([div2([cls(["bg-card border border-border rounded-lg p-6"])])([h3([cls(["text-lg font-semibold text-text mb-4"])])([text5("Profile")]), div2([cls(["space-y-4"])])([formField4("Name")(input2([cls(["w-full px-3 py-2 bg-background border border-border rounded-md text-text text-sm"]), placeholder3("Your name")])), formField4("Email")(input2([cls(["w-full px-3 py-2 bg-background border border-border rounded-md text-text text-sm"]), placeholder3("you@example.com"), type_112(InputEmail.value)]))]), div2([cls(["mt-6"])])([button([cls(["px-4 py-2 bg-amber-400 text-background text-sm font-medium rounded-md hover:bg-amber-400/90 transition-colors cursor-pointer"]), type_33(ButtonButton.value)])([text5("Save Changes")])])]), div2([cls(["bg-card border border-red-500/30 rounded-lg p-6"])])([h3([cls(["text-lg font-semibold text-red-400 mb-4"])])([text5("Danger Zone")]), p([cls(["text-sm text-muted-foreground mb-4"])])([text5("Once you delete your account, there is no going back. Please be certain.")]), button([cls(["px-4 py-2 border border-red-500 text-red-400 text-sm font-medium rounded-md hover:bg-red-500/10 transition-colors cursor-pointer"]), type_33(ButtonButton.value)])([text5("Delete Account")])])]);
+  var accountTab4 = function(dictMonadAff) {
+    return div2([cls(["space-y-6"])])([div2([cls(["bg-card border border-border rounded-lg p-6"])])([h3([cls(["text-lg font-semibold text-text mb-4"])])([text5("Profile")]), div2([cls(["space-y-4"])])([formField4("Name")(input2([cls(["w-full px-3 py-2 bg-background border border-border rounded-md text-text text-sm"]), placeholder3("Your name")])), formField4("Email")(input2([cls(["w-full px-3 py-2 bg-background border border-border rounded-md text-text text-sm"]), placeholder3("you@example.com"), type_111(InputEmail.value)]))]), div2([cls(["mt-6"])])([button([cls(["px-4 py-2 bg-amber-400 text-background text-sm font-medium rounded-md hover:bg-amber-400/90 transition-colors cursor-pointer"]), type_33(ButtonButton.value)])([text5("Save Changes")])])]), div2([cls(["bg-card border border-red-500/30 rounded-lg p-6"])])([h3([cls(["text-lg font-semibold text-red-400 mb-4"])])([text5("Danger Zone")]), p([cls(["text-sm text-muted-foreground mb-4"])])([text5("Once you delete your account, there is no going back. Please be certain.")]), button([cls(["px-4 py-2 border border-red-500 text-red-400 text-sm font-medium rounded-md hover:bg-red-500/10 transition-colors cursor-pointer"]), type_33(ButtonButton.value)])([text5("Delete Account")])])]);
   };
   var content16 = function(dictMonadAff) {
-    var accountTab1 = accountTab5(dictMonadAff);
+    var accountTab1 = accountTab4(dictMonadAff);
     var pipelinesTab1 = pipelinesTab2(dictMonadAff);
     var proofsTab1 = proofsTab3(dictMonadAff);
-    var integrationsTab1 = integrationsTab(dictMonadAff);
-    var billingTab1 = billingTab6(dictMonadAff);
+    var integrationsTab1 = integrationsTab2(dictMonadAff);
+    var billingTab1 = billingTab5(dictMonadAff);
     var teamTab1 = teamTab5(dictMonadAff);
     var notificationsTab1 = notificationsTab2(dictMonadAff);
     return function(state3) {
@@ -14208,18 +14335,18 @@
     return SetTab12;
   }();
   var tabButton8 = function(dictMonadAff) {
-    return function(value21) {
+    return function(value20) {
       return function(label5) {
         return function(activeTab) {
           return button([cls(["px-4 py-2 text-sm font-medium transition-colors -mb-px", function() {
-            var $30 = value21 === activeTab;
+            var $30 = value20 === activeTab;
             if ($30) {
               return "text-purple-400 border-b-2 border-purple-400";
             }
             ;
             return "text-muted-foreground hover:text-text";
           }()]), onClick(function(v) {
-            return new SetTab8(value21);
+            return new SetTab8(value20);
           }), type_34(ButtonButton.value)])([text5(label5)]);
         };
       };
@@ -14232,15 +14359,15 @@
     };
   };
   var statCard9 = function(label5) {
-    return function(value21) {
+    return function(value20) {
       return function(subtitle) {
-        return div2([cls(["bg-card border border-border rounded-lg p-4"])])([p([cls(["text-sm text-muted-foreground mb-1"])])([text5(label5)]), p([cls(["text-2xl font-bold text-text"])])([text5(value21)]), p([cls(["text-xs text-muted-foreground"])])([text5(subtitle)])]);
+        return div2([cls(["bg-card border border-border rounded-lg p-4"])])([p([cls(["text-sm text-muted-foreground mb-1"])])([text5(label5)]), p([cls(["text-2xl font-bold text-text"])])([text5(value20)]), p([cls(["text-xs text-muted-foreground"])])([text5(subtitle)])]);
       };
     };
   };
-  var settingRow3 = function(label5) {
-    return function(value21) {
-      return div2([cls(["flex items-center justify-between py-2"])])([span3([cls(["text-muted-foreground"])])([text5(label5)]), span3([cls(["text-text"])])([text5(value21)])]);
+  var settingRow4 = function(label5) {
+    return function(value20) {
+      return div2([cls(["flex items-center justify-between py-2"])])([span3([cls(["text-muted-foreground"])])([text5(label5)]), span3([cls(["text-text"])])([text5(value20)])]);
     };
   };
   var resourceRow = function(name16) {
@@ -14337,7 +14464,7 @@
     };
   };
   var settingsTab = function(dictMonadAff) {
-    return div_([h2([cls(["text-lg font-semibold text-text mb-6"])])([text5("Project Settings")]), div2([cls(["bg-card border border-border rounded-lg p-6 mb-6"])])([h3([cls(["text-text font-medium mb-4"])])([text5("Drift Detection")]), div2([cls(["space-y-4"])])([settingRow3("Watch Interval")("30 seconds"), settingRow3("Default Policy")("Auto-remediate"), settingRow3("Notifications")("Slack #infra-alerts")])]), div2([cls(["bg-card border border-border rounded-lg p-6"])])([div2([cls(["flex items-center justify-between mb-4"])])([h3([cls(["text-text font-medium"])])([text5("API Keys")]), button([cls(["px-3 py-1 text-sm text-purple-400 hover:text-purple-400/80 cursor-pointer"]), type_34(ButtonButton.value)])([text5("+ New Key")])]), div2([cls(["space-y-3"])])([apiKeyRow3("CI Pipeline")("cvg_live_abc***")("Created 2 weeks ago"), apiKeyRow3("Local Dev")("cvg_live_xyz***")("Created 1 month ago")])])]);
+    return div_([h2([cls(["text-lg font-semibold text-text mb-6"])])([text5("Project Settings")]), div2([cls(["bg-card border border-border rounded-lg p-6 mb-6"])])([h3([cls(["text-text font-medium mb-4"])])([text5("Drift Detection")]), div2([cls(["space-y-4"])])([settingRow4("Watch Interval")("30 seconds"), settingRow4("Default Policy")("Auto-remediate"), settingRow4("Notifications")("Slack #infra-alerts")])]), div2([cls(["bg-card border border-border rounded-lg p-6"])])([div2([cls(["flex items-center justify-between mb-4"])])([h3([cls(["text-text font-medium"])])([text5("API Keys")]), button([cls(["px-3 py-1 text-sm text-purple-400 hover:text-purple-400/80 cursor-pointer"]), type_34(ButtonButton.value)])([text5("+ New Key")])]), div2([cls(["space-y-3"])])([apiKeyRow3("CI Pipeline")("cvg_live_abc***")("Created 2 weeks ago"), apiKeyRow3("Local Dev")("cvg_live_xyz***")("Created 1 month ago")])])]);
   };
   var activityItem4 = function(action2) {
     return function(detail) {
@@ -14495,7 +14622,7 @@
   var quickstartContent8 = /* @__PURE__ */ article6([/* @__PURE__ */ h16("Quick Start"), /* @__PURE__ */ p6("Get sensenet//converge working in under a minute."), /* @__PURE__ */ h26("1. Install converge"), /* @__PURE__ */ codeBlock([/* @__PURE__ */ codeLine20("# ")("Using Nix (recommended)"), /* @__PURE__ */ codeLine20("$ ")("nix profile install github:straylight-software/converge"), /* @__PURE__ */ text5("\n"), /* @__PURE__ */ codeLine20("# ")("Or via curl"), /* @__PURE__ */ codeLine20("$ ")("curl -fsSL https://converge.straylight.software/install.sh | sh")]), /* @__PURE__ */ h26("2. Initialize a project"), /* @__PURE__ */ codeBlock([/* @__PURE__ */ codeLine20("$ ")("converge init my-infra"), /* @__PURE__ */ codeLine20("$ ")("cd my-infra")]), /* @__PURE__ */ h26("3. Define your infrastructure"), /* @__PURE__ */ codeBlock([/* @__PURE__ */ codeLine20("# ")("infra.cvg"), /* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-purple-400"])])([/* @__PURE__ */ text5("resource")]), /* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-text"])])([/* @__PURE__ */ text5(" aws.ec2.Instance web {")]), /* @__PURE__ */ text5("\n"), /* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-text"])])([/* @__PURE__ */ text5('  ami          = "ami-0c55b159cbfafe1f0"')]), /* @__PURE__ */ text5("\n"), /* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-text"])])([/* @__PURE__ */ text5('  instanceType = "t3.micro"')]), /* @__PURE__ */ text5("\n"), /* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-text"])])([/* @__PURE__ */ text5('  tags         = { Name = "web-server" }')]), /* @__PURE__ */ text5("\n"), /* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-text"])])([/* @__PURE__ */ text5("}")])]), /* @__PURE__ */ h26("4. Converge to desired state"), /* @__PURE__ */ codeBlock([/* @__PURE__ */ codeLine20("$ ")("converge up"), /* @__PURE__ */ codeLine20("")("Converging 1 resource..."), /* @__PURE__ */ codeLine20("")("  + aws.ec2.Instance.web"), /* @__PURE__ */ codeLine20("")('    ami          = "ami-0c55b159cbfafe1f0"'), /* @__PURE__ */ codeLine20("")('    instanceType = "t3.micro"'), /* @__PURE__ */ codeLine20("")(""), /* @__PURE__ */ codeLine20("")("Converged in 23s")]), /* @__PURE__ */ h26("5. Watch for drift"), /* @__PURE__ */ codeBlock([/* @__PURE__ */ codeLine20("$ ")("converge watch"), /* @__PURE__ */ codeLine20("")("Watching 1 resource for drift..."), /* @__PURE__ */ codeLine20("")("[12:34:56] All resources in sync")]), /* @__PURE__ */ h26("Next steps"), /* @__PURE__ */ ul([/* @__PURE__ */ cls(["space-y-2 text-muted-foreground"])])([/* @__PURE__ */ li5(link6)("/sensenet/converge/docs/resources")("Learn to define resources"), /* @__PURE__ */ li5(link6)("/sensenet/converge/docs/types")("Explore the type system"), /* @__PURE__ */ li5(link6)("/sensenet/converge/docs/drift")("Configure drift detection")])]);
   var resourcesContent = /* @__PURE__ */ article6([/* @__PURE__ */ h16("Defining Resources"), /* @__PURE__ */ p6("Learn how to define infrastructure resources in converge."), /* @__PURE__ */ h26("Basic syntax"), /* @__PURE__ */ codeBlock([/* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-purple-400"])])([/* @__PURE__ */ text5("resource")]), /* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-text"])])([/* @__PURE__ */ text5(" <provider>.<type> <name> {")]), /* @__PURE__ */ text5("\n"), /* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-text"])])([/* @__PURE__ */ text5("  <attribute> = <value>")]), /* @__PURE__ */ text5("\n"), /* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-text"])])([/* @__PURE__ */ text5("}")])]), /* @__PURE__ */ h26("Example: EC2 instance"), /* @__PURE__ */ codeBlock([/* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-purple-400"])])([/* @__PURE__ */ text5("resource")]), /* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-text"])])([/* @__PURE__ */ text5(" aws.ec2.Instance web {")]), /* @__PURE__ */ text5("\n"), /* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-text"])])([/* @__PURE__ */ text5('  ami          = "ami-0c55b159cbfafe1f0"')]), /* @__PURE__ */ text5("\n"), /* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-text"])])([/* @__PURE__ */ text5('  instanceType = "t3.micro"')]), /* @__PURE__ */ text5("\n"), /* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-text"])])([/* @__PURE__ */ text5("  subnetId     = aws.vpc.Subnet.main.id")]), /* @__PURE__ */ text5("\n"), /* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-text"])])([/* @__PURE__ */ text5("}")])]), /* @__PURE__ */ h26("References"), /* @__PURE__ */ p6("Resources can reference other resources using dot notation:"), /* @__PURE__ */ codeBlock([/* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-purple-400"])])([/* @__PURE__ */ text5("resource")]), /* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-text"])])([/* @__PURE__ */ text5(" aws.ec2.SecurityGroup web_sg {")]), /* @__PURE__ */ text5("\n"), /* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-text"])])([/* @__PURE__ */ text5("  vpcId = aws.vpc.Vpc.main.id")]), /* @__PURE__ */ text5("\n"), /* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-text"])])([/* @__PURE__ */ text5('  ingress = [{ port = 80, cidr = "0.0.0.0/0" }]')]), /* @__PURE__ */ text5("\n"), /* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-text"])])([/* @__PURE__ */ text5("}")])])]);
   var typesContent = /* @__PURE__ */ article6([/* @__PURE__ */ h16("Type System"), /* @__PURE__ */ p6("Converge's type system catches misconfigurations at compile time."), /* @__PURE__ */ h26("Typed attributes"), /* @__PURE__ */ p6("Every resource attribute has a type. The compiler validates values:"), /* @__PURE__ */ codeBlock([/* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-purple-400"])])([/* @__PURE__ */ text5("resource")]), /* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-text"])])([/* @__PURE__ */ text5(" aws.ec2.Instance web {")]), /* @__PURE__ */ text5("\n"), /* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-text"])])([/* @__PURE__ */ text5('  instanceType : InstanceType = "t3.micro"  ')]), /* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-muted-foreground"])])([/* @__PURE__ */ text5("# valid")]), /* @__PURE__ */ text5("\n"), /* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-text"])])([/* @__PURE__ */ text5('  instanceType : InstanceType = "invalid"   ')]), /* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-danger"])])([/* @__PURE__ */ text5("# compile error!")]), /* @__PURE__ */ text5("\n"), /* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-text"])])([/* @__PURE__ */ text5("}")])]), /* @__PURE__ */ h26("Custom types"), /* @__PURE__ */ codeBlock([/* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-purple-400"])])([/* @__PURE__ */ text5("type")]), /* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-text"])])([/* @__PURE__ */ text5(' Environment = "dev" | "staging" | "prod"')]), /* @__PURE__ */ text5("\n\n"), /* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-purple-400"])])([/* @__PURE__ */ text5("resource")]), /* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-text"])])([/* @__PURE__ */ text5(" aws.ec2.Instance web {")]), /* @__PURE__ */ text5("\n"), /* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-text"])])([/* @__PURE__ */ text5('  tags = { env : Environment = "prod" }')]), /* @__PURE__ */ text5("\n"), /* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-text"])])([/* @__PURE__ */ text5("}")])])]);
-  var apiContent7 = /* @__PURE__ */ article6([/* @__PURE__ */ h16("REST API"), /* @__PURE__ */ p6("Programmatic access to sensenet//converge."), /* @__PURE__ */ h26("Authentication"), /* @__PURE__ */ codeBlock([/* @__PURE__ */ codeLine20("")("Authorization: Bearer <API_TOKEN>")]), /* @__PURE__ */ h26("Base URL"), /* @__PURE__ */ codeBlock([/* @__PURE__ */ codeLine20("")("https://api.converge.straylight.software/v1")]), /* @__PURE__ */ h26("Trigger convergence"), /* @__PURE__ */ codeBlock([/* @__PURE__ */ codeLine20("")("POST /projects/{id}/converge"), /* @__PURE__ */ codeLine20("")(""), /* @__PURE__ */ codeLine20("")("Response: 202 Accepted"), /* @__PURE__ */ codeLine20("")('{ "job_id": "...", "status": "running" }')]), /* @__PURE__ */ h26("Get drift status"), /* @__PURE__ */ codeBlock([/* @__PURE__ */ codeLine20("")("GET /projects/{id}/drift"), /* @__PURE__ */ codeLine20("")(""), /* @__PURE__ */ codeLine20("")("Response:"), /* @__PURE__ */ codeLine20("")('{ "drifted": 1, "in_sync": 46, "resources": [...] }')])]);
+  var apiContent8 = /* @__PURE__ */ article6([/* @__PURE__ */ h16("REST API"), /* @__PURE__ */ p6("Programmatic access to sensenet//converge."), /* @__PURE__ */ h26("Authentication"), /* @__PURE__ */ codeBlock([/* @__PURE__ */ codeLine20("")("Authorization: Bearer <API_TOKEN>")]), /* @__PURE__ */ h26("Base URL"), /* @__PURE__ */ codeBlock([/* @__PURE__ */ codeLine20("")("https://api.converge.straylight.software/v1")]), /* @__PURE__ */ h26("Trigger convergence"), /* @__PURE__ */ codeBlock([/* @__PURE__ */ codeLine20("")("POST /projects/{id}/converge"), /* @__PURE__ */ codeLine20("")(""), /* @__PURE__ */ codeLine20("")("Response: 202 Accepted"), /* @__PURE__ */ codeLine20("")('{ "job_id": "...", "status": "running" }')]), /* @__PURE__ */ h26("Get drift status"), /* @__PURE__ */ codeBlock([/* @__PURE__ */ codeLine20("")("GET /projects/{id}/drift"), /* @__PURE__ */ codeLine20("")(""), /* @__PURE__ */ codeLine20("")("Response:"), /* @__PURE__ */ codeLine20("")('{ "drifted": 1, "in_sync": 46, "resources": [...] }')])]);
   var renderContent8 = function(path) {
     if (path === "/sensenet/converge/docs") {
       return overviewContent8;
@@ -14530,7 +14657,7 @@
     }
     ;
     if (path === "/sensenet/converge/docs/api") {
-      return apiContent7;
+      return apiContent8;
     }
     ;
     if (path === "/sensenet/converge/docs/config") {
@@ -14782,17 +14909,17 @@
     };
   };
   var sidebarLink14 = function(state3) {
-    return function(value21) {
+    return function(value20) {
       return function(label5) {
         return button([cls(["block w-full text-left px-3 py-2 rounded text-sm transition-colors cursor-pointer", function() {
-          var $8 = state3.activeTab === value21;
+          var $8 = state3.activeTab === value20;
           if ($8) {
             return "bg-purple-400/10 text-purple-400 font-medium";
           }
           ;
           return "text-muted-foreground hover:text-text hover:bg-card";
         }()]), type_35(ButtonButton.value), onClick(function(v) {
-          return new SetTab9(value21);
+          return new SetTab9(value20);
         })])([text5(label5)]);
       };
     };
@@ -14800,7 +14927,7 @@
   var sidebar16 = function(state3) {
     return nav([cls(["space-y-1"])])([sidebarLink14(state3)("credentials")("Cloud Credentials"), sidebarLink14(state3)("environments")("Environments"), sidebarLink14(state3)("team")("Team Access"), sidebarLink14(state3)("api")("API Keys"), sidebarLink14(state3)("notifications")("Notifications")]);
   };
-  var settingRow4 = function(event) {
+  var settingRow5 = function(event) {
     return function(channels) {
       return div2([cls(["flex items-center justify-between py-2"])])([span3([cls(["text-muted-foreground"])])([text5(event)]), span3([cls(["text-sm text-text"])])([text5(channels)])]);
     };
@@ -14842,7 +14969,7 @@
       };
     };
   };
-  var notificationsContent = /* @__PURE__ */ div2([/* @__PURE__ */ cls(["space-y-6"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["bg-card border border-border rounded-lg p-6"])])([/* @__PURE__ */ h3([/* @__PURE__ */ cls(["text-lg font-semibold text-text mb-6"])])([/* @__PURE__ */ text5("Notification Channels")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-muted-foreground mb-6"])])([/* @__PURE__ */ text5("Get notified when drift is detected, convergence fails, or resources change.")]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["space-y-4"])])([/* @__PURE__ */ notificationCard("Slack")("#infra-alerts")(true), /* @__PURE__ */ notificationCard("PagerDuty")("Production Service")(true), /* @__PURE__ */ notificationCard("Email")("team@company.com")(false)])]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["bg-card border border-border rounded-lg p-6"])])([/* @__PURE__ */ h3([/* @__PURE__ */ cls(["text-lg font-semibold text-text mb-4"])])([/* @__PURE__ */ text5("Notification Settings")]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["space-y-3"])])([/* @__PURE__ */ settingRow4("Drift detected")("All channels"), /* @__PURE__ */ settingRow4("Convergence failed")("Slack, PagerDuty"), /* @__PURE__ */ settingRow4("Convergence succeeded")("Slack only"), /* @__PURE__ */ settingRow4("Resource added/removed")("Email only")])])]);
+  var notificationsContent = /* @__PURE__ */ div2([/* @__PURE__ */ cls(["space-y-6"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["bg-card border border-border rounded-lg p-6"])])([/* @__PURE__ */ h3([/* @__PURE__ */ cls(["text-lg font-semibold text-text mb-6"])])([/* @__PURE__ */ text5("Notification Channels")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-muted-foreground mb-6"])])([/* @__PURE__ */ text5("Get notified when drift is detected, convergence fails, or resources change.")]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["space-y-4"])])([/* @__PURE__ */ notificationCard("Slack")("#infra-alerts")(true), /* @__PURE__ */ notificationCard("PagerDuty")("Production Service")(true), /* @__PURE__ */ notificationCard("Email")("team@company.com")(false)])]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["bg-card border border-border rounded-lg p-6"])])([/* @__PURE__ */ h3([/* @__PURE__ */ cls(["text-lg font-semibold text-text mb-4"])])([/* @__PURE__ */ text5("Notification Settings")]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["space-y-3"])])([/* @__PURE__ */ settingRow5("Drift detected")("All channels"), /* @__PURE__ */ settingRow5("Convergence failed")("Slack, PagerDuty"), /* @__PURE__ */ settingRow5("Convergence succeeded")("Slack only"), /* @__PURE__ */ settingRow5("Resource added/removed")("Email only")])])]);
   var header12 = /* @__PURE__ */ div2([/* @__PURE__ */ cls(["mb-8"])])([/* @__PURE__ */ h1([/* @__PURE__ */ cls(["text-2xl font-bold text-text mb-2"])])([/* @__PURE__ */ text5("Settings")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-muted-foreground"])])([/* @__PURE__ */ text5("Configure cloud credentials, environments, and team access.")])]);
   var handleAction27 = function(v) {
     return modify_29(function(v1) {
@@ -14927,7 +15054,7 @@
       };
     };
   };
-  var apiContent8 = /* @__PURE__ */ function() {
+  var apiContent9 = /* @__PURE__ */ function() {
     return div2([cls(["space-y-6"])])([div2([cls(["bg-card border border-border rounded-lg p-6"])])([div2([cls(["flex items-center justify-between mb-6"])])([h3([cls(["text-lg font-semibold text-text"])])([text5("API Keys")]), button([cls(["px-4 py-2 bg-purple-400 text-background text-sm font-medium rounded-md hover:bg-purple-400/90 transition-colors cursor-pointer"]), type_35(ButtonButton.value)])([text5("+ New Key")])]), p([cls(["text-muted-foreground mb-6"])])([text5("API keys for CI/CD pipelines and programmatic access. Keys can be scoped to specific environments.")]), div2([cls(["space-y-4"])])([apiKeyCard3("CI Pipeline")("cvg_live_abc***def")("All environments")("2 weeks ago"), apiKeyCard3("GitHub Actions")("cvg_live_xyz***789")("staging")("1 month ago"), apiKeyCard3("Local Development")("cvg_test_loc***456")("development")("3 months ago")])])]);
   }();
   var content18 = function(state3) {
@@ -14944,7 +15071,7 @@
     }
     ;
     if (state3.activeTab === "api") {
-      return apiContent8;
+      return apiContent9;
     }
     ;
     if (state3.activeTab === "notifications") {
@@ -14975,13 +15102,13 @@
   // output/Straylight.Pages.Products.SensenetForge.Dashboard/index.js
   var type_36 = /* @__PURE__ */ type_17(isPropButtonType);
   var map42 = /* @__PURE__ */ map(functorArray);
-  var show12 = /* @__PURE__ */ show(showInt);
+  var show13 = /* @__PURE__ */ show(showInt);
   var modify_30 = /* @__PURE__ */ modify_(monadStateHalogenM);
-  var tabButton9 = function(value21) {
+  var tabButton9 = function(value20) {
     return function(label5) {
       return function(activeTab) {
         return button([cls(["px-4 py-2 text-sm font-medium rounded-md transition-colors", function() {
-          var $13 = value21 === activeTab;
+          var $13 = value20 === activeTab;
           if ($13) {
             return "bg-card text-text shadow-sm";
           }
@@ -15102,7 +15229,7 @@
       }
       ;
       return "bg-rose-400/20 text-rose-400";
-    }()])])([text5(config.visibility)])]), span3([cls(["text-sm text-muted-foreground"])])([text5(config.lastUpdate)])]), p([cls(["text-sm text-muted-foreground mb-3"])])([text5(config.description)]), div2([cls(["flex items-center gap-4 text-xs text-muted-foreground"])])([span_([text5(show12(config.diffs) + " open diffs")])])]);
+    }()])])([text5(config.visibility)])]), span3([cls(["text-sm text-muted-foreground"])])([text5(config.lastUpdate)])]), p([cls(["text-sm text-muted-foreground mb-3"])])([text5(config.description)]), div2([cls(["flex items-center gap-4 text-xs text-muted-foreground"])])([span_([text5(show13(config.diffs) + " open diffs")])])]);
   };
   var reposTab = /* @__PURE__ */ function() {
     return div_([div2([cls(["flex items-center justify-between mb-6"])])([h2([cls(["text-lg font-semibold text-text"])])([text5("Your Repositories")]), button([cls(["px-4 py-2 bg-rose-400 text-background text-sm font-medium rounded-md hover:bg-rose-400/90 transition-colors"]), type_36(ButtonButton.value)])([text5("+ New Repository")])]), div2([cls(["space-y-4"])])([repoCard({
@@ -15240,7 +15367,7 @@
       };
     };
   };
-  var activityTab = /* @__PURE__ */ div_([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["mb-6"])])([/* @__PURE__ */ h2([/* @__PURE__ */ cls(["text-lg font-semibold text-text"])])([/* @__PURE__ */ text5("Recent Activity")])]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["space-y-4"])])([/* @__PURE__ */ activityItem5("D042")("created")("claude-opus-4")("10 minutes ago")(true), /* @__PURE__ */ activityItem5("D041")("approved")("bob")("2 hours ago")(false), /* @__PURE__ */ activityItem5("D040")("updated")("alice")("5 hours ago")(false), /* @__PURE__ */ activityItem5("D039")("landed")("bob")("1 day ago")(false), /* @__PURE__ */ activityItem5("D038")("commented")("carol")("1 day ago")(false), /* @__PURE__ */ activityItem5("D037")("landed")("alice")("2 days ago")(false)])]);
+  var activityTab2 = /* @__PURE__ */ div_([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["mb-6"])])([/* @__PURE__ */ h2([/* @__PURE__ */ cls(["text-lg font-semibold text-text"])])([/* @__PURE__ */ text5("Recent Activity")])]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["space-y-4"])])([/* @__PURE__ */ activityItem5("D042")("created")("claude-opus-4")("10 minutes ago")(true), /* @__PURE__ */ activityItem5("D041")("approved")("bob")("2 hours ago")(false), /* @__PURE__ */ activityItem5("D040")("updated")("alice")("5 hours ago")(false), /* @__PURE__ */ activityItem5("D039")("landed")("bob")("1 day ago")(false), /* @__PURE__ */ activityItem5("D038")("commented")("carol")("1 day ago")(false), /* @__PURE__ */ activityItem5("D037")("landed")("alice")("2 days ago")(false)])]);
   var content19 = function(state3) {
     if (state3.activeTab === "repos") {
       return reposTab;
@@ -15255,7 +15382,7 @@
     }
     ;
     if (state3.activeTab === "activity") {
-      return activityTab;
+      return activityTab2;
     }
     ;
     return reposTab;
@@ -15371,7 +15498,7 @@
   var overviewContent9 = /* @__PURE__ */ article7([/* @__PURE__ */ h17("Documentation"), /* @__PURE__ */ p7("Everything you need to start using sensenet//forge for code hosting and review."), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["grid grid-cols-1 md:grid-cols-2 gap-4 my-8"])])([/* @__PURE__ */ docCard6("/sensenet/forge/docs/quickstart")("Quick Start")("Get up and running in under a minute."), /* @__PURE__ */ docCard6("/sensenet/forge/docs/stacked-diffs")("Stacked Diffs")("Learn the core review model."), /* @__PURE__ */ docCard6("/sensenet/forge/docs/jujutsu")("jujutsu Integration")("First-class jj support."), /* @__PURE__ */ docCard6("/sensenet/forge/docs/cli")("CLI Reference")("Full command documentation.")]), /* @__PURE__ */ h27("What is sensenet//forge?"), /* @__PURE__ */ p7("sensenet//forge is a code hosting and review platform built for the agent era. Unlike traditional PR-based workflows, forge uses stacked diffs \u2014 small, focused changes that build on each other. Native jujutsu support. Cryptographic attestation for AI-generated code."), /* @__PURE__ */ h27("Core Features"), /* @__PURE__ */ ul([/* @__PURE__ */ cls(["space-y-2 text-muted-foreground mb-6"])])([/* @__PURE__ */ li$prime6("Stacked Diffs \u2014 Review changes in logical units, not massive PRs"), /* @__PURE__ */ li$prime6("jujutsu Native \u2014 First-class support for the modern VCS"), /* @__PURE__ */ li$prime6("Agent Attestation \u2014 Cryptographic proof of AI-generated code"), /* @__PURE__ */ li$prime6("Semantic Search \u2014 Find code by what it does, not what it's called")]), /* @__PURE__ */ h27("How it works"), /* @__PURE__ */ ol([/* @__PURE__ */ cls(["list-decimal list-inside space-y-2 text-muted-foreground mb-6"])])([/* @__PURE__ */ li_([/* @__PURE__ */ text5("Create changes with jj (or git)")]), /* @__PURE__ */ li_([/* @__PURE__ */ text5("Stack related changes together")]), /* @__PURE__ */ li_([/* @__PURE__ */ text5("Submit for review with forge")]), /* @__PURE__ */ li_([/* @__PURE__ */ text5("Land when approved \u2014 rebasing handled automatically")])]), /* @__PURE__ */ h27("Quick example"), /* @__PURE__ */ codeBlock([/* @__PURE__ */ codeLine23("$ ")("jj new -m 'Add user authentication'"), /* @__PURE__ */ codeLine23("$ ")("forge diff create"), /* @__PURE__ */ codeLine23("$ ")("jj new -m 'Add OAuth support'"), /* @__PURE__ */ codeLine23("$ ")("forge diff create"), /* @__PURE__ */ codeLine23("$ ")("forge stack submit")])]);
   var quickstartContent9 = /* @__PURE__ */ article7([/* @__PURE__ */ h17("Quick Start"), /* @__PURE__ */ p7("Get sensenet//forge working in under a minute."), /* @__PURE__ */ h27("1. Install the CLI"), /* @__PURE__ */ codeBlock([/* @__PURE__ */ codeLine23("# ")("Using Nix (recommended)"), /* @__PURE__ */ codeLine23("$ ")("nix run github:sensenet/forge"), /* @__PURE__ */ text5("\n"), /* @__PURE__ */ codeLine23("# ")("Or via curl"), /* @__PURE__ */ codeLine23("$ ")("curl -fsSL https://forge.sensenet.dev/install.sh | sh")]), /* @__PURE__ */ h27("2. Initialize your repo"), /* @__PURE__ */ codeBlock([/* @__PURE__ */ codeLine23("$ ")("cd your-project"), /* @__PURE__ */ codeLine23("$ ")("forge init"), /* @__PURE__ */ codeLine23("")("\u2713 Initialized forge in /path/to/your-project"), /* @__PURE__ */ codeLine23("")("\u2713 Remote: https://forge.sensenet.dev/yourname/your-project")]), /* @__PURE__ */ h27("3. Create your first diff"), /* @__PURE__ */ codeBlock([/* @__PURE__ */ codeLine23("# ")("Make some changes..."), /* @__PURE__ */ codeLine23("$ ")("jj new -m 'Add feature X'"), /* @__PURE__ */ codeLine23("$ ")("forge diff create"), /* @__PURE__ */ codeLine23("")("Created diff D001: Add feature X"), /* @__PURE__ */ codeLine23("")("https://forge.sensenet.dev/yourname/your-project/D001")]), /* @__PURE__ */ h27("4. Stack more changes"), /* @__PURE__ */ codeBlock([/* @__PURE__ */ codeLine23("# ")("Create a dependent change"), /* @__PURE__ */ codeLine23("$ ")("jj new -m 'Add feature Y (depends on X)'"), /* @__PURE__ */ codeLine23("$ ")("forge diff create"), /* @__PURE__ */ codeLine23("")("Created diff D002: Add feature Y"), /* @__PURE__ */ codeLine23("")("Stack: D001 \u2192 D002")]), /* @__PURE__ */ h27("5. Submit for review"), /* @__PURE__ */ codeBlock([/* @__PURE__ */ codeLine23("$ ")("forge stack submit"), /* @__PURE__ */ codeLine23("")("Submitted stack for review:"), /* @__PURE__ */ codeLine23("")("  D001: Add feature X [needs review]"), /* @__PURE__ */ codeLine23("")("  D002: Add feature Y [needs review]")]), /* @__PURE__ */ h27("Next steps"), /* @__PURE__ */ ul([/* @__PURE__ */ cls(["space-y-2 text-muted-foreground"])])([/* @__PURE__ */ li6(link7)("/sensenet/forge/docs/stacked-diffs")("Learn about stacked diffs"), /* @__PURE__ */ li6(link7)("/sensenet/forge/docs/jujutsu")("Explore jujutsu integration"), /* @__PURE__ */ li6(link7)("/sensenet/forge/docs/cli")("CLI reference")])]);
   var stackedDiffsContent = /* @__PURE__ */ article7([/* @__PURE__ */ h17("Stacked Diffs"), /* @__PURE__ */ p7("The core review model in sensenet//forge."), /* @__PURE__ */ h27("What are stacked diffs?"), /* @__PURE__ */ p7("Instead of creating one large PR with all your changes, you create a stack of small, focused diffs. Each diff builds on the previous one. Reviewers see logical units of change."), /* @__PURE__ */ h27("Why stacked diffs?"), /* @__PURE__ */ ul([/* @__PURE__ */ cls(["space-y-2 text-muted-foreground mb-6"])])([/* @__PURE__ */ li$prime6("Smaller changes are easier to review"), /* @__PURE__ */ li$prime6("Dependent changes are explicit"), /* @__PURE__ */ li$prime6("Rebasing propagates automatically"), /* @__PURE__ */ li$prime6("Land changes independently")]), /* @__PURE__ */ h27("Creating a stack"), /* @__PURE__ */ codeBlock([/* @__PURE__ */ codeLine23("# ")("First change"), /* @__PURE__ */ codeLine23("$ ")("jj new -m 'Refactor auth module'"), /* @__PURE__ */ codeLine23("$ ")("forge diff create"), /* @__PURE__ */ text5("\n"), /* @__PURE__ */ codeLine23("# ")("Second change (depends on first)"), /* @__PURE__ */ codeLine23("$ ")("jj new -m 'Add OAuth support'"), /* @__PURE__ */ codeLine23("$ ")("forge diff create"), /* @__PURE__ */ text5("\n"), /* @__PURE__ */ codeLine23("# ")("Third change (depends on second)"), /* @__PURE__ */ codeLine23("$ ")("jj new -m 'Add Google provider'"), /* @__PURE__ */ codeLine23("$ ")("forge diff create")]), /* @__PURE__ */ h27("Viewing your stack"), /* @__PURE__ */ codeBlock([/* @__PURE__ */ codeLine23("$ ")("forge stack show"), /* @__PURE__ */ codeLine23("")("D003: Add Google provider [draft]"), /* @__PURE__ */ codeLine23("")("  \u2191"), /* @__PURE__ */ codeLine23("")("D002: Add OAuth support [draft]"), /* @__PURE__ */ codeLine23("")("  \u2191"), /* @__PURE__ */ codeLine23("")("D001: Refactor auth module [draft]")]), /* @__PURE__ */ h27("Rebasing"), /* @__PURE__ */ p7("When the base branch updates, forge automatically rebases your entire stack:"), /* @__PURE__ */ codeBlock([/* @__PURE__ */ codeLine23("$ ")("forge stack rebase"), /* @__PURE__ */ codeLine23("")("Rebasing 3 diffs onto main..."), /* @__PURE__ */ codeLine23("")("\u2713 D001: Refactor auth module"), /* @__PURE__ */ codeLine23("")("\u2713 D002: Add OAuth support"), /* @__PURE__ */ codeLine23("")("\u2713 D003: Add Google provider")])]);
-  var apiContent9 = /* @__PURE__ */ article7([/* @__PURE__ */ h17("REST API"), /* @__PURE__ */ p7("Programmatic access to sensenet//forge."), /* @__PURE__ */ h27("Authentication"), /* @__PURE__ */ codeBlock([/* @__PURE__ */ codeLine23("")("Authorization: Bearer <API_TOKEN>")]), /* @__PURE__ */ p7("Get your API token from Settings \u2192 API Keys."), /* @__PURE__ */ h27("Base URL"), /* @__PURE__ */ codeBlock([/* @__PURE__ */ codeLine23("")("https://api.forge.sensenet.dev/v1")]), /* @__PURE__ */ h27("Create diff"), /* @__PURE__ */ codeBlock([/* @__PURE__ */ codeLine23("")("POST /repos/{owner}/{repo}/diffs"), /* @__PURE__ */ codeLine23("")(""), /* @__PURE__ */ codeLine23("")("Request body:"), /* @__PURE__ */ codeLine23("")("{"), /* @__PURE__ */ codeLine23("")('  "title": "Add feature X",'), /* @__PURE__ */ codeLine23("")('  "change_id": "abc123",'), /* @__PURE__ */ codeLine23("")('  "base": "main"'), /* @__PURE__ */ codeLine23("")("}")]), /* @__PURE__ */ h27("Get diff"), /* @__PURE__ */ codeBlock([/* @__PURE__ */ codeLine23("")("GET /repos/{owner}/{repo}/diffs/{id}"), /* @__PURE__ */ codeLine23("")(""), /* @__PURE__ */ codeLine23("")("Response:"), /* @__PURE__ */ codeLine23("")("{"), /* @__PURE__ */ codeLine23("")('  "id": "D001",'), /* @__PURE__ */ codeLine23("")('  "title": "Add feature X",'), /* @__PURE__ */ codeLine23("")('  "status": "needs_review",'), /* @__PURE__ */ codeLine23("")('  "author": "alice",'), /* @__PURE__ */ codeLine23("")('  "attestation": { ... }'), /* @__PURE__ */ codeLine23("")("}")]), /* @__PURE__ */ h27("List stack"), /* @__PURE__ */ codeBlock([/* @__PURE__ */ codeLine23("")("GET /repos/{owner}/{repo}/stacks/{id}"), /* @__PURE__ */ codeLine23("")(""), /* @__PURE__ */ codeLine23("")("Response:"), /* @__PURE__ */ codeLine23("")("{"), /* @__PURE__ */ codeLine23("")('  "diffs": ["D001", "D002", "D003"],'), /* @__PURE__ */ codeLine23("")('  "base": "main"'), /* @__PURE__ */ codeLine23("")("}")]), /* @__PURE__ */ h27("Search"), /* @__PURE__ */ codeBlock([/* @__PURE__ */ codeLine23("")("GET /repos/{owner}/{repo}/search?q={query}"), /* @__PURE__ */ codeLine23("")(""), /* @__PURE__ */ codeLine23("")("Response:"), /* @__PURE__ */ codeLine23("")("{"), /* @__PURE__ */ codeLine23("")('  "results": ['), /* @__PURE__ */ codeLine23("")('    { "file": "src/auth.rs", "line": 42, "score": 0.94 }'), /* @__PURE__ */ codeLine23("")("  ]"), /* @__PURE__ */ codeLine23("")("}")])]);
+  var apiContent10 = /* @__PURE__ */ article7([/* @__PURE__ */ h17("REST API"), /* @__PURE__ */ p7("Programmatic access to sensenet//forge."), /* @__PURE__ */ h27("Authentication"), /* @__PURE__ */ codeBlock([/* @__PURE__ */ codeLine23("")("Authorization: Bearer <API_TOKEN>")]), /* @__PURE__ */ p7("Get your API token from Settings \u2192 API Keys."), /* @__PURE__ */ h27("Base URL"), /* @__PURE__ */ codeBlock([/* @__PURE__ */ codeLine23("")("https://api.forge.sensenet.dev/v1")]), /* @__PURE__ */ h27("Create diff"), /* @__PURE__ */ codeBlock([/* @__PURE__ */ codeLine23("")("POST /repos/{owner}/{repo}/diffs"), /* @__PURE__ */ codeLine23("")(""), /* @__PURE__ */ codeLine23("")("Request body:"), /* @__PURE__ */ codeLine23("")("{"), /* @__PURE__ */ codeLine23("")('  "title": "Add feature X",'), /* @__PURE__ */ codeLine23("")('  "change_id": "abc123",'), /* @__PURE__ */ codeLine23("")('  "base": "main"'), /* @__PURE__ */ codeLine23("")("}")]), /* @__PURE__ */ h27("Get diff"), /* @__PURE__ */ codeBlock([/* @__PURE__ */ codeLine23("")("GET /repos/{owner}/{repo}/diffs/{id}"), /* @__PURE__ */ codeLine23("")(""), /* @__PURE__ */ codeLine23("")("Response:"), /* @__PURE__ */ codeLine23("")("{"), /* @__PURE__ */ codeLine23("")('  "id": "D001",'), /* @__PURE__ */ codeLine23("")('  "title": "Add feature X",'), /* @__PURE__ */ codeLine23("")('  "status": "needs_review",'), /* @__PURE__ */ codeLine23("")('  "author": "alice",'), /* @__PURE__ */ codeLine23("")('  "attestation": { ... }'), /* @__PURE__ */ codeLine23("")("}")]), /* @__PURE__ */ h27("List stack"), /* @__PURE__ */ codeBlock([/* @__PURE__ */ codeLine23("")("GET /repos/{owner}/{repo}/stacks/{id}"), /* @__PURE__ */ codeLine23("")(""), /* @__PURE__ */ codeLine23("")("Response:"), /* @__PURE__ */ codeLine23("")("{"), /* @__PURE__ */ codeLine23("")('  "diffs": ["D001", "D002", "D003"],'), /* @__PURE__ */ codeLine23("")('  "base": "main"'), /* @__PURE__ */ codeLine23("")("}")]), /* @__PURE__ */ h27("Search"), /* @__PURE__ */ codeBlock([/* @__PURE__ */ codeLine23("")("GET /repos/{owner}/{repo}/search?q={query}"), /* @__PURE__ */ codeLine23("")(""), /* @__PURE__ */ codeLine23("")("Response:"), /* @__PURE__ */ codeLine23("")("{"), /* @__PURE__ */ codeLine23("")('  "results": ['), /* @__PURE__ */ codeLine23("")('    { "file": "src/auth.rs", "line": 42, "score": 0.94 }'), /* @__PURE__ */ codeLine23("")("  ]"), /* @__PURE__ */ codeLine23("")("}")])]);
   var renderContent9 = function(path) {
     if (path === "/sensenet/forge/docs") {
       return overviewContent9;
@@ -15402,7 +15529,7 @@
     }
     ;
     if (path === "/sensenet/forge/docs/api") {
-      return apiContent9;
+      return apiContent10;
     }
     ;
     return overviewContent9;
@@ -15522,14 +15649,14 @@
   };
   var features9 = /* @__PURE__ */ section([/* @__PURE__ */ cls(["py-24 border-t border-border"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["max-w-[1100px] mx-auto px-6"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["text-center mb-16"])])([/* @__PURE__ */ h2([/* @__PURE__ */ cls(["text-3xl font-bold text-text mb-4"])])([/* @__PURE__ */ text5("Why sensenet//forge?")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-muted-foreground max-w-xl mx-auto"])])([/* @__PURE__ */ text5("Built for teams who ship fast with AI agents and want review workflows that don't fight them.")])]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"])])([/* @__PURE__ */ featureCard9("||")("Stacked diffs")("Review changes in logical units, not massive PRs. Dependent changes stack cleanly. Rebase propagates automatically."), /* @__PURE__ */ featureCard9("@")("jujutsu native")("First-class jj support. Anonymous branches. Operation log. Conflict-free rebasing. Git compatibility when you need it."), /* @__PURE__ */ featureCard9("[]")("Agent-aware review")("AI-generated changes get dedicated review flows. Attestation shows provenance. Humans review intent, not boilerplate."), /* @__PURE__ */ featureCard9("~")("Attestation")("Every commit cryptographically signed. Agent identity verified. Post-quantum signatures. Audit trail from prompt to production."), /* @__PURE__ */ featureCard9("?")("Semantic code search")("Search by meaning, not just text. Find all error handlers. Locate similar patterns. Understand impact before merge."), /* @__PURE__ */ featureCard9("/")("Branch-free workflow")("No feature branches to manage. Work directly on changes. Stack, split, squash without ceremony. Ship when ready.")])])]);
   var cta19 = /* @__PURE__ */ section([/* @__PURE__ */ cls(["py-24 border-t border-border"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["max-w-[800px] mx-auto px-6 text-center"])])([/* @__PURE__ */ h2([/* @__PURE__ */ cls(["text-3xl font-bold text-text mb-4"])])([/* @__PURE__ */ text5("Ready to ship faster?")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-muted-foreground mb-8"])])([/* @__PURE__ */ text5("Free tier includes unlimited public repos. No credit card required.")]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["flex flex-col sm:flex-row items-center justify-center gap-4"])])([/* @__PURE__ */ primaryButton10("/sensenet/forge/dashboard")("Create free account"), /* @__PURE__ */ secondaryButton10("/sensenet/forge/pricing")("See all plans")])])]);
-  var compCell4 = function(value21) {
+  var compCell4 = function(value20) {
     return span3([cls([function() {
-      if (value21 === "no") {
+      if (value20 === "no") {
         return "text-muted-foreground/50";
       }
       ;
       return "text-muted-foreground";
-    }()])])([text5(value21)]);
+    }()])])([text5(value20)]);
   };
   var comparisonRow9 = function(feature) {
     return function(us) {
@@ -15636,8 +15763,8 @@
   var map45 = /* @__PURE__ */ map(functorArray);
   var type_37 = /* @__PURE__ */ type_17(isPropButtonType);
   var modify_32 = /* @__PURE__ */ modify_(monadStateHalogenM);
-  var type_113 = /* @__PURE__ */ type_17(isPropInputType);
-  var value19 = /* @__PURE__ */ value12(isPropString);
+  var type_112 = /* @__PURE__ */ type_17(isPropInputType);
+  var value18 = /* @__PURE__ */ value12(isPropString);
   var SetActiveTab5 = /* @__PURE__ */ function() {
     function SetActiveTab6(value0) {
       this.value0 = value0;
@@ -15679,7 +15806,7 @@
       };
     };
   };
-  var teamMemberRow5 = function(name16) {
+  var teamMemberRow6 = function(name16) {
     return function(email) {
       return function(role) {
         return div2([cls(["flex items-center justify-between py-2 border-b border-border last:border-0"])])([div_([p([cls(["text-sm text-text font-medium"])])([text5(name16)]), p([cls(["text-xs text-muted-foreground"])])([text5(email)])]), div2([cls(["flex items-center gap-4"])])([span3([cls(["text-xs px-2 py-0.5 rounded bg-muted text-muted-foreground"])])([text5(role)]), function() {
@@ -15734,7 +15861,7 @@
   var sidebar18 = function(state3) {
     return nav([cls(["space-y-6"])])([div_([p([cls(["text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2"])])([text5("Account")]), div2([cls(["space-y-1"])])([sidebarButton3("account")("Profile")(state3.activeTab), sidebarButton3("billing")("Billing")(state3.activeTab), sidebarButton3("security")("Security")(state3.activeTab)])]), div_([p([cls(["text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2"])])([text5("Organization")]), div2([cls(["space-y-1"])])([sidebarButton3("team")("Team")(state3.activeTab), sidebarButton3("repos")("Repositories")(state3.activeTab), sidebarButton3("policies")("Branch Policies")(state3.activeTab), sidebarButton3("integrations")("Integrations")(state3.activeTab)])])]);
   };
-  var sessionRow4 = function(device) {
+  var sessionRow3 = function(device) {
     return function(location2) {
       return function(time3) {
         return function(current) {
@@ -15783,7 +15910,7 @@
       return div_([p([cls(["text-xs text-muted-foreground"])])([text5(label5)]), p([cls(["text-sm text-text font-medium"])])([text5(value1)])]);
     };
   };
-  var pendingInviteRow = function(email) {
+  var pendingInviteRow2 = function(email) {
     return function(sentTime) {
       return div2([cls(["flex items-center justify-between py-2 border-b border-border last:border-0"])])([div_([p([cls(["text-sm text-text"])])([text5(email)]), p([cls(["text-xs text-muted-foreground"])])([text5(sentTime)])]), div2([cls(["flex items-center gap-2"])])([button([cls(["text-sm text-rose-400 hover:text-rose-400/80 cursor-pointer"]), type_37(ButtonButton.value)])([text5("Resend")]), button([cls(["text-sm text-red-400 hover:text-red-400/80 cursor-pointer"]), type_37(ButtonButton.value)])([text5("Revoke")])])]);
     };
@@ -15795,7 +15922,7 @@
       };
     };
   };
-  var integrationRow2 = function(name16) {
+  var integrationRow3 = function(name16) {
     return function(description) {
       return function(connected) {
         return div2([cls(["flex items-center justify-between p-3 border border-border rounded-lg"])])([div_([p([cls(["text-sm text-text font-medium"])])([text5(name16)]), p([cls(["text-xs text-muted-foreground"])])([text5(description)])]), div2([cls(["flex items-center gap-3"])])([span3([cls(["text-xs px-2 py-0.5 rounded bg-green-500/10 text-green-400"])])([text5(function() {
@@ -15832,10 +15959,10 @@
     };
   };
   var reposTab2 = /* @__PURE__ */ function() {
-    return div2([cls(["space-y-6"])])([div2([cls(["bg-card border border-border rounded-lg p-6"])])([h3([cls(["text-lg font-semibold text-text mb-4"])])([text5("Default Repository Settings")]), div2([cls(["space-y-4"])])([toggleSetting2("Require attestation")("All commits must have valid attestation signatures")(true), toggleSetting2("Auto-rebase stacks")("Automatically rebase dependent diffs when base changes")(true), toggleSetting2("Squash on land")("Squash all commits in a diff when landing")(false)])]), div2([cls(["bg-card border border-border rounded-lg p-6"])])([h3([cls(["text-lg font-semibold text-text mb-4"])])([text5("Default Visibility")]), div2([cls(["space-y-2"])])([radioOption("visibility")("private")("Private")("Only collaborators can access")(true), radioOption("visibility")("public")("Public")("Anyone can view and clone")(false)])]), div2([cls(["bg-card border border-border rounded-lg p-6"])])([h3([cls(["text-lg font-semibold text-text mb-4"])])([text5("jujutsu Configuration")]), p([cls(["text-sm text-muted-foreground mb-4"])])([text5("Configure default jj settings for new repositories.")]), div2([cls(["space-y-4"])])([formField5("Default branch name")(input2([type_113(InputText.value), value19("main"), cls(["w-full px-3 py-2 bg-background border border-border rounded-md text-text text-sm focus:outline-none focus:ring-2 focus:ring-rose-400"])])), toggleSetting2("Git compatibility mode")("Enable Git colocated workspace by default")(true)])])]);
+    return div2([cls(["space-y-6"])])([div2([cls(["bg-card border border-border rounded-lg p-6"])])([h3([cls(["text-lg font-semibold text-text mb-4"])])([text5("Default Repository Settings")]), div2([cls(["space-y-4"])])([toggleSetting2("Require attestation")("All commits must have valid attestation signatures")(true), toggleSetting2("Auto-rebase stacks")("Automatically rebase dependent diffs when base changes")(true), toggleSetting2("Squash on land")("Squash all commits in a diff when landing")(false)])]), div2([cls(["bg-card border border-border rounded-lg p-6"])])([h3([cls(["text-lg font-semibold text-text mb-4"])])([text5("Default Visibility")]), div2([cls(["space-y-2"])])([radioOption("visibility")("private")("Private")("Only collaborators can access")(true), radioOption("visibility")("public")("Public")("Anyone can view and clone")(false)])]), div2([cls(["bg-card border border-border rounded-lg p-6"])])([h3([cls(["text-lg font-semibold text-text mb-4"])])([text5("jujutsu Configuration")]), p([cls(["text-sm text-muted-foreground mb-4"])])([text5("Configure default jj settings for new repositories.")]), div2([cls(["space-y-4"])])([formField5("Default branch name")(input2([type_112(InputText.value), value18("main"), cls(["w-full px-3 py-2 bg-background border border-border rounded-md text-text text-sm focus:outline-none focus:ring-2 focus:ring-rose-400"])])), toggleSetting2("Git compatibility mode")("Enable Git colocated workspace by default")(true)])])]);
   }();
   var teamTab6 = /* @__PURE__ */ function() {
-    return div2([cls(["space-y-6"])])([div2([cls(["bg-card border border-border rounded-lg p-6"])])([div2([cls(["flex items-center justify-between mb-4"])])([h3([cls(["text-lg font-semibold text-text"])])([text5("Team Members")]), button([cls(["px-3 py-1.5 bg-rose-400 text-background text-sm font-medium rounded-md hover:bg-rose-400/90 transition-colors cursor-pointer"]), type_37(ButtonButton.value)])([text5("+ Invite Member")])]), div2([cls(["space-y-2"])])([teamMemberRow5("Alice Chen")("alice@example.com")("Owner"), teamMemberRow5("Bob Wilson")("bob@example.com")("Admin"), teamMemberRow5("Carol Davis")("carol@example.com")("Member")])]), div2([cls(["bg-card border border-border rounded-lg p-6"])])([h3([cls(["text-lg font-semibold text-text mb-4"])])([text5("Pending Invites")]), div2([cls(["space-y-2"])])([pendingInviteRow("dave@example.com")("Sent 2 days ago")])]), div2([cls(["bg-card border border-border rounded-lg p-6"])])([h3([cls(["text-lg font-semibold text-text mb-4"])])([text5("Organization")]), div2([cls(["space-y-4"])])([formField5("Organization Name")(input2([type_113(InputText.value), value19("straylight"), cls(["w-full px-3 py-2 bg-background border border-border rounded-md text-text text-sm focus:outline-none focus:ring-2 focus:ring-rose-400"])])), formField5("Organization URL")(input2([type_113(InputText.value), value19("forge.sensenet.dev/straylight"), disabled10(true), cls(["w-full px-3 py-2 bg-background border border-border rounded-md text-muted-foreground text-sm"])]))]), div2([cls(["mt-4"])])([button([cls(["px-4 py-2 bg-rose-400 text-background text-sm font-medium rounded-md hover:bg-rose-400/90 transition-colors cursor-pointer"]), type_37(ButtonButton.value)])([text5("Save Changes")])])])]);
+    return div2([cls(["space-y-6"])])([div2([cls(["bg-card border border-border rounded-lg p-6"])])([div2([cls(["flex items-center justify-between mb-4"])])([h3([cls(["text-lg font-semibold text-text"])])([text5("Team Members")]), button([cls(["px-3 py-1.5 bg-rose-400 text-background text-sm font-medium rounded-md hover:bg-rose-400/90 transition-colors cursor-pointer"]), type_37(ButtonButton.value)])([text5("+ Invite Member")])]), div2([cls(["space-y-2"])])([teamMemberRow6("Alice Chen")("alice@example.com")("Owner"), teamMemberRow6("Bob Wilson")("bob@example.com")("Admin"), teamMemberRow6("Carol Davis")("carol@example.com")("Member")])]), div2([cls(["bg-card border border-border rounded-lg p-6"])])([h3([cls(["text-lg font-semibold text-text mb-4"])])([text5("Pending Invites")]), div2([cls(["space-y-2"])])([pendingInviteRow2("dave@example.com")("Sent 2 days ago")])]), div2([cls(["bg-card border border-border rounded-lg p-6"])])([h3([cls(["text-lg font-semibold text-text mb-4"])])([text5("Organization")]), div2([cls(["space-y-4"])])([formField5("Organization Name")(input2([type_112(InputText.value), value18("straylight"), cls(["w-full px-3 py-2 bg-background border border-border rounded-md text-text text-sm focus:outline-none focus:ring-2 focus:ring-rose-400"])])), formField5("Organization URL")(input2([type_112(InputText.value), value18("forge.sensenet.dev/straylight"), disabled10(true), cls(["w-full px-3 py-2 bg-background border border-border rounded-md text-muted-foreground text-sm"])]))]), div2([cls(["mt-4"])])([button([cls(["px-4 py-2 bg-rose-400 text-background text-sm font-medium rounded-md hover:bg-rose-400/90 transition-colors cursor-pointer"]), type_37(ButtonButton.value)])([text5("Save Changes")])])])]);
   }();
   var branchRule = function(pattern2) {
     return function(rules) {
@@ -15845,12 +15972,12 @@
     };
   };
   var policiesTab = /* @__PURE__ */ function() {
-    return div2([cls(["space-y-6"])])([div2([cls(["bg-card border border-border rounded-lg p-6"])])([div2([cls(["flex items-center justify-between mb-4"])])([h3([cls(["text-lg font-semibold text-text"])])([text5("Branch Protection Rules")]), button([cls(["px-3 py-1.5 bg-rose-400 text-background text-sm font-medium rounded-md hover:bg-rose-400/90 transition-colors cursor-pointer"]), type_37(ButtonButton.value)])([text5("+ Add Rule")])]), div2([cls(["space-y-3"])])([branchRule("main")(["Require review", "Require attestation", "No force push"]), branchRule("release/*")(["Require 2 reviews", "Require CI pass"])])]), div2([cls(["bg-card border border-border rounded-lg p-6"])])([h3([cls(["text-lg font-semibold text-text mb-4"])])([text5("Review Requirements")]), div2([cls(["space-y-4"])])([formField5("Minimum reviewers")(select3([cls(["w-full px-3 py-2 bg-background border border-border rounded-md text-text text-sm focus:outline-none focus:ring-2 focus:ring-rose-400"])])([option_([text5("1")]), option_([text5("2")]), option_([text5("3")])])), toggleSetting2("Dismiss stale reviews")("Require re-review after new changes are pushed")(true), toggleSetting2("Require code owners")("Require approval from code owners for relevant paths")(false)])]), div2([cls(["bg-card border border-border rounded-lg p-6"])])([h3([cls(["text-lg font-semibold text-text mb-4"])])([text5("Agent Policies")]), p([cls(["text-sm text-muted-foreground mb-4"])])([text5("Control how AI-generated code is handled in your repositories.")]), div2([cls(["space-y-4"])])([toggleSetting2("Require attestation for agent commits")("All agent-generated commits must include valid attestation")(true), toggleSetting2("Require human review for agent code")("Agent-generated diffs always need human approval")(true), formField5("Allowed agent models")(input2([type_113(InputText.value), value19("claude-*, gpt-4*"), placeholder3("claude-*, gpt-4*"), cls(["w-full px-3 py-2 bg-background border border-border rounded-md text-text text-sm focus:outline-none focus:ring-2 focus:ring-rose-400"])]))])])]);
+    return div2([cls(["space-y-6"])])([div2([cls(["bg-card border border-border rounded-lg p-6"])])([div2([cls(["flex items-center justify-between mb-4"])])([h3([cls(["text-lg font-semibold text-text"])])([text5("Branch Protection Rules")]), button([cls(["px-3 py-1.5 bg-rose-400 text-background text-sm font-medium rounded-md hover:bg-rose-400/90 transition-colors cursor-pointer"]), type_37(ButtonButton.value)])([text5("+ Add Rule")])]), div2([cls(["space-y-3"])])([branchRule("main")(["Require review", "Require attestation", "No force push"]), branchRule("release/*")(["Require 2 reviews", "Require CI pass"])])]), div2([cls(["bg-card border border-border rounded-lg p-6"])])([h3([cls(["text-lg font-semibold text-text mb-4"])])([text5("Review Requirements")]), div2([cls(["space-y-4"])])([formField5("Minimum reviewers")(select3([cls(["w-full px-3 py-2 bg-background border border-border rounded-md text-text text-sm focus:outline-none focus:ring-2 focus:ring-rose-400"])])([option_([text5("1")]), option_([text5("2")]), option_([text5("3")])])), toggleSetting2("Dismiss stale reviews")("Require re-review after new changes are pushed")(true), toggleSetting2("Require code owners")("Require approval from code owners for relevant paths")(false)])]), div2([cls(["bg-card border border-border rounded-lg p-6"])])([h3([cls(["text-lg font-semibold text-text mb-4"])])([text5("Agent Policies")]), p([cls(["text-sm text-muted-foreground mb-4"])])([text5("Control how AI-generated code is handled in your repositories.")]), div2([cls(["space-y-4"])])([toggleSetting2("Require attestation for agent commits")("All agent-generated commits must include valid attestation")(true), toggleSetting2("Require human review for agent code")("Agent-generated diffs always need human approval")(true), formField5("Allowed agent models")(input2([type_112(InputText.value), value18("claude-*, gpt-4*"), placeholder3("claude-*, gpt-4*"), cls(["w-full px-3 py-2 bg-background border border-border rounded-md text-text text-sm focus:outline-none focus:ring-2 focus:ring-rose-400"])]))])])]);
   }();
-  var billingTab7 = /* @__PURE__ */ function() {
+  var billingTab6 = /* @__PURE__ */ function() {
     return div2([cls(["space-y-6"])])([div2([cls(["bg-card border border-border rounded-lg p-6"])])([div2([cls(["flex items-center justify-between mb-4"])])([h3([cls(["text-lg font-semibold text-text"])])([text5("Current Plan")]), a([href4("/sensenet/forge/pricing"), cls(["text-sm text-rose-400 hover:text-rose-400/80"])])([text5("Change plan")])]), div2([cls(["flex items-center gap-4 mb-4"])])([span3([cls(["text-2xl font-bold text-text"])])([text5("Pro")]), span3([cls(["text-muted-foreground"])])([text5("$15/user/month")])]), div2([cls(["grid grid-cols-2 md:grid-cols-4 gap-4"])])([planDetail2("Private Repos")("Unlimited"), planDetail2("Collaborators")("Unlimited"), planDetail2("Attestation")("Included"), planDetail2("Support")("Email")])]), div2([cls(["bg-card border border-border rounded-lg p-6"])])([h3([cls(["text-lg font-semibold text-text mb-4"])])([text5("Usage This Month")]), div2([cls(["grid grid-cols-2 md:grid-cols-4 gap-4"])])([usageStat("Diffs Created")("127"), usageStat("Stacks Landed")("42"), usageStat("Reviews Completed")("89"), usageStat("Search Queries")("1.2k")])]), div2([cls(["bg-card border border-border rounded-lg p-6"])])([h3([cls(["text-lg font-semibold text-text mb-4"])])([text5("Payment Method")]), div2([cls(["flex items-center justify-between p-3 border border-border rounded-md"])])([div2([cls(["flex items-center gap-3"])])([span3([cls(["text-text"])])([text5("Visa ending in 4242")]), span3([cls(["text-xs text-muted-foreground"])])([text5("Expires 12/26")])]), button([cls(["text-sm text-rose-400 hover:text-rose-400/80 cursor-pointer"]), type_37(ButtonButton.value)])([text5("Update")])])]), div2([cls(["bg-card border border-border rounded-lg p-6"])])([h3([cls(["text-lg font-semibold text-text mb-4"])])([text5("Billing History")]), div2([cls(["space-y-2"])])([invoiceRow4("Feb 1, 2026")("$45.00")("Paid"), invoiceRow4("Jan 1, 2026")("$45.00")("Paid"), invoiceRow4("Dec 1, 2025")("$30.00")("Paid")])])]);
   }();
-  var availableIntegration2 = function(name16) {
+  var availableIntegration3 = function(name16) {
     return function(description) {
       return div2([cls(["p-4 border border-border rounded-lg hover:border-rose-400/50 transition-colors cursor-pointer"])])([p([cls(["text-sm text-text font-medium mb-1"])])([text5(name16)]), p([cls(["text-xs text-muted-foreground mb-3"])])([text5(description)]), button([cls(["text-sm text-rose-400 hover:text-rose-400/80"]), type_37(ButtonButton.value)])([text5("Connect")])]);
     };
@@ -15862,8 +15989,8 @@
       };
     };
   };
-  var securityTab6 = /* @__PURE__ */ function() {
-    return div2([cls(["space-y-6"])])([div2([cls(["bg-card border border-border rounded-lg p-6"])])([h3([cls(["text-lg font-semibold text-text mb-4"])])([text5("Two-Factor Authentication")]), p([cls(["text-sm text-muted-foreground mb-4"])])([text5("Add an extra layer of security to your account.")]), div2([cls(["flex items-center gap-4"])])([span3([cls(["text-sm text-green-400"])])([text5("Enabled")]), button([cls(["px-4 py-2 border border-border text-text text-sm font-medium rounded-md hover:bg-card transition-colors cursor-pointer"]), type_37(ButtonButton.value)])([text5("Manage")])])]), div2([cls(["bg-card border border-border rounded-lg p-6"])])([div2([cls(["flex items-center justify-between mb-4"])])([h3([cls(["text-lg font-semibold text-text"])])([text5("Signing Keys")]), button([cls(["px-3 py-1.5 bg-rose-400 text-background text-sm font-medium rounded-md hover:bg-rose-400/90 transition-colors cursor-pointer"]), type_37(ButtonButton.value)])([text5("+ Generate Key")])]), p([cls(["text-sm text-muted-foreground mb-4"])])([text5("Keys used to sign your commits and diffs for attestation.")]), div2([cls(["space-y-2"])])([signingKeyRow("ed25519")("SHA256:xyz789...")("Primary")(true)])]), div2([cls(["bg-card border border-border rounded-lg p-6"])])([h3([cls(["text-lg font-semibold text-text mb-4"])])([text5("Active Sessions")]), p([cls(["text-sm text-muted-foreground mb-4"])])([text5("Manage your active sessions across devices.")]), div2([cls(["space-y-2"])])([sessionRow4("MacBook Pro")("San Francisco, US")("Active now")(true), sessionRow4("Windows Desktop")("San Francisco, US")("2 hours ago")(false)]), button([cls(["mt-4 text-sm text-red-400 hover:text-red-400/80 cursor-pointer"]), type_37(ButtonButton.value)])([text5("Sign out all other sessions")])]), div2([cls(["bg-card border border-border rounded-lg p-6"])])([h3([cls(["text-lg font-semibold text-text mb-4"])])([text5("Audit Log")]), p([cls(["text-sm text-muted-foreground mb-4"])])([text5("Recent security events for your account.")]), div2([cls(["space-y-2"])])([auditRow("Login")("MacBook Pro")("2 hours ago"), auditRow("SSH key added")("Work Desktop")("3 days ago"), auditRow("Password changed")("MacBook Pro")("1 week ago")])])]);
+  var securityTab4 = /* @__PURE__ */ function() {
+    return div2([cls(["space-y-6"])])([div2([cls(["bg-card border border-border rounded-lg p-6"])])([h3([cls(["text-lg font-semibold text-text mb-4"])])([text5("Two-Factor Authentication")]), p([cls(["text-sm text-muted-foreground mb-4"])])([text5("Add an extra layer of security to your account.")]), div2([cls(["flex items-center gap-4"])])([span3([cls(["text-sm text-green-400"])])([text5("Enabled")]), button([cls(["px-4 py-2 border border-border text-text text-sm font-medium rounded-md hover:bg-card transition-colors cursor-pointer"]), type_37(ButtonButton.value)])([text5("Manage")])])]), div2([cls(["bg-card border border-border rounded-lg p-6"])])([div2([cls(["flex items-center justify-between mb-4"])])([h3([cls(["text-lg font-semibold text-text"])])([text5("Signing Keys")]), button([cls(["px-3 py-1.5 bg-rose-400 text-background text-sm font-medium rounded-md hover:bg-rose-400/90 transition-colors cursor-pointer"]), type_37(ButtonButton.value)])([text5("+ Generate Key")])]), p([cls(["text-sm text-muted-foreground mb-4"])])([text5("Keys used to sign your commits and diffs for attestation.")]), div2([cls(["space-y-2"])])([signingKeyRow("ed25519")("SHA256:xyz789...")("Primary")(true)])]), div2([cls(["bg-card border border-border rounded-lg p-6"])])([h3([cls(["text-lg font-semibold text-text mb-4"])])([text5("Active Sessions")]), p([cls(["text-sm text-muted-foreground mb-4"])])([text5("Manage your active sessions across devices.")]), div2([cls(["space-y-2"])])([sessionRow3("MacBook Pro")("San Francisco, US")("Active now")(true), sessionRow3("Windows Desktop")("San Francisco, US")("2 hours ago")(false)]), button([cls(["mt-4 text-sm text-red-400 hover:text-red-400/80 cursor-pointer"]), type_37(ButtonButton.value)])([text5("Sign out all other sessions")])]), div2([cls(["bg-card border border-border rounded-lg p-6"])])([h3([cls(["text-lg font-semibold text-text mb-4"])])([text5("Audit Log")]), p([cls(["text-sm text-muted-foreground mb-4"])])([text5("Recent security events for your account.")]), div2([cls(["space-y-2"])])([auditRow("Login")("MacBook Pro")("2 hours ago"), auditRow("SSH key added")("Work Desktop")("3 days ago"), auditRow("Password changed")("MacBook Pro")("1 week ago")])])]);
   }();
   var apiKeyRow4 = function(name16) {
     return function(key) {
@@ -15872,19 +15999,19 @@
       };
     };
   };
-  var integrationsTab2 = /* @__PURE__ */ function() {
-    return div2([cls(["space-y-6"])])([div2([cls(["bg-card border border-border rounded-lg p-6"])])([h3([cls(["text-lg font-semibold text-text mb-4"])])([text5("Connected Integrations")]), div2([cls(["space-y-3"])])([integrationRow2("Slack")("Post notifications to #engineering")(true), integrationRow2("Linear")("Sync diff status with issues")(true)])]), div2([cls(["bg-card border border-border rounded-lg p-6"])])([h3([cls(["text-lg font-semibold text-text mb-4"])])([text5("Available Integrations")]), div2([cls(["grid grid-cols-1 md:grid-cols-2 gap-4"])])([availableIntegration2("Discord")("Post review notifications to Discord channels"), availableIntegration2("Jira")("Link diffs to Jira issues"), availableIntegration2("PagerDuty")("Alert on failed CI for protected branches"), availableIntegration2("Datadog")("Send metrics and logs to Datadog")])]), div2([cls(["bg-card border border-border rounded-lg p-6"])])([div2([cls(["flex items-center justify-between mb-4"])])([h3([cls(["text-lg font-semibold text-text"])])([text5("Webhooks")]), button([cls(["px-3 py-1.5 bg-rose-400 text-background text-sm font-medium rounded-md hover:bg-rose-400/90 transition-colors cursor-pointer"]), type_37(ButtonButton.value)])([text5("+ Add Webhook")])]), div2([cls(["space-y-2"])])([webhookRow2("https://api.example.com/forge-webhook")(["diff.created", "diff.landed"])])]), div2([cls(["bg-card border border-border rounded-lg p-6"])])([div2([cls(["flex items-center justify-between mb-4"])])([h3([cls(["text-lg font-semibold text-text"])])([text5("API Keys")]), button([cls(["px-3 py-1.5 bg-rose-400 text-background text-sm font-medium rounded-md hover:bg-rose-400/90 transition-colors cursor-pointer"]), type_37(ButtonButton.value)])([text5("+ Create Key")])]), p([cls(["text-sm text-muted-foreground mb-4"])])([text5("API keys for programmatic access to sensenet//forge.")]), div2([cls(["space-y-2"])])([apiKeyRow4("CI Pipeline")("forge_sk_...abc123")("Created Feb 15, 2026"), apiKeyRow4("Agent Integration")("forge_sk_...def456")("Created Feb 10, 2026")])])]);
+  var integrationsTab3 = /* @__PURE__ */ function() {
+    return div2([cls(["space-y-6"])])([div2([cls(["bg-card border border-border rounded-lg p-6"])])([h3([cls(["text-lg font-semibold text-text mb-4"])])([text5("Connected Integrations")]), div2([cls(["space-y-3"])])([integrationRow3("Slack")("Post notifications to #engineering")(true), integrationRow3("Linear")("Sync diff status with issues")(true)])]), div2([cls(["bg-card border border-border rounded-lg p-6"])])([h3([cls(["text-lg font-semibold text-text mb-4"])])([text5("Available Integrations")]), div2([cls(["grid grid-cols-1 md:grid-cols-2 gap-4"])])([availableIntegration3("Discord")("Post review notifications to Discord channels"), availableIntegration3("Jira")("Link diffs to Jira issues"), availableIntegration3("PagerDuty")("Alert on failed CI for protected branches"), availableIntegration3("Datadog")("Send metrics and logs to Datadog")])]), div2([cls(["bg-card border border-border rounded-lg p-6"])])([div2([cls(["flex items-center justify-between mb-4"])])([h3([cls(["text-lg font-semibold text-text"])])([text5("Webhooks")]), button([cls(["px-3 py-1.5 bg-rose-400 text-background text-sm font-medium rounded-md hover:bg-rose-400/90 transition-colors cursor-pointer"]), type_37(ButtonButton.value)])([text5("+ Add Webhook")])]), div2([cls(["space-y-2"])])([webhookRow2("https://api.example.com/forge-webhook")(["diff.created", "diff.landed"])])]), div2([cls(["bg-card border border-border rounded-lg p-6"])])([div2([cls(["flex items-center justify-between mb-4"])])([h3([cls(["text-lg font-semibold text-text"])])([text5("API Keys")]), button([cls(["px-3 py-1.5 bg-rose-400 text-background text-sm font-medium rounded-md hover:bg-rose-400/90 transition-colors cursor-pointer"]), type_37(ButtonButton.value)])([text5("+ Create Key")])]), p([cls(["text-sm text-muted-foreground mb-4"])])([text5("API keys for programmatic access to sensenet//forge.")]), div2([cls(["space-y-2"])])([apiKeyRow4("CI Pipeline")("forge_sk_...abc123")("Created Feb 15, 2026"), apiKeyRow4("Agent Integration")("forge_sk_...def456")("Created Feb 10, 2026")])])]);
   }();
-  var accountTab6 = /* @__PURE__ */ function() {
-    return div2([cls(["space-y-6"])])([div2([cls(["bg-card border border-border rounded-lg p-6"])])([h3([cls(["text-lg font-semibold text-text mb-4"])])([text5("Profile")]), div2([cls(["space-y-4"])])([formField5("Username")(input2([type_113(InputText.value), value19("alice"), cls(["w-full px-3 py-2 bg-background border border-border rounded-md text-text text-sm focus:outline-none focus:ring-2 focus:ring-rose-400"])])), formField5("Display Name")(input2([type_113(InputText.value), value19("Alice Chen"), cls(["w-full px-3 py-2 bg-background border border-border rounded-md text-text text-sm focus:outline-none focus:ring-2 focus:ring-rose-400"])])), formField5("Email")(input2([type_113(InputEmail.value), value19("alice@example.com"), disabled10(true), cls(["w-full px-3 py-2 bg-background border border-border rounded-md text-muted-foreground text-sm"])]))]), div2([cls(["mt-4"])])([button([cls(["px-4 py-2 bg-rose-400 text-background text-sm font-medium rounded-md hover:bg-rose-400/90 transition-colors cursor-pointer"]), type_37(ButtonButton.value)])([text5("Save Changes")])])]), div2([cls(["bg-card border border-border rounded-lg p-6"])])([div2([cls(["flex items-center justify-between mb-4"])])([h3([cls(["text-lg font-semibold text-text"])])([text5("SSH Keys")]), button([cls(["px-3 py-1.5 bg-rose-400 text-background text-sm font-medium rounded-md hover:bg-rose-400/90 transition-colors cursor-pointer"]), type_37(ButtonButton.value)])([text5("+ Add Key")])]), div2([cls(["space-y-2"])])([sshKeyRow("MacBook Pro")("SHA256:abc123...")("Added Feb 10, 2026"), sshKeyRow("Work Desktop")("SHA256:def456...")("Added Jan 5, 2026")])]), div2([cls(["bg-card border border-red-500/30 rounded-lg p-6"])])([h3([cls(["text-lg font-semibold text-red-400 mb-4"])])([text5("Danger Zone")]), p([cls(["text-sm text-muted-foreground mb-4"])])([text5("Once you delete your account, all your repositories and diffs will be permanently deleted.")]), button([cls(["px-4 py-2 border border-red-500 text-red-400 text-sm font-medium rounded-md hover:bg-red-500/10 transition-colors cursor-pointer"]), type_37(ButtonButton.value)])([text5("Delete Account")])])]);
+  var accountTab5 = /* @__PURE__ */ function() {
+    return div2([cls(["space-y-6"])])([div2([cls(["bg-card border border-border rounded-lg p-6"])])([h3([cls(["text-lg font-semibold text-text mb-4"])])([text5("Profile")]), div2([cls(["space-y-4"])])([formField5("Username")(input2([type_112(InputText.value), value18("alice"), cls(["w-full px-3 py-2 bg-background border border-border rounded-md text-text text-sm focus:outline-none focus:ring-2 focus:ring-rose-400"])])), formField5("Display Name")(input2([type_112(InputText.value), value18("Alice Chen"), cls(["w-full px-3 py-2 bg-background border border-border rounded-md text-text text-sm focus:outline-none focus:ring-2 focus:ring-rose-400"])])), formField5("Email")(input2([type_112(InputEmail.value), value18("alice@example.com"), disabled10(true), cls(["w-full px-3 py-2 bg-background border border-border rounded-md text-muted-foreground text-sm"])]))]), div2([cls(["mt-4"])])([button([cls(["px-4 py-2 bg-rose-400 text-background text-sm font-medium rounded-md hover:bg-rose-400/90 transition-colors cursor-pointer"]), type_37(ButtonButton.value)])([text5("Save Changes")])])]), div2([cls(["bg-card border border-border rounded-lg p-6"])])([div2([cls(["flex items-center justify-between mb-4"])])([h3([cls(["text-lg font-semibold text-text"])])([text5("SSH Keys")]), button([cls(["px-3 py-1.5 bg-rose-400 text-background text-sm font-medium rounded-md hover:bg-rose-400/90 transition-colors cursor-pointer"]), type_37(ButtonButton.value)])([text5("+ Add Key")])]), div2([cls(["space-y-2"])])([sshKeyRow("MacBook Pro")("SHA256:abc123...")("Added Feb 10, 2026"), sshKeyRow("Work Desktop")("SHA256:def456...")("Added Jan 5, 2026")])]), div2([cls(["bg-card border border-red-500/30 rounded-lg p-6"])])([h3([cls(["text-lg font-semibold text-red-400 mb-4"])])([text5("Danger Zone")]), p([cls(["text-sm text-muted-foreground mb-4"])])([text5("Once you delete your account, all your repositories and diffs will be permanently deleted.")]), button([cls(["px-4 py-2 border border-red-500 text-red-400 text-sm font-medium rounded-md hover:bg-red-500/10 transition-colors cursor-pointer"]), type_37(ButtonButton.value)])([text5("Delete Account")])])]);
   }();
   var content20 = function(state3) {
     if (state3.activeTab === "account") {
-      return accountTab6;
+      return accountTab5;
     }
     ;
     if (state3.activeTab === "billing") {
-      return billingTab7;
+      return billingTab6;
     }
     ;
     if (state3.activeTab === "team") {
@@ -15892,7 +16019,7 @@
     }
     ;
     if (state3.activeTab === "security") {
-      return securityTab6;
+      return securityTab4;
     }
     ;
     if (state3.activeTab === "repos") {
@@ -15904,10 +16031,10 @@
     }
     ;
     if (state3.activeTab === "integrations") {
-      return integrationsTab2;
+      return integrationsTab3;
     }
     ;
-    return accountTab6;
+    return accountTab5;
   };
   var render61 = function(state3) {
     return div2([cls(["max-w-[1100px] mx-auto px-6 py-8"])])([header14, div2([cls(["grid grid-cols-1 lg:grid-cols-[200px_1fr] gap-8"])])([sidebar18(state3), content20(state3)])]);
@@ -15928,7 +16055,7 @@
 
   // output/Straylight.Pages.Products.SensenetPublish.Dashboard/index.js
   var type_38 = /* @__PURE__ */ type_17(isPropButtonType);
-  var show13 = /* @__PURE__ */ show(showInt);
+  var show14 = /* @__PURE__ */ show(showInt);
   var modify_33 = /* @__PURE__ */ modify_(monadStateHalogenM);
   var SetTab10 = /* @__PURE__ */ function() {
     function SetTab12(value0) {
@@ -15941,17 +16068,17 @@
     return SetTab12;
   }();
   var tabButton10 = function(state3) {
-    return function(value21) {
+    return function(value20) {
       return function(label5) {
         return button([cls(["px-4 py-2 text-sm font-medium transition-colors -mb-px cursor-pointer", function() {
-          var $11 = state3.activeTab === value21;
+          var $11 = state3.activeTab === value20;
           if ($11) {
             return "text-teal-400 border-b-2 border-teal-400";
           }
           ;
           return "text-muted-foreground hover:text-text";
         }()]), type_38(ButtonButton.value), onClick(function(v) {
-          return new SetTab10(value21);
+          return new SetTab10(value20);
         })])([text5(label5)]);
       };
     };
@@ -15960,9 +16087,9 @@
     return div2([cls(["flex gap-1 mb-8 border-b border-border"])])([tabButton10(state3)("overview")("Overview"), tabButton10(state3)("builds")("Builds"), tabButton10(state3)("references")("References"), tabButton10(state3)("projects")("Projects")]);
   };
   var statCard10 = function(label5) {
-    return function(value21) {
+    return function(value20) {
       return function(subtitle) {
-        return div2([cls(["bg-card border border-border rounded-lg p-4"])])([p([cls(["text-sm text-muted-foreground mb-1"])])([text5(label5)]), p([cls(["text-2xl font-bold text-text"])])([text5(value21)]), p([cls(["text-xs text-muted-foreground"])])([text5(subtitle)])]);
+        return div2([cls(["bg-card border border-border rounded-lg p-4"])])([p([cls(["text-sm text-muted-foreground mb-1"])])([text5(label5)]), p([cls(["text-2xl font-bold text-text"])])([text5(value20)]), p([cls(["text-xs text-muted-foreground"])])([text5(subtitle)])]);
       };
     };
   };
@@ -15970,10 +16097,10 @@
     return function(total) {
       return function(resolved) {
         return function(broken) {
-          return div2([cls(["p-4 flex items-center justify-between"])])([div_([p([cls(["text-text font-medium"])])([text5(project)]), p([cls(["text-sm text-muted-foreground"])])([text5(show13(total) + " total references")])]), div2([cls(["flex items-center gap-4"])])([span3([cls(["text-sm text-green-400"])])([text5(show13(resolved) + " resolved")]), function() {
+          return div2([cls(["p-4 flex items-center justify-between"])])([div_([p([cls(["text-text font-medium"])])([text5(project)]), p([cls(["text-sm text-muted-foreground"])])([text5(show14(total) + " total references")])]), div2([cls(["flex items-center gap-4"])])([span3([cls(["text-sm text-green-400"])])([text5(show14(resolved) + " resolved")]), function() {
             var $12 = broken > 0;
             if ($12) {
-              return span3([cls(["text-sm text-red-400"])])([text5(show13(broken) + " broken")]);
+              return span3([cls(["text-sm text-red-400"])])([text5(show14(broken) + " broken")]);
             }
             ;
             return text5("");
@@ -15992,14 +16119,14 @@
         }
         ;
         return "text-yellow-400";
-      }()])])([text5(show13(pct) + "%")])]), div2([cls(["h-2 bg-muted rounded-full overflow-hidden"])])([div2([cls(["h-full rounded-full", function() {
+      }()])])([text5(show14(pct) + "%")])]), div2([cls(["h-2 bg-muted rounded-full overflow-hidden"])])([div2([cls(["h-full rounded-full", function() {
         var $14 = pct === 100;
         if ($14) {
           return "bg-green-400";
         }
         ;
         return "bg-yellow-400";
-      }()]), style("width: " + (show13(pct) + "%"))])([])])]);
+      }()]), style("width: " + (show14(pct) + "%"))])([])])]);
     };
   };
   var referenceHealthCard = /* @__PURE__ */ div2([/* @__PURE__ */ cls(["bg-card border border-border rounded-lg"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["p-4 border-b border-border"])])([/* @__PURE__ */ h3([/* @__PURE__ */ cls(["text-lg font-semibold text-text"])])([/* @__PURE__ */ text5("Reference Health")])]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["p-4 space-y-4"])])([/* @__PURE__ */ refHealthRow("api-docs")(100), /* @__PURE__ */ refHealthRow("sdk-reference")(100), /* @__PURE__ */ refHealthRow("internal-docs")(97), /* @__PURE__ */ refHealthRow("guides")(100)])]);
@@ -16189,7 +16316,7 @@
   var quickstartContent10 = /* @__PURE__ */ article8([/* @__PURE__ */ h18("Quick Start"), /* @__PURE__ */ p8("Get sensenet//publish working in under a minute."), /* @__PURE__ */ h28("1. Install the CLI"), /* @__PURE__ */ codeBlock([/* @__PURE__ */ codeLine26("# ")("Using Nix (recommended)"), /* @__PURE__ */ codeLine26("$ ")("nix profile install github:straylight-software/sensenet-publish"), /* @__PURE__ */ text5("\n"), /* @__PURE__ */ codeLine26("# ")("Or via curl"), /* @__PURE__ */ codeLine26("$ ")("curl -fsSL https://publish.sensenet.dev/install.sh | sh")]), /* @__PURE__ */ h28("2. Initialize your project"), /* @__PURE__ */ codeBlock([/* @__PURE__ */ codeLine26("$ ")("cd your-project"), /* @__PURE__ */ codeLine26("$ ")("sensenet-publish init"), /* @__PURE__ */ codeLine26("")("Created sensenet-publish.toml"), /* @__PURE__ */ codeLine26("")("Detected languages: rust, typescript")]), /* @__PURE__ */ h28("3. Build the scope graph"), /* @__PURE__ */ codeBlock([/* @__PURE__ */ codeLine26("$ ")("sensenet-publish build"), /* @__PURE__ */ codeLine26("")("Parsing source files..."), /* @__PURE__ */ codeLine26("")("Building scope graph..."), /* @__PURE__ */ codeLine26("")("Resolving references..."), /* @__PURE__ */ codeLine26("")("Generating output..."), /* @__PURE__ */ codeLine26("")("Done! Output written to ./docs/build")]), /* @__PURE__ */ h28("4. Check references (CI mode)"), /* @__PURE__ */ codeBlock([/* @__PURE__ */ codeLine26("$ ")("sensenet-publish check --strict"), /* @__PURE__ */ codeLine26("")("Checking 247 references..."), /* @__PURE__ */ codeLine26("")("All references resolved")]), /* @__PURE__ */ h28("Next steps"), /* @__PURE__ */ ul([/* @__PURE__ */ cls(["space-y-2 text-muted-foreground"])])([/* @__PURE__ */ li7(link8)("/sensenet/publish/docs/scope-graphs")("Understand scope graphs"), /* @__PURE__ */ li7(link8)("/sensenet/publish/docs/ci")("Set up CI integration"), /* @__PURE__ */ li7(link8)("/sensenet/publish/docs/cli")("Explore the CLI")])]);
   var referencesContent = /* @__PURE__ */ article8([/* @__PURE__ */ h18("Reference Resolution"), /* @__PURE__ */ p8("How sensenet//publish verifies every cross-reference in your documentation."), /* @__PURE__ */ h28("The problem"), /* @__PURE__ */ p8("Documentation rots. You rename a function, delete a type, or move a module - and links break silently. Readers find dead links. Search indexes point nowhere. Trust erodes."), /* @__PURE__ */ h28("The solution"), /* @__PURE__ */ p8("Every reference in your documentation is resolved against the scope graph at build time. If a reference can't be resolved, the build fails with a helpful error message."), /* @__PURE__ */ h28("Reference syntax"), /* @__PURE__ */ p8("In doc comments and markdown, use backtick references:"), /* @__PURE__ */ codeBlock([/* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-muted-foreground"])])([/* @__PURE__ */ text5("/// Process the [`Data`] and return an [`Output`].")]), /* @__PURE__ */ text5("\n"), /* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-muted-foreground"])])([/* @__PURE__ */ text5("/// See [`utils::process`] for details.")])]), /* @__PURE__ */ h28("Error messages"), /* @__PURE__ */ p8("When a reference fails to resolve:"), /* @__PURE__ */ codeBlock([/* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-red-400"])])([/* @__PURE__ */ text5("ERROR")]), /* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-text"])])([/* @__PURE__ */ text5(": Unresolved reference in docs/api.md:47")]), /* @__PURE__ */ text5("\n"), /* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-muted-foreground"])])([/* @__PURE__ */ text5("  See [`process_data`] for details.")]), /* @__PURE__ */ text5("\n"), /* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-muted-foreground"])])([/* @__PURE__ */ text5("       ^^^^^^^^^^^^^^^")]), /* @__PURE__ */ text5("\n"), /* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-muted-foreground"])])([/* @__PURE__ */ text5("  Did you mean: `process` (lib.rs:42)")])]), /* @__PURE__ */ h28("Version pinning"), /* @__PURE__ */ p8("Pin references to specific versions for stable external links:"), /* @__PURE__ */ codeBlock([/* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-muted-foreground"])])([/* @__PURE__ */ text5("See [`utils::process@v1.2.0`] for the previous API.")])])]);
   var scopeGraphsContent = /* @__PURE__ */ article8([/* @__PURE__ */ h18("Scope Graphs"), /* @__PURE__ */ p8("Understanding the semantic foundation of sensenet//publish."), /* @__PURE__ */ h28("What is a scope graph?"), /* @__PURE__ */ p8("A scope graph is a language-agnostic representation of name binding and resolution. It captures:"), /* @__PURE__ */ ul([/* @__PURE__ */ cls(["space-y-2 text-muted-foreground mb-6"])])([/* @__PURE__ */ li$prime7("Definitions - Where names are introduced"), /* @__PURE__ */ li$prime7("References - Where names are used"), /* @__PURE__ */ li$prime7("Scopes - Regions where bindings are visible"), /* @__PURE__ */ li$prime7("Edges - Relationships between scopes (imports, inheritance, etc.)")]), /* @__PURE__ */ h28("Why scope graphs?"), /* @__PURE__ */ p8("Traditional doc generators use regex or simple AST matching to find references. This breaks on:"), /* @__PURE__ */ ul([/* @__PURE__ */ cls(["space-y-2 text-muted-foreground mb-6"])])([/* @__PURE__ */ li$prime7("Shadowing - The same name in different scopes"), /* @__PURE__ */ li$prime7("Imports and re-exports"), /* @__PURE__ */ li$prime7("Macros and generated code"), /* @__PURE__ */ li$prime7("Type-level vs value-level names")]), /* @__PURE__ */ p8("Scope graphs handle all of these correctly because they model the actual name resolution semantics of the language."), /* @__PURE__ */ h28("Example"), /* @__PURE__ */ codeBlock([/* @__PURE__ */ codeLine26("// ")("Rust source"), /* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-text"])])([/* @__PURE__ */ text5("mod utils {")]), /* @__PURE__ */ text5("\n"), /* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-text"])])([/* @__PURE__ */ text5("    pub fn process(data: Data) -> Result<Output> { ... }")]), /* @__PURE__ */ text5("\n"), /* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-text"])])([/* @__PURE__ */ text5("}")]), /* @__PURE__ */ text5("\n\n"), /* @__PURE__ */ codeLine26("// ")("Scope graph representation"), /* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-teal-400"])])([/* @__PURE__ */ text5("scope:utils")]), /* @__PURE__ */ text5("\n"), /* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-text"])])([/* @__PURE__ */ text5("  def process @ utils.rs:2")]), /* @__PURE__ */ text5("\n"), /* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-text"])])([/* @__PURE__ */ text5("  ref Data -> types::Data")]), /* @__PURE__ */ text5("\n"), /* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-text"])])([/* @__PURE__ */ text5("  ref Result -> std::result::Result")]), /* @__PURE__ */ text5("\n"), /* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-text"])])([/* @__PURE__ */ text5("  ref Output -> output::Output")])]), /* @__PURE__ */ h28("Querying the scope graph"), /* @__PURE__ */ codeBlock([/* @__PURE__ */ codeLine26("$ ")("sensenet-publish query 'callers(utils::process)'"), /* @__PURE__ */ codeLine26("$ ")("sensenet-publish query 'refs-to(types::Data)'"), /* @__PURE__ */ codeLine26("$ ")("sensenet-publish query 'scope-of(utils::process)'")])]);
-  var apiContent10 = /* @__PURE__ */ article8([/* @__PURE__ */ h18("REST API"), /* @__PURE__ */ p8("Programmatic access to sensenet//publish. API access requires a Pro plan or higher."), /* @__PURE__ */ h28("Authentication"), /* @__PURE__ */ codeBlock([/* @__PURE__ */ codeLine26("")("Authorization: Bearer <API_TOKEN>")]), /* @__PURE__ */ p8("Get your API token from the dashboard -> Settings -> API Keys."), /* @__PURE__ */ h28("Base URL"), /* @__PURE__ */ codeBlock([/* @__PURE__ */ codeLine26("")("https://api.publish.sensenet.dev/v1")]), /* @__PURE__ */ h28("Build documentation"), /* @__PURE__ */ codeBlock([/* @__PURE__ */ codeLine26("")("POST /projects/{project}/build"), /* @__PURE__ */ codeLine26("")(""), /* @__PURE__ */ codeLine26("")("Request body:"), /* @__PURE__ */ codeLine26("")("{"), /* @__PURE__ */ codeLine26("")('  "ref": "main",'), /* @__PURE__ */ codeLine26("")('  "format": "html",'), /* @__PURE__ */ codeLine26("")('  "strict": true'), /* @__PURE__ */ codeLine26("")("}")]), /* @__PURE__ */ h28("Check references"), /* @__PURE__ */ codeBlock([/* @__PURE__ */ codeLine26("")("POST /projects/{project}/check"), /* @__PURE__ */ codeLine26("")(""), /* @__PURE__ */ codeLine26("")("Response:"), /* @__PURE__ */ codeLine26("")("{"), /* @__PURE__ */ codeLine26("")('  "status": "success",'), /* @__PURE__ */ codeLine26("")('  "references_checked": 247,'), /* @__PURE__ */ codeLine26("")('  "errors": [],'), /* @__PURE__ */ codeLine26("")('  "warnings": []'), /* @__PURE__ */ codeLine26("")("}")]), /* @__PURE__ */ h28("Query scope graph"), /* @__PURE__ */ codeBlock([/* @__PURE__ */ codeLine26("")("POST /projects/{project}/query"), /* @__PURE__ */ codeLine26("")(""), /* @__PURE__ */ codeLine26("")("Request body:"), /* @__PURE__ */ codeLine26("")("{"), /* @__PURE__ */ codeLine26("")('  "query": "callers(process)"'), /* @__PURE__ */ codeLine26("")("}")]), /* @__PURE__ */ h28("Rate limits"), /* @__PURE__ */ p8("API requests are rate limited to 100 requests per minute per project.")]);
+  var apiContent11 = /* @__PURE__ */ article8([/* @__PURE__ */ h18("REST API"), /* @__PURE__ */ p8("Programmatic access to sensenet//publish. API access requires a Pro plan or higher."), /* @__PURE__ */ h28("Authentication"), /* @__PURE__ */ codeBlock([/* @__PURE__ */ codeLine26("")("Authorization: Bearer <API_TOKEN>")]), /* @__PURE__ */ p8("Get your API token from the dashboard -> Settings -> API Keys."), /* @__PURE__ */ h28("Base URL"), /* @__PURE__ */ codeBlock([/* @__PURE__ */ codeLine26("")("https://api.publish.sensenet.dev/v1")]), /* @__PURE__ */ h28("Build documentation"), /* @__PURE__ */ codeBlock([/* @__PURE__ */ codeLine26("")("POST /projects/{project}/build"), /* @__PURE__ */ codeLine26("")(""), /* @__PURE__ */ codeLine26("")("Request body:"), /* @__PURE__ */ codeLine26("")("{"), /* @__PURE__ */ codeLine26("")('  "ref": "main",'), /* @__PURE__ */ codeLine26("")('  "format": "html",'), /* @__PURE__ */ codeLine26("")('  "strict": true'), /* @__PURE__ */ codeLine26("")("}")]), /* @__PURE__ */ h28("Check references"), /* @__PURE__ */ codeBlock([/* @__PURE__ */ codeLine26("")("POST /projects/{project}/check"), /* @__PURE__ */ codeLine26("")(""), /* @__PURE__ */ codeLine26("")("Response:"), /* @__PURE__ */ codeLine26("")("{"), /* @__PURE__ */ codeLine26("")('  "status": "success",'), /* @__PURE__ */ codeLine26("")('  "references_checked": 247,'), /* @__PURE__ */ codeLine26("")('  "errors": [],'), /* @__PURE__ */ codeLine26("")('  "warnings": []'), /* @__PURE__ */ codeLine26("")("}")]), /* @__PURE__ */ h28("Query scope graph"), /* @__PURE__ */ codeBlock([/* @__PURE__ */ codeLine26("")("POST /projects/{project}/query"), /* @__PURE__ */ codeLine26("")(""), /* @__PURE__ */ codeLine26("")("Request body:"), /* @__PURE__ */ codeLine26("")("{"), /* @__PURE__ */ codeLine26("")('  "query": "callers(process)"'), /* @__PURE__ */ codeLine26("")("}")]), /* @__PURE__ */ h28("Rate limits"), /* @__PURE__ */ p8("API requests are rate limited to 100 requests per minute per project.")]);
   var renderContent10 = function(path) {
     if (path === "/sensenet/publish/docs") {
       return overviewContent10;
@@ -16224,7 +16351,7 @@
     }
     ;
     if (path === "/sensenet/publish/docs/api") {
-      return apiContent10;
+      return apiContent11;
     }
     ;
     if (path === "/sensenet/publish/docs/config") {
@@ -16325,14 +16452,14 @@
   };
   var features10 = /* @__PURE__ */ section([/* @__PURE__ */ cls(["py-24 border-t border-border"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["max-w-[1100px] mx-auto px-6"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["text-center mb-16"])])([/* @__PURE__ */ h2([/* @__PURE__ */ cls(["text-3xl font-bold text-text mb-4"])])([/* @__PURE__ */ text5("Why sensenet//publish?")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-muted-foreground max-w-xl mx-auto"])])([/* @__PURE__ */ text5("Built by engineers who got tired of dead links and stale documentation.")])]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"])])([/* @__PURE__ */ featureCard10("G")("Scope-graph analysis")("Full semantic understanding via scope graphs. Every reference tracked from definition to usage. No regex heuristics."), /* @__PURE__ */ featureCard10("~>")("Reference resolution")("Every cross-reference in your docs is verified at build time. Broken links fail the build. Zero dead references in production."), /* @__PURE__ */ featureCard10("{ }")("Cross-language")("Rust, Haskell, TypeScript, C++, Python, and more. Unified scope-graph representation across all supported languages."), /* @__PURE__ */ featureCard10("{}")("Machine-readable output")("JSON-LD, OpenAPI, and custom formats. Structured output for IDE plugins, search indexes, and downstream tooling."), /* @__PURE__ */ featureCard10("!")("Build-integrated")("Runs in your CI pipeline. Docs are artifacts, not afterthoughts. Version-pinned references across releases."), /* @__PURE__ */ featureCard10("?")("Semantic search")("Query by type signature, scope, or relationship. Find all callers of a function. Trace data flow through your codebase.")])])]);
   var cta21 = /* @__PURE__ */ section([/* @__PURE__ */ cls(["py-24 border-t border-border"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["max-w-[800px] mx-auto px-6 text-center"])])([/* @__PURE__ */ h2([/* @__PURE__ */ cls(["text-3xl font-bold text-text mb-4"])])([/* @__PURE__ */ text5("Ready for docs that don't lie?")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-muted-foreground mb-8"])])([/* @__PURE__ */ text5("Free for open source. Simple pricing for teams.")]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["flex flex-col sm:flex-row items-center justify-center gap-4"])])([/* @__PURE__ */ primaryButton11("/sensenet/publish/pricing")("View pricing"), /* @__PURE__ */ secondaryButton11("/sensenet/publish/docs")("Read the docs")])])]);
-  var compCell5 = function(value21) {
+  var compCell5 = function(value20) {
     return span3([cls([function() {
-      if (value21 === "no") {
+      if (value20 === "no") {
         return "text-muted-foreground/50";
       }
       ;
       return "text-muted-foreground";
-    }()])])([text5(value21)]);
+    }()])])([text5(value20)]);
   };
   var comparisonRow10 = function(feature) {
     return function(us) {
@@ -16446,8 +16573,8 @@
   // output/Straylight.Pages.Products.SensenetPublish.Settings/index.js
   var type_39 = /* @__PURE__ */ type_17(isPropButtonType);
   var modify_35 = /* @__PURE__ */ modify_(monadStateHalogenM);
-  var type_114 = /* @__PURE__ */ type_17(isPropInputType);
-  var value20 = /* @__PURE__ */ value12(isPropString);
+  var type_113 = /* @__PURE__ */ type_17(isPropInputType);
+  var value19 = /* @__PURE__ */ value12(isPropString);
   var SetTab11 = /* @__PURE__ */ function() {
     function SetTab12(value0) {
       this.value0 = value0;
@@ -16477,7 +16604,7 @@
       };
     };
   };
-  var teamMemberRow6 = function(email) {
+  var teamMemberRow7 = function(email) {
     return function(role) {
       return div2([cls(["flex items-center justify-between p-3 bg-muted rounded-md"])])([p([cls(["text-sm text-text"])])([text5(email)]), span3([cls(["px-2 py-1 rounded text-xs font-medium bg-teal-400/10 text-teal-400"])])([text5(role)])]);
     };
@@ -16506,7 +16633,7 @@
       return div2([cls(["bg-card border border-border rounded-lg p-6"])])([h3([cls(["text-lg font-semibold text-text mb-4"])])([text5(title3)]), div2([cls(["space-y-4"])])(children2)]);
     };
   };
-  var teamSettings = /* @__PURE__ */ div2([/* @__PURE__ */ cls(["space-y-6"])])([/* @__PURE__ */ settingsSection("Team Members")([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["space-y-4"])])([/* @__PURE__ */ teamMemberRow6("alice@example.com")("Owner"), /* @__PURE__ */ teamMemberRow6("bob@example.com")("Admin"), /* @__PURE__ */ teamMemberRow6("carol@example.com")("Member")]), /* @__PURE__ */ button([/* @__PURE__ */ cls(["mt-4 px-4 py-2 border border-border text-text rounded-md text-sm font-medium hover:bg-card transition-colors"])])([/* @__PURE__ */ text5("Invite Member")])])]);
+  var teamSettings = /* @__PURE__ */ div2([/* @__PURE__ */ cls(["space-y-6"])])([/* @__PURE__ */ settingsSection("Team Members")([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["space-y-4"])])([/* @__PURE__ */ teamMemberRow7("alice@example.com")("Owner"), /* @__PURE__ */ teamMemberRow7("bob@example.com")("Admin"), /* @__PURE__ */ teamMemberRow7("carol@example.com")("Member")]), /* @__PURE__ */ button([/* @__PURE__ */ cls(["mt-4 px-4 py-2 border border-border text-text rounded-md text-sm font-medium hover:bg-card transition-colors"])])([/* @__PURE__ */ text5("Invite Member")])])]);
   var langConfigRow = function(lang2) {
     return function(enabled) {
       return function(config) {
@@ -16544,14 +16671,14 @@
   var formField6 = function(label5) {
     return function(inputType) {
       return function(placeholder4) {
-        return div_([label4([cls(["block text-sm font-medium text-text mb-1"])])([text5(label5)]), input2([type_114(function() {
+        return div_([label4([cls(["block text-sm font-medium text-text mb-1"])])([text5(label5)]), input2([type_113(function() {
           var $19 = inputType === "text";
           if ($19) {
             return InputText.value;
           }
           ;
           return InputText.value;
-        }()), placeholder3(placeholder4), value20(placeholder4), cls(["w-full px-3 py-2 bg-muted border border-border rounded-md text-text"])])]);
+        }()), placeholder3(placeholder4), value19(placeholder4), cls(["w-full px-3 py-2 bg-muted border border-border rounded-md text-text"])])]);
       };
     };
   };

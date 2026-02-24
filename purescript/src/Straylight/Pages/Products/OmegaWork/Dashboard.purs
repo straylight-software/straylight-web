@@ -1,10 +1,10 @@
 -- | omega//work Dashboard Page
--- | User dashboard for managing account and usage
+-- | Team activity, shared conversations, usage stats for non-coders
 module Straylight.Pages.Products.OmegaWork.Dashboard where
 
 import Prelude
 
-import Data.Maybe (Maybe(..))
+
 import Halogen as H
 import Halogen.HTML as HH
 import Halogen.HTML.Events as HE
@@ -64,10 +64,10 @@ header =
     [ cls [ "mb-8" ] ]
     [ HH.h1
         [ cls [ "text-2xl font-bold text-text mb-2" ] ]
-        [ HH.text "Dashboard" ]
+        [ HH.text "Team Dashboard" ]
     , HH.p
         [ cls [ "text-muted-foreground" ] ]
-        [ HH.text "Manage your omega//work account and usage." ]
+        [ HH.text "Monitor team activity, shared conversations, and workspace usage." ]
     ]
 
 tabs :: forall m. State -> H.ComponentHTML Action () m
@@ -75,9 +75,9 @@ tabs state =
   HH.div
     [ cls [ "flex gap-1 border-b border-border mb-8" ] ]
     [ tabButton "overview" "Overview" state.activeTab
-    , tabButton "downloads" "Downloads" state.activeTab
-    , tabButton "usage" "Usage" state.activeTab
-    , tabButton "devices" "Devices" state.activeTab
+    , tabButton "activity" "Team Activity" state.activeTab
+    , tabButton "conversations" "Shared Conversations" state.activeTab
+    , tabButton "usage" "Usage Stats" state.activeTab
     ]
 
 tabButton :: forall m. String -> String -> String -> H.ComponentHTML Action () m
@@ -85,7 +85,7 @@ tabButton value label activeTab =
   HH.button
     [ cls [ "px-4 py-2 text-sm font-medium transition-colors -mb-px"
           , if value == activeTab 
-              then "text-amber-400 border-b-2 border-amber-400" 
+              then "text-indigo-400 border-b-2 border-indigo-400" 
               else "text-muted-foreground hover:text-text"
           ]
     , HP.type_ HP.ButtonButton
@@ -96,9 +96,9 @@ tabButton value label activeTab =
 content :: forall m. State -> H.ComponentHTML Action () m
 content state = case state.activeTab of
   "overview" -> overviewTab
-  "downloads" -> downloadsTab
+  "activity" -> activityTab
+  "conversations" -> conversationsTab
   "usage" -> usageTab
-  "devices" -> devicesTab
   _ -> overviewTab
 
 -- ============================================================
@@ -111,10 +111,10 @@ overviewTab =
     [ -- Stats grid
       HH.div
         [ cls [ "grid grid-cols-1 md:grid-cols-4 gap-4 mb-8" ] ]
-        [ statCard "Plan" "Pro" "Active"
-        , statCard "Conversations" "247" "This month"
-        , statCard "Projects" "12" "Active"
-        , statCard "Devices" "3" "Synced"
+        [ statCard "Plan" "Team" "12 seats"
+        , statCard "Team Members" "12" "Active"
+        , statCard "Workspaces" "4" "Marketing, Product, Design, Ops"
+        , statCard "Conversations" "847" "This month"
         ]
     
       -- Quick actions
@@ -125,24 +125,25 @@ overviewTab =
             [ HH.text "Quick Actions" ]
         , HH.div
             [ cls [ "flex flex-wrap gap-3" ] ]
-            [ actionButton "Download App" "/omega/work/download"
+            [ actionButton "Invite Team Member" "/omega/work/settings#team"
+            , actionButton "Create Workspace" "/omega/work/settings#workspaces"
             , actionButton "View Docs" "/omega/work/docs"
             , actionButton "Manage Billing" "/omega/work/settings#billing"
             ]
         ]
     
-      -- Recent activity
+      -- Recent team activity
     , HH.div
         [ cls [ "bg-card border border-border rounded-lg p-6" ] ]
         [ HH.h3
             [ cls [ "text-lg font-semibold text-text mb-4" ] ]
-            [ HH.text "Recent Activity" ]
+            [ HH.text "Recent Team Activity" ]
         , HH.div
             [ cls [ "space-y-3" ] ]
-            [ activityItem "Conversation" "Updated README.md in my-project" "2 hours ago"
-            , activityItem "Project" "Created new-website project" "Yesterday"
-            , activityItem "Sync" "Synced from MacBook Pro" "Yesterday"
-            , activityItem "Conversation" "Refactored utils.ts" "2 days ago"
+            [ activityItem "Sarah" "Shared conversation 'Q1 Planning Brief'" "2 hours ago"
+            , activityItem "Mike" "Created workspace 'Brand Guidelines'" "Yesterday"
+            , activityItem "Lisa" "Generated report 'Monthly Metrics'" "Yesterday"
+            , activityItem "Tom" "Added context 'Style Guide v2' to Design workspace" "2 days ago"
             ]
         ]
     ]
@@ -166,93 +167,212 @@ actionButton :: forall w i. String -> String -> HH.HTML w i
 actionButton label href =
   HH.a
     [ HP.href href
-    , cls [ "px-4 py-2 bg-amber-400/10 text-amber-400 text-sm font-medium rounded-md hover:bg-amber-400/20 transition-colors" ]
+    , cls [ "px-4 py-2 bg-indigo-400/10 text-indigo-400 text-sm font-medium rounded-md hover:bg-indigo-400/20 transition-colors" ]
     ]
     [ HH.text label ]
 
 activityItem :: forall w i. String -> String -> String -> HH.HTML w i
-activityItem type_ description time =
+activityItem member description time =
   HH.div
     [ cls [ "flex items-center justify-between py-2 border-b border-border last:border-0" ] ]
     [ HH.div
         [ cls [ "flex items-center gap-3" ] ]
         [ HH.span
-            [ cls [ "text-xs px-2 py-0.5 rounded font-medium bg-amber-400/10 text-amber-400" ] ]
-            [ HH.text type_ ]
+            [ cls [ "text-xs px-2 py-0.5 rounded font-medium bg-indigo-400/10 text-indigo-400" ] ]
+            [ HH.text member ]
         , HH.span [ cls [ "text-sm text-text" ] ] [ HH.text description ]
         ]
     , HH.span [ cls [ "text-sm text-muted-foreground" ] ] [ HH.text time ]
     ]
 
 -- ============================================================
--- DOWNLOADS TAB
+-- TEAM ACTIVITY TAB
 -- ============================================================
 
-downloadsTab :: forall w i. HH.HTML w i
-downloadsTab =
+activityTab :: forall w i. HH.HTML w i
+activityTab =
   HH.div_
     [ HH.div
-        [ cls [ "grid grid-cols-1 md:grid-cols-3 gap-6" ] ]
-        [ downloadCard "macOS" "Universal (Intel + Apple Silicon)" "omega-work-1.0.0.dmg" "45 MB"
-        , downloadCard "Windows" "Windows 10/11 (64-bit)" "omega-work-1.0.0.exe" "52 MB"
-        , downloadCard "Linux" "AppImage (64-bit)" "omega-work-1.0.0.AppImage" "48 MB"
+        [ cls [ "bg-card border border-border rounded-lg p-6 mb-6" ] ]
+        [ HH.h3
+            [ cls [ "text-lg font-semibold text-text mb-4" ] ]
+            [ HH.text "Team Activity Feed" ]
+        , HH.div
+            [ cls [ "space-y-4" ] ]
+            [ teamActivityRow "Sarah Chen" "PM" "Shared 'Product Roadmap Q2' to Product workspace" "10 min ago"
+            , teamActivityRow "Mike Johnson" "Designer" "Created conversation 'Homepage Redesign Ideas'" "1 hour ago"
+            , teamActivityRow "Lisa Park" "Analyst" "Exported 'Monthly Revenue Report' to Google Docs" "2 hours ago"
+            , teamActivityRow "Tom Wilson" "Ops" "Updated shared context 'SOP Templates'" "3 hours ago"
+            , teamActivityRow "Emma Davis" "PM" "Invited Alex to Marketing workspace" "Yesterday"
+            , teamActivityRow "James Lee" "Designer" "Shared 'Brand Color Exploration' with team" "Yesterday"
+            ]
         ]
     , HH.div
-        [ cls [ "mt-8 p-4 bg-card border border-border rounded-lg" ] ]
-        [ HH.h3 [ cls [ "text-sm font-medium text-text mb-2" ] ] [ HH.text "Previous Versions" ]
-        , HH.a
-            [ HP.href "/omega/work/docs"
-            , cls [ "text-sm text-amber-400 hover:text-amber-400/80" ]
+        [ cls [ "bg-card border border-border rounded-lg p-6" ] ]
+        [ HH.h3
+            [ cls [ "text-lg font-semibold text-text mb-4" ] ]
+            [ HH.text "Active Team Members" ]
+        , HH.div
+            [ cls [ "grid grid-cols-2 md:grid-cols-4 gap-4" ] ]
+            [ memberCard "Sarah Chen" "PM" true
+            , memberCard "Mike Johnson" "Designer" true
+            , memberCard "Lisa Park" "Analyst" false
+            , memberCard "Tom Wilson" "Ops" true
             ]
-            [ HH.text "View all releases ->" ]
         ]
     ]
 
-downloadCard :: forall w i. String -> String -> String -> String -> HH.HTML w i
-downloadCard platform description filename size =
+teamActivityRow :: forall w i. String -> String -> String -> String -> HH.HTML w i
+teamActivityRow name role action time =
   HH.div
-    [ cls [ "bg-card border border-border rounded-lg p-6" ] ]
-    [ HH.h3
-        [ cls [ "text-lg font-semibold text-text mb-2" ] ]
-        [ HH.text platform ]
-    , HH.p
-        [ cls [ "text-sm text-muted-foreground mb-4" ] ]
-        [ HH.text description ]
-    , HH.div
-        [ cls [ "flex items-center justify-between" ] ]
-        [ HH.span [ cls [ "text-xs text-muted-foreground" ] ] [ HH.text size ]
-        , HH.a
-            [ HP.href $ "/downloads/" <> filename
-            , cls [ "px-4 py-2 bg-amber-400 text-background text-sm font-medium rounded-md hover:bg-amber-400/90 transition-colors" ]
+    [ cls [ "flex items-start justify-between py-3 border-b border-border last:border-0" ] ]
+    [ HH.div_
+        [ HH.div
+            [ cls [ "flex items-center gap-2 mb-1" ] ]
+            [ HH.span [ cls [ "text-text font-medium" ] ] [ HH.text name ]
+            , HH.span [ cls [ "text-xs px-2 py-0.5 rounded bg-indigo-400/10 text-indigo-400" ] ] [ HH.text role ]
             ]
-            [ HH.text "Download" ]
+        , HH.p [ cls [ "text-sm text-muted-foreground" ] ] [ HH.text action ]
         ]
+    , HH.span [ cls [ "text-xs text-muted-foreground whitespace-nowrap" ] ] [ HH.text time ]
+    ]
+
+memberCard :: forall w i. String -> String -> Boolean -> HH.HTML w i
+memberCard name role online =
+  HH.div
+    [ cls [ "p-3 bg-card border border-border rounded-lg" ] ]
+    [ HH.div
+        [ cls [ "flex items-center gap-2" ] ]
+        [ HH.span 
+            [ cls [ "w-2 h-2 rounded-full", if online then "bg-green-400" else "bg-muted-foreground" ] ] 
+            []
+        , HH.span [ cls [ "text-sm text-text font-medium" ] ] [ HH.text name ]
+        ]
+    , HH.p [ cls [ "text-xs text-muted-foreground mt-1" ] ] [ HH.text role ]
     ]
 
 -- ============================================================
--- USAGE TAB
+-- SHARED CONVERSATIONS TAB
+-- ============================================================
+
+conversationsTab :: forall w i. HH.HTML w i
+conversationsTab =
+  HH.div_
+    [ HH.div
+        [ cls [ "bg-card border border-border rounded-lg p-6 mb-6" ] ]
+        [ HH.div
+            [ cls [ "flex items-center justify-between mb-4" ] ]
+            [ HH.h3 [ cls [ "text-lg font-semibold text-text" ] ] [ HH.text "Shared Conversations" ]
+            , HH.input
+                [ HP.type_ HP.InputText
+                , HP.placeholder "Search conversations..."
+                , cls [ "px-3 py-2 bg-background border border-border rounded-md text-sm text-text w-64" ]
+                ]
+            ]
+        , HH.div
+            [ cls [ "space-y-3" ] ]
+            [ sharedConvoRow "Q1 Planning Brief" "Sarah Chen" "Product" "2 hours ago"
+            , sharedConvoRow "Homepage Redesign Ideas" "Mike Johnson" "Design" "5 hours ago"
+            , sharedConvoRow "Monthly Metrics Analysis" "Lisa Park" "Marketing" "Yesterday"
+            , sharedConvoRow "Customer Feedback Summary" "Emma Davis" "Product" "2 days ago"
+            , sharedConvoRow "Social Media Calendar Draft" "Tom Wilson" "Marketing" "3 days ago"
+            ]
+        ]
+    , HH.div
+        [ cls [ "bg-card border border-border rounded-lg p-6" ] ]
+        [ HH.h3
+            [ cls [ "text-lg font-semibold text-text mb-4" ] ]
+            [ HH.text "Recently Viewed" ]
+        , HH.div
+            [ cls [ "space-y-3" ] ]
+            [ sharedConvoRow "Brand Guidelines v2" "Mike Johnson" "Design" "Viewed 1 hour ago"
+            , sharedConvoRow "Onboarding Checklist" "Tom Wilson" "Ops" "Viewed yesterday"
+            ]
+        ]
+    ]
+
+sharedConvoRow :: forall w i. String -> String -> String -> String -> HH.HTML w i
+sharedConvoRow title author workspace time =
+  HH.div
+    [ cls [ "flex items-center justify-between py-3 border-b border-border last:border-0 cursor-pointer hover:bg-card/50" ] ]
+    [ HH.div_
+        [ HH.p [ cls [ "text-text font-medium mb-1" ] ] [ HH.text title ]
+        , HH.div
+            [ cls [ "flex items-center gap-2 text-xs text-muted-foreground" ] ]
+            [ HH.span_ [ HH.text author ]
+            , HH.span_ [ HH.text "in" ]
+            , HH.span [ cls [ "text-indigo-400" ] ] [ HH.text workspace ]
+            ]
+        ]
+    , HH.span [ cls [ "text-xs text-muted-foreground" ] ] [ HH.text time ]
+    ]
+
+-- ============================================================
+-- USAGE STATS TAB
 -- ============================================================
 
 usageTab :: forall w i. HH.HTML w i
 usageTab =
   HH.div_
     [ HH.div
-        [ cls [ "grid grid-cols-1 md:grid-cols-2 gap-6 mb-8" ] ]
-        [ usageCard "Conversations" 247 500 "this month"
-        , usageCard "Cloud Storage" 128 1000 "MB used"
+        [ cls [ "grid grid-cols-1 md:grid-cols-3 gap-6 mb-8" ] ]
+        [ usageCard "Team Conversations" 847 (-1) "this month"
+        , usageCard "Shared Contexts" 23 (-1) "files"
+        , usageCard "Integrations Used" 156 (-1) "syncs this week"
+        ]
+    , HH.div
+        [ cls [ "bg-card border border-border rounded-lg p-6 mb-6" ] ]
+        [ HH.h3
+            [ cls [ "text-lg font-semibold text-text mb-4" ] ]
+            [ HH.text "Usage by Workspace" ]
+        , HH.div
+            [ cls [ "space-y-4" ] ]
+            [ workspaceUsageRow "Marketing" 312 37
+            , workspaceUsageRow "Product" 245 29
+            , workspaceUsageRow "Design" 178 21
+            , workspaceUsageRow "Operations" 112 13
+            ]
         ]
     , HH.div
         [ cls [ "bg-card border border-border rounded-lg p-6" ] ]
         [ HH.h3
             [ cls [ "text-lg font-semibold text-text mb-4" ] ]
-            [ HH.text "Usage by Project" ]
+            [ HH.text "Usage by Team Member" ]
         , HH.div
             [ cls [ "space-y-4" ] ]
-            [ projectUsageRow "my-project" 89 35
-            , projectUsageRow "new-website" 67 27
-            , projectUsageRow "docs-site" 45 18
-            , projectUsageRow "Other" 46 20
+            [ memberUsageRow "Sarah Chen" 156 18
+            , memberUsageRow "Mike Johnson" 134 16
+            , memberUsageRow "Lisa Park" 98 12
+            , memberUsageRow "Tom Wilson" 87 10
             ]
+        ]
+    ]
+
+workspaceUsageRow :: forall w i. String -> Int -> Int -> HH.HTML w i
+workspaceUsageRow name conversations percentage =
+  HH.div
+    [ cls [ "flex items-center justify-between py-2 border-b border-border last:border-0" ] ]
+    [ HH.span [ cls [ "text-sm text-text" ] ] [ HH.text name ]
+    , HH.div
+        [ cls [ "flex items-center gap-4" ] ]
+        [ HH.span [ cls [ "text-sm text-muted-foreground" ] ] 
+            [ HH.text $ show conversations <> " conversations" ]
+        , HH.span [ cls [ "text-sm text-indigo-400" ] ] 
+            [ HH.text $ show percentage <> "%" ]
+        ]
+    ]
+
+memberUsageRow :: forall w i. String -> Int -> Int -> HH.HTML w i
+memberUsageRow name conversations percentage =
+  HH.div
+    [ cls [ "flex items-center justify-between py-2 border-b border-border last:border-0" ] ]
+    [ HH.span [ cls [ "text-sm text-text" ] ] [ HH.text name ]
+    , HH.div
+        [ cls [ "flex items-center gap-4" ] ]
+        [ HH.span [ cls [ "text-sm text-muted-foreground" ] ] 
+            [ HH.text $ show conversations <> " conversations" ]
+        , HH.span [ cls [ "text-sm text-indigo-400" ] ] 
+            [ HH.text $ show percentage <> "%" ]
         ]
     ]
 
@@ -261,83 +381,14 @@ usageCard label current limit unit =
   HH.div
     [ cls [ "bg-card border border-border rounded-lg p-6" ] ]
     [ HH.div
-        [ cls [ "flex items-center justify-between mb-4" ] ]
+        [ cls [ "flex items-center justify-between mb-2" ] ]
         [ HH.span [ cls [ "text-sm font-medium text-text" ] ] [ HH.text label ]
-        , HH.span [ cls [ "text-sm text-muted-foreground" ] ] 
-            [ HH.text $ show current <> " / " <> show limit <> " " <> unit ]
         ]
     , HH.div
-        [ cls [ "h-2 bg-muted rounded-full overflow-hidden" ] ]
-        [ HH.div
-            [ cls [ "h-full bg-amber-400 rounded-full" ]
-            , HP.style $ "width: " <> show ((current * 100) / limit) <> "%"
-            ]
-            []
+        [ cls [ "flex items-baseline gap-2" ] ]
+        [ HH.span [ cls [ "text-2xl font-bold text-indigo-400" ] ] [ HH.text $ show current ]
+        , HH.span [ cls [ "text-sm text-muted-foreground" ] ] [ HH.text unit ]
         ]
     ]
 
-projectUsageRow :: forall w i. String -> Int -> Int -> HH.HTML w i
-projectUsageRow name conversations percentage =
-  HH.div
-    [ cls [ "flex items-center justify-between py-2 border-b border-border last:border-0" ] ]
-    [ HH.span [ cls [ "text-sm text-text" ] ] [ HH.text name ]
-    , HH.div
-        [ cls [ "flex items-center gap-4" ] ]
-        [ HH.span [ cls [ "text-sm text-muted-foreground" ] ] 
-            [ HH.text $ show conversations <> " conversations" ]
-        , HH.span [ cls [ "text-sm text-amber-400" ] ] 
-            [ HH.text $ show percentage <> "%" ]
-        ]
-    ]
 
--- ============================================================
--- DEVICES TAB
--- ============================================================
-
-devicesTab :: forall w i. HH.HTML w i
-devicesTab =
-  HH.div_
-    [ HH.div
-        [ cls [ "space-y-4" ] ]
-        [ deviceCard "MacBook Pro" "macOS 14.2" "Active now" true
-        , deviceCard "Windows Desktop" "Windows 11" "2 hours ago" true
-        , deviceCard "Linux Laptop" "Ubuntu 22.04" "3 days ago" false
-        ]
-    , HH.div
-        [ cls [ "mt-8 p-4 bg-card border border-border rounded-lg" ] ]
-        [ HH.p
-            [ cls [ "text-sm text-muted-foreground" ] ]
-            [ HH.text "Your Pro plan includes sync across unlimited devices." ]
-        ]
-    ]
-
-deviceCard :: forall w i. String -> String -> String -> Boolean -> HH.HTML w i
-deviceCard name os lastActive current =
-  HH.div
-    [ cls [ "bg-card border rounded-lg p-4 flex items-center justify-between"
-          , if current then "border-amber-400/30" else "border-border"
-          ]
-    ]
-    [ HH.div_
-        [ HH.div
-            [ cls [ "flex items-center gap-2" ] ]
-            [ HH.span [ cls [ "text-text font-medium" ] ] [ HH.text name ]
-            , if current
-                then HH.span [ cls [ "text-xs px-2 py-0.5 rounded bg-amber-400/10 text-amber-400" ] ] 
-                    [ HH.text "Current" ]
-                else HH.text ""
-            ]
-        , HH.p [ cls [ "text-sm text-muted-foreground" ] ] [ HH.text os ]
-        ]
-    , HH.div
-        [ cls [ "text-right" ] ]
-        [ HH.p [ cls [ "text-sm text-muted-foreground" ] ] [ HH.text lastActive ]
-        , if not current
-            then HH.button
-                [ cls [ "text-xs text-danger hover:text-danger/80 cursor-pointer" ]
-                , HP.type_ HP.ButtonButton
-                ]
-                [ HH.text "Remove" ]
-            else HH.text ""
-        ]
-    ]
