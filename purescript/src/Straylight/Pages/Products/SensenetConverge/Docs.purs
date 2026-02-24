@@ -100,7 +100,7 @@ sidebarLink href label currentPath =
         [ HP.href href
         , cls [ "block py-1.5 px-3 rounded text-sm transition-colors"
               , if href == currentPath
-                  then "bg-emerald-400/10 text-emerald-400 font-medium" 
+                  then "bg-purple-400/10 text-purple-400 font-medium" 
                   else "text-muted-foreground hover:text-text hover:bg-card"
               ]
         ]
@@ -207,7 +207,7 @@ quickstartContent =
     , h2 "3. Define your infrastructure"
     , codeBlock
         [ codeLine "# " "infra.cvg"
-        , HH.span [ cls [ "text-emerald-400" ] ] [ HH.text "resource" ]
+        , HH.span [ cls [ "text-purple-400" ] ] [ HH.text "resource" ]
         , HH.span [ cls [ "text-text" ] ] [ HH.text " aws.ec2.Instance web {" ]
         , HH.text "\n"
         , HH.span [ cls [ "text-text" ] ] [ HH.text "  ami          = \"ami-0c55b159cbfafe1f0\"" ]
@@ -293,7 +293,7 @@ resourcesContent =
     
     , h2 "Basic syntax"
     , codeBlock
-        [ HH.span [ cls [ "text-emerald-400" ] ] [ HH.text "resource" ]
+        [ HH.span [ cls [ "text-purple-400" ] ] [ HH.text "resource" ]
         , HH.span [ cls [ "text-text" ] ] [ HH.text " <provider>.<type> <name> {" ]
         , HH.text "\n"
         , HH.span [ cls [ "text-text" ] ] [ HH.text "  <attribute> = <value>" ]
@@ -303,7 +303,7 @@ resourcesContent =
     
     , h2 "Example: EC2 instance"
     , codeBlock
-        [ HH.span [ cls [ "text-emerald-400" ] ] [ HH.text "resource" ]
+        [ HH.span [ cls [ "text-purple-400" ] ] [ HH.text "resource" ]
         , HH.span [ cls [ "text-text" ] ] [ HH.text " aws.ec2.Instance web {" ]
         , HH.text "\n"
         , HH.span [ cls [ "text-text" ] ] [ HH.text "  ami          = \"ami-0c55b159cbfafe1f0\"" ]
@@ -318,7 +318,7 @@ resourcesContent =
     , h2 "References"
     , p "Resources can reference other resources using dot notation:"
     , codeBlock
-        [ HH.span [ cls [ "text-emerald-400" ] ] [ HH.text "resource" ]
+        [ HH.span [ cls [ "text-purple-400" ] ] [ HH.text "resource" ]
         , HH.span [ cls [ "text-text" ] ] [ HH.text " aws.ec2.SecurityGroup web_sg {" ]
         , HH.text "\n"
         , HH.span [ cls [ "text-text" ] ] [ HH.text "  vpcId = aws.vpc.Vpc.main.id" ]
@@ -342,7 +342,7 @@ typesContent =
     , h2 "Typed attributes"
     , p "Every resource attribute has a type. The compiler validates values:"
     , codeBlock
-        [ HH.span [ cls [ "text-emerald-400" ] ] [ HH.text "resource" ]
+        [ HH.span [ cls [ "text-purple-400" ] ] [ HH.text "resource" ]
         , HH.span [ cls [ "text-text" ] ] [ HH.text " aws.ec2.Instance web {" ]
         , HH.text "\n"
         , HH.span [ cls [ "text-text" ] ] [ HH.text "  instanceType : InstanceType = \"t3.micro\"  " ]
@@ -356,10 +356,10 @@ typesContent =
     
     , h2 "Custom types"
     , codeBlock
-        [ HH.span [ cls [ "text-emerald-400" ] ] [ HH.text "type" ]
+        [ HH.span [ cls [ "text-purple-400" ] ] [ HH.text "type" ]
         , HH.span [ cls [ "text-text" ] ] [ HH.text " Environment = \"dev\" | \"staging\" | \"prod\"" ]
         , HH.text "\n\n"
-        , HH.span [ cls [ "text-emerald-400" ] ] [ HH.text "resource" ]
+        , HH.span [ cls [ "text-purple-400" ] ] [ HH.text "resource" ]
         , HH.span [ cls [ "text-text" ] ] [ HH.text " aws.ec2.Instance web {" ]
         , HH.text "\n"
         , HH.span [ cls [ "text-text" ] ] [ HH.text "  tags = { env : Environment = \"prod\" }" ]
@@ -390,7 +390,7 @@ driftContent =
     
     , h2 "Drift policies"
     , codeBlock
-        [ HH.span [ cls [ "text-emerald-400" ] ] [ HH.text "resource" ]
+        [ HH.span [ cls [ "text-purple-400" ] ] [ HH.text "resource" ]
         , HH.span [ cls [ "text-text" ] ] [ HH.text " aws.ec2.Instance web {" ]
         , HH.text "\n"
         , HH.span [ cls [ "text-text" ] ] [ HH.text "  # ..." ]
@@ -578,7 +578,7 @@ link :: forall w i. String -> String -> HH.HTML w i
 link href text = 
   HH.a 
     [ HP.href href
-    , cls [ "text-emerald-400 hover:text-emerald-400/80" ]
+    , cls [ "text-purple-400 hover:text-purple-400/80" ]
     ] 
     [ HH.text text ]
 
@@ -586,7 +586,7 @@ docCard :: forall w i. String -> String -> String -> HH.HTML w i
 docCard href title description =
   HH.a
     [ HP.href href
-    , cls [ "block p-4 bg-card border border-border rounded-lg hover:border-emerald-400/50 transition-colors" ]
+    , cls [ "block p-4 bg-card border border-border rounded-lg hover:border-purple-400/50 transition-colors" ]
     ]
     [ HH.h3
         [ cls [ "text-text font-medium mb-1" ] ]

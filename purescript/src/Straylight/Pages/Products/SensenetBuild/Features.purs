@@ -177,7 +177,7 @@ proofItem theorem status =
     [ cls [ "flex items-center justify-between py-2 border-b border-border last:border-0" ] ]
     [ HH.code [ cls [ "text-sm text-text font-mono" ] ] [ HH.text theorem ]
     , HH.span 
-        [ cls [ "text-xs px-2 py-0.5 rounded bg-rose-400/20 text-rose-400" ] ] 
+        [ cls [ "text-xs px-2 py-0.5 rounded bg-green-400/20 text-green-400" ] ] 
         [ HH.text status ]
     ]
 
@@ -235,7 +235,7 @@ isolationBadge label status =
   HH.div
     [ cls [ "bg-background border border-border rounded-lg p-3 text-center" ] ]
     [ HH.p [ cls [ "text-xs text-muted-foreground mb-1" ] ] [ HH.text label ]
-    , HH.p [ cls [ "text-sm text-rose-400 font-medium" ] ] [ HH.text status ]
+    , HH.p [ cls [ "text-sm text-green-400 font-medium" ] ] [ HH.text status ]
     ]
 
 -- ============================================================
@@ -282,7 +282,7 @@ distributedExec =
 execCard :: forall w i. String -> String -> HH.HTML w i
 execCard title desc =
   HH.div
-    [ cls [ "bg-card border border-border rounded-lg p-6 text-center hover:border-rose-400/50 transition-colors" ] ]
+    [ cls [ "bg-card border border-border rounded-lg p-6 text-center hover:border-green-400/50 transition-colors" ] ]
     [ HH.p [ cls [ "text-text font-medium mb-1" ] ] [ HH.text title ]
     , HH.p [ cls [ "text-sm text-muted-foreground" ] ] [ HH.text desc ]
     ]
@@ -323,7 +323,7 @@ languageSupport =
 langCard :: forall w i. String -> HH.HTML w i
 langCard name =
   HH.div
-    [ cls [ "bg-card border border-border rounded-lg p-4 text-center hover:border-rose-400/30 transition-colors" ] ]
+    [ cls [ "bg-card border border-border rounded-lg p-4 text-center hover:border-green-400/30 transition-colors" ] ]
     [ HH.p [ cls [ "text-text font-medium text-sm" ] ] [ HH.text name ] ]
 
 -- ============================================================
@@ -346,7 +346,7 @@ cta =
             [ cls [ "flex flex-col sm:flex-row items-center justify-center gap-4" ] ]
             [ HH.a
                 [ HP.href "/sensenet/build/pricing"
-                , cls [ "inline-flex items-center justify-center px-8 py-4 bg-rose-400 text-background font-medium rounded-md hover:bg-rose-400/90 transition-colors" ]
+                , cls [ "inline-flex items-center justify-center px-8 py-4 bg-green-400 text-background font-medium rounded-md hover:bg-green-400/90 transition-colors" ]
                 ]
                 [ HH.text "Get started free" ]
             , HH.a
@@ -365,7 +365,7 @@ cta =
 badge :: forall w i. String -> HH.HTML w i
 badge label =
   HH.span
-    [ cls [ "inline-block px-3 py-1 bg-rose-400/10 border border-rose-400/20 rounded-full text-rose-400 text-sm font-medium mb-4" ] ]
+    [ cls [ "inline-block px-3 py-1 bg-green-400/10 border border-green-400/20 rounded-full text-green-400 text-sm font-medium mb-4" ] ]
     [ HH.text label ]
 
 featureList :: forall w i. Array String -> HH.HTML w i
@@ -378,7 +378,7 @@ featureItem :: forall w i. String -> HH.HTML w i
 featureItem text =
   HH.li
     [ cls [ "flex items-start gap-3" ] ]
-    [ HH.span [ cls [ "text-rose-400 mt-1" ] ] [ HH.text "+" ]
+    [ HH.span [ cls [ "text-green-400 mt-1" ] ] [ HH.text "+" ]
     , HH.span [ cls [ "text-muted-foreground" ] ] [ HH.text text ]
     ]
 

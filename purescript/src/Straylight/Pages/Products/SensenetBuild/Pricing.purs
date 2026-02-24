@@ -66,77 +66,65 @@ plans =
     [ HH.div
         [ cls [ "max-w-[1100px] mx-auto px-6" ] ]
         [ HH.div
-            [ cls [ "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6" ] ]
+            [ cls [ "grid grid-cols-1 md:grid-cols-3 gap-6" ] ]
             [ pricingCard
-                { name: "Open Source"
+                { name: "Free"
                 , price: "$0"
                 , period: "/month"
-                , description: "For open source projects."
+                , description: "For open source and small projects."
                 , features:
-                    [ "Unlimited local builds"
-                    , "Full Dhall support"
-                    , "Lean4 verification"
+                    [ "100 builds per month"
+                    , "Full Dhall configuration"
+                    , "Lean4 proof verification"
+                    , "Hermetic local builds"
                     , "Community support"
-                    , "Public repos only"
+                    , "Public repositories"
                     ]
                 , cta: "Get started"
-                , ctaHref: "/sensenet/build/docs"
+                , ctaHref: "/sensenet/build/docs/quickstart"
                 , highlighted: false
                 }
             , pricingCard
-                { name: "Developer"
-                , price: "$29"
+                { name: "Pro"
+                , price: "$49"
                 , period: "/month"
-                , description: "For individual developers."
+                , description: "For professional developers and teams."
                 , features:
-                    [ "Everything in Open Source"
+                    [ "Unlimited builds"
                     , "Private repositories"
-                    , "100 remote build hours"
-                    , "Build analytics"
-                    , "Email support"
+                    , "Remote build execution"
+                    , "Distributed caching"
+                    , "Build analytics dashboard"
+                    , "Priority email support"
+                    , "Advanced proof reports"
                     ]
                 , cta: "Start free trial"
                 , ctaHref: "/sensenet/build/dashboard"
                 , highlighted: true
                 }
             , pricingCard
-                { name: "Team"
-                , price: "$99"
-                , period: "/month"
-                , description: "For teams shipping production software."
-                , features:
-                    [ "Everything in Developer"
-                    , "Unlimited remote builds"
-                    , "5 team seats included"
-                    , "Priority support"
-                    , "SSO/SAML"
-                    , "Audit logs"
-                    ]
-                , cta: "Start free trial"
-                , ctaHref: "/sensenet/build/dashboard"
-                , highlighted: false
-                }
-            , pricingCard
                 { name: "Enterprise"
                 , price: "Custom"
                 , period: ""
-                , description: "For organizations with compliance needs."
+                , description: "For organizations requiring compliance and scale."
                 , features:
-                    [ "Everything in Team"
-                    , "Unlimited seats"
-                    , "Dedicated support"
-                    , "SLA guarantee"
-                    , "Self-hosted option"
+                    [ "Everything in Pro"
+                    , "Unlimited team seats"
+                    , "Self-hosted deployment"
+                    , "SSO/SAML authentication"
+                    , "Audit logs & compliance"
+                    , "Dedicated support SLA"
                     , "Custom integrations"
+                    , "On-premise build clusters"
                     ]
                 , cta: "Contact sales"
-                , ctaHref: "/sensenet/build/legal"
+                , ctaHref: "mailto:enterprise@straylight.software"
                 , highlighted: false
                 }
             ]
         , HH.p
             [ cls [ "text-center text-muted-foreground text-sm mt-8" ] ]
-            [ HH.text "All plans include: Dhall configs, Lean4 proofs, hermetic builds, multi-language support" ]
+            [ HH.text "All plans include: Dhall configs, Lean4 proofs, hermetic builds, multi-language support, content-addressed caching" ]
         ]
     ]
 

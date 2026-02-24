@@ -110,12 +110,12 @@ stackItem :: forall w i. String -> String -> String -> Boolean -> HH.HTML w i
 stackItem num title status active =
   HH.div
     [ cls [ "flex items-center gap-4 p-3 rounded-lg"
-          , if active then "bg-violet-400/10 border border-violet-400/20" else "bg-muted/30"
+          , if active then "bg-rose-400/10 border border-rose-400/20" else "bg-muted/30"
           ]
     ]
     [ HH.span
         [ cls [ "w-8 h-8 rounded-full flex items-center justify-center text-sm font-mono"
-              , if active then "bg-violet-400 text-background" else "bg-muted text-muted-foreground"
+              , if active then "bg-rose-400 text-background" else "bg-muted text-muted-foreground"
               ]
         ]
         [ HH.text num ]
@@ -213,7 +213,7 @@ agentReview =
                     [ cls [ "p-4 border-b border-border bg-muted/30" ] ]
                     [ HH.div
                         [ cls [ "flex items-center gap-2" ] ]
-                        [ HH.span [ cls [ "text-xs px-2 py-0.5 rounded bg-violet-400/20 text-violet-400" ] ] [ HH.text "Agent" ]
+                        [ HH.span [ cls [ "text-xs px-2 py-0.5 rounded bg-rose-400/20 text-rose-400" ] ] [ HH.text "Agent" ]
                         , HH.span [ cls [ "text-sm text-text" ] ] [ HH.text "claude-opus-4" ]
                         ]
                     ]
@@ -286,7 +286,7 @@ trustBadge :: forall w i. String -> String -> HH.HTML w i
 trustBadge title subtitle =
   HH.div
     [ cls [ "bg-card border border-border rounded-lg p-6 text-center" ] ]
-    [ HH.p [ cls [ "text-2xl font-bold text-violet-400 mb-1" ] ] [ HH.text title ]
+    [ HH.p [ cls [ "text-2xl font-bold text-rose-400 mb-1" ] ] [ HH.text title ]
     , HH.p [ cls [ "text-sm text-muted-foreground" ] ] [ HH.text subtitle ]
     ]
 
@@ -351,7 +351,7 @@ searchResult name file score =
             [ HH.span [ cls [ "text-text font-medium font-mono" ] ] [ HH.text name ]
             , HH.span [ cls [ "text-muted-foreground text-sm ml-2" ] ] [ HH.text file ]
             ]
-        , HH.span [ cls [ "text-xs text-violet-400" ] ] [ HH.text $ score <> " match" ]
+        , HH.span [ cls [ "text-xs text-rose-400" ] ] [ HH.text $ score <> " match" ]
         ]
     ]
 
@@ -396,10 +396,10 @@ developer =
 dxCard :: forall w i. String -> String -> String -> HH.HTML w i
 dxCard icon title description =
   HH.div
-    [ cls [ "bg-card border border-border rounded-lg p-6 hover:border-violet-400/30 transition-colors" ] ]
+    [ cls [ "bg-card border border-border rounded-lg p-6 hover:border-rose-400/30 transition-colors" ] ]
     [ HH.div
         [ cls [ "flex items-center gap-3 mb-3" ] ]
-        [ HH.span [ cls [ "text-violet-400 font-mono text-xl" ] ] [ HH.text icon ]
+        [ HH.span [ cls [ "text-rose-400 font-mono text-xl" ] ] [ HH.text icon ]
         , HH.h3 [ cls [ "text-text font-semibold" ] ] [ HH.text title ]
         ]
     , HH.p
@@ -427,7 +427,7 @@ cta =
             [ cls [ "flex flex-col sm:flex-row items-center justify-center gap-4" ] ]
             [ HH.a
                 [ HP.href "/sensenet/forge/dashboard"
-                , cls [ "inline-flex items-center justify-center px-8 py-4 bg-violet-400 text-background font-medium rounded-md hover:bg-violet-400/90 transition-colors" ]
+                , cls [ "inline-flex items-center justify-center px-8 py-4 bg-rose-400 text-background font-medium rounded-md hover:bg-rose-400/90 transition-colors" ]
                 ]
                 [ HH.text "Get started free" ]
             , HH.a
@@ -446,7 +446,7 @@ cta =
 badge :: forall w i. String -> HH.HTML w i
 badge label =
   HH.span
-    [ cls [ "inline-block px-3 py-1 bg-violet-400/10 border border-violet-400/20 rounded-full text-violet-400 text-sm font-medium mb-4" ] ]
+    [ cls [ "inline-block px-3 py-1 bg-rose-400/10 border border-rose-400/20 rounded-full text-rose-400 text-sm font-medium mb-4" ] ]
     [ HH.text label ]
 
 featureList :: forall w i. Array String -> HH.HTML w i
@@ -459,7 +459,7 @@ featureItem :: forall w i. String -> HH.HTML w i
 featureItem text =
   HH.li
     [ cls [ "flex items-start gap-3" ] ]
-    [ HH.span [ cls [ "text-violet-400 mt-1" ] ] [ HH.text "+" ]
+    [ HH.span [ cls [ "text-rose-400 mt-1" ] ] [ HH.text "+" ]
     , HH.span [ cls [ "text-muted-foreground" ] ] [ HH.text text ]
     ]
 

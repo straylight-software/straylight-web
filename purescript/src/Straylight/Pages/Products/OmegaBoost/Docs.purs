@@ -1,5 +1,5 @@
 -- | omega//boost Documentation
--- | Complete docs for managed inference
+-- | Complete docs for managed inference with custom CUTLASS kernels
 module Straylight.Pages.Products.OmegaBoost.Docs 
   ( docsPage
   , renderContent
@@ -66,17 +66,18 @@ sidebar currentPath =
         [ sidebarSection "Getting Started"
             [ sidebarLink "/omega/boost/docs" "Overview" currentPath
             , sidebarLink "/omega/boost/docs/quickstart" "Quick Start" currentPath
-            , sidebarLink "/omega/boost/docs/byok" "BYOK Setup" currentPath
+            , sidebarLink "/omega/boost/docs/deployment" "Deployment" currentPath
+            , sidebarLink "/omega/boost/docs/byok-setup" "BYOK Setup" currentPath
             ]
         , sidebarSection "Integration"
             [ sidebarLink "/omega/boost/docs/openai" "OpenAI" currentPath
             , sidebarLink "/omega/boost/docs/anthropic" "Anthropic" currentPath
             , sidebarLink "/omega/boost/docs/streaming" "Streaming" currentPath
             ]
-        , sidebarSection "Features"
-            [ sidebarLink "/omega/boost/docs/batching" "Batching" currentPath
-            , sidebarLink "/omega/boost/docs/caching" "KV Cache" currentPath
-            , sidebarLink "/omega/boost/docs/analytics" "Analytics" currentPath
+        , sidebarSection "Performance"
+            [ sidebarLink "/omega/boost/docs/kernels" "CUTLASS Kernels" currentPath
+            , sidebarLink "/omega/boost/docs/performance" "Performance Tuning" currentPath
+            , sidebarLink "/omega/boost/docs/batching" "Continuous Batching" currentPath
             ]
         , sidebarSection "Reference"
             [ sidebarLink "/omega/boost/docs/api" "API Reference" currentPath
@@ -104,7 +105,7 @@ sidebarLink href label currentPath =
         [ HP.href href
         , cls [ "block py-1.5 px-3 rounded text-sm transition-colors"
               , if href == currentPath
-                  then "bg-orange-400/10 text-orange-400 font-medium" 
+                  then "bg-yellow-400/10 text-yellow-400 font-medium" 
                   else "text-muted-foreground hover:text-text hover:bg-card"
               ]
         ]
@@ -134,13 +135,14 @@ renderContent :: forall w i. String -> HH.HTML w i
 renderContent path = case path of
   "/omega/boost/docs" -> overviewContent
   "/omega/boost/docs/quickstart" -> quickstartContent
-  "/omega/boost/docs/byok" -> byokContent
+  "/omega/boost/docs/deployment" -> deploymentContent
+  "/omega/boost/docs/byok-setup" -> byokContent
   "/omega/boost/docs/openai" -> openaiContent
   "/omega/boost/docs/anthropic" -> anthropicContent
   "/omega/boost/docs/streaming" -> streamingContent
+  "/omega/boost/docs/kernels" -> kernelsContent
+  "/omega/boost/docs/performance" -> performanceContent
   "/omega/boost/docs/batching" -> batchingContent
-  "/omega/boost/docs/caching" -> cachingContent
-  "/omega/boost/docs/analytics" -> analyticsContent
   "/omega/boost/docs/api" -> apiContent
   "/omega/boost/docs/errors" -> errorsContent
   "/omega/boost/docs/limits" -> limitsContent
@@ -154,36 +156,38 @@ overviewContent :: forall w i. HH.HTML w i
 overviewContent =
   article
     [ h1 "omega//boost Documentation"
-    , p "Managed inference co-located with your BYOK vendor. evring HTTP stack for maximum throughput."
+    , p "Managed inference with custom CUTLASS 3.x sm_120 kernels. Co-located with your BYOK vendor. evring HTTP/1.1+2+3 stack."
     
     , HH.div
         [ cls [ "grid grid-cols-1 md:grid-cols-2 gap-4 my-8" ] ]
-        [ docCard "/omega/boost/docs/quickstart" "Quick Start" "Get up and running in under a minute."
-        , docCard "/omega/boost/docs/byok" "BYOK Setup" "Configure your API keys securely."
-        , docCard "/omega/boost/docs/openai" "OpenAI Integration" "Drop-in replacement for OpenAI API."
+        [ docCard "/omega/boost/docs/quickstart" "Quick Start" "Get up and running in 5 minutes."
+        , docCard "/omega/boost/docs/byok-setup" "BYOK Setup" "Configure your provider API keys."
+        , docCard "/omega/boost/docs/performance" "Performance" "Optimize latency and throughput."
         , docCard "/omega/boost/docs/api" "API Reference" "Full endpoint documentation."
         ]
     
     , h2 "What is omega//boost?"
-    , p "omega//boost is a managed inference proxy that sits between your application and your AI providers. Bring your own API keys, and we add a performance layer: automatic batching, KV cache sharing, and co-located infrastructure for minimal latency."
+    , p "omega//boost is managed inference infrastructure powered by custom CUDA kernels. We build CUTLASS 3.x kernels targeting sm_120 (H100/B200) that outperform stock vLLM by 40-60%. Bring your own API keys from OpenAI, Anthropic, or other providers - we co-locate our infrastructure with yours for minimal latency."
     
     , h2 "Key Features"
     , HH.ul
         [ cls [ "space-y-2 text-muted-foreground mb-6" ] ]
-        [ li' "BYOK Architecture - Use your existing API keys, keep your billing relationship"
-        , li' "evring HTTP Stack - 509k req/s throughput, <10ms p99 latency"
-        , li' "Automatic Batching - Batch compatible requests for cost savings"
-        , li' "KV Cache Sharing - Share prompt caches across requests"
-        , li' "Full Observability - Request tracing, cost analytics, usage reports"
+        [ li' "CUTLASS 3.x Kernels - Custom sm_120 CUDA kernels for H100/B200"
+        , li' "BYOK Co-location - Your API keys, our optimized infrastructure"
+        , li' "evring HTTP/1.1+2+3 - Full HTTP stack with 509k req/s throughput"
+        , li' "Continuous Batching - PagedAttention with dynamic scheduling"
+        , li' "Replace vLLM - No GPU ops, no tuning, just managed inference"
         ]
     
     , h2 "Quick example"
     , codeBlock
-        [ codeLine "# " "Switch from OpenAI direct to omega//boost"
+        [ codeLine "# " "Replace vLLM or raw provider API with omega//boost"
         , codeLine "" "client = OpenAI("
         , codeLine "" "    base_url=\"https://boost.omega.dev/v1\","
         , codeLine "" "    api_key=os.environ[\"OPENAI_API_KEY\"]"
         , codeLine "" ")"
+        , HH.text "\n"
+        , codeLine "# " "Custom CUTLASS kernels handle the rest"
         ]
     ]
 
@@ -195,49 +199,90 @@ quickstartContent :: forall w i. HH.HTML w i
 quickstartContent =
   article
     [ h1 "Quick Start"
-    , p "Get omega//boost working in under a minute."
+    , p "Get omega//boost running in 5 minutes. Custom CUTLASS kernels, zero ops burden."
     
     , h2 "1. Create an account"
     , p "Sign up at straylight.dev and navigate to the omega//boost dashboard."
     
-    , h2 "2. Add your API key"
-    , p "Add your OpenAI, Anthropic, or other provider API key through our secure vault."
+    , h2 "2. Add your BYOK credentials"
+    , p "Add your OpenAI, Anthropic, or other provider API key. We co-locate with your vendor automatically."
     , codeBlock
-        [ codeLine "# " "In your dashboard, add your key:"
+        [ codeLine "# " "In your dashboard, add your provider key:"
         , codeLine "" "Provider: OpenAI"
         , codeLine "" "Key: sk-..."
-        , codeLine "" "Label: production"
+        , codeLine "" "Region: auto  # We co-locate automatically"
         ]
     
     , h2 "3. Update your base URL"
     , codeBlock
-        [ codeLine "# " "Python with OpenAI SDK"
+        [ codeLine "# " "Replace vLLM or raw provider API"
         , codeLine "" "from openai import OpenAI"
         , HH.text "\n"
         , codeLine "" "client = OpenAI("
         , codeLine "" "    base_url=\"https://boost.omega.dev/v1\","
-        , codeLine "" "    api_key=\"your-openai-key\"  # or via env"
+        , codeLine "" "    api_key=\"your-openai-key\""
         , codeLine "" ")"
         , HH.text "\n"
+        , codeLine "# " "CUTLASS kernels handle inference optimization"
         , codeLine "" "response = client.chat.completions.create("
         , codeLine "" "    model=\"gpt-4-turbo-preview\","
         , codeLine "" "    messages=[{\"role\": \"user\", \"content\": \"Hello!\"}]"
         , codeLine "" ")"
         ]
     
-    , h2 "4. Verify it works"
+    , h2 "4. Verify CUTLASS is active"
     , codeBlock
-        [ codeLine "$ " "curl https://boost.omega.dev/v1/models \\"
-        , codeLine "" "  -H \"Authorization: Bearer $OPENAI_API_KEY\""
+        [ codeLine "$ " "curl https://boost.omega.dev/v1/health"
+        , codeLine "" "{"
+        , codeLine "" "  \"status\": \"ok\","
+        , codeLine "" "  \"kernel\": \"cutlass-3.x-sm_120\","
+        , codeLine "" "  \"region\": \"us-east-1\""
+        , codeLine "" "}"
         ]
     
     , h2 "Next steps"
     , HH.ul
         [ cls [ "space-y-2 text-muted-foreground" ] ]
-        [ li link "/omega/boost/docs/batching" "Configure automatic batching"
-        , li link "/omega/boost/docs/caching" "Enable KV cache sharing"
-        , li link "/omega/boost/docs/analytics" "View your analytics dashboard"
+        [ li link "/omega/boost/docs/performance" "Tune latency and throughput"
+        , li link "/omega/boost/docs/kernels" "Learn about CUTLASS kernels"
+        , li link "/omega/boost/docs/batching" "Configure continuous batching"
         ]
+    ]
+
+-- ============================================================
+-- DEPLOYMENT
+-- ============================================================
+
+deploymentContent :: forall w i. HH.HTML w i
+deploymentContent =
+  article
+    [ h1 "Deployment"
+    , p "omega//boost runs in multiple regions co-located with major AI providers."
+    
+    , h2 "Supported Regions"
+    , HH.ul
+        [ cls [ "space-y-2 text-muted-foreground mb-6" ] ]
+        [ li' "us-east-1 - Co-located with OpenAI, Anthropic"
+        , li' "us-west-2 - Co-located with OpenAI, Google AI"
+        , li' "eu-west-1 - Co-located with Anthropic, Mistral"
+        , li' "ap-northeast-1 - Co-located with OpenAI"
+        ]
+    
+    , h2 "Automatic Routing"
+    , p "omega//boost automatically routes requests to the region closest to your configured BYOK provider. No configuration needed - we detect your provider and co-locate automatically."
+    
+    , h2 "GPU Infrastructure"
+    , p "All regions run on NVIDIA H100 SXM5 80GB GPUs with our custom CUTLASS 3.x sm_120 kernels. Enterprise customers can request dedicated B200 capacity."
+    
+    , h2 "Network Topology"
+    , codeBlock
+        [ codeLine "" "Your App -> omega//boost Edge (anycast)"
+        , codeLine "" "         -> CUTLASS Inference (regional)"
+        , codeLine "" "         -> BYOK Provider (co-located)"
+        ]
+    
+    , h2 "Failover"
+    , p "omega//boost automatically fails over between regions if a GPU cluster or provider experiences issues. Failover typically completes in <100ms with no dropped requests."
     ]
 
 -- ============================================================
@@ -248,33 +293,37 @@ byokContent :: forall w i. HH.HTML w i
 byokContent =
   article
     [ h1 "BYOK Setup"
-    , p "Bring your own API keys from any supported provider."
+    , p "Bring your own API keys. We co-locate our CUTLASS kernels with your provider for optimal performance."
     
     , h2 "Supported Providers"
     , HH.ul
         [ cls [ "space-y-2 text-muted-foreground mb-6" ] ]
-        [ li' "OpenAI (GPT-4, GPT-3.5, embeddings)"
-        , li' "Anthropic (Claude 3, Claude 2)"
+        [ li' "OpenAI (GPT-4, GPT-4 Turbo, GPT-3.5, embeddings)"
+        , li' "Anthropic (Claude 3 Opus, Sonnet, Haiku)"
         , li' "Google (Gemini Pro, Gemini Ultra)"
-        , li' "Mistral AI"
-        , li' "Cohere"
+        , li' "Mistral AI (Mistral Large, Medium, Small)"
+        , li' "Together AI (Llama, Mixtral)"
         , li' "Custom OpenAI-compatible endpoints"
         ]
     
-    , h2 "Adding Keys"
-    , p "Navigate to Dashboard > Settings > API Keys. Click 'Add Key' and enter:"
+    , h2 "Adding BYOK Credentials"
+    , p "Navigate to Dashboard > Settings > BYOK Providers. Click 'Add Provider' and enter:"
     , HH.ul
         [ cls [ "space-y-2 text-muted-foreground mb-6" ] ]
         [ li' "Provider - Select from the dropdown"
-        , li' "Key - Your API key (we encrypt this immediately)"
-        , li' "Label - A friendly name for this key"
+        , li' "API Key - Your key (encrypted immediately with AES-256-GCM)"
+        , li' "Label - A friendly name (e.g., 'production', 'staging')"
+        , li' "Region - Auto (recommended) or manual selection"
         ]
     
+    , h2 "Co-location"
+    , p "When you add a BYOK provider, omega//boost automatically routes requests through our nearest GPU cluster. This co-location minimizes network latency - typically <1ms to your provider."
+    
     , h2 "Key Security"
-    , p "Your API keys are encrypted at rest using AES-256-GCM. We never log or store raw keys. Keys are decrypted only at request time in isolated memory."
+    , p "Your API keys are encrypted at rest using AES-256-GCM in isolated secure enclaves. Keys are decrypted only during request processing in isolated memory. We never log raw keys or request content."
     
     , h2 "Key Rotation"
-    , p "To rotate a key, add the new key first, then delete the old one. There's no downtime during rotation."
+    , p "To rotate a key, add the new key first, test it, then delete the old one. Zero downtime during rotation. All in-flight requests complete on the old key."
     ]
 
 -- ============================================================
@@ -392,93 +441,116 @@ streamingContent =
     ]
 
 -- ============================================================
+-- KERNELS CONTENT
+-- ============================================================
+
+kernelsContent :: forall w i. HH.HTML w i
+kernelsContent =
+  article
+    [ h1 "CUTLASS Kernels"
+    , p "omega//boost runs custom CUDA kernels built on NVIDIA's CUTLASS 3.x library."
+    
+    , h2 "What is CUTLASS?"
+    , p "CUTLASS (CUDA Templates for Linear Algebra Subroutines) is NVIDIA's open-source library for high-performance matrix operations. We build custom kernels on CUTLASS 3.x targeting sm_120 architecture (H100, B200 GPUs)."
+    
+    , h2 "Our Kernel Stack"
+    , HH.ul
+        [ cls [ "space-y-2 text-muted-foreground mb-6" ] ]
+        [ li' "FlashAttention-3 - Custom attention kernels with async copy"
+        , li' "Fused MoE - Optimized kernels for Mixtral/DBRX architectures"
+        , li' "Warp-specialized GEMM - 1.8x faster than cuBLAS"
+        , li' "PagedAttention - Memory-efficient KV cache management"
+        ]
+    
+    , h2 "Performance vs vLLM"
+    , codeBlock
+        [ codeLine "# " "Benchmark: Llama-70B on H100 SXM5"
+        , codeLine "" "Operation     | vLLM    | omega//boost"
+        , codeLine "" "Attention     | 1.0x    | 2.1x"
+        , codeLine "" "GEMM          | 1.0x    | 1.8x"
+        , codeLine "" "Overall TTFT  | 12ms    | <5ms"
+        , codeLine "" "Throughput    | 8k t/s  | 12k t/s"
+        ]
+    
+    , h2 "sm_120 Architecture"
+    , p "Our kernels target sm_120 (Hopper/Blackwell architecture) exclusively. This allows us to use features not available on older GPUs: TMA (Tensor Memory Accelerator), warp-specialized pipelines, and 4th-gen Tensor Cores."
+    ]
+
+-- ============================================================
+-- PERFORMANCE CONTENT
+-- ============================================================
+
+performanceContent :: forall w i. HH.HTML w i
+performanceContent =
+  article
+    [ h1 "Performance Tuning"
+    , p "Optimize latency, throughput, and cost for your workload."
+    
+    , h2 "Key Metrics"
+    , HH.ul
+        [ cls [ "space-y-2 text-muted-foreground mb-6" ] ]
+        [ li' "TTFT (Time to First Token) - Critical for interactive use cases"
+        , li' "TBT (Time Between Tokens) - Affects streaming experience"
+        , li' "Throughput (tok/s) - Total tokens processed per second"
+        , li' "GPU Utilization - Higher is better for cost efficiency"
+        ]
+    
+    , h2 "Latency Optimization"
+    , p "For minimum TTFT, use these headers:"
+    , codeBlock
+        [ codeLine "" "X-Boost-Priority: high      # Skip batch queuing"
+        , codeLine "" "X-Boost-Prefill: eager      # Immediate prefill"
+        ]
+    
+    , h2 "Throughput Optimization"
+    , p "For maximum throughput at the cost of latency:"
+    , codeBlock
+        [ codeLine "" "X-Boost-Priority: normal    # Allow batching"
+        , codeLine "" "X-Boost-Batch-Window: 50    # 50ms batch window"
+        ]
+    
+    , h2 "Monitoring"
+    , p "Monitor your inference performance in the dashboard or via API:"
+    , codeBlock
+        [ codeLine "" "GET /v1/metrics/latency     # p50, p95, p99"
+        , codeLine "" "GET /v1/metrics/throughput  # tok/s, req/s"
+        , codeLine "" "GET /v1/metrics/gpu         # utilization, memory"
+        ]
+    ]
+
+-- ============================================================
 -- BATCHING CONTENT
 -- ============================================================
 
 batchingContent :: forall w i. HH.HTML w i
 batchingContent =
   article
-    [ h1 "Automatic Batching"
-    , p "omega//boost automatically batches compatible requests for cost savings."
+    [ h1 "Continuous Batching"
+    , p "omega//boost implements continuous batching with PagedAttention for maximum GPU utilization."
     
     , h2 "How It Works"
-    , p "Requests with the same model and compatible parameters are grouped into batches. We hold requests for a configurable window (default: 10ms) to collect batch candidates."
+    , p "Unlike static batching, continuous batching adds and removes requests from the batch every iteration. Our CUTLASS kernels implement this with PagedAttention for memory-efficient KV cache management."
+    
+    , h2 "Batching Modes"
+    , HH.ul
+        [ cls [ "space-y-2 text-muted-foreground mb-6" ] ]
+        [ li' "auto (default) - Dynamic scheduling based on queue depth"
+        , li' "eager - Minimize latency, batch when requests arrive together"
+        , li' "throughput - Maximize throughput, larger batch windows"
+        ]
     
     , h2 "Configuration"
     , codeBlock
         [ codeLine "# " "Via header"
-        , codeLine "" "X-Boost-Batch-Window: 50  # milliseconds"
+        , codeLine "" "X-Boost-Batch-Mode: auto    # auto, eager, throughput"
+        , codeLine "" "X-Boost-Batch-Window: 10    # milliseconds (throughput mode)"
         , HH.text "\n"
         , codeLine "# " "Via dashboard"
-        , codeLine "" "Settings > Batching > Window: 10-100ms"
+        , codeLine "" "Settings > Batching > Mode: auto"
         ]
     
-    , h2 "Cost Savings"
-    , p "Typical savings from batching:"
-    , HH.ul
-        [ cls [ "space-y-2 text-muted-foreground mb-6" ] ]
-        [ li' "High traffic (>100 req/s): 40-60% savings"
-        , li' "Medium traffic (10-100 req/s): 20-40% savings"
-        , li' "Low traffic (<10 req/s): 0-10% savings"
-        ]
-    ]
-
--- ============================================================
--- CACHING CONTENT
--- ============================================================
-
-cachingContent :: forall w i. HH.HTML w i
-cachingContent =
-  article
-    [ h1 "KV Cache Sharing"
-    , p "Share prompt caches across requests for significant cost reduction."
-    
-    , h2 "How It Works"
-    , p "When multiple requests share the same prompt prefix (e.g., system prompt), we cache the KV states and reuse them. This reduces both latency and cost."
-    
-    , h2 "Enable Caching"
-    , codeBlock
-        [ codeLine "# " "Via header"
-        , codeLine "" "X-Boost-Cache: true"
-        , HH.text "\n"
-        , codeLine "# " "Via dashboard"
-        , codeLine "" "Settings > Caching > Enable: true"
-        ]
-    
-    , h2 "Cache TTL"
-    , p "Default cache TTL is 5 minutes. Configure via dashboard or header:"
-    , codeBlock
-        [ codeLine "" "X-Boost-Cache-TTL: 300  # seconds"
-        ]
-    ]
-
--- ============================================================
--- ANALYTICS CONTENT
--- ============================================================
-
-analyticsContent :: forall w i. HH.HTML w i
-analyticsContent =
-  article
-    [ h1 "Analytics"
-    , p "Full visibility into your inference usage."
-    
-    , h2 "Dashboard"
-    , p "Access your analytics at Dashboard > Analytics. View:"
-    , HH.ul
-        [ cls [ "space-y-2 text-muted-foreground mb-6" ] ]
-        [ li' "Request volume over time"
-        , li' "Latency percentiles (p50, p95, p99)"
-        , li' "Cost breakdown by model"
-        , li' "Batch efficiency metrics"
-        , li' "Cache hit rates"
-        ]
-    
-    , h2 "API Access"
-    , codeBlock
-        [ codeLine "" "GET /v1/analytics/usage"
-        , codeLine "" "GET /v1/analytics/costs"
-        , codeLine "" "GET /v1/analytics/latency"
-        ]
+    , h2 "Batching + Streaming"
+    , p "Continuous batching works seamlessly with streaming responses. Each request in a batch can start streaming independently as soon as its first token is generated."
     ]
 
 -- ============================================================
@@ -489,7 +561,7 @@ apiContent :: forall w i. HH.HTML w i
 apiContent =
   article
     [ h1 "API Reference"
-    , p "Complete API documentation for omega//boost."
+    , p "Complete API documentation for omega//boost managed inference."
     
     , h2 "Base URL"
     , codeBlock
@@ -497,17 +569,34 @@ apiContent =
         ]
     
     , h2 "Authentication"
-    , p "Pass your provider API key in the Authorization header:"
+    , p "Pass your BYOK provider API key in the Authorization header:"
     , codeBlock
-        [ codeLine "" "Authorization: Bearer sk-your-api-key"
+        [ codeLine "" "Authorization: Bearer sk-your-provider-key"
         ]
     
-    , h2 "Endpoints"
-    , p "omega//boost proxies all standard provider endpoints. Additional endpoints:"
+    , h2 "Provider Endpoints"
+    , p "omega//boost proxies all standard OpenAI/Anthropic endpoints:"
     , codeBlock
-        [ codeLine "" "GET  /v1/health          # Health check"
-        , codeLine "" "GET  /v1/analytics/*     # Usage analytics"
-        , codeLine "" "POST /v1/keys            # Manage API keys"
+        [ codeLine "" "POST /v1/chat/completions   # OpenAI chat"
+        , codeLine "" "POST /v1/completions        # OpenAI completions"
+        , codeLine "" "POST /v1/embeddings         # OpenAI embeddings"
+        , codeLine "" "POST /anthropic/messages    # Anthropic messages"
+        ]
+    
+    , h2 "Boost Headers"
+    , p "Control kernel behavior with these headers:"
+    , codeBlock
+        [ codeLine "" "X-Boost-Priority: high|normal|low"
+        , codeLine "" "X-Boost-Batch-Mode: auto|eager|throughput"
+        , codeLine "" "X-Boost-Batch-Window: <milliseconds>"
+        , codeLine "" "X-Boost-Prefill: eager|batched"
+        ]
+    
+    , h2 "Management Endpoints"
+    , codeBlock
+        [ codeLine "" "GET  /v1/health             # Kernel status"
+        , codeLine "" "GET  /v1/metrics/*          # Performance metrics"
+        , codeLine "" "GET  /v1/usage              # Token usage"
         ]
     ]
 
@@ -590,7 +679,7 @@ link :: forall w i. String -> String -> HH.HTML w i
 link href text = 
   HH.a 
     [ HP.href href
-    , cls [ "text-orange-400 hover:text-orange-400/80" ]
+    , cls [ "text-yellow-400 hover:text-yellow-400/80" ]
     ] 
     [ HH.text text ]
 
@@ -598,7 +687,7 @@ docCard :: forall w i. String -> String -> String -> HH.HTML w i
 docCard href title description =
   HH.a
     [ HP.href href
-    , cls [ "block p-4 bg-card border border-border rounded-lg hover:border-orange-400/50 transition-colors" ]
+    , cls [ "block p-4 bg-card border border-border rounded-lg hover:border-yellow-400/50 transition-colors" ]
     ]
     [ HH.h3
         [ cls [ "text-text font-medium mb-1" ] ]

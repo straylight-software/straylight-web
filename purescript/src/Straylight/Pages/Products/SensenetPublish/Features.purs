@@ -99,8 +99,8 @@ scopeGraphs =
                     [ cls [ "font-mono text-sm" ] ]
                     [ HH.div [ cls [ "text-muted-foreground mb-2" ] ] [ HH.text "// Scope graph for:" ]
                     , HH.div [ cls [ "text-text mb-4" ] ] [ HH.text "fn process(data: &Data) -> Result<Output>" ]
-                    , HH.div [ cls [ "border-l-2 border-sky-400/50 pl-4 space-y-2" ] ]
-                        [ HH.div_ [ HH.span [ cls [ "text-sky-400" ] ] [ HH.text "def" ], HH.text " process @ line 42" ]
+                    , HH.div [ cls [ "border-l-2 border-teal-400/50 pl-4 space-y-2" ] ]
+                        [ HH.div_ [ HH.span [ cls [ "text-teal-400" ] ] [ HH.text "def" ], HH.text " process @ line 42" ]
                         , HH.div_ [ HH.span [ cls [ "text-green-400" ] ] [ HH.text "ref" ], HH.text " Data -> types.rs:15" ]
                         , HH.div_ [ HH.span [ cls [ "text-green-400" ] ] [ HH.text "ref" ], HH.text " Result -> std::result" ]
                         , HH.div_ [ HH.span [ cls [ "text-green-400" ] ] [ HH.text "ref" ], HH.text " Output -> output.rs:8" ]
@@ -212,7 +212,7 @@ crossLanguage =
 langCard :: forall w i. String -> String -> HH.HTML w i
 langCard name status =
   HH.div
-    [ cls [ "bg-card border border-border rounded-lg p-4 text-center hover:border-sky-400/50 transition-colors" ] ]
+    [ cls [ "bg-card border border-border rounded-lg p-4 text-center hover:border-teal-400/50 transition-colors" ] ]
     [ HH.p [ cls [ "text-text font-medium mb-1" ] ] [ HH.text name ]
     , HH.p [ cls [ "text-xs text-muted-foreground" ] ] [ HH.text status ]
     ]
@@ -322,7 +322,7 @@ ciIntegration =
 ciCard :: forall w i. String -> String -> HH.HTML w i
 ciCard name desc =
   HH.div
-    [ cls [ "bg-card border border-border rounded-lg p-6 text-center hover:border-sky-400/50 transition-colors" ] ]
+    [ cls [ "bg-card border border-border rounded-lg p-6 text-center hover:border-teal-400/50 transition-colors" ] ]
     [ HH.p [ cls [ "text-text font-medium mb-1" ] ] [ HH.text name ]
     , HH.p [ cls [ "text-sm text-muted-foreground" ] ] [ HH.text desc ]
     ]
@@ -368,10 +368,10 @@ developer =
 dxCard :: forall w i. String -> String -> String -> HH.HTML w i
 dxCard icon title description =
   HH.div
-    [ cls [ "bg-card border border-border rounded-lg p-6 hover:border-sky-400/30 transition-colors" ] ]
+    [ cls [ "bg-card border border-border rounded-lg p-6 hover:border-teal-400/30 transition-colors" ] ]
     [ HH.div
         [ cls [ "flex items-center gap-3 mb-3" ] ]
-        [ HH.span [ cls [ "text-sky-400 font-mono text-xl" ] ] [ HH.text icon ]
+        [ HH.span [ cls [ "text-teal-400 font-mono text-xl" ] ] [ HH.text icon ]
         , HH.h3 [ cls [ "text-text font-semibold" ] ] [ HH.text title ]
         ]
     , HH.p
@@ -399,7 +399,7 @@ cta =
             [ cls [ "flex flex-col sm:flex-row items-center justify-center gap-4" ] ]
             [ HH.a
                 [ HP.href "/sensenet/publish/pricing"
-                , cls [ "inline-flex items-center justify-center px-8 py-4 bg-sky-400 text-background font-medium rounded-md hover:bg-sky-400/90 transition-colors" ]
+                , cls [ "inline-flex items-center justify-center px-8 py-4 bg-teal-400 text-background font-medium rounded-md hover:bg-teal-400/90 transition-colors" ]
                 ]
                 [ HH.text "Get started" ]
             , HH.a
@@ -418,7 +418,7 @@ cta =
 badge :: forall w i. String -> HH.HTML w i
 badge label =
   HH.span
-    [ cls [ "inline-block px-3 py-1 bg-sky-400/10 border border-sky-400/20 rounded-full text-sky-400 text-sm font-medium mb-4" ] ]
+    [ cls [ "inline-block px-3 py-1 bg-teal-400/10 border border-teal-400/20 rounded-full text-teal-400 text-sm font-medium mb-4" ] ]
     [ HH.text label ]
 
 featureList :: forall w i. Array String -> HH.HTML w i
@@ -431,7 +431,7 @@ featureItem :: forall w i. String -> HH.HTML w i
 featureItem text =
   HH.li
     [ cls [ "flex items-start gap-3" ] ]
-    [ HH.span [ cls [ "text-sky-400 mt-1" ] ] [ HH.text "+" ]
+    [ HH.span [ cls [ "text-teal-400 mt-1" ] ] [ HH.text "+" ]
     , HH.span [ cls [ "text-muted-foreground" ] ] [ HH.text text ]
     ]
 

@@ -49,9 +49,9 @@ hero =
         [ cls [ "max-w-[1100px] mx-auto px-6 text-center" ] ]
         [ -- Badge
           HH.div
-            [ cls [ "inline-flex items-center gap-2 px-3 py-1 bg-rose-400/10 border border-rose-400/20 rounded-full text-rose-400 text-sm mb-8" ] ]
-            [ HH.span [ cls [ "w-2 h-2 bg-rose-400 rounded-full animate-pulse" ] ] []
-            , HH.text "Private beta"
+            [ cls [ "inline-flex items-center gap-2 px-3 py-1 bg-green-400/10 border border-green-400/20 rounded-full text-green-400 text-sm mb-8" ] ]
+            [ HH.span [ cls [ "w-2 h-2 bg-green-400 rounded-full animate-pulse" ] ] []
+            , HH.text "Typed Build System"
             ]
           
           -- Headline
@@ -59,7 +59,7 @@ hero =
             [ cls [ "text-4xl md:text-6xl font-bold text-text mb-6 leading-tight" ] ]
             [ HH.text "Build systems that"
             , HH.br_
-            , HH.span [ cls [ "text-rose-400" ] ] [ HH.text "prove" ]
+            , HH.span [ cls [ "text-green-400" ] ] [ HH.text "prove" ]
             , HH.text " themselves correct"
             ]
           
@@ -78,7 +78,7 @@ hero =
           -- Social proof
         , HH.p
             [ cls [ "mt-12 text-sm text-muted-foreground" ] ]
-            [ HH.text "Trusted by teams who demand mathematical certainty" ]
+            [ HH.text "Replaces Bazel, Buck2, Nix expressions with mathematical certainty" ]
         ]
     ]
 
@@ -146,7 +146,7 @@ comparison =
                     [ HH.tr
                         [ cls [ "border-b border-border" ] ]
                         [ HH.th [ cls [ "py-4 text-left text-muted-foreground font-medium w-40" ] ] [ HH.text "" ]
-                        , HH.th [ cls [ "py-4 text-center text-rose-400 font-bold" ] ] [ HH.text "sensenet//build" ]
+                        , HH.th [ cls [ "py-4 text-center text-green-400 font-bold" ] ] [ HH.text "sensenet//build" ]
                         , HH.th [ cls [ "py-4 text-center text-muted-foreground font-medium" ] ] [ HH.text "Bazel" ]
                         , HH.th [ cls [ "py-4 text-center text-muted-foreground font-medium" ] ] [ HH.text "Buck2" ]
                         , HH.th [ cls [ "py-4 text-center text-muted-foreground font-medium" ] ] [ HH.text "Nix" ]
@@ -195,7 +195,7 @@ quickstart =
             [ cls [ "mt-8 text-center" ] ]
             [ HH.a
                 [ HP.href "/sensenet/build/docs/quickstart"
-                , cls [ "text-rose-400 hover:text-rose-400/80 transition-colors" ]
+                , cls [ "text-green-400 hover:text-green-400/80 transition-colors" ]
                 ]
                 [ HH.text "Full quickstart guide ->" ]
             ]
@@ -234,7 +234,7 @@ primaryButton :: forall w i. String -> String -> HH.HTML w i
 primaryButton href label =
   HH.a
     [ HP.href href
-    , cls [ "inline-flex items-center justify-center px-8 py-4 bg-rose-400 text-background font-medium rounded-md hover:bg-rose-400/90 transition-colors" ]
+    , cls [ "inline-flex items-center justify-center px-8 py-4 bg-green-400 text-background font-medium rounded-md hover:bg-green-400/90 transition-colors" ]
     ]
     [ HH.text label ]
 
@@ -249,9 +249,9 @@ secondaryButton href label =
 featureCard :: forall w i. String -> String -> String -> HH.HTML w i
 featureCard icon title description =
   HH.div
-    [ cls [ "p-6 bg-card border border-border rounded-lg hover:border-rose-400/30 transition-colors" ] ]
+    [ cls [ "p-6 bg-card border border-border rounded-lg hover:border-green-400/30 transition-colors" ] ]
     [ HH.div
-        [ cls [ "text-2xl text-rose-400 mb-4 font-mono" ] ]
+        [ cls [ "text-2xl text-green-400 mb-4 font-mono" ] ]
         [ HH.text $ iconSymbol icon ]
     , HH.h3
         [ cls [ "text-text text-lg font-semibold mb-2" ] ]
@@ -276,7 +276,7 @@ comparisonRow feature us bazel buck2 nix =
   HH.tr
     [ cls [ "border-b border-border" ] ]
     [ HH.td [ cls [ "py-3 text-muted-foreground font-medium" ] ] [ HH.text feature ]
-    , HH.td [ cls [ "py-3 text-center text-rose-400 font-semibold" ] ] [ HH.text us ]
+    , HH.td [ cls [ "py-3 text-center text-green-400 font-semibold" ] ] [ HH.text us ]
     , HH.td [ cls [ "py-3 text-center" ] ] [ compCell bazel ]
     , HH.td [ cls [ "py-3 text-center" ] ] [ compCell buck2 ]
     , HH.td [ cls [ "py-3 text-center" ] ] [ compCell nix ]

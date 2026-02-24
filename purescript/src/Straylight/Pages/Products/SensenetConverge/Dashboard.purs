@@ -89,7 +89,7 @@ tabButton value label activeTab =
   HH.button
     [ cls [ "px-4 py-2 text-sm font-medium transition-colors -mb-px"
           , if value == activeTab 
-              then "text-emerald-400 border-b-2 border-emerald-400" 
+              then "text-purple-400 border-b-2 border-purple-400" 
               else "text-muted-foreground hover:text-text"
           ]
     , HE.onClick \_ -> SetTab value
@@ -179,7 +179,7 @@ driftItem name status synced =
     [ HH.span [ cls [ "text-sm font-mono text-text" ] ] [ HH.text name ]
     , HH.span 
         [ cls [ "text-xs px-2 py-1 rounded"
-              , if synced then "bg-emerald-400/20 text-emerald-400" else "bg-yellow-500/20 text-yellow-500"
+              , if synced then "bg-purple-400/20 text-purple-400" else "bg-yellow-500/20 text-yellow-500"
               ] 
         ] 
         [ HH.text status ]
@@ -207,7 +207,7 @@ activityItem action detail time =
     [ HH.div
         [ cls [ "flex items-center gap-3" ] ]
         [ HH.span
-            [ cls [ "text-xs px-2 py-0.5 rounded font-medium bg-emerald-400/20 text-emerald-400" ] ]
+            [ cls [ "text-xs px-2 py-0.5 rounded font-medium bg-purple-400/20 text-purple-400" ] ]
             [ HH.text action ]
         , HH.span [ cls [ "text-sm text-text" ] ] [ HH.text detail ]
         ]
@@ -232,7 +232,7 @@ resourcesTab =
         [ cls [ "flex items-center justify-between mb-6" ] ]
         [ HH.h2 [ cls [ "text-lg font-semibold text-text" ] ] [ HH.text "Managed Resources" ]
         , HH.button
-            [ cls [ "px-4 py-2 bg-emerald-400 text-background text-sm font-medium rounded-md hover:bg-emerald-400/90 transition-colors cursor-pointer" ]
+            [ cls [ "px-4 py-2 bg-purple-400 text-background text-sm font-medium rounded-md hover:bg-purple-400/90 transition-colors cursor-pointer" ]
             , HP.type_ HP.ButtonButton
             ]
             [ HH.text "+ Add Resource" ]
@@ -269,7 +269,7 @@ resourceRow name resType synced lastSync =
     , HH.td [ cls [ "py-3 px-4" ] ] 
         [ HH.span 
             [ cls [ "text-xs px-2 py-1 rounded"
-                  , if synced then "bg-emerald-400/20 text-emerald-400" else "bg-yellow-500/20 text-yellow-500"
+                  , if synced then "bg-purple-400/20 text-purple-400" else "bg-yellow-500/20 text-yellow-500"
                   ] 
             ]
             [ HH.text $ if synced then "in sync" else "drifted" ]
@@ -295,7 +295,7 @@ driftTab =
                 ]
                 [ HH.text "Scan Now" ]
             , HH.button
-                [ cls [ "px-4 py-2 bg-emerald-400 text-background text-sm font-medium rounded-md hover:bg-emerald-400/90 transition-colors cursor-pointer" ]
+                [ cls [ "px-4 py-2 bg-purple-400 text-background text-sm font-medium rounded-md hover:bg-purple-400/90 transition-colors cursor-pointer" ]
                 , HP.type_ HP.ButtonButton
                 ]
                 [ HH.text "Remediate All" ]
@@ -321,7 +321,7 @@ driftTab =
                 , HH.span [ cls [ "text-text font-mono" ] ] [ HH.text "aws.ec2.SecurityGroup.web_sg" ]
                 ]
             , HH.button
-                [ cls [ "px-3 py-1 bg-emerald-400 text-background text-sm font-medium rounded hover:bg-emerald-400/90 transition-colors cursor-pointer" ]
+                [ cls [ "px-3 py-1 bg-purple-400 text-background text-sm font-medium rounded hover:bg-purple-400/90 transition-colors cursor-pointer" ]
                 , HP.type_ HP.ButtonButton
                 ]
                 [ HH.text "Remediate" ]
@@ -332,7 +332,7 @@ driftTab =
                 [ cls [ "text-danger" ] ]
                 [ HH.text "- ingress[0].cidr = \"10.0.0.0/8\"" ]
             , HH.div
-                [ cls [ "text-emerald-400" ] ]
+                [ cls [ "text-purple-400" ] ]
                 [ HH.text "+ ingress[0].cidr = \"0.0.0.0/0\"" ]
             ]
         , HH.p
@@ -370,7 +370,7 @@ historyEntry name status time detail =
             [ HH.span [ cls [ "text-text font-medium" ] ] [ HH.text name ]
             , HH.span 
                 [ cls [ "text-xs px-2 py-0.5 rounded"
-                      , if status == "Success" then "bg-emerald-400/20 text-emerald-400" else "bg-danger/20 text-danger"
+                      , if status == "Success" then "bg-purple-400/20 text-purple-400" else "bg-danger/20 text-danger"
                       ] 
                 ]
                 [ HH.text status ]
@@ -408,7 +408,7 @@ settingsTab =
             [ cls [ "flex items-center justify-between mb-4" ] ]
             [ HH.h3 [ cls [ "text-text font-medium" ] ] [ HH.text "API Keys" ]
             , HH.button
-                [ cls [ "px-3 py-1 text-sm text-emerald-400 hover:text-emerald-400/80 cursor-pointer" ]
+                [ cls [ "px-3 py-1 text-sm text-purple-400 hover:text-purple-400/80 cursor-pointer" ]
                 , HP.type_ HP.ButtonButton
                 ]
                 [ HH.text "+ New Key" ]

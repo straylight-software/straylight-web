@@ -1,5 +1,5 @@
 -- | omega//boost Home Page
--- | Managed inference co-located with BYOK vendor. evring HTTP stack.
+-- | Managed inference co-located with BYOK vendor. Custom CUTLASS kernels.
 module Straylight.Pages.Products.OmegaBoost.Home 
   ( homePage
   , render
@@ -50,22 +50,22 @@ hero =
         [ cls [ "max-w-[1100px] mx-auto px-6 text-center" ] ]
         [ -- Badge
           HH.div
-            [ cls [ "inline-flex items-center gap-2 px-3 py-1 bg-orange-400/10 border border-orange-400/20 rounded-full text-orange-400 text-sm mb-8" ] ]
-            [ HH.span [ cls [ "w-2 h-2 bg-orange-400 rounded-full animate-pulse" ] ] []
-            , HH.text "Co-located inference"
+            [ cls [ "inline-flex items-center gap-2 px-3 py-1 bg-yellow-400/10 border border-yellow-400/20 rounded-full text-yellow-400 text-sm mb-8" ] ]
+            [ HH.span [ cls [ "w-2 h-2 bg-yellow-400 rounded-full animate-pulse" ] ] []
+            , HH.text "Managed Inference"
             ]
         , -- Headline
           HH.h1
             [ cls [ "text-4xl md:text-6xl font-bold text-text mb-6 leading-tight" ] ]
-            [ HH.text "BYOK inference,"
+            [ HH.text "Custom CUDA kernels,"
             , HH.br_
-            , HH.text "zero "
-            , HH.span [ cls [ "text-orange-400" ] ] [ HH.text "latency" ]
+            , HH.span [ cls [ "text-yellow-400" ] ] [ HH.text "managed" ]
+            , HH.text " for you"
             ]
         , -- Subheadline
           HH.p
             [ cls [ "text-xl text-muted-foreground mb-10 max-w-2xl mx-auto" ] ]
-            [ HH.text "Bring your own API keys. We co-locate inference with your vendor. evring HTTP stack for 509k req/s throughput. Managed batching, caching, and routing." ]
+            [ HH.text "CUTLASS 3.x sm_120 kernels co-located with your BYOK vendor. evring HTTP/1.1+2+3 stack. Replace self-hosted vLLM and raw provider APIs with our optimized infrastructure." ]
         , -- CTAs
           HH.div
             [ cls [ "flex flex-col sm:flex-row items-center justify-center gap-4" ] ]
@@ -75,15 +75,15 @@ hero =
         , -- Key metrics
           HH.div
             [ cls [ "mt-12 flex flex-col sm:flex-row items-center justify-center gap-8" ] ]
-            [ metricBadge "509k" "req/s"
-            , metricBadge "BYOK" "your keys"
-            , metricBadge "<10ms" "p99 latency"
+            [ metricBadge "sm_120" "CUTLASS kernels"
+            , metricBadge "BYOK" "co-located"
+            , metricBadge "<5ms" "p99 TTFT"
             ]
         , -- Social proof
           HH.p
             [ cls [ "mt-8 font-mono text-sm text-muted-foreground" ] ]
-            [ HH.span [ cls [ "text-orange-400/60" ] ] [ HH.text "powered by " ]
-            , HH.text "evring HTTP stack"
+            [ HH.span [ cls [ "text-yellow-400/60" ] ] [ HH.text "powered by " ]
+            , HH.text "CUTLASS 3.x + evring"
             ]
         ]
     ]
@@ -92,7 +92,7 @@ metricBadge :: forall w i. String -> String -> HH.HTML w i
 metricBadge value label =
   HH.div
     [ cls [ "flex items-baseline gap-2" ] ]
-    [ HH.span [ cls [ "text-3xl font-bold text-orange-400" ] ] [ HH.text value ]
+    [ HH.span [ cls [ "text-3xl font-bold text-yellow-400" ] ] [ HH.text value ]
     , HH.span [ cls [ "text-muted-foreground text-sm" ] ] [ HH.text label ]
     ]
 
@@ -113,22 +113,22 @@ features =
                 [ HH.text "Why omega//boost?" ]
             , HH.p
                 [ cls [ "text-muted-foreground max-w-xl mx-auto" ] ]
-                [ HH.text "Keep your existing API keys. We add the performance layer." ]
+                [ HH.text "Custom CUDA kernels. Co-located infrastructure. Your keys, our performance." ]
             ]
         , HH.div
             [ cls [ "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" ] ]
-            [ featureCard "~" "BYOK architecture"
-                "Bring your own API keys from OpenAI, Anthropic, or any provider. Your credentials, your billing, our infrastructure."
-            , featureCard ">>" "Co-located inference"
-                "We run evring proxies in the same regions as your vendors. Minimal network hops, maximum throughput."
-            , featureCard "!!" "evring HTTP stack"
-                "io_uring event loop. Zero-copy buffers. 509k req/s per core. The same stack powering omega//proxy."
-            , featureCard "&&" "Automatic batching"
-                "We batch requests intelligently. Same latency, lower costs. Compatible with all streaming responses."
-            , featureCard "==" "KV cache sharing"
-                "Share prompt caches across requests. Significant cost reduction for repeated system prompts."
-            , featureCard "$" "Transparent pricing"
-                "Pay only for our infrastructure margin. Your API costs stay with your vendor."
+            [ featureCard "<<" "CUTLASS 3.x kernels"
+                "Custom sm_120 CUDA kernels built on NVIDIA CUTLASS. Maximum throughput on H100/B200 GPUs. Faster than stock vLLM."
+            , featureCard ">>" "Co-located with BYOK"
+                "Your API keys, our infrastructure. We deploy in the same regions as your providers for sub-millisecond network hops."
+            , featureCard "!!" "evring HTTP/1.1+2+3"
+                "io_uring event loop with full HTTP/1.1, HTTP/2, and HTTP/3 support. 509k req/s per core. Zero-copy throughout."
+            , featureCard "&&" "Replace self-hosted vLLM"
+                "Stop managing GPU clusters. We handle scaling, failover, and optimization. Same API, better performance."
+            , featureCard "==" "Intelligent batching"
+                "Continuous batching with our custom kernels. Higher throughput than provider APIs without latency penalty."
+            , featureCard "$" "Pay for what you use"
+                "No idle GPU costs. No reserved capacity. Just inference at scale with transparent per-token pricing."
             ]
         ]
     ]
@@ -136,9 +136,9 @@ features =
 featureCard :: forall w i. String -> String -> String -> HH.HTML w i
 featureCard icon title description =
   HH.div
-    [ cls [ "p-6 bg-card border border-border rounded-lg hover:border-orange-400/30 transition-colors" ] ]
+    [ cls [ "p-6 bg-card border border-border rounded-lg hover:border-yellow-400/30 transition-colors" ] ]
     [ HH.div
-        [ cls [ "text-2xl text-orange-400 mb-4 font-mono" ] ]
+        [ cls [ "text-2xl text-yellow-400 mb-4 font-mono" ] ]
         [ HH.text icon ]
     , HH.h3
         [ cls [ "text-text text-lg font-semibold mb-2" ] ]
@@ -165,16 +165,16 @@ howItWorks =
                 [ HH.text "How it works" ]
             , HH.p
                 [ cls [ "text-muted-foreground max-w-xl mx-auto" ] ]
-                [ HH.text "Three steps to co-located inference." ]
+                [ HH.text "Three steps to managed inference with custom kernels." ]
             ]
         , HH.div
             [ cls [ "grid grid-cols-1 md:grid-cols-3 gap-8" ] ]
             [ stepCard "01" "Connect your keys"
-                "Add your OpenAI, Anthropic, or other provider API keys through our secure vault. We never see your raw keys."
-            , stepCard "02" "Point to our endpoint"
-                "Replace api.openai.com with boost.omega.dev. Same API, same responses, better performance."
-            , stepCard "03" "Scale automatically"
-                "We handle batching, caching, retries, and failover. You focus on building."
+                "Add your OpenAI, Anthropic, or other provider API keys. We co-locate with your vendor for optimal routing."
+            , stepCard "02" "Point to boost.omega.dev"
+                "Replace your provider's base URL. Our CUTLASS kernels and evring stack handle the rest."
+            , stepCard "03" "Scale without ops"
+                "Auto-scaling, continuous batching, failover. No GPU clusters to manage. No vLLM configs to tune."
             ]
         ]
     ]
@@ -184,7 +184,7 @@ stepCard step title description =
   HH.div
     [ cls [ "text-center" ] ]
     [ HH.div
-        [ cls [ "text-5xl font-bold text-orange-400/20 mb-4 font-mono" ] ]
+        [ cls [ "text-5xl font-bold text-yellow-400/20 mb-4 font-mono" ] ]
         [ HH.text step ]
     , HH.h3
         [ cls [ "text-text text-lg font-semibold mb-2" ] ]
@@ -208,22 +208,22 @@ integration =
             [ cls [ "text-center mb-12" ] ]
             [ HH.h2
                 [ cls [ "text-3xl font-bold text-text mb-4" ] ]
-                [ HH.text "One line to switch" ]
+                [ HH.text "Drop-in replacement" ]
             ]
         , codeBlock
-            [ codeLine "# " "Before: direct to OpenAI"
+            [ codeLine "# " "Before: self-hosted vLLM or raw provider API"
             , codeLine "" "client = OpenAI(base_url=\"https://api.openai.com/v1\")"
             , HH.text "\n"
-            , codeLine "# " "After: through omega//boost"
+            , codeLine "# " "After: omega//boost with CUTLASS kernels"
             , codeLine "" "client = OpenAI(base_url=\"https://boost.omega.dev/v1\")"
             , HH.text "\n"
-            , codeLine "# " "Same API, same responses, better performance"
+            , codeLine "# " "Same API. Custom kernels. Managed infrastructure."
             ]
         , HH.div
             [ cls [ "mt-8 text-center" ] ]
             [ HH.a
                 [ HP.href "/omega/boost/docs"
-                , cls [ "text-orange-400 hover:text-orange-400/80 transition-colors" ]
+                , cls [ "text-yellow-400 hover:text-yellow-400/80 transition-colors" ]
                 ]
                 [ HH.text "View full integration guide ->" ]
             ]
@@ -255,10 +255,10 @@ cta =
         [ cls [ "max-w-[800px] mx-auto px-6 text-center" ] ]
         [ HH.h2
             [ cls [ "text-3xl font-bold text-text mb-4" ] ]
-            [ HH.text "Ready to boost your inference?" ]
+            [ HH.text "Ready for managed inference?" ]
         , HH.p
             [ cls [ "text-muted-foreground mb-8" ] ]
-            [ HH.text "Keep your API keys. Add our performance layer. Start in minutes." ]
+            [ HH.text "Custom CUTLASS kernels. BYOK co-location. No GPU ops. Start in minutes." ]
         , HH.div
             [ cls [ "flex flex-col sm:flex-row items-center justify-center gap-4" ] ]
             [ primaryButton "/omega/boost/dashboard" "Get started"
@@ -275,7 +275,7 @@ primaryButton :: forall w i. String -> String -> HH.HTML w i
 primaryButton href label =
   HH.a
     [ HP.href href
-    , cls [ "inline-flex items-center justify-center px-6 py-3 bg-orange-400 text-background font-medium rounded-md hover:bg-orange-400/90 transition-colors" ]
+    , cls [ "inline-flex items-center justify-center px-6 py-3 bg-yellow-400 text-background font-medium rounded-md hover:bg-yellow-400/90 transition-colors" ]
     ]
     [ HH.text label ]
 

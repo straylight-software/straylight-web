@@ -50,8 +50,8 @@ hero =
         [ cls [ "max-w-[1100px] mx-auto px-6 text-center" ] ]
         [ -- Badge
           HH.div
-            [ cls [ "inline-flex items-center gap-2 px-3 py-1 bg-emerald-400/10 border border-emerald-400/20 rounded-full text-emerald-400 text-sm mb-8" ] ]
-            [ HH.span [ cls [ "w-2 h-2 bg-emerald-400 rounded-full animate-pulse" ] ] []
+            [ cls [ "inline-flex items-center gap-2 px-3 py-1 bg-purple-400/10 border border-purple-400/20 rounded-full text-purple-400 text-sm mb-8" ] ]
+            [ HH.span [ cls [ "w-2 h-2 bg-purple-400 rounded-full animate-pulse" ] ] []
             , HH.text "Private beta"
             ]
           
@@ -60,7 +60,7 @@ hero =
             [ cls [ "text-4xl md:text-6xl font-bold text-text mb-6 leading-tight" ] ]
             [ HH.text "Infrastructure that"
             , HH.br_
-            , HH.span [ cls [ "text-emerald-400" ] ] [ HH.text "converges" ]
+            , HH.span [ cls [ "text-purple-400" ] ] [ HH.text "converges" ]
             , HH.text ", not drifts"
             ]
           
@@ -123,9 +123,9 @@ features =
 featureCard :: forall w i. String -> String -> String -> HH.HTML w i
 featureCard icon title description =
   HH.div
-    [ cls [ "p-6 bg-card border border-border rounded-lg hover:border-emerald-400/30 transition-colors" ] ]
+    [ cls [ "p-6 bg-card border border-border rounded-lg hover:border-purple-400/30 transition-colors" ] ]
     [ HH.div
-        [ cls [ "text-2xl text-emerald-400 mb-4 font-mono" ] ]
+        [ cls [ "text-2xl text-purple-400 mb-4 font-mono" ] ]
         [ HH.text icon ]
     , HH.h3
         [ cls [ "text-text text-lg font-semibold mb-2" ] ]
@@ -162,7 +162,7 @@ comparison =
                     [ HH.tr
                         [ cls [ "border-b border-border" ] ]
                         [ HH.th [ cls [ "py-4 text-left text-muted-foreground font-medium w-40" ] ] [ HH.text "" ]
-                        , HH.th [ cls [ "py-4 text-center text-emerald-400 font-bold" ] ] [ HH.text "converge" ]
+                        , HH.th [ cls [ "py-4 text-center text-purple-400 font-bold" ] ] [ HH.text "converge" ]
                         , HH.th [ cls [ "py-4 text-center text-muted-foreground font-medium" ] ] [ HH.text "Terraform" ]
                         , HH.th [ cls [ "py-4 text-center text-muted-foreground font-medium" ] ] [ HH.text "Pulumi" ]
                         , HH.th [ cls [ "py-4 text-center text-muted-foreground font-medium" ] ] [ HH.text "Ansible" ]
@@ -189,7 +189,7 @@ comparisonRow feature us terraform pulumi ansible =
   HH.tr
     [ cls [ "border-b border-border" ] ]
     [ HH.td [ cls [ "py-3 text-muted-foreground font-medium" ] ] [ HH.text feature ]
-    , HH.td [ cls [ "py-3 text-center text-emerald-400 font-semibold" ] ] [ HH.text us ]
+    , HH.td [ cls [ "py-3 text-center text-purple-400 font-semibold" ] ] [ HH.text us ]
     , HH.td [ cls [ "py-3 text-center text-muted-foreground" ] ] [ HH.text terraform ]
     , HH.td [ cls [ "py-3 text-center text-muted-foreground" ] ] [ HH.text pulumi ]
     , HH.td [ cls [ "py-3 text-center text-muted-foreground" ] ] [ HH.text ansible ]
@@ -228,7 +228,7 @@ quickstart =
             [ cls [ "mt-8 text-center" ] ]
             [ HH.a
                 [ HP.href "/sensenet/converge/docs"
-                , cls [ "text-emerald-400 hover:text-emerald-400/80 transition-colors" ]
+                , cls [ "text-purple-400 hover:text-purple-400/80 transition-colors" ]
                 ]
                 [ HH.text "Full quickstart guide ->" ]
             ]
@@ -274,7 +274,7 @@ primaryButton :: forall w i. String -> String -> HH.HTML w i
 primaryButton href label =
   HH.a
     [ HP.href href
-    , cls [ "inline-flex items-center justify-center px-8 py-4 bg-emerald-400 text-background font-medium rounded-md hover:bg-emerald-400/90 transition-colors" ]
+    , cls [ "inline-flex items-center justify-center px-8 py-4 bg-purple-400 text-background font-medium rounded-md hover:bg-purple-400/90 transition-colors" ]
     ]
     [ HH.text label ]
 

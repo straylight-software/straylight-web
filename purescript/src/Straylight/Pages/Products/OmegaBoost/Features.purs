@@ -1,5 +1,5 @@
 -- | omega//boost Features Page
--- | Complete feature showcase for managed inference
+-- | Complete feature showcase for managed inference with custom CUTLASS kernels
 module Straylight.Pages.Products.OmegaBoost.Features 
   ( featuresPage
   , render
@@ -32,10 +32,10 @@ render :: forall w i. HH.HTML w i
 render =
   HH.div_
     [ hero
+    , cutlassKernels
     , byokArchitecture
     , evringStack
     , batching
-    , caching
     , observability
     , cta
     ]
@@ -52,13 +52,72 @@ hero =
         [ cls [ "max-w-[1100px] mx-auto px-6 text-center" ] ]
         [ HH.h1
             [ cls [ "text-4xl md:text-6xl font-bold text-text mb-6 leading-tight" ] ]
-            [ HH.text "Everything you need"
+            [ HH.text "Custom kernels,"
             , HH.br_
-            , HH.text "for managed inference"
+            , HH.text "managed infrastructure"
             ]
         , HH.p
             [ cls [ "text-xl text-muted-foreground max-w-2xl mx-auto" ] ]
-            [ HH.text "BYOK architecture. evring HTTP stack. Intelligent batching. KV cache sharing. Enterprise-grade observability." ]
+            [ HH.text "CUTLASS 3.x sm_120 kernels. evring HTTP/1.1+2+3 stack. BYOK co-location. Auto-scaling. Replace self-hosted vLLM." ]
+        ]
+    ]
+
+-- ============================================================
+-- CUTLASS KERNELS
+-- ============================================================
+
+cutlassKernels :: forall w i. HH.HTML w i
+cutlassKernels =
+  HH.section
+    [ cls [ "py-24 border-t border-border" ] ]
+    [ HH.div
+        [ cls [ "max-w-[1100px] mx-auto px-6" ] ]
+        [ HH.div
+            [ cls [ "grid grid-cols-1 lg:grid-cols-2 gap-16 items-center" ] ]
+            [ -- Left: content
+              HH.div_
+                [ badge "CUTLASS 3.x Kernels"
+                , HH.h2
+                    [ cls [ "text-3xl font-bold text-text mb-6" ] ]
+                    [ HH.text "Custom sm_120 CUDA kernels" ]
+                , HH.p
+                    [ cls [ "text-muted-foreground mb-6" ] ]
+                    [ HH.text "We build custom inference kernels on NVIDIA's CUTLASS 3.x library, targeting sm_120 architecture (H100, B200). Our kernels outperform stock vLLM by 40-60% on attention and GEMM operations." ]
+                , featureList
+                    [ "Optimized for H100/B200 Tensor Cores"
+                    , "Custom attention kernels with FlashAttention-3"
+                    , "Fused MoE kernels for Mixtral/DBRX"
+                    , "Async copy and warp-specialized pipelines"
+                    , "Continuous batching with PagedAttention"
+                    ]
+                ]
+            , -- Right: visual
+              HH.div
+                [ cls [ "bg-card border border-border rounded-lg p-6" ] ]
+                [ HH.div
+                    [ cls [ "space-y-4" ] ]
+                    [ kernelMetric "Attention" "2.1x" "vs stock vLLM"
+                    , kernelMetric "GEMM" "1.8x" "vs cuBLAS"
+                    , kernelMetric "TTFT" "<5ms" "p99 latency"
+                    , kernelMetric "Throughput" "12k" "tok/s/GPU"
+                    ]
+                , HH.p
+                    [ cls [ "text-sm text-muted-foreground mt-6 text-center" ] ]
+                    [ HH.text "Benchmarked on H100 SXM5 80GB" ]
+                ]
+            ]
+        ]
+    ]
+
+kernelMetric :: forall w i. String -> String -> String -> HH.HTML w i
+kernelMetric label value note =
+  HH.div
+    [ cls [ "flex items-center justify-between p-3 bg-background rounded-md" ] ]
+    [ HH.span [ cls [ "text-text font-medium" ] ] [ HH.text label ]
+    , HH.div
+        [ cls [ "flex items-center gap-2" ] ]
+        [ HH.span [ cls [ "text-yellow-400 font-bold font-mono" ] ] [ HH.text value ]
+        , HH.span [ cls [ "text-xs text-muted-foreground" ] ] [ HH.text note ]
         ]
     ]
 
@@ -74,35 +133,36 @@ byokArchitecture =
         [ cls [ "max-w-[1100px] mx-auto px-6" ] ]
         [ HH.div
             [ cls [ "grid grid-cols-1 lg:grid-cols-2 gap-16 items-center" ] ]
-            [ -- Left: content
-              HH.div_
-                [ badge "BYOK Architecture"
-                , HH.h2
-                    [ cls [ "text-3xl font-bold text-text mb-6" ] ]
-                    [ HH.text "Your keys, your billing" ]
-                , HH.p
-                    [ cls [ "text-muted-foreground mb-6" ] ]
-                    [ HH.text "Bring your existing API keys from OpenAI, Anthropic, Google, or any provider. omega//boost never stores your raw credentials - we use encrypted key references through our secure vault." ]
-                , featureList
-                    [ "Zero vendor lock-in - switch providers anytime"
-                    , "Your billing stays with your vendor"
-                    , "Encrypted key storage in secure vault"
-                    , "Per-key usage tracking and analytics"
-                    , "Automatic key rotation support"
-                    ]
-                ]
-            , -- Right: visual
+            [ -- Left: visual
               HH.div
-                [ cls [ "bg-card border border-border rounded-lg p-6" ] ]
+                [ cls [ "order-2 lg:order-1 bg-card border border-border rounded-lg p-6" ] ]
                 [ HH.div
                     [ cls [ "space-y-4" ] ]
-                    [ vendorRow "OpenAI" "sk-***...abc" "active"
-                    , vendorRow "Anthropic" "sk-ant-***...xyz" "active"
-                    , vendorRow "Google" "AIza***...def" "pending"
+                    [ vendorRow "OpenAI" "sk-***...abc" "co-located"
+                    , vendorRow "Anthropic" "sk-ant-***...xyz" "co-located"
+                    , vendorRow "Google" "AIza***...def" "routing"
                     ]
                 , HH.p
                     [ cls [ "text-sm text-muted-foreground mt-6 text-center" ] ]
-                    [ HH.text "Manage all your keys in one place" ]
+                    [ HH.text "Your keys, our optimized infrastructure" ]
+                ]
+            , -- Right: content
+              HH.div
+                [ cls [ "order-1 lg:order-2" ] ]
+                [ badge "BYOK Co-location"
+                , HH.h2
+                    [ cls [ "text-3xl font-bold text-text mb-6" ] ]
+                    [ HH.text "Your keys, our kernels" ]
+                , HH.p
+                    [ cls [ "text-muted-foreground mb-6" ] ]
+                    [ HH.text "Bring your existing API keys. We co-locate our CUTLASS-optimized inference in the same regions as your providers, routing requests through our custom kernels for maximum performance with minimal latency." ]
+                , featureList
+                    [ "Sub-millisecond network hops to providers"
+                    , "Encrypted key storage with AES-256-GCM"
+                    , "Automatic failover between regions"
+                    , "Per-provider routing optimization"
+                    , "Keep your existing billing relationships"
+                    ]
                 ]
             ]
         ]
@@ -118,10 +178,7 @@ vendorRow vendor key status =
         , HH.code [ cls [ "text-xs text-muted-foreground font-mono" ] ] [ HH.text key ]
         ]
     , HH.span
-        [ cls [ "text-xs px-2 py-0.5 rounded"
-              , if status == "active" then "bg-green-500/20 text-green-400" else "bg-yellow-500/20 text-yellow-400"
-              ]
-        ]
+        [ cls [ "text-xs px-2 py-0.5 rounded bg-yellow-400/20 text-yellow-400" ] ]
         [ HH.text status ]
     ]
 
@@ -141,33 +198,33 @@ evringStack =
               HH.div
                 [ cls [ "order-2 lg:order-1" ] ]
                 [ codeBlock
-                    [ codeLine "// " "evring HTTP stack"
+                    [ codeLine "// " "evring HTTP/1.1+2+3 stack"
                     , codeLine "" "io_uring event loop"
                     , codeLine "" "zero-copy buffers"
-                    , codeLine "" "linear multi-core scaling"
+                    , codeLine "" "HTTP/3 QUIC support"
                     , HH.text "\n"
                     , codeLine "// " "Performance"
                     , codeLine "" "509,000 req/s per core"
-                    , codeLine "" "< 10ms p99 latency"
+                    , codeLine "" "< 5ms p99 TTFT"
                     , codeLine "" "99.99% uptime SLA"
                     ]
                 ]
             , -- Right: content
               HH.div
                 [ cls [ "order-1 lg:order-2" ] ]
-                [ badge "evring HTTP Stack"
+                [ badge "evring HTTP/1.1+2+3"
                 , HH.h2
                     [ cls [ "text-3xl font-bold text-text mb-6" ] ]
-                    [ HH.text "509k requests per second" ]
+                    [ HH.text "Full HTTP stack, zero overhead" ]
                 , HH.p
                     [ cls [ "text-muted-foreground mb-6" ] ]
-                    [ HH.text "omega//boost is built on evring, our high-performance HTTP stack. io_uring event loop, zero-copy buffers, and linear multi-core scaling. The same infrastructure powering omega//proxy." ]
+                    [ HH.text "omega//boost runs on evring, our custom HTTP stack with full HTTP/1.1, HTTP/2, and HTTP/3 (QUIC) support. io_uring event loop, zero-copy buffers, and linear multi-core scaling." ]
                 , featureList
-                    [ "io_uring for async I/O without syscall overhead"
-                    , "Zero-copy request/response handling"
-                    , "Linear scaling across all available cores"
-                    , "Co-located with major inference providers"
-                    , "Global anycast routing for optimal latency"
+                    [ "HTTP/1.1 + HTTP/2 multiplexing + HTTP/3 QUIC"
+                    , "io_uring for async I/O without syscall overhead"
+                    , "Zero-copy SSE streaming for token delivery"
+                    , "509k req/s per core, linear multi-core scaling"
+                    , "Global anycast with automatic failover"
                     ]
                 ]
             ]
@@ -188,19 +245,19 @@ batching =
             [ cls [ "grid grid-cols-1 lg:grid-cols-2 gap-16 items-center" ] ]
             [ -- Left: content
               HH.div_
-                [ badge "Intelligent Batching"
+                [ badge "Continuous Batching"
                 , HH.h2
                     [ cls [ "text-3xl font-bold text-text mb-6" ] ]
-                    [ HH.text "Automatic request batching" ]
+                    [ HH.text "Auto-scaling with custom kernels" ]
                 , HH.p
                     [ cls [ "text-muted-foreground mb-6" ] ]
-                    [ HH.text "omega//boost automatically batches compatible requests to maximize throughput and minimize costs. Works seamlessly with streaming responses - you get the same latency with better efficiency." ]
+                    [ HH.text "Our CUTLASS kernels implement continuous batching with PagedAttention. Dynamic request scheduling maximizes GPU utilization while maintaining low latency. No vLLM tuning required." ]
                 , featureList
-                    [ "Automatic batching of compatible requests"
-                    , "Streaming-compatible batch processing"
-                    , "Configurable batch windows (1-100ms)"
-                    , "Per-request priority support"
-                    , "Detailed batch analytics"
+                    [ "Continuous batching with PagedAttention"
+                    , "Dynamic request scheduling per-iteration"
+                    , "Auto-scaling based on queue depth"
+                    , "Priority queues for latency-sensitive requests"
+                    , "Zero-downtime scaling events"
                     ]
                 ]
             , -- Right: visual
@@ -208,14 +265,14 @@ batching =
                 [ cls [ "bg-card border border-border rounded-lg p-6" ] ]
                 [ HH.div
                     [ cls [ "space-y-3" ] ]
-                    [ batchVisual "Request 1" 50 "batched"
-                    , batchVisual "Request 2" 75 "batched"
-                    , batchVisual "Request 3" 25 "batched"
+                    [ batchVisual "Batch 1" 85 "12 reqs"
+                    , batchVisual "Batch 2" 92 "14 reqs"
+                    , batchVisual "Batch 3" 78 "11 reqs"
                     ]
                 , HH.div
                     [ cls [ "mt-4 pt-4 border-t border-border text-center" ] ]
-                    [ HH.span [ cls [ "text-sm text-muted-foreground" ] ] [ HH.text "3 requests -> 1 batch" ]
-                    , HH.span [ cls [ "text-sm text-orange-400 ml-2" ] ] [ HH.text "67% cost reduction" ]
+                    [ HH.span [ cls [ "text-sm text-muted-foreground" ] ] [ HH.text "GPU utilization: " ]
+                    , HH.span [ cls [ "text-sm text-yellow-400 ml-1" ] ] [ HH.text "94%" ]
                     ]
                 ]
             ]
@@ -229,86 +286,13 @@ batchVisual label size status =
     [ HH.div
         [ cls [ "flex-1 h-8 bg-background rounded overflow-hidden" ] ]
         [ HH.div
-            [ cls [ "h-full bg-orange-400/30 rounded" ]
+            [ cls [ "h-full bg-yellow-400/30 rounded" ]
             , HP.style $ "width: " <> show size <> "%"
             ]
             []
         ]
     , HH.span [ cls [ "text-xs text-muted-foreground w-20" ] ] [ HH.text label ]
     , HH.span [ cls [ "text-xs text-green-400" ] ] [ HH.text status ]
-    ]
-
--- ============================================================
--- CACHING
--- ============================================================
-
-caching :: forall w i. HH.HTML w i
-caching =
-  HH.section
-    [ cls [ "py-24 border-t border-border" ] ]
-    [ HH.div
-        [ cls [ "max-w-[1100px] mx-auto px-6" ] ]
-        [ HH.div
-            [ cls [ "grid grid-cols-1 lg:grid-cols-2 gap-16 items-center" ] ]
-            [ -- Left: visual
-              HH.div
-                [ cls [ "order-2 lg:order-1 bg-card border border-border rounded-lg p-6" ] ]
-                [ HH.div
-                    [ cls [ "space-y-4" ] ]
-                    [ cacheRow "System prompt" "2.1k tokens" "cached"
-                    , cacheRow "Few-shot examples" "1.8k tokens" "cached"
-                    , cacheRow "User message" "156 tokens" "new"
-                    ]
-                , HH.div
-                    [ cls [ "mt-4 pt-4 border-t border-border" ] ]
-                    [ HH.div
-                        [ cls [ "flex justify-between text-sm" ] ]
-                        [ HH.span [ cls [ "text-muted-foreground" ] ] [ HH.text "Tokens cached" ]
-                        , HH.span [ cls [ "text-orange-400" ] ] [ HH.text "3.9k (95%)" ]
-                        ]
-                    , HH.div
-                        [ cls [ "flex justify-between text-sm mt-1" ] ]
-                        [ HH.span [ cls [ "text-muted-foreground" ] ] [ HH.text "Cost savings" ]
-                        , HH.span [ cls [ "text-green-400" ] ] [ HH.text "~$0.008/request" ]
-                        ]
-                    ]
-                ]
-            , -- Right: content
-              HH.div
-                [ cls [ "order-1 lg:order-2" ] ]
-                [ badge "KV Cache Sharing"
-                , HH.h2
-                    [ cls [ "text-3xl font-bold text-text mb-6" ] ]
-                    [ HH.text "Share caches across requests" ]
-                , HH.p
-                    [ cls [ "text-muted-foreground mb-6" ] ]
-                    [ HH.text "Repeated system prompts? Few-shot examples? omega//boost shares KV caches across requests, dramatically reducing costs and latency for common patterns." ]
-                , featureList
-                    [ "Automatic prompt prefix matching"
-                    , "Cross-request cache sharing"
-                    , "Compatible with OpenAI and Anthropic caching"
-                    , "Per-organization cache isolation"
-                    , "Configurable cache TTL"
-                    ]
-                ]
-            ]
-        ]
-    ]
-
-cacheRow :: forall w i. String -> String -> String -> HH.HTML w i
-cacheRow label tokens status =
-  HH.div
-    [ cls [ "flex items-center justify-between p-3 bg-background rounded-md" ] ]
-    [ HH.div_
-        [ HH.span [ cls [ "text-text text-sm" ] ] [ HH.text label ]
-        , HH.span [ cls [ "text-xs text-muted-foreground ml-2" ] ] [ HH.text tokens ]
-        ]
-    , HH.span
-        [ cls [ "text-xs px-2 py-0.5 rounded"
-              , if status == "cached" then "bg-green-500/20 text-green-400" else "bg-blue-500/20 text-blue-400"
-              ]
-        ]
-        [ HH.text status ]
     ]
 
 -- ============================================================
@@ -326,17 +310,17 @@ observability =
             [ badge "Observability"
             , HH.h2
                 [ cls [ "text-3xl font-bold text-text mb-4" ] ]
-                [ HH.text "Full visibility into your inference" ]
+                [ HH.text "Full visibility into inference" ]
             , HH.p
                 [ cls [ "text-muted-foreground max-w-2xl mx-auto" ] ]
-                [ HH.text "Real-time metrics, request tracing, and cost analytics. Know exactly what's happening with every request." ]
+                [ HH.text "Real-time GPU metrics, latency percentiles, throughput analytics. Monitor your inference like production infrastructure." ]
             ]
         , HH.div
             [ cls [ "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6" ] ]
-            [ observabilityCard ">" "Request tracing" "End-to-end traces for every request"
-            , observabilityCard "$" "Cost analytics" "Per-request and aggregate cost tracking"
-            , observabilityCard "!" "Real-time metrics" "Latency, throughput, error rates"
-            , observabilityCard "=" "Usage reports" "Daily, weekly, monthly breakdowns"
+            [ observabilityCard "<<" "GPU metrics" "Utilization, memory, kernel timing"
+            , observabilityCard "$" "Cost analytics" "Per-token and aggregate cost tracking"
+            , observabilityCard "!" "Latency percentiles" "TTFT, TBT, p50/p95/p99"
+            , observabilityCard "=" "Throughput" "Tokens/sec, requests/sec, batching efficiency"
             ]
         ]
     ]
@@ -344,8 +328,8 @@ observability =
 observabilityCard :: forall w i. String -> String -> String -> HH.HTML w i
 observabilityCard icon title description =
   HH.div
-    [ cls [ "bg-card border border-border rounded-lg p-6 text-center hover:border-orange-400/30 transition-colors" ] ]
-    [ HH.div [ cls [ "text-2xl text-orange-400 mb-3 font-mono" ] ] [ HH.text icon ]
+    [ cls [ "bg-card border border-border rounded-lg p-6 text-center hover:border-yellow-400/30 transition-colors" ] ]
+    [ HH.div [ cls [ "text-2xl text-yellow-400 mb-3 font-mono" ] ] [ HH.text icon ]
     , HH.p [ cls [ "text-text font-medium mb-1" ] ] [ HH.text title ]
     , HH.p [ cls [ "text-sm text-muted-foreground" ] ] [ HH.text description ]
     ]
@@ -362,15 +346,15 @@ cta =
         [ cls [ "max-w-[800px] mx-auto px-6 text-center" ] ]
         [ HH.h2
             [ cls [ "text-3xl font-bold text-text mb-4" ] ]
-            [ HH.text "Ready to boost your inference?" ]
+            [ HH.text "Ready for managed inference?" ]
         , HH.p
             [ cls [ "text-muted-foreground mb-8" ] ]
-            [ HH.text "Keep your API keys. Add our performance layer. Start in minutes." ]
+            [ HH.text "Custom CUTLASS kernels. BYOK co-location. Replace vLLM. Start in minutes." ]
         , HH.div
             [ cls [ "flex flex-col sm:flex-row items-center justify-center gap-4" ] ]
             [ HH.a
                 [ HP.href "/omega/boost/dashboard"
-                , cls [ "inline-flex items-center justify-center px-8 py-4 bg-orange-400 text-background font-medium rounded-md hover:bg-orange-400/90 transition-colors" ]
+                , cls [ "inline-flex items-center justify-center px-8 py-4 bg-yellow-400 text-background font-medium rounded-md hover:bg-yellow-400/90 transition-colors" ]
                 ]
                 [ HH.text "Get started" ]
             , HH.a
@@ -389,7 +373,7 @@ cta =
 badge :: forall w i. String -> HH.HTML w i
 badge label =
   HH.span
-    [ cls [ "inline-block px-3 py-1 bg-orange-400/10 border border-orange-400/20 rounded-full text-orange-400 text-sm font-medium mb-4" ] ]
+    [ cls [ "inline-block px-3 py-1 bg-yellow-400/10 border border-yellow-400/20 rounded-full text-yellow-400 text-sm font-medium mb-4" ] ]
     [ HH.text label ]
 
 featureList :: forall w i. Array String -> HH.HTML w i
@@ -402,7 +386,7 @@ featureItem :: forall w i. String -> HH.HTML w i
 featureItem text =
   HH.li
     [ cls [ "flex items-start gap-3" ] ]
-    [ HH.span [ cls [ "text-orange-400 mt-1" ] ] [ HH.text "+" ]
+    [ HH.span [ cls [ "text-yellow-400 mt-1" ] ] [ HH.text "+" ]
     , HH.span [ cls [ "text-muted-foreground" ] ] [ HH.text text ]
     ]
 

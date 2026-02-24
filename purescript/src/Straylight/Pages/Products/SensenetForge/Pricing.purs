@@ -157,7 +157,7 @@ pricingCard :: forall w i. PricingCardConfig -> HH.HTML w i
 pricingCard config =
   HH.div
     [ cls [ "bg-card border rounded-lg p-6 flex flex-col"
-          , if config.highlighted then "border-violet-400" else "border-border"
+          , if config.highlighted then "border-rose-400" else "border-border"
           ]
     ]
     [ -- Header
@@ -180,7 +180,7 @@ pricingCard config =
         [ HP.href config.ctaHref
         , cls [ "w-full py-2 text-center font-medium rounded-md transition-colors block"
               , if config.highlighted 
-                  then "bg-violet-400 text-background hover:bg-violet-400/90"
+                  then "bg-rose-400 text-background hover:bg-rose-400/90"
                   else "border border-border text-text hover:bg-muted"
               ]
         ]
@@ -191,7 +191,7 @@ featureItem :: forall w i. String -> HH.HTML w i
 featureItem text =
   HH.li
     [ cls [ "flex items-start gap-2 text-sm" ] ]
-    [ HH.span [ cls [ "text-violet-400" ] ] [ HH.text "+" ]
+    [ HH.span [ cls [ "text-rose-400" ] ] [ HH.text "+" ]
     , HH.span [ cls [ "text-muted-foreground" ] ] [ HH.text text ]
     ]
 
@@ -258,7 +258,7 @@ enterprise =
             [ HH.text "We work with enterprises on custom deployments, compliance requirements, and integrations. Let's talk." ]
         , HH.a
             [ HP.href "mailto:enterprise@sensenet.dev"
-            , cls [ "inline-flex items-center justify-center px-6 py-3 bg-violet-400 text-background font-medium rounded-md hover:bg-violet-400/90 transition-colors" ]
+            , cls [ "inline-flex items-center justify-center px-6 py-3 bg-rose-400 text-background font-medium rounded-md hover:bg-rose-400/90 transition-colors" ]
             ]
             [ HH.text "Contact sales" ]
         ]

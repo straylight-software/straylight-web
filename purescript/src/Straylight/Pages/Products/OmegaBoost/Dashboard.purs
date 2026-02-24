@@ -1,5 +1,5 @@
 -- | omega//boost Dashboard Page
--- | User dashboard for managing inference, API keys, and usage
+-- | User dashboard for inference metrics, latency, throughput, GPU utilization
 module Straylight.Pages.Products.OmegaBoost.Dashboard where
 
 import Prelude
@@ -85,7 +85,7 @@ header =
         [ HH.text "Dashboard" ]
     , HH.p
         [ cls [ "text-muted-foreground" ] ]
-        [ HH.text "Manage your omega//boost inference, API keys, and usage." ]
+        [ HH.text "Monitor inference metrics, latency, throughput, and GPU utilization." ]
     ]
 
 tabs :: forall m. State -> H.ComponentHTML Action () m
@@ -94,8 +94,8 @@ tabs state =
     [ cls [ "flex gap-1 border-b border-border mb-8" ] ]
     [ tabButton "overview" "Overview" state.activeTab
     , tabButton "keys" "API Keys" state.activeTab
-    , tabButton "providers" "Providers" state.activeTab
-    , tabButton "analytics" "Analytics" state.activeTab
+    , tabButton "providers" "BYOK Providers" state.activeTab
+    , tabButton "analytics" "Metrics" state.activeTab
     , tabButton "usage" "Usage" state.activeTab
     ]
 
@@ -104,7 +104,7 @@ tabButton value label activeTab =
   HH.button
     [ cls [ "px-4 py-2 text-sm font-medium transition-colors -mb-px"
           , if value == activeTab 
-              then "text-orange-400 border-b-2 border-orange-400" 
+              then "text-yellow-400 border-b-2 border-yellow-400" 
               else "text-muted-foreground hover:text-text"
           ]
     , HP.type_ HP.ButtonButton
@@ -152,7 +152,7 @@ newKeyForm state =
             [ cls [ "block text-sm font-medium text-text mb-2" ] ]
             [ HH.text "Key Name" ]
         , HH.input
-            [ cls [ "w-full px-3 py-2 bg-background border border-border rounded-md text-text text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-orange-400" ]
+            [ cls [ "w-full px-3 py-2 bg-background border border-border rounded-md text-text text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-yellow-400" ]
             , HP.placeholder "e.g., Production, Development"
             , HP.value state.newKeyName
             , HE.onValueInput SetNewKeyName
@@ -167,7 +167,7 @@ newKeyForm state =
             ]
             [ HH.text "Cancel" ]
         , HH.button
-            [ cls [ "px-4 py-2 bg-orange-400 text-background text-sm font-medium rounded-md hover:bg-orange-400/90 transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed" ]
+            [ cls [ "px-4 py-2 bg-yellow-400 text-background text-sm font-medium rounded-md hover:bg-yellow-400/90 transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed" ]
             , HP.type_ HP.ButtonButton
             , HP.disabled (state.newKeyName == "")
             , HE.onClick \_ -> CreateApiKey
@@ -186,9 +186,9 @@ newKeySuccess key =
         [ cls [ "text-sm text-muted-foreground mb-3" ] ]
         [ HH.text "Your API key has been created. Copy it now - you won't be able to see it again!" ]
     , HH.div
-        [ cls [ "p-3 bg-background border border-orange-400/30 rounded-md mb-4" ] ]
+        [ cls [ "p-3 bg-background border border-yellow-400/30 rounded-md mb-4" ] ]
         [ HH.code
-            [ cls [ "text-sm font-mono text-orange-400 break-all" ] ]
+            [ cls [ "text-sm font-mono text-yellow-400 break-all" ] ]
             [ HH.text key ]
         ]
     , HH.p
@@ -197,7 +197,7 @@ newKeySuccess key =
     , HH.div
         [ cls [ "flex justify-end" ] ]
         [ HH.button
-            [ cls [ "px-4 py-2 bg-orange-400 text-background text-sm font-medium rounded-md hover:bg-orange-400/90 transition-colors cursor-pointer" ]
+            [ cls [ "px-4 py-2 bg-yellow-400 text-background text-sm font-medium rounded-md hover:bg-yellow-400/90 transition-colors cursor-pointer" ]
             , HP.type_ HP.ButtonButton
             , HE.onClick \_ -> CloseNewKeyModal
             ]
@@ -215,10 +215,10 @@ overviewTab =
     [ -- Stats grid
       HH.div
         [ cls [ "grid grid-cols-1 md:grid-cols-4 gap-4 mb-8" ] ]
-        [ statCard "Requests" "127,432" "This month"
-        , statCard "Avg Latency" "8.3ms" "p99"
-        , statCard "Cost Savings" "42%" "vs direct API"
-        , statCard "Cache Hit Rate" "78%" "Last 24h"
+        [ statCard "Tokens" "12.4M" "This month"
+        , statCard "TTFT" "4.2ms" "p99 latency"
+        , statCard "Throughput" "11.8k" "tok/s avg"
+        , statCard "GPU Util" "94%" "Last 24h"
         ]
     
       -- Quick start
@@ -228,10 +228,10 @@ overviewTab =
             [ cls [ "text-lg font-semibold text-text mb-4" ] ]
             [ HH.text "Quick Start" ]
         , codeBlock
-            [ codeLine "# " "Switch to omega//boost"
+            [ codeLine "# " "Replace vLLM or raw provider API"
             , codeLine "" "client = OpenAI(base_url=\"https://boost.omega.dev/v1\")"
             , HH.text "\n"
-            , codeLine "# " "Your existing code works unchanged"
+            , codeLine "# " "CUTLASS kernels handle inference optimization"
             , codeLine "" "response = client.chat.completions.create(...)"
             ]
         ]
@@ -241,13 +241,13 @@ overviewTab =
         [ cls [ "bg-card border border-border rounded-lg p-6" ] ]
         [ HH.h3
             [ cls [ "text-lg font-semibold text-text mb-4" ] ]
-            [ HH.text "Recent Activity" ]
+            [ HH.text "Recent Inference" ]
         , HH.div
             [ cls [ "space-y-3" ] ]
-            [ activityItem "Request" "gpt-4-turbo-preview" "2 min ago" "batched"
-            , activityItem "Request" "claude-3-opus" "5 min ago" "cached"
-            , activityItem "Request" "gpt-4-turbo-preview" "8 min ago" "direct"
-            , activityItem "Key Created" "Production API Key" "1 hour ago" ""
+            [ activityItem "Inference" "gpt-4-turbo (1.2k tok)" "2 min ago" "batched"
+            , activityItem "Inference" "claude-3-opus (856 tok)" "5 min ago" "priority"
+            , activityItem "Inference" "llama-70b (2.1k tok)" "8 min ago" "batched"
+            , activityItem "BYOK Added" "Anthropic API Key" "1 hour ago" ""
             ]
         ]
     ]
@@ -274,7 +274,7 @@ activityItem type_ description time status =
     [ HH.div
         [ cls [ "flex items-center gap-3" ] ]
         [ HH.span
-            [ cls [ "text-xs px-2 py-0.5 rounded font-medium bg-orange-400/10 text-orange-400" ] ]
+            [ cls [ "text-xs px-2 py-0.5 rounded font-medium bg-yellow-400/10 text-yellow-400" ] ]
             [ HH.text type_ ]
         , HH.span [ cls [ "text-sm text-text" ] ] [ HH.text description ]
         , if status /= ""
@@ -282,7 +282,7 @@ activityItem type_ description time status =
               [ cls [ "text-xs px-2 py-0.5 rounded"
                     , case status of
                         "batched" -> "bg-green-500/20 text-green-400"
-                        "cached" -> "bg-blue-500/20 text-blue-400"
+                        "priority" -> "bg-yellow-500/20 text-yellow-400"
                         _ -> "bg-muted text-muted-foreground"
                     ]
               ]
@@ -303,7 +303,7 @@ keysTab _ =
         [ cls [ "flex items-center justify-between mb-6" ] ]
         [ HH.h2 [ cls [ "text-lg font-semibold text-text" ] ] [ HH.text "API Keys" ]
         , HH.button
-            [ cls [ "px-4 py-2 bg-orange-400 text-background text-sm font-medium rounded-md hover:bg-orange-400/90 transition-colors cursor-pointer" ]
+            [ cls [ "px-4 py-2 bg-yellow-400 text-background text-sm font-medium rounded-md hover:bg-yellow-400/90 transition-colors cursor-pointer" ]
             , HP.type_ HP.ButtonButton
             , HE.onClick \_ -> OpenNewKeyModal
             ]
@@ -311,9 +311,9 @@ keysTab _ =
         ]
     , HH.div
         [ cls [ "space-y-4" ] ]
-        [ apiKeyCard "Production" "boost_live_prod_***abc" "push, pull" "2 hours ago"
-        , apiKeyCard "Development" "boost_live_dev_***xyz" "push, pull" "Yesterday"
-        , apiKeyCard "CI Pipeline" "boost_live_ci_***def" "push" "3 days ago"
+        [ apiKeyCard "Production" "boost_live_prod_***abc" "inference" "2 hours ago"
+        , apiKeyCard "Development" "boost_live_dev_***xyz" "inference" "Yesterday"
+        , apiKeyCard "CI Pipeline" "boost_live_ci_***def" "metrics" "3 days ago"
         ]
     ]
 
@@ -353,24 +353,24 @@ providersTab =
   HH.div_
     [ HH.div
         [ cls [ "flex items-center justify-between mb-6" ] ]
-        [ HH.h2 [ cls [ "text-lg font-semibold text-text" ] ] [ HH.text "Connected Providers" ]
+        [ HH.h2 [ cls [ "text-lg font-semibold text-text" ] ] [ HH.text "BYOK Providers" ]
         , HH.button
-            [ cls [ "px-4 py-2 bg-orange-400 text-background text-sm font-medium rounded-md hover:bg-orange-400/90 transition-colors cursor-pointer" ]
+            [ cls [ "px-4 py-2 bg-yellow-400 text-background text-sm font-medium rounded-md hover:bg-yellow-400/90 transition-colors cursor-pointer" ]
             , HP.type_ HP.ButtonButton
             ]
             [ HH.text "+ Add Provider" ]
         ]
     , HH.div
         [ cls [ "space-y-4" ] ]
-        [ providerCard "OpenAI" "sk-***...abc" "active" "45,231 requests"
-        , providerCard "Anthropic" "sk-ant-***...xyz" "active" "82,201 requests"
-        , providerCard "Google AI" "AIza***...def" "pending" "0 requests"
+        [ providerCard "OpenAI" "sk-***...abc" "co-located" "4.2M tokens"
+        , providerCard "Anthropic" "sk-ant-***...xyz" "co-located" "7.8M tokens"
+        , providerCard "Together AI" "tok-***...def" "routing" "312k tokens"
         ]
     , HH.div
         [ cls [ "mt-8 p-4 bg-card border border-border rounded-lg" ] ]
-        [ HH.h3 [ cls [ "text-sm font-medium text-text mb-2" ] ] [ HH.text "Security" ]
+        [ HH.h3 [ cls [ "text-sm font-medium text-text mb-2" ] ] [ HH.text "Co-location" ]
         , HH.p [ cls [ "text-sm text-muted-foreground" ] ] 
-            [ HH.text "Your API keys are encrypted at rest using AES-256-GCM. We never log or store raw keys." ]
+            [ HH.text "Your BYOK keys are co-located with our CUTLASS kernels in the same region as your provider. Sub-millisecond network hops." ]
         ]
     ]
 
@@ -384,10 +384,7 @@ providerCard name keyPreview status usage =
             [ cls [ "flex items-center gap-3" ] ]
             [ HH.span [ cls [ "text-text font-medium" ] ] [ HH.text name ]
             , HH.span
-                [ cls [ "text-xs px-2 py-0.5 rounded"
-                      , if status == "active" then "bg-green-500/20 text-green-400" else "bg-yellow-500/20 text-yellow-400"
-                      ]
-                ]
+                [ cls [ "text-xs px-2 py-0.5 rounded bg-yellow-400/20 text-yellow-400" ] ]
                 [ HH.text status ]
             ]
         , HH.button
@@ -414,21 +411,21 @@ analyticsTab =
     [ -- Metrics grid
       HH.div
         [ cls [ "grid grid-cols-1 md:grid-cols-2 gap-6 mb-8" ] ]
-        [ metricsCard "Request Volume" "127,432" "+12% vs last month"
-        , metricsCard "Average Latency" "8.3ms" "-15% vs direct API"
+        [ metricsCard "Token Throughput" "11.8k/s" "+18% vs last week"
+        , metricsCard "p99 TTFT" "4.2ms" "2.1x faster than vLLM"
         ]
     
-      -- Breakdown
+      -- GPU Metrics
     , HH.div
         [ cls [ "bg-card border border-border rounded-lg p-6 mb-8" ] ]
         [ HH.h3
             [ cls [ "text-lg font-semibold text-text mb-4" ] ]
-            [ HH.text "Request Breakdown" ]
+            [ HH.text "GPU Utilization" ]
         , HH.div
             [ cls [ "space-y-4" ] ]
-            [ breakdownRow "Batched" 54 "54% cost savings"
-            , breakdownRow "Cached" 24 "100% cost savings"
-            , breakdownRow "Direct" 22 "Standard pricing"
+            [ breakdownRow "Compute" 94 "CUTLASS kernel active"
+            , breakdownRow "Memory" 78 "PagedAttention KV cache"
+            , breakdownRow "Tensor Core" 89 "sm_120 utilization"
             ]
         ]
     
@@ -437,12 +434,12 @@ analyticsTab =
         [ cls [ "bg-card border border-border rounded-lg p-6" ] ]
         [ HH.h3
             [ cls [ "text-lg font-semibold text-text mb-4" ] ]
-            [ HH.text "Requests by Model" ]
+            [ HH.text "Tokens by Model" ]
         , HH.div
             [ cls [ "space-y-3" ] ]
-            [ modelRow "gpt-4-turbo-preview" 68432 "54%"
-            , modelRow "claude-3-opus" 45231 "35%"
-            , modelRow "gpt-3.5-turbo" 13769 "11%"
+            [ modelRow "gpt-4-turbo" 5842000 "47%"
+            , modelRow "claude-3-opus" 4231000 "34%"
+            , modelRow "llama-70b" 2327000 "19%"
             ]
         ]
     ]
@@ -467,7 +464,7 @@ breakdownRow label percentage note =
     , HH.div
         [ cls [ "h-2 bg-muted rounded-full overflow-hidden mb-1" ] ]
         [ HH.div
-            [ cls [ "h-full bg-orange-400 rounded-full" ]
+            [ cls [ "h-full bg-yellow-400 rounded-full" ]
             , HP.style $ "width: " <> show percentage <> "%"
             ]
             []
@@ -476,15 +473,15 @@ breakdownRow label percentage note =
     ]
 
 modelRow :: forall w i. String -> Int -> String -> HH.HTML w i
-modelRow name requests percentage =
+modelRow name tokens percentage =
   HH.div
     [ cls [ "flex items-center justify-between py-2 border-b border-border last:border-0" ] ]
     [ HH.span [ cls [ "text-sm text-text font-mono" ] ] [ HH.text name ]
     , HH.div
         [ cls [ "flex items-center gap-4" ] ]
         [ HH.span [ cls [ "text-sm text-muted-foreground" ] ] 
-            [ HH.text $ formatNumber requests <> " requests" ]
-        , HH.span [ cls [ "text-sm text-orange-400" ] ] [ HH.text percentage ]
+            [ HH.text $ formatNumber tokens <> " tokens" ]
+        , HH.span [ cls [ "text-sm text-yellow-400" ] ] [ HH.text percentage ]
         ]
     ]
 
@@ -500,7 +497,7 @@ usageTab =
   HH.div_
     [ HH.div
         [ cls [ "grid grid-cols-1 md:grid-cols-2 gap-6 mb-8" ] ]
-        [ usageCard "Requests" 127432 1000000 "this month"
+        [ usageCard "Tokens" 12400000 50000000 "this month"
         , usageCard "Overage" 0 0 "no overage"
         ]
     
@@ -512,15 +509,14 @@ usageTab =
             [ HH.text "Cost Breakdown" ]
         , HH.div
             [ cls [ "space-y-4" ] ]
-            [ costRow "omega//boost fee" "$63.72" "$0.0005/request"
-            , costRow "Estimated vendor costs" "$1,847.23" "OpenAI + Anthropic"
-            , costRow "Savings from batching" "-$432.18" "42% of requests batched"
-            , costRow "Savings from caching" "-$287.45" "24% cache hit rate"
+            [ costRow "omega//boost fee" "$12.40" "$0.001/1k tokens"
+            , costRow "Estimated vs self-hosted" "$2,500/mo" "8x H100 equivalent"
+            , costRow "Estimated vs raw APIs" "$186.00" "OpenAI + Anthropic direct"
             ]
         , HH.div
             [ cls [ "mt-6 pt-4 border-t border-border flex items-center justify-between" ] ]
-            [ HH.span [ cls [ "text-text font-medium" ] ] [ HH.text "Net savings" ]
-            , HH.span [ cls [ "text-green-400 font-bold text-xl" ] ] [ HH.text "$655.91" ]
+            [ HH.span [ cls [ "text-text font-medium" ] ] [ HH.text "Savings vs alternatives" ]
+            , HH.span [ cls [ "text-green-400 font-bold text-xl" ] ] [ HH.text "93%" ]
             ]
         ]
     
@@ -529,7 +525,7 @@ usageTab =
         [ cls [ "bg-card border border-border rounded-lg p-6" ] ]
         [ HH.h3 [ cls [ "text-lg font-semibold text-text mb-4" ] ] [ HH.text "Current Plan: Pro" ]
         , HH.p [ cls [ "text-muted-foreground mb-4" ] ] 
-            [ HH.text "1M requests/month included. $0.0005/request after." ]
+            [ HH.text "50M tokens/month included. $0.001/1k tokens after. CUTLASS kernels on H100." ]
         , HH.a
             [ HP.href "/omega/boost/settings"
             , cls [ "inline-block px-4 py-2 border border-border text-text text-sm font-medium rounded-md hover:bg-card transition-colors" ]
@@ -551,7 +547,7 @@ usageCard label current limit unit =
     , HH.div
         [ cls [ "h-2 bg-muted rounded-full overflow-hidden" ] ]
         [ HH.div
-            [ cls [ "h-full bg-orange-400 rounded-full" ]
+            [ cls [ "h-full bg-yellow-400 rounded-full" ]
             , HP.style $ "width: " <> show (if limit == 0 then 0 else (current * 100) / limit) <> "%"
             ]
             []

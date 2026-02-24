@@ -66,80 +66,68 @@ plans =
     [ HH.div
         [ cls [ "max-w-[1100px] mx-auto px-6" ] ]
         [ HH.div
-            [ cls [ "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6" ] ]
+            [ cls [ "grid grid-cols-1 md:grid-cols-3 gap-8" ] ]
             [ pricingCard
                 { name: "Free"
                 , price: "$0"
                 , period: "/month"
-                , description: "For personal projects and experiments."
+                , description: "For individuals and open source projects."
                 , features:
-                    [ "10GB storage"
-                    , "100GB transfer/month"
+                    [ "5GB storage"
+                    , "50GB transfer/month"
                     , "1 private cache"
-                    , "Community support"
+                    , "Unlimited public caches"
                     , "Post-quantum signatures"
+                    , "Blake3 content-addressing"
+                    , "Community support"
                     ]
-                , cta: "Get started"
+                , cta: "Get started free"
                 , ctaHref: "/signup"
                 , highlighted: false
                 }
             , pricingCard
                 { name: "Pro"
-                , price: "$15"
-                , period: "/month"
-                , description: "For individual developers and small teams."
-                , features:
-                    [ "100GB storage"
-                    , "500GB transfer/month"
-                    , "5 private caches"
-                    , "Email support"
-                    , "Attestation reports"
-                    , "Cache analytics"
-                    ]
-                , cta: "Start free trial"
-                , ctaHref: "/signup?plan=pro"
-                , highlighted: true
-                }
-            , pricingCard
-                { name: "Team"
-                , price: "$49"
+                , price: "$29"
                 , period: "/month"
                 , description: "For teams shipping production software."
                 , features:
-                    [ "500GB storage"
-                    , "2TB transfer/month"
-                    , "Unlimited private caches"
+                    [ "100GB storage"
+                    , "500GB transfer/month"
+                    , "10 private caches"
                     , "5 team seats included"
-                    , "Priority support"
-                    , "SSO/SAML"
-                    , "Audit logs"
+                    , "Attestation reports & exports"
+                    , "Cache analytics dashboard"
+                    , "Priority email support"
+                    , "Webhook integrations"
                     ]
-                , cta: "Start free trial"
-                , ctaHref: "/signup?plan=team"
-                , highlighted: false
+                , cta: "Start 14-day trial"
+                , ctaHref: "/signup?plan=pro"
+                , highlighted: true
                 }
             , pricingCard
                 { name: "Enterprise"
                 , price: "Custom"
                 , period: ""
-                , description: "For organizations with compliance needs."
+                , description: "For organizations with compliance and scale requirements."
                 , features:
                     [ "Unlimited storage"
                     , "Unlimited transfer"
-                    , "Unlimited seats"
-                    , "Dedicated support"
-                    , "SLA guarantee"
-                    , "Self-hosted option"
+                    , "Unlimited team seats"
+                    , "SSO/SAML authentication"
+                    , "Audit logs (90-day retention)"
+                    , "SLA guarantee (99.9% uptime)"
+                    , "Self-hosted deployment option"
+                    , "Dedicated support engineer"
                     , "Custom integrations"
                     ]
                 , cta: "Contact sales"
-                , ctaHref: "/discord"
+                , ctaHref: "mailto:enterprise@sensenet.dev"
                 , highlighted: false
                 }
             ]
         , HH.p
             [ cls [ "text-center text-muted-foreground text-sm mt-8" ] ]
-            [ HH.text "All plans include: Post-quantum signatures, Blake3 hashing, attestation metadata, REST API access" ]
+            [ HH.text "All plans include: Post-quantum SPHINCS+ signatures, Blake3 hashing, full attestation metadata, REST API access, Nix substituter support" ]
         ]
     ]
 
@@ -216,19 +204,25 @@ faq =
             [ cls [ "space-y-8" ] ]
             [ faqItem 
                 "What are post-quantum signatures?"
-                "SPHINCS+ is a hash-based signature algorithm that remains secure even against quantum computers. We use it to sign all artifacts, ensuring your supply chain is protected against future quantum threats."
+                "SPHINCS+ is a hash-based signature algorithm standardized by NIST that remains secure against quantum computers. We sign all artifacts with SPHINCS+-256s, providing 128-bit post-quantum security. Your supply chain stays protected even when large-scale quantum computers exist."
             , faqItem
-                "Can I migrate from Cachix?"
-                "Yes. Our CLI includes a migration command that pulls your existing cache and re-uploads to sensenet//cache. Zero downtime, usually under an hour."
+                "Can I migrate from Cachix or S3?"
+                "Yes. Our CLI includes migration commands for both. Run `sensenet-cache migrate --from cachix` or `sensenet-cache migrate --from s3` to pull your existing artifacts and re-upload with attestation metadata. Most migrations complete in under an hour with zero downtime."
             , faqItem
-                "How does content-addressed storage work?"
-                "Every artifact is identified by its Blake3 hash. The same content always has the same address. This means automatic deduplication, immutability, and integrity verification."
+                "How does content-addressed storage save money?"
+                "Every artifact is identified by its Blake3 hash. Same content = same address, regardless of who uploaded it or when. This means automatic deduplication across your entire organization. Teams typically see 40-60% storage reduction compared to naive artifact storage."
             , faqItem
-                "What happens if I exceed my limits?"
-                "We don't cut you off. You'll get a notification and we'll work with you to either upgrade or optimize. No surprise bills."
+                "What happens if I exceed my storage or transfer limits?"
+                "We don't cut you off or surprise you with overage bills. You'll receive a notification at 80% and 95% usage. If you exceed limits, you have 7 days to either upgrade or clean up old artifacts before we throttle uploads. Downloads are never affected."
             , faqItem
                 "Is self-hosting available?"
-                "Yes, on the Enterprise plan. Deploy sensenet//cache on your own infrastructure with full support."
+                "Yes, on the Enterprise plan. We provide Docker images, Kubernetes Helm charts, and NixOS modules for on-premise deployment. Self-hosted instances can optionally connect to our managed attestation registry for cross-organization verification."
+            , faqItem
+                "How do attestations work?"
+                "Every artifact upload captures provenance metadata: who built it, when, from what source commit, on which system. This metadata is cryptographically signed and stored alongside the artifact. Consumers can verify the complete chain of custody before using any artifact."
+            , faqItem
+                "Do you support private caches with public fallback?"
+                "Yes. Configure multiple caches with priority ordering. Your CI pushes to your private cache, and Nix fetches from your private cache first, falling back to public caches like cache.nixos.org if needed. Full control over your supply chain."
             ]
         ]
     ]

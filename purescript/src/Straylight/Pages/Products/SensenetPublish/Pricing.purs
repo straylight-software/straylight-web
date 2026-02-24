@@ -66,14 +66,15 @@ plans =
     [ HH.div
         [ cls [ "max-w-[1100px] mx-auto px-6" ] ]
         [ HH.div
-            [ cls [ "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6" ] ]
+            [ cls [ "grid grid-cols-1 md:grid-cols-3 gap-6" ] ]
             [ pricingCard
-                { name: "Open Source"
+                { name: "Starter"
                 , price: "$0"
                 , period: "/forever"
-                , description: "For public repositories."
+                , description: "For open source and personal projects."
                 , features:
-                    [ "Unlimited public repos"
+                    [ "3 projects"
+                    , "100 builds/month"
                     , "All languages supported"
                     , "Full scope-graph analysis"
                     , "HTML + JSON output"
@@ -84,39 +85,22 @@ plans =
                 , highlighted: false
                 }
             , pricingCard
-                { name: "Pro"
-                , price: "$29"
-                , period: "/month"
-                , description: "For individual developers and small teams."
-                , features:
-                    [ "5 private repositories"
-                    , "All output formats"
-                    , "Priority builds"
-                    , "Version pinning"
-                    , "Email support"
-                    , "Usage analytics"
-                    ]
-                , cta: "Start free trial"
-                , ctaHref: "/sensenet/publish/signup?plan=pro"
-                , highlighted: true
-                }
-            , pricingCard
                 { name: "Team"
-                , price: "$99"
+                , price: "$79"
                 , period: "/month"
                 , description: "For teams shipping production software."
                 , features:
-                    [ "Unlimited private repos"
-                    , "10 team seats included"
-                    , "Custom output formats"
-                    , "API access"
-                    , "Priority support"
-                    , "SSO/SAML"
-                    , "Audit logs"
+                    [ "25 projects"
+                    , "Unlimited builds"
+                    , "Cross-language refs"
+                    , "All output formats"
+                    , "CI/CD integration"
+                    , "Version pinning"
+                    , "Email support"
                     ]
                 , cta: "Start free trial"
                 , ctaHref: "/sensenet/publish/signup?plan=team"
-                , highlighted: false
+                , highlighted: true
                 }
             , pricingCard
                 { name: "Enterprise"
@@ -124,13 +108,13 @@ plans =
                 , period: ""
                 , description: "For organizations with compliance needs."
                 , features:
-                    [ "Unlimited everything"
+                    [ "Unlimited projects"
+                    , "Unlimited builds"
                     , "Self-hosted option"
-                    , "Custom integrations"
-                    , "Dedicated support"
-                    , "SLA guarantee"
-                    , "On-premise deployment"
-                    , "Training & onboarding"
+                    , "Custom output formats"
+                    , "API access"
+                    , "SSO/SAML"
+                    , "Dedicated support & SLA"
                     ]
                 , cta: "Contact sales"
                 , ctaHref: "/sensenet/publish/contact"
@@ -158,12 +142,12 @@ pricingCard :: forall w i. PricingCardProps -> HH.HTML w i
 pricingCard props =
   HH.div
     [ cls [ "bg-card border rounded-lg p-6"
-          , if props.highlighted then "border-sky-400" else "border-border"
+          , if props.highlighted then "border-teal-400" else "border-border"
           ]
     ]
     [ if props.highlighted
         then HH.span 
-          [ cls [ "text-xs text-sky-400 font-medium uppercase tracking-wider" ] ] 
+          [ cls [ "text-xs text-teal-400 font-medium uppercase tracking-wider" ] ] 
           [ HH.text "Most Popular" ]
         else HH.text ""
     , HH.h3
@@ -188,7 +172,7 @@ pricingCard props =
         [ HP.href props.ctaHref
         , cls [ "block w-full py-3 text-center font-medium rounded-md transition-colors"
               , if props.highlighted 
-                  then "bg-sky-400 text-background hover:bg-sky-400/90" 
+                  then "bg-teal-400 text-background hover:bg-teal-400/90" 
                   else "border border-border text-text hover:bg-muted"
               ]
         ]
@@ -199,7 +183,7 @@ featureItem :: forall w i. String -> HH.HTML w i
 featureItem text =
   HH.li
     [ cls [ "flex items-center gap-2 text-sm text-muted-foreground" ] ]
-    [ HH.span [ cls [ "text-sky-400" ] ] [ HH.text "+" ]
+    [ HH.span [ cls [ "text-teal-400" ] ] [ HH.text "+" ]
     , HH.text text
     ]
 
@@ -225,14 +209,14 @@ faq =
                 "Can I use it with private forks of open source projects?"
                 "Yes, but private forks count against your private repository limit unless the upstream project is public."
             , faqItem
-                "What happens if I exceed my limits?"
-                "We'll notify you and give you time to upgrade or reduce usage. We don't cut off access without warning."
+                "What counts as a build?"
+                "Each invocation of sensenet-publish build or check counts as one build. Incremental builds that use cached scope graphs still count."
             , faqItem
                 "Is the CLI open source?"
                 "Yes, the CLI and core scope-graph engine are MIT licensed. The hosted service adds features like version pinning, analytics, and priority builds."
             , faqItem
                 "Can I self-host?"
-                "Enterprise plans include self-hosted deployment options. Contact sales for details."
+                "Enterprise plans include self-hosted deployment options with full scope-graph analysis. Contact sales for details."
             ]
         ]
     ]
@@ -266,7 +250,7 @@ enterprise =
             [ HH.text "We work with enterprises on custom deployments, integrations, and SLAs. Let's talk." ]
         , HH.a
             [ HP.href "mailto:enterprise@sensenet.dev"
-            , cls [ "inline-flex items-center justify-center px-6 py-3 bg-sky-400 text-background font-medium rounded-md hover:bg-sky-400/90 transition-colors" ]
+            , cls [ "inline-flex items-center justify-center px-6 py-3 bg-teal-400 text-background font-medium rounded-md hover:bg-teal-400/90 transition-colors" ]
             ]
             [ HH.text "Contact sales" ]
         ]

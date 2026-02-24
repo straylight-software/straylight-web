@@ -103,7 +103,7 @@ sidebarLink href label currentPath =
         [ HP.href href
         , cls [ "block py-1.5 px-3 rounded text-sm transition-colors"
               , if href == currentPath
-                  then "bg-violet-400/10 text-violet-400 font-medium" 
+                  then "bg-rose-400/10 text-rose-400 font-medium" 
                   else "text-muted-foreground hover:text-text hover:bg-card"
               ]
         ]
@@ -607,7 +607,7 @@ link :: forall w i. String -> String -> HH.HTML w i
 link href text = 
   HH.a 
     [ HP.href href
-    , cls [ "text-violet-400 hover:text-violet-400/80" ]
+    , cls [ "text-rose-400 hover:text-rose-400/80" ]
     ] 
     [ HH.text text ]
 
@@ -615,7 +615,7 @@ docCard :: forall w i. String -> String -> String -> HH.HTML w i
 docCard href title description =
   HH.a
     [ HP.href href
-    , cls [ "block p-4 bg-card border border-border rounded-lg hover:border-violet-400/50 transition-colors" ]
+    , cls [ "block p-4 bg-card border border-border rounded-lg hover:border-rose-400/50 transition-colors" ]
     ]
     [ HH.h3
         [ cls [ "text-text font-medium mb-1" ] ]

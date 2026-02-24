@@ -68,51 +68,54 @@ plans =
         [ HH.div
             [ cls [ "grid grid-cols-1 md:grid-cols-3 gap-6" ] ]
             [ pricingCard
-                { name: "Starter"
+                { name: "Free"
                 , price: "$0"
-                , period: "/month"
-                , description: "For individual developers exploring omega//code."
+                , period: "/forever"
+                , description: "Bring your own keys. Full power, zero cost."
                 , features:
-                    [ "1 concurrent agent"
-                    , "100 requests/day"
+                    [ "Unlimited local execution"
+                    , "BYOK (Anthropic, OpenAI, etc.)"
+                    , "Full CLI access"
+                    , "SIGIL protocol"
+                    , "Local attestation"
                     , "Community support"
-                    , "Basic CLI access"
-                    , "Local execution only"
+                    , "MIT licensed"
                     ]
-                , cta: "Get started"
-                , ctaHref: "/omega/code/signup"
+                , cta: "Download now"
+                , ctaHref: "/omega/code/docs/installation"
                 , highlighted: false
                 }
             , pricingCard
                 { name: "Pro"
                 , price: "$49"
                 , period: "/month"
-                , description: "For developers who ship production code."
+                , description: "Managed inference. No API keys needed."
                 , features:
-                    [ "10 concurrent agents"
-                    , "Unlimited requests"
+                    [ "Managed LLM inference"
+                    , "No API keys required"
+                    , "10 concurrent agents"
                     , "Crew mode (parallel agents)"
+                    , "Cloud attestation sync"
                     , "Priority support"
-                    , "Cloud execution"
-                    , "Attestation logs"
-                    , "API access"
+                    , "Usage dashboard"
+                    , "SSE streaming"
                     ]
                 , cta: "Start free trial"
                 , ctaHref: "/omega/code/signup?plan=pro"
                 , highlighted: true
                 }
             , pricingCard
-                { name: "Team"
-                , price: "$199"
-                , period: "/month"
-                , description: "For teams shipping together."
+                { name: "Enterprise"
+                , price: "Custom"
+                , period: ""
+                , description: "Air-gapped. On-prem. Your infrastructure."
                 , features:
                     [ "Unlimited agents"
-                    , "Unlimited requests"
-                    , "Team workspaces"
-                    , "Shared context pools"
-                    , "SSO/SAML"
-                    , "Audit logs"
+                    , "Air-gapped deployment"
+                    , "On-premise installation"
+                    , "Custom LLM integration"
+                    , "SSO/SAML/OIDC"
+                    , "Audit logs & compliance"
                     , "Dedicated support"
                     , "SLA guarantee"
                     ]
@@ -123,7 +126,7 @@ plans =
             ]
         , HH.p
             [ cls [ "text-center text-muted-foreground text-sm mt-8" ] ]
-            [ HH.text "All plans include: MIT-licensed CLI, self-hosting option, no vendor lock-in" ]
+            [ HH.text "All plans include: MIT-licensed CLI, self-hosting option, SIGIL protocol, no vendor lock-in" ]
         ]
     ]
 
@@ -204,20 +207,23 @@ faq =
         , HH.div
             [ cls [ "space-y-8" ] ]
             [ faqItem 
-                "What's included in 'unlimited requests'?"
-                "Unlimited API requests to omega//code. You pay for the plan, not per-token or per-request. Fair use policy applies to prevent abuse."
+                "What does BYOK mean?"
+                "Bring Your Own Keys. On the Free plan, you provide your own API keys for Anthropic, OpenAI, or any compatible provider. You pay them directly, we charge nothing."
             , faqItem
-                "Can I self-host?"
-                "Yes. omega//code is MIT licensed. You can run it on your own infrastructure. Cloud plans add managed hosting, support, and team features."
+                "What's the difference between Free and Pro?"
+                "Free requires your own API keys. Pro includes managed inference \x2014 no keys needed, we handle the LLM providers. Pro also adds cloud attestation sync and priority support."
             , faqItem
                 "What LLM providers are supported?"
-                "Any OpenAI-compatible API. Anthropic Claude, OpenAI, local models via Ollama, or your own fine-tuned models."
+                "Any OpenAI-compatible API. Anthropic Claude, OpenAI GPT-4, local models via Ollama, Groq, Together AI, or your own fine-tuned models."
             , faqItem
                 "How does Crew mode work?"
-                "Spawn multiple agents working on the same task with isolated CoW filesystems. Compare approaches and merge the best result."
+                "Spawn multiple agents working on the same task with isolated CoW filesystems via bubblewrap. Compare approaches and merge the best result with attestation."
             , faqItem
                 "What about data privacy?"
-                "Your code never leaves your machine with local execution. Cloud execution uses ephemeral sandboxes that are destroyed after each session."
+                "Your code never leaves your machine with local execution. Pro cloud features use ephemeral sandboxes destroyed after each session. We never train on your code."
+            , faqItem
+                "Can I switch between Free and Pro?"
+                "Yes. Start with Free using your own keys. Upgrade to Pro anytime for managed inference. Downgrade back to Free whenever you want."
             ]
         ]
     ]

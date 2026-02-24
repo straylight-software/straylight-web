@@ -68,11 +68,11 @@ sidebar currentPath =
             , sidebarLink "/sensenet/publish/docs/quickstart" "Quick Start" currentPath
             , sidebarLink "/sensenet/publish/docs/installation" "Installation" currentPath
             ]
-        , sidebarSection "Guides"
+        , sidebarSection "Core Concepts"
             [ sidebarLink "/sensenet/publish/docs/scope-graphs" "Scope Graphs" currentPath
             , sidebarLink "/sensenet/publish/docs/references" "Reference Resolution" currentPath
-            , sidebarLink "/sensenet/publish/docs/cross-language" "Cross-Language" currentPath
-            , sidebarLink "/sensenet/publish/docs/ci" "CI Integration" currentPath
+            , sidebarLink "/sensenet/publish/docs/languages" "Languages" currentPath
+            , sidebarLink "/sensenet/publish/docs/output-formats" "Output Formats" currentPath
             ]
         , sidebarSection "Reference"
             [ sidebarLink "/sensenet/publish/docs/cli" "CLI Reference" currentPath
@@ -100,7 +100,7 @@ sidebarLink href label currentPath =
         [ HP.href href
         , cls [ "block py-1.5 px-3 rounded text-sm transition-colors"
               , if href == currentPath
-                  then "bg-sky-400/10 text-sky-400 font-medium" 
+                  then "bg-teal-400/10 text-teal-400 font-medium" 
                   else "text-muted-foreground hover:text-text hover:bg-card"
               ]
         ]
@@ -134,8 +134,8 @@ renderContent path = case path of
   "/sensenet/publish/docs/installation" -> installationContent
   "/sensenet/publish/docs/scope-graphs" -> scopeGraphsContent
   "/sensenet/publish/docs/references" -> referencesContent
-  "/sensenet/publish/docs/cross-language" -> crossLanguageContent
-  "/sensenet/publish/docs/ci" -> ciContent
+  "/sensenet/publish/docs/languages" -> languagesContent
+  "/sensenet/publish/docs/output-formats" -> outputFormatsContent
   "/sensenet/publish/docs/cli" -> cliContent
   "/sensenet/publish/docs/api" -> apiContent
   "/sensenet/publish/docs/config" -> configContent
@@ -326,7 +326,7 @@ scopeGraphsContent =
         , HH.span [ cls [ "text-text" ] ] [ HH.text "}" ]
         , HH.text "\n\n"
         , codeLine "// " "Scope graph representation"
-        , HH.span [ cls [ "text-sky-400" ] ] [ HH.text "scope:utils" ]
+        , HH.span [ cls [ "text-teal-400" ] ] [ HH.text "scope:utils" ]
         , HH.text "\n"
         , HH.span [ cls [ "text-text" ] ] [ HH.text "  def process @ utils.rs:2" ]
         , HH.text "\n"
@@ -393,13 +393,13 @@ referencesContent =
 -- CROSS-LANGUAGE
 -- ============================================================
 
-crossLanguageContent :: forall w i. HH.HTML w i
-crossLanguageContent =
+languagesContent :: forall w i. HH.HTML w i
+languagesContent =
   article
-    [ h1 "Cross-Language Support"
-    , p "Unified documentation across your entire stack."
+    [ h1 "Supported Languages"
+    , p "sensenet//publish supports multiple languages with cross-language reference tracking."
     
-    , h2 "Supported languages"
+    , h2 "Full support"
     , HH.div
         [ cls [ "grid grid-cols-2 md:grid-cols-3 gap-4 my-6" ] ]
         [ langBadge "Rust" "Full support"
@@ -426,67 +426,49 @@ crossLanguageContent =
     ]
 
 -- ============================================================
--- CI INTEGRATION
+-- OUTPUT FORMATS
 -- ============================================================
 
-ciContent :: forall w i. HH.HTML w i
-ciContent =
+outputFormatsContent :: forall w i. HH.HTML w i
+outputFormatsContent =
   article
-    [ h1 "CI Integration"
-    , p "Add reference checking to your continuous integration pipeline."
+    [ h1 "Output Formats"
+    , p "sensenet//publish generates machine-readable documentation in multiple formats."
     
-    , h2 "GitHub Actions"
+    , h2 "HTML"
+    , p "Static HTML documentation with full navigation, search, and cross-references. Default format."
     , codeBlock
-        [ codeLine "# " ".github/workflows/docs.yml"
-        , HH.span [ cls [ "text-text" ] ] [ HH.text "name: Docs" ]
-        , HH.text "\n"
-        , HH.span [ cls [ "text-text" ] ] [ HH.text "on: [push, pull_request]" ]
-        , HH.text "\n\n"
-        , HH.span [ cls [ "text-text" ] ] [ HH.text "jobs:" ]
-        , HH.text "\n"
-        , HH.span [ cls [ "text-text" ] ] [ HH.text "  check:" ]
-        , HH.text "\n"
-        , HH.span [ cls [ "text-text" ] ] [ HH.text "    runs-on: ubuntu-latest" ]
-        , HH.text "\n"
-        , HH.span [ cls [ "text-text" ] ] [ HH.text "    steps:" ]
-        , HH.text "\n"
-        , HH.span [ cls [ "text-text" ] ] [ HH.text "      - uses: actions/checkout@v4" ]
-        , HH.text "\n"
-        , HH.span [ cls [ "text-text" ] ] [ HH.text "      - uses: straylight/sensenet-publish-action@v1" ]
-        , HH.text "\n"
-        , HH.span [ cls [ "text-text" ] ] [ HH.text "        with:" ]
-        , HH.text "\n"
-        , HH.span [ cls [ "text-text" ] ] [ HH.text "          strict: true" ]
+        [ codeLine "$ " "sensenet-publish build --format html"
         ]
     
-    , h2 "GitLab CI"
+    , h2 "JSON-LD"
+    , p "Linked data format using schema.org vocabulary. Ideal for knowledge graphs and semantic web integration."
     , codeBlock
-        [ codeLine "# " ".gitlab-ci.yml"
-        , HH.span [ cls [ "text-text" ] ] [ HH.text "docs:" ]
+        [ codeLine "$ " "sensenet-publish build --format json-ld"
         , HH.text "\n"
-        , HH.span [ cls [ "text-text" ] ] [ HH.text "  image: straylight/sensenet-publish:latest" ]
-        , HH.text "\n"
-        , HH.span [ cls [ "text-text" ] ] [ HH.text "  script:" ]
-        , HH.text "\n"
-        , HH.span [ cls [ "text-text" ] ] [ HH.text "    - sensenet-publish check --strict" ]
+        , codeLine "// " "Output includes:"
+        , codeLine "" "- @context with schema.org vocabulary"
+        , codeLine "" "- Typed definitions (Function, Class, Module)"
+        , codeLine "" "- Linked references between entities"
         ]
     
-    , h2 "Generic CI"
+    , h2 "OpenAPI"
+    , p "Generate OpenAPI 3.1 specs from annotated REST handlers. Works with Rust (axum, actix), Haskell (servant), and TypeScript (express, fastify)."
     , codeBlock
-        [ codeLine "# " "Any CI that runs commands"
-        , codeLine "$ " "sensenet-publish check --strict --format=junit > results.xml"
+        [ codeLine "$ " "sensenet-publish build --format openapi"
         ]
     
-    , h2 "Pull request comments"
-    , p "The GitHub Action can post comments on PRs showing which references broke:"
+    , h2 "Raw scope graph"
+    , p "Export the scope graph directly for custom tooling."
     , codeBlock
-        [ HH.span [ cls [ "text-text" ] ] [ HH.text "      - uses: straylight/sensenet-publish-action@v1" ]
-        , HH.text "\n"
-        , HH.span [ cls [ "text-text" ] ] [ HH.text "        with:" ]
-        , HH.text "\n"
-        , HH.span [ cls [ "text-text" ] ] [ HH.text "          strict: true" ]
-        , HH.text "\n"
-        , HH.span [ cls [ "text-text" ] ] [ HH.text "          comment: true  # Post PR comments" ]
+        [ codeLine "$ " "sensenet-publish build --format scope-graph"
+        , codeLine "" "Output: JSON representation of nodes and edges"
+        ]
+    
+    , h2 "Multiple formats"
+    , p "Generate multiple formats in a single build:"
+    , codeBlock
+        [ codeLine "$ " "sensenet-publish build --format html,json-ld,openapi"
         ]
     ]
 
@@ -684,7 +666,7 @@ envRow :: forall w i. String -> String -> HH.HTML w i
 envRow name desc =
   HH.tr
     [ cls [ "border-b border-border" ] ]
-    [ HH.td [ cls [ "py-2 font-mono text-sky-400" ] ] [ HH.text name ]
+    [ HH.td [ cls [ "py-2 font-mono text-teal-400" ] ] [ HH.text name ]
     , HH.td [ cls [ "py-2 text-muted-foreground" ] ] [ HH.text desc ]
     ]
 
@@ -714,7 +696,7 @@ link :: forall w i. String -> String -> HH.HTML w i
 link href text = 
   HH.a 
     [ HP.href href
-    , cls [ "text-sky-400 hover:text-sky-400/80" ]
+    , cls [ "text-teal-400 hover:text-teal-400/80" ]
     ] 
     [ HH.text text ]
 
@@ -722,7 +704,7 @@ docCard :: forall w i. String -> String -> String -> HH.HTML w i
 docCard href title description =
   HH.a
     [ HP.href href
-    , cls [ "block p-4 bg-card border border-border rounded-lg hover:border-sky-400/50 transition-colors" ]
+    , cls [ "block p-4 bg-card border border-border rounded-lg hover:border-teal-400/50 transition-colors" ]
     ]
     [ HH.h3
         [ cls [ "text-text font-medium mb-1" ] ]

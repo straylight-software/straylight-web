@@ -158,7 +158,7 @@ pricingCard :: forall w i. PricingCardProps -> HH.HTML w i
 pricingCard props =
   HH.div
     [ cls [ "bg-card border rounded-lg p-6"
-          , if props.highlighted then "border-emerald-400" else "border-border"
+          , if props.highlighted then "border-purple-400" else "border-border"
           ]
     ]
     [ -- Header
@@ -181,7 +181,7 @@ pricingCard props =
         [ HP.href props.ctaHref
         , cls [ "block w-full py-3 text-center font-medium rounded-md transition-colors"
               , if props.highlighted 
-                  then "bg-emerald-400 text-background hover:bg-emerald-400/90" 
+                  then "bg-purple-400 text-background hover:bg-purple-400/90" 
                   else "border border-border text-text hover:bg-card"
               ]
         ]
@@ -192,7 +192,7 @@ featureItem :: forall w i. String -> HH.HTML w i
 featureItem text =
   HH.li
     [ cls [ "flex items-start gap-2 text-sm" ] ]
-    [ HH.span [ cls [ "text-emerald-400" ] ] [ HH.text "+" ]
+    [ HH.span [ cls [ "text-purple-400" ] ] [ HH.text "+" ]
     , HH.span [ cls [ "text-muted-foreground" ] ] [ HH.text text ]
     ]
 
@@ -259,7 +259,7 @@ enterprise =
             [ HH.text "We work with enterprises on custom deployments, SLAs, and integrations. Let's talk." ]
         , HH.a
             [ HP.href "mailto:enterprise@straylight.software"
-            , cls [ "inline-flex items-center justify-center px-6 py-3 bg-emerald-400 text-background font-medium rounded-md hover:bg-emerald-400/90 transition-colors" ]
+            , cls [ "inline-flex items-center justify-center px-6 py-3 bg-purple-400 text-background font-medium rounded-md hover:bg-purple-400/90 transition-colors" ]
             ]
             [ HH.text "Contact sales" ]
         ]

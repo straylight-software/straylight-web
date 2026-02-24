@@ -112,7 +112,7 @@ convergenceStep num title desc =
   HH.div
     [ cls [ "flex items-start gap-4" ] ]
     [ HH.div
-        [ cls [ "w-8 h-8 rounded-full bg-emerald-400/20 text-emerald-400 flex items-center justify-center text-sm font-bold shrink-0" ] ]
+        [ cls [ "w-8 h-8 rounded-full bg-purple-400/20 text-purple-400 flex items-center justify-center text-sm font-bold shrink-0" ] ]
         [ HH.text num ]
     , HH.div_
         [ HH.p [ cls [ "text-text font-medium" ] ] [ HH.text title ]
@@ -138,7 +138,7 @@ typeSystem =
                 [ codeBlock
                     [ codeLine "# " "Typed resource definitions"
                     , HH.text "\n"
-                    , HH.span [ cls [ "text-emerald-400" ] ] [ HH.text "resource" ]
+                    , HH.span [ cls [ "text-purple-400" ] ] [ HH.text "resource" ]
                     , HH.span [ cls [ "text-text" ] ] [ HH.text " aws.ec2.Instance web {" ]
                     , HH.text "\n"
                     , HH.span [ cls [ "text-text" ] ] [ HH.text "  ami          : Ami = \"ami-0c55b159cbfafe1f0\"" ]
@@ -234,7 +234,7 @@ driftItem name status synced =
     [ HH.span [ cls [ "text-sm font-mono text-text" ] ] [ HH.text name ]
     , HH.span 
         [ cls [ "text-xs px-2 py-1 rounded"
-              , if synced then "bg-emerald-400/20 text-emerald-400" else "bg-yellow-500/20 text-yellow-500"
+              , if synced then "bg-purple-400/20 text-purple-400" else "bg-yellow-500/20 text-yellow-500"
               ] 
         ] 
         [ HH.text status ]
@@ -273,7 +273,7 @@ multiCloud =
 cloudCard :: forall w i. String -> String -> HH.HTML w i
 cloudCard name desc =
   HH.div
-    [ cls [ "bg-card border border-border rounded-lg p-6 text-center hover:border-emerald-400/50 transition-colors" ] ]
+    [ cls [ "bg-card border border-border rounded-lg p-6 text-center hover:border-purple-400/50 transition-colors" ] ]
     [ HH.p [ cls [ "text-text font-medium mb-1" ] ] [ HH.text name ]
     , HH.p [ cls [ "text-sm text-muted-foreground" ] ] [ HH.text desc ]
     ]
@@ -324,7 +324,7 @@ trustBadge :: forall w i. String -> String -> HH.HTML w i
 trustBadge title subtitle =
   HH.div
     [ cls [ "bg-card border border-border rounded-lg p-6 text-center" ] ]
-    [ HH.p [ cls [ "text-2xl font-bold text-emerald-400 mb-1" ] ] [ HH.text title ]
+    [ HH.p [ cls [ "text-2xl font-bold text-purple-400 mb-1" ] ] [ HH.text title ]
     , HH.p [ cls [ "text-sm text-muted-foreground" ] ] [ HH.text subtitle ]
     ]
 
@@ -369,10 +369,10 @@ developer =
 dxCard :: forall w i. String -> String -> String -> HH.HTML w i
 dxCard icon title description =
   HH.div
-    [ cls [ "bg-card border border-border rounded-lg p-6 hover:border-emerald-400/30 transition-colors" ] ]
+    [ cls [ "bg-card border border-border rounded-lg p-6 hover:border-purple-400/30 transition-colors" ] ]
     [ HH.div
         [ cls [ "flex items-center gap-3 mb-3" ] ]
-        [ HH.span [ cls [ "text-emerald-400 font-mono text-xl" ] ] [ HH.text icon ]
+        [ HH.span [ cls [ "text-purple-400 font-mono text-xl" ] ] [ HH.text icon ]
         , HH.h3 [ cls [ "text-text font-semibold" ] ] [ HH.text title ]
         ]
     , HH.p
@@ -400,7 +400,7 @@ cta =
             [ cls [ "flex flex-col sm:flex-row items-center justify-center gap-4" ] ]
             [ HH.a
                 [ HP.href "/sensenet/converge/pricing"
-                , cls [ "inline-flex items-center justify-center px-8 py-4 bg-emerald-400 text-background font-medium rounded-md hover:bg-emerald-400/90 transition-colors" ]
+                , cls [ "inline-flex items-center justify-center px-8 py-4 bg-purple-400 text-background font-medium rounded-md hover:bg-purple-400/90 transition-colors" ]
                 ]
                 [ HH.text "Get started free" ]
             , HH.a
@@ -419,7 +419,7 @@ cta =
 badge :: forall w i. String -> HH.HTML w i
 badge label =
   HH.span
-    [ cls [ "inline-block px-3 py-1 bg-emerald-400/10 border border-emerald-400/20 rounded-full text-emerald-400 text-sm font-medium mb-4" ] ]
+    [ cls [ "inline-block px-3 py-1 bg-purple-400/10 border border-purple-400/20 rounded-full text-purple-400 text-sm font-medium mb-4" ] ]
     [ HH.text label ]
 
 featureList :: forall w i. Array String -> HH.HTML w i
@@ -432,7 +432,7 @@ featureItem :: forall w i. String -> HH.HTML w i
 featureItem text =
   HH.li
     [ cls [ "flex items-start gap-3" ] ]
-    [ HH.span [ cls [ "text-emerald-400 mt-1" ] ] [ HH.text "+" ]
+    [ HH.span [ cls [ "text-purple-400 mt-1" ] ] [ HH.text "+" ]
     , HH.span [ cls [ "text-muted-foreground" ] ] [ HH.text text ]
     ]
 

@@ -60,6 +60,7 @@ render state =
     [ cls [ "max-w-[1100px] mx-auto px-6 py-8" ] ]
     [ header
     , tabs state
+    , agentReviewBanner
     , content state
     ]
 
@@ -83,6 +84,7 @@ tabs state =
     , tabButton state "builds" "Builds"
     , tabButton state "pipelines" "Pipelines"
     , tabButton state "proofs" "Proofs"
+    , tabButton state "reviews" "Agent Reviews"
     , tabButton state "apikeys" "API Keys"
     ]
 
@@ -99,12 +101,32 @@ tabButton state value label =
     ]
     [ HH.text label ]
 
+agentReviewBanner :: forall m. MonadAff m => H.ComponentHTML Action Slots m
+agentReviewBanner =
+  HH.div
+    [ cls [ "mb-6 p-4 bg-amber-400/10 border border-amber-400/20 rounded-lg flex items-center justify-between" ] ]
+    [ HH.div
+        [ cls [ "flex items-center gap-3" ] ]
+        [ HH.span [ cls [ "text-amber-400 font-mono text-lg" ] ] [ HH.text "!" ]
+        , HH.div_
+            [ HH.p [ cls [ "text-sm text-text font-medium" ] ] [ HH.text "3 agent-generated commits pending review" ]
+            , HH.p [ cls [ "text-xs text-muted-foreground" ] ] [ HH.text "Higher review burden required for AI-generated code" ]
+            ]
+        ]
+    , HH.a
+        [ HP.href "/sensenet/confirm/dashboard/reviews"
+        , cls [ "text-sm text-amber-400 hover:text-amber-400/80" ]
+        ]
+        [ HH.text "Review now ->" ]
+    ]
+
 content :: forall m. MonadAff m => State -> H.ComponentHTML Action Slots m
 content state = case state.activeTab of
   "overview" -> overviewTab
   "builds" -> buildsTab
   "pipelines" -> pipelinesTab
   "proofs" -> proofsTab
+  "reviews" -> agentReviewsTab
   "apikeys" -> apiKeysTab
   _ -> overviewTab
 
@@ -122,6 +144,30 @@ overviewTab =
         , statCard "Success Rate" "94.2%" "last 30 days"
         , statCard "Proofs Verified" "1,247" "this month"
         , statCard "Active Pipelines" "12" "across repos"
+        ]
+      -- Agent code alert
+    , HH.div
+        [ cls [ "grid grid-cols-1 md:grid-cols-2 gap-4 mb-8" ] ]
+        [ HH.div
+            [ cls [ "bg-card border border-amber-400/30 rounded-lg p-4" ] ]
+            [ HH.div
+                [ cls [ "flex items-center gap-2 mb-2" ] ]
+                [ HH.span [ cls [ "text-amber-400 font-mono" ] ] [ HH.text "!" ]
+                , HH.span [ cls [ "text-sm font-medium text-text" ] ] [ HH.text "Agent Code Reviews Pending" ]
+                ]
+            , HH.p [ cls [ "text-2xl font-bold text-amber-400" ] ] [ HH.text "3" ]
+            , HH.p [ cls [ "text-xs text-muted-foreground" ] ] [ HH.text "AI-generated commits awaiting elevated review" ]
+            ]
+        , HH.div
+            [ cls [ "bg-card border border-border rounded-lg p-4" ] ]
+            [ HH.div
+                [ cls [ "flex items-center gap-2 mb-2" ] ]
+                [ HH.span [ cls [ "text-green-400 font-mono" ] ] [ HH.text "=" ]
+                , HH.span [ cls [ "text-sm font-medium text-text" ] ] [ HH.text "Attestations Issued" ]
+                ]
+            , HH.p [ cls [ "text-2xl font-bold text-text" ] ] [ HH.text "847" ]
+            , HH.p [ cls [ "text-xs text-muted-foreground" ] ] [ HH.text "Post-quantum signed this month" ]
+            ]
         ]
     
       -- Recent builds
@@ -415,5 +461,82 @@ apiKeyCard name prefix scopes lastUsed =
         [ cls [ "flex items-center gap-4 text-xs text-muted-foreground" ] ]
         [ HH.span_ [ HH.text $ "Scopes: " <> scopes ]
         , HH.span_ [ HH.text $ "Last used: " <> lastUsed ]
+        ]
+    ]
+
+-- ============================================================
+-- AGENT REVIEWS TAB
+-- ============================================================
+
+agentReviewsTab :: forall m. MonadAff m => H.ComponentHTML Action Slots m
+agentReviewsTab =
+  HH.div_
+    [ HH.div
+        [ cls [ "mb-6" ] ]
+        [ HH.h2 [ cls [ "text-lg font-semibold text-text mb-2" ] ] [ HH.text "Agent Code Reviews" ]
+        , HH.p [ cls [ "text-muted-foreground text-sm" ] ] 
+            [ HH.text "AI-generated commits face higher review burden. Approve or reject pending changes." ]
+        ]
+    , HH.div
+        [ cls [ "grid grid-cols-1 md:grid-cols-3 gap-4 mb-8" ] ]
+        [ agentStatCard "Pending Review" "3" "text-amber-400"
+        , agentStatCard "Approved" "42" "text-green-400"
+        , agentStatCard "Rejected" "7" "text-red-400"
+        ]
+    , HH.div
+        [ cls [ "bg-card border border-border rounded-lg p-6" ] ]
+        [ HH.h3 [ cls [ "text-text font-medium mb-4" ] ] [ HH.text "Pending Agent Reviews" ]
+        , HH.div
+            [ cls [ "space-y-4" ] ]
+            [ agentReviewCard "feat: add user authentication" "Copilot" "my-app" "abc123" "4 approvals required"
+            , agentReviewCard "fix: resolve null pointer exception" "Claude" "api-service" "def456" "3 approvals + security review"
+            , agentReviewCard "refactor: optimize database queries" "Copilot" "backend" "ghi789" "3 approvals required"
+            ]
+        ]
+    ]
+
+agentStatCard :: forall w i. String -> String -> String -> HH.HTML w i
+agentStatCard label value color =
+  HH.div
+    [ cls [ "bg-card border border-border rounded-lg p-4 text-center" ] ]
+    [ HH.p [ cls [ "text-sm text-muted-foreground mb-1" ] ] [ HH.text label ]
+    , HH.p [ cls [ "text-2xl font-bold", color ] ] [ HH.text value ]
+    ]
+
+agentReviewCard :: forall w i. String -> String -> String -> String -> String -> HH.HTML w i
+agentReviewCard title source repo commit requirement =
+  HH.div
+    [ cls [ "p-4 bg-background rounded-lg border border-border" ] ]
+    [ HH.div
+        [ cls [ "flex items-center justify-between mb-3" ] ]
+        [ HH.div
+            [ cls [ "flex items-center gap-2" ] ]
+            [ HH.span
+                [ cls [ "text-xs px-2 py-0.5 rounded bg-amber-400/20 text-amber-400" ] ]
+                [ HH.text source ]
+            , HH.span [ cls [ "text-sm text-text font-medium" ] ] [ HH.text title ]
+            ]
+        , HH.span [ cls [ "text-xs font-mono text-muted-foreground" ] ] [ HH.text commit ]
+        ]
+    , HH.div
+        [ cls [ "flex items-center justify-between" ] ]
+        [ HH.div
+            [ cls [ "flex items-center gap-2" ] ]
+            [ HH.span [ cls [ "text-xs text-muted-foreground" ] ] [ HH.text repo ]
+            , HH.span [ cls [ "text-xs text-amber-400" ] ] [ HH.text requirement ]
+            ]
+        , HH.div
+            [ cls [ "flex items-center gap-2" ] ]
+            [ HH.button
+                [ cls [ "px-3 py-1 text-xs border border-green-500 text-green-400 rounded hover:bg-green-500/10 transition-colors cursor-pointer" ]
+                , HP.type_ HP.ButtonButton
+                ]
+                [ HH.text "Approve" ]
+            , HH.button
+                [ cls [ "px-3 py-1 text-xs border border-red-500 text-red-400 rounded hover:bg-red-500/10 transition-colors cursor-pointer" ]
+                , HP.type_ HP.ButtonButton
+                ]
+                [ HH.text "Reject" ]
+            ]
         ]
     ]

@@ -50,22 +50,22 @@ hero =
         [ cls [ "max-w-[1100px] mx-auto px-6 text-center" ] ]
         [ -- Badge
           HH.div
-            [ cls [ "inline-flex items-center gap-2 px-3 py-1 bg-purple-400/10 border border-purple-400/20 rounded-full text-purple-400 text-sm mb-8" ] ]
-            [ HH.span [ cls [ "w-2 h-2 bg-purple-400 rounded-full animate-pulse" ] ] []
-            , HH.text "Now available"
+            [ cls [ "inline-flex items-center gap-2 px-3 py-1 bg-orange-400/10 border border-orange-400/20 rounded-full text-orange-400 text-sm mb-8" ] ]
+            [ HH.span [ cls [ "w-2 h-2 bg-orange-400 rounded-full animate-pulse" ] ] []
+            , HH.text "Verified Inference Proxy"
             ]
         , -- Headline
           HH.h1
             [ cls [ "text-4xl md:text-6xl font-bold text-text mb-6 leading-tight" ] ]
             [ HH.text "Verified inference"
             , HH.br_
-            , HH.text "for "
-            , HH.span [ cls [ "text-purple-400" ] ] [ HH.text "every request" ]
+            , HH.text "with "
+            , HH.span [ cls [ "text-orange-400" ] ] [ HH.text "200-600% compression" ]
             ]
         , -- Subheadline
           HH.p
             [ cls [ "text-xl text-muted-foreground mb-10 max-w-2xl mx-auto" ] ]
-            [ HH.text "SSE to SIGIL over ZeroMQ. Reset-on-ambiguity. Cryptographic attestation of every LLM request/response. Provider-agnostic verified passthrough." ]
+            [ HH.text "jaylene-slide ingress: SSE to SIGIL over ZeroMQ. Reset-on-ambiguity prevents hallucination cascades. Fixes broken tool calls. Replaces LiteLLM, raw OpenAI SDK, and custom proxy scripts." ]
         , -- CTAs
           HH.div
             [ cls [ "flex flex-col sm:flex-row items-center justify-center gap-4" ] ]
@@ -83,7 +83,7 @@ hero =
                     , HH.text "docker run -p 8080:8080 straylight/omega-proxy"
                     ]
                 , HH.button
-                    [ cls [ "text-[#596775] hover:text-[#c4b5fd] transition-colors text-xs shrink-0" ] ]
+                    [ cls [ "text-[#596775] hover:text-orange-400 transition-colors text-xs shrink-0" ] ]
                     [ HH.text "copy" ]
                 ]
             , HH.span [ cls [ "text-muted-foreground text-sm" ] ] [ HH.text "or" ]
@@ -95,15 +95,15 @@ hero =
                     , HH.text "nix run github:straylight-software/omega-proxy"
                     ]
                 , HH.button
-                    [ cls [ "text-[#596775] hover:text-[#c4b5fd] transition-colors text-xs shrink-0" ] ]
+                    [ cls [ "text-[#596775] hover:text-orange-400 transition-colors text-xs shrink-0" ] ]
                     [ HH.text "copy" ]
                 ]
             ]
         , -- Social proof
           HH.p
             [ cls [ "mt-8 font-mono text-sm text-muted-foreground" ] ]
-            [ HH.span [ cls [ "text-purple-400/60" ] ] [ HH.text "replaces " ]
-            , HH.text "LiteLLM, OpenRouter, raw API calls, custom proxy scripts"
+            [ HH.span [ cls [ "text-orange-400/60" ] ] [ HH.text "replaces " ]
+            , HH.text "LiteLLM, raw OpenAI SDK, broken tool calls, custom proxy scripts"
             ]
         ]
     ]
@@ -125,22 +125,22 @@ features =
                 [ HH.text "Why omega//proxy?" ]
             , HH.p
                 [ cls [ "text-muted-foreground max-w-xl mx-auto" ] ]
-                [ HH.text "Built for agents that need cryptographic proof of what the LLM actually said." ]
+                [ HH.text "Built for agents that need verified inference, wire compression, and reliable tool calls." ]
             ]
         , HH.div
             [ cls [ "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" ] ]
             [ featureCard ">" "SSE to SIGIL"
-                "Stream Server-Sent Events directly to SIGIL frames over ZeroMQ. No intermediate buffering. Real-time verified tokens."
+                "jaylene-slide ingress translates Server-Sent Events to SIGIL frames over ZeroMQ. No intermediate buffering. Real-time verified tokens."
             , featureCard "!" "Reset-on-ambiguity"
-                "Automatic state reset when ambiguous responses detected. No corrupt context propagation. Clean recovery semantics."
-            , featureCard "∴" "Verified inference"
-                "Cryptographic attestation on every request/response. Post-quantum signatures. Tamper-evident audit logs."
-            , featureCard "↔" "Provider-agnostic"
-                "OpenAI, Anthropic, Google, Mistral, local models via Ollama. Single unified API. Hot-swap providers."
-            , featureCard "$" "Cost tracking"
-                "Real-time token counting. Budget alerts. Usage attribution by key, team, project. Export to your billing system."
-            , featureCard "◎" "Observability"
-                "Request tracing with OpenTelemetry. Prometheus metrics. Structured JSON logs. Full request/response capture."
+                "Prevents hallucination cascades. Automatic state reset on ambiguous responses. No corrupt context propagation. Clean recovery."
+            , featureCard "◎" "200-600% Compression"
+                "Wire-level compression reduces bandwidth dramatically. SIGIL protocol optimizes token transmission. Lower latency, lower costs."
+            , featureCard "⚡" "Fixes Broken Tool Calls"
+                "LLM providers often return malformed tool calls. omega//proxy validates, repairs, and ensures structured responses work every time."
+            , featureCard "↔" "Multi-Provider"
+                "OpenAI, Anthropic, Google, Mistral, local models via Ollama. Single unified API. Hot-swap providers without code changes."
+            , featureCard "∴" "Verified Inference"
+                "SIGIL protocol ensures structured, verified communication. Every response validated against schema. Tamper-evident audit logs."
             ]
         ]
     ]
@@ -148,9 +148,9 @@ features =
 featureCard :: forall w i. String -> String -> String -> HH.HTML w i
 featureCard icon title description =
   HH.div
-    [ cls [ "p-6 bg-card border border-border rounded-lg hover:border-purple-400/30 transition-colors" ] ]
+    [ cls [ "p-6 bg-card border border-border rounded-lg hover:border-orange-400/30 transition-colors" ] ]
     [ HH.div
-        [ cls [ "text-2xl text-purple-400 mb-4 font-mono" ] ]
+        [ cls [ "text-2xl text-orange-400 mb-4 font-mono" ] ]
         [ HH.text icon ]
     , HH.h3
         [ cls [ "text-text text-lg font-semibold mb-2" ] ]
@@ -177,7 +177,7 @@ comparison =
                 [ HH.text "The verified inference layer" ]
             , HH.p
                 [ cls [ "text-muted-foreground max-w-2xl mx-auto" ] ]
-                [ HH.text "Others pass through requests and hope for the best. We prove what happened." ]
+                [ HH.text "Others pass through requests and hope for the best. We verify, compress, and fix what the LLM returns." ]
             ]
         , HH.div
             [ cls [ "overflow-x-auto -mx-6 px-6" ] ]
@@ -187,19 +187,19 @@ comparison =
                     [ HH.tr
                         [ cls [ "border-b border-border" ] ]
                         [ HH.th [ cls [ "py-4 text-left text-muted-foreground font-medium w-40" ] ] [ HH.text "" ]
-                        , HH.th [ cls [ "py-4 text-center text-purple-400 font-bold" ] ] [ HH.text "omega//proxy" ]
+                        , HH.th [ cls [ "py-4 text-center text-orange-400 font-bold" ] ] [ HH.text "omega//proxy" ]
                         , HH.th [ cls [ "py-4 text-center text-muted-foreground font-medium" ] ] [ HH.text "LiteLLM" ]
                         , HH.th [ cls [ "py-4 text-center text-muted-foreground font-medium" ] ] [ HH.text "OpenRouter" ]
                         , HH.th [ cls [ "py-4 text-center text-muted-foreground font-medium" ] ] [ HH.text "Direct API" ]
                         ]
                     ]
                 , HH.tbody_
-                    [ comparisonRow "SSE to SIGIL" "native" "no" "no" "no"
+                    [ comparisonRow "Wire Compression" "200-600%" "no" "no" "no"
+                    , comparisonRow "Fixes Tool Calls" "automatic" "no" "no" "no"
                     , comparisonRow "Reset-on-ambiguity" "automatic" "no" "no" "no"
-                    , comparisonRow "Verified inference" "post-quantum" "no" "no" "no"
+                    , comparisonRow "SSE to SIGIL" "native" "no" "no" "no"
                     , comparisonRow "ZeroMQ transport" "yes" "no" "no" "no"
                     , comparisonRow "Provider support" "all + local" "all" "most" "one"
-                    , comparisonRow "Self-hosted" "yes" "yes" "no" "n/a"
                     ]
                 ]
             ]

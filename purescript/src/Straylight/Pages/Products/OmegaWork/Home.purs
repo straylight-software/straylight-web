@@ -1,5 +1,5 @@
 -- | omega//work Landing Page
--- | Electron desktop app for non-coders. Same agent engine, GUI surface.
+-- | Desktop AI for Teams - Electron app for non-coders with team collaboration
 module Straylight.Pages.Products.OmegaWork.Home 
   ( homePage
   , render
@@ -11,7 +11,7 @@ import Halogen as H
 import Halogen.HTML as HH
 import Halogen.HTML.Properties as HP
 
-import Straylight.UI (cls, codeBlock)
+import Straylight.UI (cls)
 
 -- ============================================================
 -- COMPONENT
@@ -32,7 +32,9 @@ render :: forall w i. HH.HTML w i
 render =
   HH.div_
     [ hero
+    , audience
     , features
+    , teamFeatures
     , comparison
     , quickstart
     , cta
@@ -50,30 +52,30 @@ hero =
         [ cls [ "max-w-[1100px] mx-auto px-6 text-center" ] ]
         [ -- Badge
           HH.div
-            [ cls [ "inline-flex items-center gap-2 px-3 py-1 bg-amber-400/10 border border-amber-400/20 rounded-full text-amber-400 text-sm mb-8" ] ]
-            [ HH.span [ cls [ "w-2 h-2 bg-amber-400 rounded-full animate-pulse" ] ] []
-            , HH.text "Coming soon"
+            [ cls [ "inline-flex items-center gap-2 px-3 py-1 bg-indigo-400/10 border border-indigo-400/20 rounded-full text-indigo-400 text-sm mb-8" ] ]
+            [ HH.span [ cls [ "w-2 h-2 bg-indigo-400 rounded-full animate-pulse" ] ] []
+            , HH.text "Desktop AI for Teams"
             ]
           
           -- Headline
         , HH.h1
             [ cls [ "text-4xl md:text-6xl font-bold text-text mb-6 leading-tight" ] ]
-            [ HH.text "AI coding"
+            [ HH.text "AI assistance for"
             , HH.br_
-            , HH.text "without the "
-            , HH.span [ cls [ "text-amber-400" ] ] [ HH.text "terminal" ]
+            , HH.span [ cls [ "text-indigo-400" ] ] [ HH.text "everyone" ]
+            , HH.text " on your team"
             ]
           
           -- Subheadline
         , HH.p
             [ cls [ "text-xl text-muted-foreground mb-10 max-w-2xl mx-auto" ] ]
-            [ HH.text "omega//work brings the full power of our agent engine to a native desktop app. Same reliability, same speed, beautiful GUI. Built for creators who prefer visual interfaces." ]
+            [ HH.text "omega//work brings enterprise-grade AI to PMs, designers, analysts, and ops teams. Same powerful engine as omega//code, wrapped in a beautiful desktop app your whole team can use." ]
           
           -- CTAs
         , HH.div
             [ cls [ "flex flex-col sm:flex-row items-center justify-center gap-4" ] ]
-            [ primaryButton "/omega/work/pricing" "Join the waitlist"
-            , secondaryButton "/omega/work/features" "Explore features"
+            [ primaryButton "/omega/work/pricing" "Start free trial"
+            , secondaryButton "/omega/work/features" "See how it works"
             ]
           
           -- Platform badges
@@ -87,7 +89,7 @@ hero =
           -- Social proof
         , HH.p
             [ cls [ "mt-8 text-sm text-muted-foreground" ] ]
-            [ HH.text "Same engine powering omega//code, with a GUI surface" ]
+            [ HH.text "Replaces ChatGPT desktop and Claude desktop for teams" ]
         ]
     ]
 
@@ -95,8 +97,49 @@ platformBadge :: forall w i. String -> HH.HTML w i
 platformBadge platform =
   HH.span
     [ cls [ "flex items-center gap-2" ] ]
-    [ HH.span [ cls [ "w-1.5 h-1.5 bg-amber-400/50 rounded-full" ] ] []
+    [ HH.span [ cls [ "w-1.5 h-1.5 bg-indigo-400/50 rounded-full" ] ] []
     , HH.text platform
+    ]
+
+-- ============================================================
+-- AUDIENCE
+-- ============================================================
+
+audience :: forall w i. HH.HTML w i
+audience =
+  HH.section
+    [ cls [ "py-24 border-t border-border" ] ]
+    [ HH.div
+        [ cls [ "max-w-[1100px] mx-auto px-6" ] ]
+        [ HH.div
+            [ cls [ "text-center mb-16" ] ]
+            [ HH.h2
+                [ cls [ "text-3xl font-bold text-text mb-4" ] ]
+                [ HH.text "Built for the rest of your team" ]
+            , HH.p
+                [ cls [ "text-muted-foreground max-w-xl mx-auto" ] ]
+                [ HH.text "Not everyone codes. omega//work gives every team member access to AI assistance." ]
+            ]
+        , HH.div
+            [ cls [ "grid grid-cols-2 md:grid-cols-4 gap-6" ] ]
+            [ audienceCard "Product Managers" "Write PRDs, analyze feedback, plan roadmaps"
+            , audienceCard "Designers" "Generate copy, document systems, iterate faster"
+            , audienceCard "Analysts" "Query data, build reports, automate workflows"
+            , audienceCard "Operations" "Draft processes, manage docs, streamline tasks"
+            ]
+        ]
+    ]
+
+audienceCard :: forall w i. String -> String -> HH.HTML w i
+audienceCard title description =
+  HH.div
+    [ cls [ "p-6 bg-card border border-border rounded-lg text-center hover:border-indigo-400/30 transition-colors" ] ]
+    [ HH.h3
+        [ cls [ "text-text font-semibold mb-2" ] ]
+        [ HH.text title ]
+    , HH.p
+        [ cls [ "text-muted-foreground text-sm" ] ]
+        [ HH.text description ]
     ]
 
 -- ============================================================
@@ -116,22 +159,22 @@ features =
                 [ HH.text "Why omega//work?" ]
             , HH.p
                 [ cls [ "text-muted-foreground max-w-xl mx-auto" ] ]
-                [ HH.text "Built for non-coders who want AI assistance without learning command-line tools." ]
+                [ HH.text "A friendly interface backed by serious AI. No terminal, no learning curve." ]
             ]
         , HH.div
             [ cls [ "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" ] ]
-            [ featureCard ">" "Visual interface"
-                "Point-and-click file selection, drag-and-drop context, visual diff previews. No terminal required."
-            , featureCard "{}" "Same engine"
-                "Powered by the same battle-tested agent engine as omega//code. SIGIL protocol, Lean4 proofs, full reliability."
-            , featureCard "!" "Native performance"
-                "Electron + Rust core. Smooth 60fps UI, instant file operations, minimal memory footprint."
-            , featureCard "++" "Project workspaces"
-                "Organize your work into projects. Context persists across sessions. Pick up where you left off."
-            , featureCard "=" "Real-time preview"
-                "See changes as they happen. Side-by-side diffs, syntax highlighting, instant rollback."
-            , featureCard "$" "Conversation history"
-                "Full history of every interaction. Search, filter, export. Your work is never lost."
+            [ featureCard ">" "Point-and-click interface"
+                "Drag files, click to share context, visual previews. Designed for how you already work."
+            , featureCard "{}" "Same powerful engine"
+                "Powered by the same SIGIL protocol as omega//code. Battle-tested reliability, now in a GUI."
+            , featureCard "!" "Native desktop app"
+                "Electron + Rust core. Fast, responsive, works offline. No browser tabs required."
+            , featureCard "++" "Team workspaces"
+                "Shared spaces for your team. Collaborate on conversations, share context, work together."
+            , featureCard "=" "Shared conversation history"
+                "Find what your team has already solved. Search across all team conversations."
+            , featureCard "$" "Enterprise integrations"
+                "Connect Slack, Notion, Google Workspace. AI that fits into your existing tools."
             ]
         ]
     ]
@@ -139,9 +182,9 @@ features =
 featureCard :: forall w i. String -> String -> String -> HH.HTML w i
 featureCard icon title description =
   HH.div
-    [ cls [ "p-6 bg-card border border-border rounded-lg hover:border-amber-400/30 transition-colors" ] ]
+    [ cls [ "p-6 bg-card border border-border rounded-lg hover:border-indigo-400/30 transition-colors" ] ]
     [ HH.div
-        [ cls [ "text-2xl text-amber-400 mb-4 font-mono" ] ]
+        [ cls [ "text-2xl text-indigo-400 mb-4 font-mono" ] ]
         [ HH.text icon ]
     , HH.h3
         [ cls [ "text-text text-lg font-semibold mb-2" ] ]
@@ -149,6 +192,54 @@ featureCard icon title description =
     , HH.p
         [ cls [ "text-muted-foreground text-sm" ] ]
         [ HH.text description ]
+    ]
+
+-- ============================================================
+-- TEAM FEATURES
+-- ============================================================
+
+teamFeatures :: forall w i. HH.HTML w i
+teamFeatures =
+  HH.section
+    [ cls [ "py-24 border-t border-border" ] ]
+    [ HH.div
+        [ cls [ "max-w-[1100px] mx-auto px-6" ] ]
+        [ HH.div
+            [ cls [ "grid grid-cols-1 lg:grid-cols-2 gap-16 items-center" ] ]
+            [ -- Left: content
+              HH.div_
+                [ HH.span
+                    [ cls [ "inline-block px-3 py-1 bg-indigo-400/10 border border-indigo-400/20 rounded-full text-indigo-400 text-sm font-medium mb-4" ] ]
+                    [ HH.text "Team Collaboration" ]
+                , HH.h2
+                    [ cls [ "text-3xl font-bold text-text mb-6" ] ]
+                    [ HH.text "Work together, not in silos" ]
+                , HH.p
+                    [ cls [ "text-muted-foreground mb-6" ] ]
+                    [ HH.text "omega//work is built for teams from day one. Share workspaces, learn from each other's conversations, and build collective knowledge." ]
+                , HH.ul
+                    [ cls [ "space-y-3" ] ]
+                    [ teamFeatureItem "Shared workspaces for projects and teams"
+                    , teamFeatureItem "Conversation history visible to team members"
+                    , teamFeatureItem "Role-based permissions and access control"
+                    , teamFeatureItem "Usage analytics and admin dashboard"
+                    , teamFeatureItem "SSO/SAML for enterprise security"
+                    ]
+                ]
+              -- Right: visual placeholder
+            , HH.div
+                [ cls [ "bg-card border border-border rounded-lg p-6 aspect-video flex items-center justify-center" ] ]
+                [ HH.span [ cls [ "text-muted-foreground" ] ] [ HH.text "[Team Workspace Preview]" ] ]
+            ]
+        ]
+    ]
+
+teamFeatureItem :: forall w i. String -> HH.HTML w i
+teamFeatureItem text =
+  HH.li
+    [ cls [ "flex items-start gap-3" ] ]
+    [ HH.span [ cls [ "text-indigo-400 mt-1" ] ] [ HH.text "+" ]
+    , HH.span [ cls [ "text-muted-foreground" ] ] [ HH.text text ]
     ]
 
 -- ============================================================
@@ -165,10 +256,10 @@ comparison =
             [ cls [ "text-center mb-16" ] ]
             [ HH.h2
                 [ cls [ "text-3xl font-bold text-text mb-4" ] ]
-                [ HH.text "omega//code vs omega//work" ]
+                [ HH.text "omega//work vs alternatives" ]
             , HH.p
                 [ cls [ "text-muted-foreground max-w-2xl mx-auto" ] ]
-                [ HH.text "Same engine, different interface. Choose what fits your workflow." ]
+                [ HH.text "Built for teams who need more than a chat interface." ]
             ]
         , HH.div
             [ cls [ "overflow-x-auto -mx-6 px-6" ] ]
@@ -178,19 +269,19 @@ comparison =
                     [ HH.tr
                         [ cls [ "border-b border-border" ] ]
                         [ HH.th [ cls [ "py-4 text-left text-muted-foreground font-medium w-40" ] ] [ HH.text "" ]
-                        , HH.th [ cls [ "py-4 text-center text-amber-400 font-bold" ] ] [ HH.text "omega//work" ]
-                        , HH.th [ cls [ "py-4 text-center text-blue-300 font-medium" ] ] [ HH.text "omega//code" ]
+                        , HH.th [ cls [ "py-4 text-center text-indigo-400 font-bold" ] ] [ HH.text "omega//work" ]
+                        , HH.th [ cls [ "py-4 text-center text-muted-foreground font-medium" ] ] [ HH.text "ChatGPT / Claude" ]
                         ]
                     ]
                 , HH.tbody_
-                    [ comparisonRow "Interface" "Native GUI" "Terminal TUI"
-                    , comparisonRow "Target user" "Creators, writers, designers" "Developers, engineers"
-                    , comparisonRow "Learning curve" "Minimal" "Requires terminal familiarity"
-                    , comparisonRow "Agent engine" "Same (SIGIL)" "Same (SIGIL)"
-                    , comparisonRow "Performance" "Native + Rust" "Native Haskell"
-                    , comparisonRow "File selection" "Visual browser" "Path patterns"
-                    , comparisonRow "Diff preview" "Side-by-side GUI" "Inline terminal"
-                    , comparisonRow "Platforms" "macOS, Windows, Linux" "macOS, Linux"
+                    [ comparisonRow "Team workspaces" "Built-in" "Not available"
+                    , comparisonRow "Shared history" "Yes, searchable" "Individual only"
+                    , comparisonRow "File handling" "Visual, drag-drop" "Upload only"
+                    , comparisonRow "SSO/SAML" "Included" "Enterprise add-on"
+                    , comparisonRow "Admin controls" "Full dashboard" "Limited"
+                    , comparisonRow "Integrations" "Slack, Notion, more" "Limited"
+                    , comparisonRow "Agent engine" "SIGIL (proven)" "Proprietary"
+                    , comparisonRow "Platforms" "macOS, Windows, Linux" "Varies"
                     ]
                 ]
             ]
@@ -198,12 +289,12 @@ comparison =
     ]
 
 comparisonRow :: forall w i. String -> String -> String -> HH.HTML w i
-comparisonRow feature work code =
+comparisonRow feature work other =
   HH.tr
     [ cls [ "border-b border-border" ] ]
     [ HH.td [ cls [ "py-3 text-muted-foreground font-medium" ] ] [ HH.text feature ]
-    , HH.td [ cls [ "py-3 text-center text-amber-400 font-semibold" ] ] [ HH.text work ]
-    , HH.td [ cls [ "py-3 text-center text-muted-foreground" ] ] [ HH.text code ]
+    , HH.td [ cls [ "py-3 text-center text-indigo-400 font-semibold" ] ] [ HH.text work ]
+    , HH.td [ cls [ "py-3 text-center text-muted-foreground" ] ] [ HH.text other ]
     ]
 
 -- ============================================================
@@ -220,19 +311,19 @@ quickstart =
             [ cls [ "text-center mb-12" ] ]
             [ HH.h2
                 [ cls [ "text-3xl font-bold text-text mb-4" ] ]
-                [ HH.text "Getting started is simple" ]
+                [ HH.text "Get your team started in minutes" ]
             ]
         , HH.div
             [ cls [ "grid grid-cols-1 md:grid-cols-3 gap-8" ] ]
-            [ stepCard "1" "Download" "Get the native app for your platform. One installer, no dependencies."
-            , stepCard "2" "Sign in" "Use your Straylight account or create one. Sync across devices."
-            , stepCard "3" "Start creating" "Open a project, describe what you want, watch it happen."
+            [ stepCard "1" "Download" "Get the app for macOS, Windows, or Linux. One installer, no dependencies."
+            , stepCard "2" "Create team" "Set up your team workspace and invite members. SSO available for enterprise."
+            , stepCard "3" "Start working" "Share context, collaborate on conversations, get things done together."
             ]
         , HH.div
             [ cls [ "mt-12 text-center" ] ]
             [ HH.a
                 [ HP.href "/omega/work/docs"
-                , cls [ "text-amber-400 hover:text-amber-400/80 transition-colors" ]
+                , cls [ "text-indigo-400 hover:text-indigo-400/80 transition-colors" ]
                 ]
                 [ HH.text "Read the documentation ->" ]
             ]
@@ -244,7 +335,7 @@ stepCard number title description =
   HH.div
     [ cls [ "text-center" ] ]
     [ HH.div
-        [ cls [ "w-10 h-10 rounded-full bg-amber-400/10 border border-amber-400/20 text-amber-400 font-bold flex items-center justify-center mx-auto mb-4" ] ]
+        [ cls [ "w-10 h-10 rounded-full bg-indigo-400/10 border border-indigo-400/20 text-indigo-400 font-bold flex items-center justify-center mx-auto mb-4" ] ]
         [ HH.text number ]
     , HH.h3
         [ cls [ "text-text font-semibold mb-2" ] ]
@@ -266,13 +357,13 @@ cta =
         [ cls [ "max-w-[800px] mx-auto px-6 text-center" ] ]
         [ HH.h2
             [ cls [ "text-3xl font-bold text-text mb-4" ] ]
-            [ HH.text "Ready for AI without the terminal?" ]
+            [ HH.text "Ready to empower your whole team?" ]
         , HH.p
             [ cls [ "text-muted-foreground mb-8" ] ]
-            [ HH.text "omega//work is coming soon. Join the waitlist for early access and updates." ]
+            [ HH.text "Start with a free trial. No credit card required. Upgrade when you're ready." ]
         , HH.div
             [ cls [ "flex flex-col sm:flex-row items-center justify-center gap-4" ] ]
-            [ primaryButton "/omega/work/pricing" "Join the waitlist"
+            [ primaryButton "/omega/work/pricing" "Start free trial"
             , secondaryButton "/omega/work/pricing" "See pricing"
             ]
         ]
@@ -286,7 +377,7 @@ primaryButton :: forall w i. String -> String -> HH.HTML w i
 primaryButton href label =
   HH.a
     [ HP.href href
-    , cls [ "inline-flex items-center justify-center px-6 py-3 bg-amber-400 text-background font-medium rounded-md hover:bg-amber-400/90 transition-colors" ]
+    , cls [ "inline-flex items-center justify-center px-6 py-3 bg-indigo-400 text-background font-medium rounded-md hover:bg-indigo-400/90 transition-colors" ]
     ]
     [ HH.text label ]
 

@@ -50,8 +50,8 @@ hero =
         [ cls [ "max-w-[1100px] mx-auto px-6 text-center" ] ]
         [ -- Badge
           HH.div
-            [ cls [ "inline-flex items-center gap-2 px-3 py-1 bg-violet-400/10 border border-violet-400/20 rounded-full text-violet-400 text-sm mb-8" ] ]
-            [ HH.span [ cls [ "w-2 h-2 bg-violet-400 rounded-full animate-pulse" ] ] []
+            [ cls [ "inline-flex items-center gap-2 px-3 py-1 bg-rose-400/10 border border-rose-400/20 rounded-full text-rose-400 text-sm mb-8" ] ]
+            [ HH.span [ cls [ "w-2 h-2 bg-rose-400 rounded-full animate-pulse" ] ] []
             , HH.text "Private beta"
             ]
           
@@ -61,7 +61,7 @@ hero =
             [ HH.text "Code review for"
             , HH.br_
             , HH.text "the "
-            , HH.span [ cls [ "text-violet-400" ] ] [ HH.text "agent era" ]
+            , HH.span [ cls [ "text-rose-400" ] ] [ HH.text "agent era" ]
             ]
           
           -- Subheadline
@@ -169,7 +169,7 @@ comparison =
                     [ HH.tr
                         [ cls [ "border-b border-border" ] ]
                         [ HH.th [ cls [ "py-4 text-left text-muted-foreground font-medium w-40" ] ] [ HH.text "" ]
-                        , HH.th [ cls [ "py-4 text-center text-violet-400 font-bold" ] ] [ HH.text "sensenet//forge" ]
+                        , HH.th [ cls [ "py-4 text-center text-rose-400 font-bold" ] ] [ HH.text "sensenet//forge" ]
                         , HH.th [ cls [ "py-4 text-center text-muted-foreground font-medium" ] ] [ HH.text "GitHub" ]
                         , HH.th [ cls [ "py-4 text-center text-muted-foreground font-medium" ] ] [ HH.text "Gerrit" ]
                         , HH.th [ cls [ "py-4 text-center text-muted-foreground font-medium" ] ] [ HH.text "GitLab" ]
@@ -196,7 +196,7 @@ comparisonRow feature us github gerrit gitlab =
   HH.tr
     [ cls [ "border-b border-border" ] ]
     [ HH.td [ cls [ "py-3 text-muted-foreground font-medium" ] ] [ HH.text feature ]
-    , HH.td [ cls [ "py-3 text-center text-violet-400 font-semibold" ] ] [ HH.text us ]
+    , HH.td [ cls [ "py-3 text-center text-rose-400 font-semibold" ] ] [ HH.text us ]
     , HH.td [ cls [ "py-3 text-center" ] ] [ compCell github ]
     , HH.td [ cls [ "py-3 text-center" ] ] [ compCell gerrit ]
     , HH.td [ cls [ "py-3 text-center" ] ] [ compCell gitlab ]
@@ -247,7 +247,7 @@ quickstart =
             [ cls [ "mt-8 text-center" ] ]
             [ HH.a
                 [ HP.href "/sensenet/forge/docs"
-                , cls [ "text-violet-400 hover:text-violet-400/80 transition-colors" ]
+                , cls [ "text-rose-400 hover:text-rose-400/80 transition-colors" ]
                 ]
                 [ HH.text "Full quickstart guide ->" ]
             ]
@@ -285,9 +285,9 @@ cta =
 featureCard :: forall w i. String -> String -> String -> HH.HTML w i
 featureCard icon title description =
   HH.div
-    [ cls [ "p-6 bg-card border border-border rounded-lg hover:border-violet-400/30 transition-colors" ] ]
+    [ cls [ "p-6 bg-card border border-border rounded-lg hover:border-rose-400/30 transition-colors" ] ]
     [ HH.div
-        [ cls [ "text-2xl text-violet-400 mb-4 font-mono" ] ]
+        [ cls [ "text-2xl text-rose-400 mb-4 font-mono" ] ]
         [ HH.text icon ]
     , HH.h3
         [ cls [ "text-text text-lg font-semibold mb-2" ] ]
@@ -308,7 +308,7 @@ primaryButton :: forall w i. String -> String -> HH.HTML w i
 primaryButton href label =
   HH.a
     [ HP.href href
-    , cls [ "inline-flex items-center justify-center px-8 py-4 bg-violet-400 text-background font-medium rounded-md hover:bg-violet-400/90 transition-colors" ]
+    , cls [ "inline-flex items-center justify-center px-8 py-4 bg-rose-400 text-background font-medium rounded-md hover:bg-rose-400/90 transition-colors" ]
     ]
     [ HH.text label ]
 

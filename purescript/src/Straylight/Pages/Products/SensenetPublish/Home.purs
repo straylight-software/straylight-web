@@ -50,17 +50,17 @@ hero =
         [ cls [ "max-w-[1100px] mx-auto px-6 text-center" ] ]
         [ -- Badge
           HH.div
-            [ cls [ "inline-flex items-center gap-2 px-3 py-1 bg-sky-400/10 border border-sky-400/20 rounded-full text-sky-400 text-sm mb-8" ] ]
-            [ HH.span [ cls [ "w-2 h-2 bg-sky-400 rounded-full animate-pulse" ] ] []
+            [ cls [ "inline-flex items-center gap-2 px-3 py-1 bg-teal-400/10 border border-teal-400/20 rounded-full text-teal-400 text-sm mb-8" ] ]
+            [ HH.span [ cls [ "w-2 h-2 bg-teal-400 rounded-full animate-pulse" ] ] []
             , HH.text "Private beta"
             ]
           
           -- Headline
         , HH.h1
             [ cls [ "text-4xl md:text-6xl font-bold text-text mb-6 leading-tight" ] ]
-            [ HH.text "Documentation that"
+            [ HH.text "References resolve"
             , HH.br_
-            , HH.span [ cls [ "text-sky-400" ] ] [ HH.text "actually resolves" ]
+            , HH.span [ cls [ "text-teal-400" ] ] [ HH.text "or the build fails" ]
             ]
           
           -- Subheadline
@@ -100,7 +100,7 @@ hero =
           -- Social proof
         , HH.p
             [ cls [ "mt-8 font-mono text-sm text-muted-foreground" ] ]
-            [ HH.span [ cls [ "text-sky-400/60" ] ] [ HH.text "replaces " ]
+            [ HH.span [ cls [ "text-teal-400/60" ] ] [ HH.text "replaces " ]
             , HH.text "Rustdoc, Haddock, TypeDoc, Doxygen"
             ]
         ]
@@ -146,9 +146,9 @@ features =
 featureCard :: forall w i. String -> String -> String -> HH.HTML w i
 featureCard icon title description =
   HH.div
-    [ cls [ "p-6 bg-card border border-border rounded-lg hover:border-sky-400/30 transition-colors" ] ]
+    [ cls [ "p-6 bg-card border border-border rounded-lg hover:border-teal-400/30 transition-colors" ] ]
     [ HH.div
-        [ cls [ "text-2xl text-sky-400 mb-4 font-mono" ] ]
+        [ cls [ "text-2xl text-teal-400 mb-4 font-mono" ] ]
         [ HH.text icon ]
     , HH.h3
         [ cls [ "text-text text-lg font-semibold mb-2" ] ]
@@ -185,7 +185,7 @@ comparison =
                     [ HH.tr
                         [ cls [ "border-b border-border" ] ]
                         [ HH.th [ cls [ "py-4 text-left text-muted-foreground font-medium w-40" ] ] [ HH.text "" ]
-                        , HH.th [ cls [ "py-4 text-center text-sky-400 font-bold" ] ] [ HH.text "sensenet//publish" ]
+                        , HH.th [ cls [ "py-4 text-center text-teal-400 font-bold" ] ] [ HH.text "sensenet//publish" ]
                         , HH.th [ cls [ "py-4 text-center text-muted-foreground font-medium" ] ] [ HH.text "Rustdoc" ]
                         , HH.th [ cls [ "py-4 text-center text-muted-foreground font-medium" ] ] [ HH.text "Haddock" ]
                         , HH.th [ cls [ "py-4 text-center text-muted-foreground font-medium" ] ] [ HH.text "TypeDoc" ]
@@ -214,7 +214,7 @@ comparisonRow feature us rustdoc haddock typedoc doxygen =
   HH.tr
     [ cls [ "border-b border-border" ] ]
     [ HH.td [ cls [ "py-3 text-muted-foreground font-medium" ] ] [ HH.text feature ]
-    , HH.td [ cls [ "py-3 text-center text-sky-400 font-semibold" ] ] [ HH.text us ]
+    , HH.td [ cls [ "py-3 text-center text-teal-400 font-semibold" ] ] [ HH.text us ]
     , HH.td [ cls [ "py-3 text-center" ] ] [ compCell rustdoc ]
     , HH.td [ cls [ "py-3 text-center" ] ] [ compCell haddock ]
     , HH.td [ cls [ "py-3 text-center" ] ] [ compCell typedoc ]
@@ -264,7 +264,7 @@ quickstart =
             [ cls [ "mt-8 text-center" ] ]
             [ HH.a
                 [ HP.href "/sensenet/publish/docs/quickstart"
-                , cls [ "text-sky-400 hover:text-sky-400/80 transition-colors" ]
+                , cls [ "text-teal-400 hover:text-teal-400/80 transition-colors" ]
                 ]
                 [ HH.text "Full quickstart guide ->" ]
             ]
@@ -310,7 +310,7 @@ primaryButton :: forall w i. String -> String -> HH.HTML w i
 primaryButton href label =
   HH.a
     [ HP.href href
-    , cls [ "inline-flex items-center justify-center px-6 py-3 bg-sky-400 text-background font-medium rounded-md hover:bg-sky-400/90 transition-colors" ]
+    , cls [ "inline-flex items-center justify-center px-6 py-3 bg-teal-400 text-background font-medium rounded-md hover:bg-teal-400/90 transition-colors" ]
     ]
     [ HH.text label ]
 

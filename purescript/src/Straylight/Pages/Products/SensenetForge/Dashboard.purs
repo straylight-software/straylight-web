@@ -104,7 +104,7 @@ reposTab =
         [ cls [ "flex items-center justify-between mb-6" ] ]
         [ HH.h2 [ cls [ "text-lg font-semibold text-text" ] ] [ HH.text "Your Repositories" ]
         , HH.button
-            [ cls [ "px-4 py-2 bg-violet-400 text-background text-sm font-medium rounded-md hover:bg-violet-400/90 transition-colors" ]
+            [ cls [ "px-4 py-2 bg-rose-400 text-background text-sm font-medium rounded-md hover:bg-rose-400/90 transition-colors" ]
             , HP.type_ HP.ButtonButton
             ]
             [ HH.text "+ New Repository" ]
@@ -147,7 +147,7 @@ repoCard :: forall w i. RepoConfig -> HH.HTML w i
 repoCard config =
   HH.a
     [ HP.href $ "/sensenet/forge/repo/" <> config.name
-    , cls [ "block bg-card border border-border rounded-lg p-4 hover:border-violet-400/50 transition-colors" ]
+    , cls [ "block bg-card border border-border rounded-lg p-4 hover:border-rose-400/50 transition-colors" ]
     ]
     [ HH.div
         [ cls [ "flex items-center justify-between mb-2" ] ]
@@ -158,7 +158,7 @@ repoCard config =
                 [ cls [ "text-xs px-2 py-0.5 rounded"
                       , if config.visibility == "private" 
                           then "bg-muted text-muted-foreground" 
-                          else "bg-violet-400/20 text-violet-400"
+                          else "bg-rose-400/20 text-rose-400"
                       ]
                 ]
                 [ HH.text config.visibility ]
@@ -238,7 +238,7 @@ filterButton _ label active =
   HH.button
     [ cls [ "px-3 py-1 text-xs font-medium rounded-md transition-colors"
           , if active 
-              then "bg-violet-400/20 text-violet-400" 
+              then "bg-rose-400/20 text-rose-400" 
               else "text-muted-foreground hover:text-text"
           ]
     , HP.type_ HP.ButtonButton
@@ -259,13 +259,13 @@ diffRow :: forall w i. DiffConfig -> HH.HTML w i
 diffRow config =
   HH.a
     [ HP.href $ "/sensenet/forge/diff/" <> config.id
-    , cls [ "block bg-card border border-border rounded-lg p-4 hover:border-violet-400/50 transition-colors" ]
+    , cls [ "block bg-card border border-border rounded-lg p-4 hover:border-rose-400/50 transition-colors" ]
     ]
     [ HH.div
         [ cls [ "flex items-center justify-between mb-2" ] ]
         [ HH.div
             [ cls [ "flex items-center gap-3" ] ]
-            [ HH.span [ cls [ "text-violet-400 font-mono text-sm" ] ] [ HH.text config.id ]
+            [ HH.span [ cls [ "text-rose-400 font-mono text-sm" ] ] [ HH.text config.id ]
             , HH.span [ cls [ "text-text font-medium" ] ] [ HH.text config.title ]
             ]
         , statusBadge config.status
@@ -276,7 +276,7 @@ diffRow config =
         , HH.div
             [ cls [ "flex items-center gap-1" ] ]
             [ if config.isAgent 
-                then HH.span [ cls [ "px-1.5 py-0.5 rounded bg-violet-400/20 text-violet-400" ] ] [ HH.text "agent" ]
+                then HH.span [ cls [ "px-1.5 py-0.5 rounded bg-rose-400/20 text-rose-400" ] ] [ HH.text "agent" ]
                 else HH.text ""
             , HH.span_ [ HH.text config.author ]
             ]
@@ -359,13 +359,13 @@ reviewRow :: forall w i. ReviewConfig -> HH.HTML w i
 reviewRow config =
   HH.a
     [ HP.href $ "/sensenet/forge/diff/" <> config.id
-    , cls [ "block bg-card border border-border rounded-lg p-4 hover:border-violet-400/50 transition-colors" ]
+    , cls [ "block bg-card border border-border rounded-lg p-4 hover:border-rose-400/50 transition-colors" ]
     ]
     [ HH.div
         [ cls [ "flex items-center justify-between mb-2" ] ]
         [ HH.div
             [ cls [ "flex items-center gap-3" ] ]
-            [ HH.span [ cls [ "text-violet-400 font-mono text-sm" ] ] [ HH.text config.id ]
+            [ HH.span [ cls [ "text-rose-400 font-mono text-sm" ] ] [ HH.text config.id ]
             , HH.span [ cls [ "text-text font-medium" ] ] [ HH.text config.title ]
             ]
         , HH.span [ cls [ "text-xs px-2 py-0.5 rounded bg-yellow-500/20 text-yellow-400" ] ] 
@@ -377,7 +377,7 @@ reviewRow config =
         , HH.div
             [ cls [ "flex items-center gap-1" ] ]
             [ if config.isAgent 
-                then HH.span [ cls [ "px-1.5 py-0.5 rounded bg-violet-400/20 text-violet-400" ] ] [ HH.text "agent" ]
+                then HH.span [ cls [ "px-1.5 py-0.5 rounded bg-rose-400/20 text-rose-400" ] ] [ HH.text "agent" ]
                 else HH.text ""
             , HH.span_ [ HH.text $ "by " <> config.author ]
             ]
@@ -391,7 +391,7 @@ reviewHistoryRow diffId action time =
     [ cls [ "flex items-center justify-between py-3 border-b border-border last:border-0" ] ]
     [ HH.div
         [ cls [ "flex items-center gap-3" ] ]
-        [ HH.span [ cls [ "text-violet-400 font-mono text-sm" ] ] [ HH.text diffId ]
+        [ HH.span [ cls [ "text-rose-400 font-mono text-sm" ] ] [ HH.text diffId ]
         , HH.span [ cls [ "text-sm text-muted-foreground" ] ] [ HH.text action ]
         ]
     , HH.span [ cls [ "text-xs text-muted-foreground" ] ] [ HH.text time ]
@@ -424,13 +424,13 @@ activityItem diffId action actor time isAgent =
     [ cls [ "flex items-center justify-between py-3 border-b border-border last:border-0" ] ]
     [ HH.div
         [ cls [ "flex items-center gap-3" ] ]
-        [ HH.span [ cls [ "text-violet-400 font-mono text-sm" ] ] [ HH.text diffId ]
+        [ HH.span [ cls [ "text-rose-400 font-mono text-sm" ] ] [ HH.text diffId ]
         , HH.span [ cls [ "text-sm text-muted-foreground" ] ] [ HH.text action ]
         , HH.span [ cls [ "text-sm text-text" ] ] [ HH.text "by" ]
         , HH.div
             [ cls [ "flex items-center gap-1" ] ]
             [ if isAgent 
-                then HH.span [ cls [ "px-1.5 py-0.5 rounded bg-violet-400/20 text-violet-400 text-xs" ] ] [ HH.text "agent" ]
+                then HH.span [ cls [ "px-1.5 py-0.5 rounded bg-rose-400/20 text-rose-400 text-xs" ] ] [ HH.text "agent" ]
                 else HH.text ""
             , HH.span [ cls [ "text-sm text-text" ] ] [ HH.text actor ]
             ]
