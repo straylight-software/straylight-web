@@ -4,6 +4,7 @@ module Straylight.Layout.Header where
 import Prelude
 
 import Data.Maybe (Maybe(..))
+import Data.String as Data.String
 import Effect (Effect)
 import Effect.Class (liftEffect)
 import Effect.Aff.Class (class MonadAff)
@@ -120,14 +121,10 @@ render state =
             [ -- Product switcher
               productSwitcher state
               
-              -- Desktop Nav
+              -- Desktop Nav - show product sub-pages or global nav
             , HH.nav
                 [ cls [ "hidden md:flex items-center gap-6" ] ]
-                [ navLink "/team" "team"
-                , navLink "/software" "software"
-                , externalLink "https://github.com/straylight-software" "github"
-                , navLink "/discord" "discord"
-                ]
+                (productNav state.currentPath)
               
               -- Status indicator
             , HH.div
@@ -172,22 +169,85 @@ productSwitcher state =
     ]
 
 currentProductName :: String -> String
-currentProductName = case _ of
-  "/" -> "straylight"
+currentProductName path
+  | path == "/" = "straylight"
   -- SENSE//NET
-  "/sensenet/cache" -> "sensenet//cache"
-  "/sensenet/build" -> "sensenet//build"
-  "/sensenet/converge" -> "sensenet//converge"
-  "/sensenet/confirm" -> "sensenet//confirm"
-  "/sensenet/forge" -> "sensenet//forge"
-  "/sensenet/publish" -> "sensenet//publish"
+  | startsWith "/sensenet/cache" path = "sensenet//cache"
+  | startsWith "/sensenet/build" path = "sensenet//build"
+  | startsWith "/sensenet/converge" path = "sensenet//converge"
+  | startsWith "/sensenet/confirm" path = "sensenet//confirm"
+  | startsWith "/sensenet/forge" path = "sensenet//forge"
+  | startsWith "/sensenet/publish" path = "sensenet//publish"
   -- Ω
-  "/omega/code" -> "omega//code"
-  "/omega/work" -> "omega//work"
-  "/omega/proxy" -> "omega//proxy"
-  "/omega/boost" -> "omega//boost"
-  "/team" -> "team"
-  _ -> "straylight"
+  | startsWith "/omega/code" path = "omega//code"
+  | startsWith "/omega/work" path = "omega//work"
+  | startsWith "/omega/proxy" path = "omega//proxy"
+  | startsWith "/omega/boost" path = "omega//boost"
+  | startsWith "/team" path = "team"
+  | otherwise = "straylight"
+
+startsWith :: String -> String -> Boolean
+startsWith prefix str = 
+  str == prefix || case Data.String.stripPrefix (Data.String.Pattern (prefix <> "/")) str of
+    Just _ -> true
+    Nothing -> false
+
+-- | Returns navigation links - product sub-pages when on a product, global nav otherwise
+productNav :: forall w i. String -> Array (HH.HTML w i)
+productNav path
+  | startsWith "/sensenet/cache" path = productSubNav "/sensenet/cache" path
+  | startsWith "/sensenet/build" path = productSubNav "/sensenet/build" path
+  | startsWith "/sensenet/converge" path = productSubNav "/sensenet/converge" path
+  | startsWith "/sensenet/confirm" path = productSubNav "/sensenet/confirm" path
+  | startsWith "/sensenet/forge" path = productSubNav "/sensenet/forge" path
+  | startsWith "/sensenet/publish" path = productSubNav "/sensenet/publish" path
+  | startsWith "/omega/code" path = productSubNav "/omega/code" path
+  | startsWith "/omega/work" path = productSubNav "/omega/work" path
+  | startsWith "/omega/proxy" path = productSubNav "/omega/proxy" path
+  | startsWith "/omega/boost" path = productSubNav "/omega/boost" path
+  | otherwise = globalNav
+
+globalNav :: forall w i. Array (HH.HTML w i)
+globalNav =
+  [ navLink "/team" "team"
+  , navLink "/software" "software"
+  , externalLink "https://github.com/straylight-software" "github"
+  , navLink "/discord" "discord"
+  ]
+
+productSubNav :: forall w i. String -> String -> Array (HH.HTML w i)
+productSubNav base currentPath =
+  [ subNavLink (base) "home" currentPath
+  , subNavLink (base <> "/features") "features" currentPath
+  , subNavLink (base <> "/pricing") "pricing" currentPath
+  , subNavLink (base <> "/docs") "docs" currentPath
+  ]
+
+subNavLink :: forall w i. String -> String -> String -> HH.HTML w i
+subNavLink href label currentPath =
+  HH.a
+    [ HP.href href
+    , cls [ "text-[13px] transition-colors link-trace"
+          , if isActive href currentPath
+              then "text-primary"
+              else "text-muted-foreground hover:text-text"
+          ]
+    ]
+    [ HH.text label ]
+
+isActive :: String -> String -> Boolean
+isActive href currentPath
+  | href == currentPath = true
+  | href <> "/" == currentPath = true
+  -- For base product path, only active if exactly on home
+  | not (Data.String.contains (Data.String.Pattern "/features") href) 
+    && not (Data.String.contains (Data.String.Pattern "/pricing") href)
+    && not (Data.String.contains (Data.String.Pattern "/docs") href)
+    && (currentPath == href || currentPath == href <> "/") = true
+  -- For sub-pages, check prefix
+  | Data.String.contains (Data.String.Pattern "/docs") href 
+    && startsWith href currentPath = true
+  | otherwise = currentPath == href
 
 productMenu :: forall m. State -> H.ComponentHTML Action () m
 productMenu state =
@@ -255,7 +315,7 @@ productOption :: forall m. State -> String -> String -> String -> String -> H.Co
 productOption state path name desc theme =
   HH.button
     [ cls [ "text-left px-3 py-2 rounded transition-colors flex items-center justify-between group cursor-pointer w-full"
-          , if state.currentPath == path 
+          , if startsWith path state.currentPath
               then "bg-primary/10 text-text" 
               else "hover:bg-card text-muted-foreground hover:text-text"
           ]

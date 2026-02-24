@@ -262,7 +262,7 @@ quickstart =
         , HH.div
             [ cls [ "mt-8 text-center" ] ]
             [ HH.a
-                [ HP.href "/docs/quickstart"
+                [ HP.href "/omega/code/docs"
                 , cls [ "text-blue-300 hover:text-blue-300/80 transition-colors" ]
                 ]
                 [ HH.text "Full quickstart guide →" ]

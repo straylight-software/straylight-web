@@ -276,7 +276,7 @@ quickstart =
         , HH.div
             [ cls [ "mt-8 text-center" ] ]
             [ HH.a
-                [ HP.href "/docs/converge/quickstart"
+                [ HP.href "/sensenet/converge/docs"
                 , cls [ "text-emerald-400 hover:text-emerald-400/80 transition-colors" ]
                 ]
                 [ HH.text "Full quickstart guide ->" ]

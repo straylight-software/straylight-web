@@ -272,7 +272,7 @@ quickstart =
         , HH.div
             [ cls [ "mt-8 text-center" ] ]
             [ HH.a
-                [ HP.href "/docs/forge/quickstart"
+                [ HP.href "/sensenet/forge/docs"
                 , cls [ "text-violet-400 hover:text-violet-400/80 transition-colors" ]
                 ]
                 [ HH.text "Full quickstart guide →" ]

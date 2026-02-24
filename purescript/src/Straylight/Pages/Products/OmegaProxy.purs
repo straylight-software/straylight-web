@@ -67,7 +67,7 @@ hero =
         , -- CTAs
           HH.div
             [ cls [ "flex flex-col sm:flex-row items-center justify-center gap-4" ] ]
-            [ primaryButton "/docs/proxy/quickstart" "Get started"
+            [ primaryButton "/omega/proxy/docs" "Get started"
             , secondaryButton "https://github.com/straylight-software/omega-proxy" "View source"
             ]
         , -- install options
@@ -267,7 +267,7 @@ quickstart =
         , HH.div
             [ cls [ "mt-8 text-center" ] ]
             [ HH.a
-                [ HP.href "/docs/proxy/quickstart"
+                [ HP.href "/omega/proxy/docs"
                 , cls [ "text-purple-400 hover:text-purple-400/80 transition-colors" ]
                 ]
                 [ HH.text "Full deployment guide →" ]
@@ -300,7 +300,7 @@ cta =
             [ HH.text "omega//proxy is open source and free to self-host. Managed hosting available for teams." ]
         , HH.div
             [ cls [ "flex flex-col sm:flex-row items-center justify-center gap-4" ] ]
-            [ primaryButton "/docs/proxy/quickstart" "Deploy now"
+            [ primaryButton "/omega/proxy/docs" "Deploy now"
             , secondaryButton "/pricing" "View pricing"
             ]
         ]

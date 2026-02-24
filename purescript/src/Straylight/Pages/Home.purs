@@ -69,24 +69,30 @@ productMap =
             [ brandHeader "SENSE // NET" "Build infrastructure" true
             , HH.div
                 [ cls [ "flex flex-col gap-3" ] ]
-                [ productCard true "Cache" 
+                [ productCardLink true "Cache" 
                     "Attestation-aware binary cache & artifact store. Content-addressed. Post-quantum signatures."
                     "Cachix, S3 artifact buckets"
-                , productCard true "Build"
+                    "/sensenet/cache"
+                , productCardLink true "Build"
                     "Typed build system with formal verification. Dhall configs. Lean4-proven derivations."
                     "Bazel, Buck2, Nix expressions"
-                , productCard true "Converge"
+                    "/sensenet/build"
+                , productCardLink true "Converge"
                     "Typed infrastructure-as-code. Desired-state convergence. No state files, no drift."
                     "Terraform, Pulumi, Ansible"
-                , productCard true "Confirm"
+                    "/sensenet/converge"
+                , productCardLink true "Confirm"
                     "CI with proof obligations. Typed Dhall pipelines. Agent code faces higher review burden."
                     "GitHub Actions, CircleCI, Jenkins"
-                , productCard true "Forge"
+                    "/sensenet/confirm"
+                , productCardLink true "Forge"
                     "Code hosting + review. Stacked diffs, not PRs. jujutsu first-class. Agent-era design."
                     "GitHub, Graphite, Phabricator"
-                , productCard true "Publish"
+                    "/sensenet/forge"
+                , productCardLink true "Publish"
                     "Scope-graph documentation. References resolve or the build fails. Cross-language. Machine-readable."
                     "rustdoc, Haddock, typedoc, Doxygen"
+                    "/sensenet/publish"
                 ]
             ]
         , -- OMEGA column
@@ -98,15 +104,18 @@ productMap =
                     "Native terminal AI coding agent. Haskell + Brick TUI. io_uring event loop. 509k req/s. SIGIL-native."
                     "Claude Code, Cursor, Windsurf, Aider"
                     "/omega/code"
-                , productCard false "work"
+                , productCardLink false "work"
                     "Electron desktop app for non-coders. Same agent engine, GUI surface. For PMs, designers, analysts, ops."
                     "ChatGPT desktop, Claude desktop (for teams)"
-                , productCard false "proxy"
+                    "/omega/work"
+                , productCardLink false "proxy"
                     "Verified inference proxy. jaylene-slide ingress: SSE → SIGIL over ZeroMQ. Reset-on-ambiguity. 200–600% wire compression."
                     "LiteLLM, raw OpenAI SDK, broken tool calls"
-                , productCard false "boost"
+                    "/omega/proxy"
+                , productCardLink false "boost"
                     "Managed inference co-located with BYOK vendor. evring HTTP/1.1+2+3 stack. Custom CUTLASS 3.x sm_120 kernels."
                     "Self-hosted vLLM, raw provider APIs"
+                    "/omega/boost"
                 ]
             , -- Shared architecture box
               sharedArchitecture

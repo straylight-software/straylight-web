@@ -287,7 +287,7 @@ pricing =
                     , "SOC 2 compliance"
                     ]
                 , cta: "Contact sales"
-                , ctaHref: "/contact"
+                , ctaHref: "/discord"
                 , highlighted: false
                 }
             ]
