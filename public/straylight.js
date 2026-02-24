@@ -91,10 +91,10 @@
   };
   var applySecond = function(dictApply) {
     var apply1 = apply(dictApply);
-    var map24 = map(dictApply.Functor0());
+    var map25 = map(dictApply.Functor0());
     return function(a2) {
       return function(b2) {
-        return apply1(map24($$const(identity2))(a2))(b2);
+        return apply1(map25($$const(identity2))(a2))(b2);
       };
     };
   };
@@ -1789,10 +1789,10 @@
   var $$try = function(dictMonadError) {
     var catchError1 = catchError(dictMonadError);
     var Monad0 = dictMonadError.MonadThrow0().Monad0();
-    var map24 = map(Monad0.Bind1().Apply0().Functor0());
+    var map25 = map(Monad0.Bind1().Apply0().Functor0());
     var pure10 = pure(Monad0.Applicative0());
     return function(a2) {
-      return catchError1(map24(Right.create)(a2))(function($52) {
+      return catchError1(map25(Right.create)(a2))(function($52) {
         return pure10(Left.create($52));
       });
     };
@@ -5867,6 +5867,7 @@
   var img = function(props) {
     return element2("img")(props)([]);
   };
+  var li = /* @__PURE__ */ element2("li");
   var main = /* @__PURE__ */ element2("main");
   var nav = /* @__PURE__ */ element2("nav");
   var p = /* @__PURE__ */ element2("p");
@@ -5885,6 +5886,7 @@
   var thead = /* @__PURE__ */ element2("thead");
   var thead_ = /* @__PURE__ */ thead([]);
   var tr = /* @__PURE__ */ element2("tr");
+  var ul = /* @__PURE__ */ element2("ul");
   var div2 = /* @__PURE__ */ element2("div");
   var div_ = /* @__PURE__ */ div2([]);
   var code = /* @__PURE__ */ element2("code");
@@ -6114,16 +6116,16 @@
       });
     };
   };
-  var evalQ = function(render13) {
+  var evalQ = function(render16) {
     return function(ref2) {
       return function(q2) {
         return bind12(liftEffect3(read(ref2)))(function(v) {
-          return evalM(render13)(ref2)(v["component"]["eval"](new Query(map13(Just.create)(liftCoyoneda(q2)), $$const(Nothing.value))));
+          return evalM(render16)(ref2)(v["component"]["eval"](new Query(map13(Just.create)(liftCoyoneda(q2)), $$const(Nothing.value))));
         });
       };
     };
   };
-  var evalM = function(render13) {
+  var evalM = function(render16) {
     return function(initRef) {
       return function(v) {
         var evalChildQuery = function(ref2) {
@@ -6133,7 +6135,7 @@
                 var evalChild = function(v3) {
                   return parallel3(bind12(liftEffect3(read(v3)))(function(dsx) {
                     return unDriverStateX(function(ds) {
-                      return evalQ(render13)(ds.selfRef)(v2.value1);
+                      return evalQ(render16)(ds.selfRef)(v2.value1);
                     })(dsx);
                   }));
                 };
@@ -6170,7 +6172,7 @@
                     lifecycleHandlers: v2.lifecycleHandlers,
                     state: v3.value1
                   })(ref2)))(function() {
-                    return discard1(handleLifecycle(v2.lifecycleHandlers)(render13(v2.lifecycleHandlers)(ref2)))(function() {
+                    return discard1(handleLifecycle(v2.lifecycleHandlers)(render16(v2.lifecycleHandlers)(ref2)))(function() {
                       return pure6(v3.value0);
                     });
                   });
@@ -6183,7 +6185,7 @@
             if (v1 instanceof Subscribe) {
               return bind12(fresh(SubscriptionId)(ref2))(function(sid) {
                 return bind12(liftEffect3(subscribe(v1.value0(sid))(function(act) {
-                  return handleAff(evalF(render13)(ref2)(new Action(act)));
+                  return handleAff(evalF(render16)(ref2)(new Action(act)));
                 })))(function(finalize) {
                   return bind12(liftEffect3(read(ref2)))(function(v2) {
                     return discard1(liftEffect3(modify_2(map22(insert4(sid)(finalize)))(v2.subscriptions)))(function() {
@@ -6220,7 +6222,7 @@
             ;
             if (v1 instanceof Par) {
               return sequential2(retractFreeAp2(hoistFreeAp(function() {
-                var $119 = evalM(render13)(ref2);
+                var $119 = evalM(render16)(ref2);
                 return function($120) {
                   return parallel3($119($120));
                 };
@@ -6234,7 +6236,7 @@
                     return bind12(fork3($$finally(liftEffect3(function __do2() {
                       modify_2($$delete2(fid))(v2.forks)();
                       return write(true)(doneRef)();
-                    }))(evalM(render13)(ref2)(v1.value0))))(function(fiber) {
+                    }))(evalM(render16)(ref2)(v1.value0))))(function(fiber) {
                       return discard1(liftEffect3(unlessM2(read(doneRef))(modify_2(insert12(fid)(fiber))(v2.forks))))(function() {
                         return pure6(v1.value1(fid));
                       });
@@ -6277,7 +6279,7 @@
       };
     };
   };
-  var evalF = function(render13) {
+  var evalF = function(render16) {
     return function(ref2) {
       return function(v) {
         if (v instanceof RefUpdate) {
@@ -6305,7 +6307,7 @@
         ;
         if (v instanceof Action) {
           return bind12(liftEffect3(read(ref2)))(function(v1) {
-            return evalM(render13)(ref2)(v1["component"]["eval"](new Action2(v.value0, unit)));
+            return evalM(render16)(ref2)(v1["component"]["eval"](new Action2(v.value0, unit)));
           });
         }
         ;
@@ -6376,7 +6378,7 @@
         var squashChildInitializers = function(lchs) {
           return function(preInits) {
             return unDriverStateX(function(st) {
-              var parentInitializer = evalM(render13)(st.selfRef)(st["component"]["eval"](new Initialize(unit)));
+              var parentInitializer = evalM(render16)(st.selfRef)(st["component"]["eval"](new Initialize(unit)));
               return modify_2(function(handlers) {
                 return {
                   initializers: new Cons(discard22(parSequence_3(reverse2(handlers.initializers)))(function() {
@@ -6406,7 +6408,7 @@
                     finalizers: pre2.finalizers
                   })(lchs)();
                   bindFlipped6(unDriverStateX(function() {
-                    var $63 = render13(lchs);
+                    var $63 = render16(lchs);
                     return function($64) {
                       return $63(function(v) {
                         return v.selfRef;
@@ -6439,7 +6441,7 @@
                                 return $65(slot.output($66));
                               };
                             }())();
-                            return handleAff(evalM(render13)(st.selfRef)(st["component"]["eval"](new Receive(slot.input, unit))))();
+                            return handleAff(evalM(render16)(st.selfRef)(st["component"]["eval"](new Receive(slot.input, unit))))();
                           };
                         })(dsx)();
                         return childrenIn.value0.value0;
@@ -6478,7 +6480,7 @@
             };
           };
         };
-        var render13 = function(lchs) {
+        var render16 = function(lchs) {
           return function($$var2) {
             return function __do2() {
               var v = read($$var2)();
@@ -6488,7 +6490,7 @@
               write(v.children)(v.childrenIn)();
               var handler3 = function() {
                 var $70 = queueOrRun(v.pendingHandlers);
-                var $71 = evalF(render13)(v.selfRef);
+                var $71 = evalF(render16)(v.selfRef);
                 return function($72) {
                   return $70($$void5($71($72)));
                 };
@@ -6557,7 +6559,7 @@
           return unDriverStateX(function(st) {
             return function __do2() {
               cleanupSubscriptionsAndForks(st)();
-              var f = evalM(render13)(st.selfRef)(st["component"]["eval"](new Finalize(unit)));
+              var f = evalM(render16)(st.selfRef)(st["component"]["eval"](new Finalize(unit)));
               modify_2(function(handlers) {
                 return {
                   initializers: handlers.initializers,
@@ -6581,7 +6583,7 @@
                   return pure1(Nothing.value);
                 }
                 ;
-                return evalQ(render13)(ref2)(q2);
+                return evalQ(render16)(ref2)(q2);
               });
             };
           };
@@ -6793,9 +6795,9 @@
             };
           });
           var patch = $lazy_patch(91);
-          var render13 = $lazy_render(82);
+          var render16 = $lazy_render(82);
           var renderComponentSlot = $lazy_renderComponentSlot(109);
-          return render13;
+          return render16;
         };
         var buildAttributes = buildProp(handler3);
         return {
@@ -6808,7 +6810,7 @@
   };
   var renderSpec = function(document3) {
     return function(container2) {
-      var render13 = function(handler3) {
+      var render16 = function(handler3) {
         return function(child) {
           return function(v) {
             return function(v1) {
@@ -6849,7 +6851,7 @@
         };
       };
       return {
-        render: render13,
+        render: render16,
         renderChild: identity7,
         removeChild: removeChild3,
         dispose: removeChild3
@@ -8092,7 +8094,8 @@
     "eval": /* @__PURE__ */ mkEval(defaultEval)
   });
 
-  // output/Straylight.Pages.Products.OmegaCode/index.js
+  // output/Straylight.Pages.Products.OmegaBoost/index.js
+  var map21 = /* @__PURE__ */ map(functorArray);
   var secondaryButton2 = function(href5) {
     return function(label5) {
       return a([href4(href5), cls(["inline-flex items-center justify-center px-6 py-3 border border-border text-text font-medium rounded-md hover:bg-card transition-colors"])])([text5(label5)]);
@@ -8100,22 +8103,83 @@
   };
   var primaryButton2 = function(href5) {
     return function(label5) {
-      return a([href4(href5), cls(["inline-flex items-center justify-center px-6 py-3 bg-blue-300 text-background font-medium rounded-md hover:bg-blue-300/90 transition-colors"])])([text5(label5)]);
+      return a([href4(href5), cls(["inline-flex items-center justify-center px-6 py-3 bg-orange-400 text-background font-medium rounded-md hover:bg-orange-400/90 transition-colors"])])([text5(label5)]);
     };
   };
-  var hero2 = /* @__PURE__ */ section([/* @__PURE__ */ cls(["py-24 md:py-32"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["max-w-[1100px] mx-auto px-6 text-center"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["inline-flex items-center gap-2 px-3 py-1 bg-blue-300/10 border border-blue-300/20 rounded-full text-blue-300 text-sm mb-8"])])([/* @__PURE__ */ span3([/* @__PURE__ */ cls(["w-2 h-2 bg-blue-300 rounded-full animate-pulse"])])([]), /* @__PURE__ */ text5("Private beta")]), /* @__PURE__ */ h1([/* @__PURE__ */ cls(["text-4xl md:text-6xl font-bold text-text mb-6 leading-tight"])])([/* @__PURE__ */ text5("AI coding agent"), br_, /* @__PURE__ */ text5("that doesn't "), /* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-blue-300"])])([/* @__PURE__ */ text5("suck")])]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-xl text-muted-foreground mb-10 max-w-2xl mx-auto"])])([/* @__PURE__ */ text5("509k req/s. Native Haskell TUI. io_uring event loop. SIGIL protocol with Lean4 proofs. Not another Electron wrapper around the OpenAI SDK.")]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["flex flex-col sm:flex-row items-center justify-center gap-4"])])([/* @__PURE__ */ primaryButton2("/waitlist")("Join the waitlist"), /* @__PURE__ */ secondaryButton2("https://github.com/straylight-software")("View source")]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["mt-12 flex flex-col sm:flex-row items-center justify-center gap-3"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["bg-[#0a0c0f] border border-[#2a3038] rounded-lg px-5 py-3 font-mono text-sm flex items-center gap-6"])])([/* @__PURE__ */ code([/* @__PURE__ */ cls(["text-[#dde6f0] whitespace-nowrap"])])([/* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-[#596775]"])])([/* @__PURE__ */ text5("$ ")]), /* @__PURE__ */ text5("curl -fsSL omega.straylight.software | sh")]), /* @__PURE__ */ button([/* @__PURE__ */ cls(["text-[#596775] hover:text-[#80ccff] transition-colors text-xs shrink-0"])])([/* @__PURE__ */ text5("copy")])]), /* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-muted-foreground text-sm"])])([/* @__PURE__ */ text5("or")]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["bg-[#0a0c0f] border border-[#2a3038] rounded-lg px-5 py-3 font-mono text-sm flex items-center gap-6"])])([/* @__PURE__ */ code([/* @__PURE__ */ cls(["text-[#dde6f0] whitespace-nowrap"])])([/* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-[#596775]"])])([/* @__PURE__ */ text5("$ ")]), /* @__PURE__ */ text5("nix run github:straylight-software/omega")]), /* @__PURE__ */ button([/* @__PURE__ */ cls(["text-[#596775] hover:text-[#80ccff] transition-colors text-xs shrink-0"])])([/* @__PURE__ */ text5("copy")])])]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["mt-8 font-mono text-sm text-muted-foreground"])])([/* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-blue-300/60"])])([/* @__PURE__ */ text5("replaces ")]), /* @__PURE__ */ text5("Claude Code, Cursor, Windsurf, Aider, Copilot Workspace")])])]);
+  var pricingFeature = function(feature) {
+    return li([cls(["flex items-start gap-2 text-sm"])])([span3([cls(["text-orange-400 mt-0.5"])])([text5("+")]), span3([cls(["text-muted-foreground"])])([text5(feature)])]);
+  };
+  var pricingCard = function(t) {
+    return div2([cls(["p-6 bg-card border rounded-lg flex flex-col", function() {
+      if (t.highlighted) {
+        return "border-orange-400";
+      }
+      ;
+      return "border-border";
+    }()])])([div2([cls(["mb-4"])])([span3([cls(["text-sm font-medium", function() {
+      if (t.highlighted) {
+        return "text-orange-400";
+      }
+      ;
+      return "text-muted-foreground";
+    }()])])([text5(t.tier)])]), div2([cls(["mb-4"])])([span3([cls(["text-4xl font-bold text-text"])])([text5(t.price)]), span3([cls(["text-muted-foreground"])])([text5(t.period)])]), p([cls(["text-muted-foreground text-sm mb-6"])])([text5(t.description)]), ul([cls(["space-y-3 mb-8 flex-grow"])])(map21(pricingFeature)(t.features)), function() {
+      if (t.highlighted) {
+        return primaryButton2(t.ctaHref)(t.cta);
+      }
+      ;
+      return secondaryButton2(t.ctaHref)(t.cta);
+    }()]);
+  };
+  var pricing = /* @__PURE__ */ section([/* @__PURE__ */ cls(["py-24 border-t border-border"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["max-w-[1100px] mx-auto px-6"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["text-center mb-16"])])([/* @__PURE__ */ h2([/* @__PURE__ */ cls(["text-3xl font-bold text-text mb-4"])])([/* @__PURE__ */ text5("Simple, transparent pricing")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-muted-foreground max-w-xl mx-auto"])])([/* @__PURE__ */ text5("Pay for what you use. No surprises. No hidden fees.")])]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["grid grid-cols-1 md:grid-cols-3 gap-6"])])([/* @__PURE__ */ pricingCard({
+    tier: "Free",
+    price: "$0",
+    period: "forever",
+    description: "Perfect for trying omega//boost",
+    features: ["100k tokens/month", "Community support", "Standard routing", "omega//code integration"],
+    cta: "Get started",
+    ctaHref: "/signup",
+    highlighted: false
+  }), /* @__PURE__ */ pricingCard({
+    tier: "Pro",
+    price: "$29",
+    period: "/month",
+    description: "For serious developers and small teams",
+    features: ["10M tokens/month included", "$2/M tokens after", "Email support", "Priority routing", "99.9% uptime SLA"],
+    cta: "Start Pro trial",
+    ctaHref: "/signup?plan=pro",
+    highlighted: true
+  }), /* @__PURE__ */ pricingCard({
+    tier: "Enterprise",
+    price: "Custom",
+    period: "",
+    description: "For teams that need more",
+    features: ["Unlimited tokens", "Volume discounts", "Dedicated support", "99.99% uptime SLA", "Custom integrations", "SOC 2 compliance"],
+    cta: "Contact sales",
+    ctaHref: "/contact",
+    highlighted: false
+  })])])]);
+  var metricBadge = function(value12) {
+    return function(label5) {
+      return div2([cls(["flex items-baseline gap-2"])])([span3([cls(["text-3xl font-bold text-orange-400"])])([text5(value12)]), span3([cls(["text-muted-foreground text-sm"])])([text5(label5)])]);
+    };
+  };
+  var hero2 = /* @__PURE__ */ section([/* @__PURE__ */ cls(["py-24 md:py-32"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["max-w-[1100px] mx-auto px-6 text-center"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["inline-flex items-center gap-2 px-3 py-1 bg-orange-400/10 border border-orange-400/20 rounded-full text-orange-400 text-sm mb-8"])])([/* @__PURE__ */ span3([/* @__PURE__ */ cls(["w-2 h-2 bg-orange-400 rounded-full animate-pulse"])])([]), /* @__PURE__ */ text5("Now available")]), /* @__PURE__ */ h1([/* @__PURE__ */ cls(["text-4xl md:text-6xl font-bold text-text mb-6 leading-tight"])])([/* @__PURE__ */ text5("Managed inference"), br_, /* @__PURE__ */ text5("for coding "), /* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-orange-400"])])([/* @__PURE__ */ text5("agents")])]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-xl text-muted-foreground mb-10 max-w-2xl mx-auto"])])([/* @__PURE__ */ text5("No API keys. No rate limits. Batching, speculative decoding, KV cache. Built on evring's 509k req/s infrastructure. Pay per token, not per hour.")]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["flex flex-col sm:flex-row items-center justify-center gap-4"])])([/* @__PURE__ */ primaryButton2("/signup")("Start for free"), /* @__PURE__ */ secondaryButton2("/docs/boost")("Read the docs")]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["mt-12 flex flex-col sm:flex-row items-center justify-center gap-8"])])([/* @__PURE__ */ metricBadge("509k")("req/s"), /* @__PURE__ */ metricBadge("99.99%")("uptime SLA"), /* @__PURE__ */ metricBadge("0")("rate limits")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["mt-8 font-mono text-sm text-muted-foreground"])])([/* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-orange-400/60"])])([/* @__PURE__ */ text5("integrated with ")]), /* @__PURE__ */ text5("omega//code, omega//work, and your existing stack")])])]);
   var featureCard = function(icon) {
     return function(title3) {
       return function(description) {
-        return div2([cls(["p-6 bg-card border border-border rounded-lg hover:border-blue-300/30 transition-colors"])])([div2([cls(["text-2xl text-blue-300 mb-4 font-mono"])])([text5(icon)]), h3([cls(["text-text text-lg font-semibold mb-2"])])([text5(title3)]), p([cls(["text-muted-foreground text-sm"])])([text5(description)])]);
+        return div2([cls(["p-6 bg-card border border-border rounded-lg hover:border-orange-400/30 transition-colors"])])([div2([cls(["text-2xl text-orange-400 mb-4 font-mono"])])([text5(icon)]), h3([cls(["text-text text-lg font-semibold mb-2"])])([text5(title3)]), p([cls(["text-muted-foreground text-sm"])])([text5(description)])]);
       };
     };
   };
-  var features = /* @__PURE__ */ section([/* @__PURE__ */ cls(["py-24 border-t border-border"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["max-w-[1100px] mx-auto px-6"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["text-center mb-16"])])([/* @__PURE__ */ h2([/* @__PURE__ */ cls(["text-3xl font-bold text-text mb-4"])])([/* @__PURE__ */ text5("Why omega//code?")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-muted-foreground max-w-xl mx-auto"])])([/* @__PURE__ */ text5("Built by engineers who got tired of slow, bloated, unreliable coding agents.")])]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"])])([/* @__PURE__ */ featureCard(">")("509k req/s")("evring-wai vs Warp's 99k. io_uring share-nothing per-core rings. Linear multi-core scaling."), /* @__PURE__ */ featureCard("{}")("Native TUI")("Haskell + Brick. No Electron. No React. No Node.js. Sub-millisecond rendering from a real binary."), /* @__PURE__ */ featureCard("\u2234")("18 Lean4 proofs")("SIGIL protocol semantics proven correct. 0 sorry. Corrupted parse cannot propagate to your agent."), /* @__PURE__ */ featureCard("++")("Crew orchestration")("Parallel competing agents. CoW filesystem isolation via bwrap. Best result wins. Attestation on merge."), /* @__PURE__ */ featureCard("=")("Full API parity")("95 endpoints. Sessions, messages, files, PTY terminals, SSE streaming, sandboxed execution. 221 property tests."), /* @__PURE__ */ featureCard("!")("Attestation-first")("Every change cryptographically anchored. Post-quantum hybrid signatures. Continuity kernel.")])])]);
-  var cta2 = /* @__PURE__ */ section([/* @__PURE__ */ cls(["py-24 border-t border-border"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["max-w-[800px] mx-auto px-6 text-center"])])([/* @__PURE__ */ h2([/* @__PURE__ */ cls(["text-3xl font-bold text-text mb-4"])])([/* @__PURE__ */ text5("Ready to stop fighting your tools?")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-muted-foreground mb-8"])])([/* @__PURE__ */ text5("omega//code is in private beta. Join the waitlist for early access.")]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["flex flex-col sm:flex-row items-center justify-center gap-4"])])([/* @__PURE__ */ primaryButton2("/waitlist")("Join the waitlist"), /* @__PURE__ */ secondaryButton2("/team")("Meet the team")])])]);
+  var features = /* @__PURE__ */ section([/* @__PURE__ */ cls(["py-24 border-t border-border"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["max-w-[1100px] mx-auto px-6"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["text-center mb-16"])])([/* @__PURE__ */ h2([/* @__PURE__ */ cls(["text-3xl font-bold text-text mb-4"])])([/* @__PURE__ */ text5("Why omega//boost?")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-muted-foreground max-w-xl mx-auto"])])([/* @__PURE__ */ text5("Stop managing API keys, rate limits, and inference infrastructure. Focus on building.")])]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"])])([/* @__PURE__ */ featureCard("~")("Managed infrastructure")("No API keys to rotate. No rate limits to hit. No provider dashboards to juggle. We handle it all."), /* @__PURE__ */ featureCard(">>")("Agent-optimized")("Batching, speculative decoding, KV cache sharing. Purpose-built for high-throughput coding agents."), /* @__PURE__ */ featureCard("$")("Pay per token")("Zero idle costs. No reserved capacity. Scale to zero, scale to millions. True usage-based pricing."), /* @__PURE__ */ featureCard("!!")("509k req/s")("Built on evring infrastructure. io_uring event loop. Linear multi-core scaling. Same backend as omega//code."), /* @__PURE__ */ featureCard("&&")("Deep integrations")("Native support in omega//code and omega//work. One-line setup. Automatic model routing."), /* @__PURE__ */ featureCard("==")("SLA guarantees")("99.99% uptime. Priority routing. Dedicated support. Enterprise-grade reliability.")])])]);
+  var cta2 = /* @__PURE__ */ section([/* @__PURE__ */ cls(["py-24 border-t border-border"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["max-w-[800px] mx-auto px-6 text-center"])])([/* @__PURE__ */ h2([/* @__PURE__ */ cls(["text-3xl font-bold text-text mb-4"])])([/* @__PURE__ */ text5("Stop managing inference infrastructure")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-muted-foreground mb-8"])])([/* @__PURE__ */ text5("omega//boost handles the complexity so you can focus on building. Start free, scale infinitely.")]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["flex flex-col sm:flex-row items-center justify-center gap-4"])])([/* @__PURE__ */ primaryButton2("/signup")("Start for free"), /* @__PURE__ */ secondaryButton2("/docs/boost")("Read the docs")])])]);
   var compCell = function(value12) {
     return span3([cls([function() {
       if (value12 === "no") {
+        return "text-muted-foreground/50";
+      }
+      ;
+      if (value12 === "DIY") {
         return "text-muted-foreground/50";
       }
       ;
@@ -8124,36 +8188,205 @@
   };
   var comparisonRow = function(feature) {
     return function(us) {
-      return function(claude) {
-        return function(cursor) {
-          return function(aider) {
-            return tr([cls(["border-b border-border"])])([td([cls(["py-3 text-muted-foreground font-medium"])])([text5(feature)]), td([cls(["py-3 text-center text-blue-300 font-semibold"])])([text5(us)]), td([cls(["py-3 text-center"])])([compCell(claude)]), td([cls(["py-3 text-center"])])([compCell(cursor)]), td([cls(["py-3 text-center"])])([compCell(aider)])]);
+      return function(openai) {
+        return function(anthropic) {
+          return function(bedrock) {
+            return function(together) {
+              return tr([cls(["border-b border-border"])])([td([cls(["py-3 text-muted-foreground font-medium"])])([text5(feature)]), td([cls(["py-3 text-center text-orange-400 font-semibold"])])([text5(us)]), td([cls(["py-3 text-center"])])([compCell(openai)]), td([cls(["py-3 text-center"])])([compCell(anthropic)]), td([cls(["py-3 text-center"])])([compCell(bedrock)]), td([cls(["py-3 text-center"])])([compCell(together)])]);
+            };
           };
         };
       };
     };
   };
-  var comparison = /* @__PURE__ */ section([/* @__PURE__ */ cls(["py-24 border-t border-border"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["max-w-[1100px] mx-auto px-6"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["text-center mb-16"])])([/* @__PURE__ */ h2([/* @__PURE__ */ cls(["text-3xl font-bold text-text mb-4"])])([/* @__PURE__ */ text5("The complete agent platform")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-muted-foreground max-w-2xl mx-auto"])])([/* @__PURE__ */ text5("Others ship Electron wrappers with broken tool calls. We ship a native binary with proven protocol semantics.")])]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["overflow-x-auto -mx-6 px-6"])])([/* @__PURE__ */ table([/* @__PURE__ */ cls(["w-full min-w-[700px] text-sm"])])([/* @__PURE__ */ thead_([/* @__PURE__ */ tr([/* @__PURE__ */ cls(["border-b border-border"])])([/* @__PURE__ */ th([/* @__PURE__ */ cls(["py-4 text-left text-muted-foreground font-medium w-40"])])([/* @__PURE__ */ text5("")]), /* @__PURE__ */ th([/* @__PURE__ */ cls(["py-4 text-center text-blue-300 font-bold"])])([/* @__PURE__ */ text5("omega//code")]), /* @__PURE__ */ th([/* @__PURE__ */ cls(["py-4 text-center text-muted-foreground font-medium"])])([/* @__PURE__ */ text5("Claude Code")]), /* @__PURE__ */ th([/* @__PURE__ */ cls(["py-4 text-center text-muted-foreground font-medium"])])([/* @__PURE__ */ text5("Cursor")]), /* @__PURE__ */ th([/* @__PURE__ */ cls(["py-4 text-center text-muted-foreground font-medium"])])([/* @__PURE__ */ text5("Aider")])])]), /* @__PURE__ */ tbody_([/* @__PURE__ */ comparisonRow("Runtime")("Native binary")("Node.js")("Electron")("Python"), /* @__PURE__ */ comparisonRow("req/s")("509k")("~10k")("~5k")("~1k"), /* @__PURE__ */ comparisonRow("Protocol proofs")("18 Lean4")("no")("no")("no"), /* @__PURE__ */ comparisonRow("Tool call parsing")("SIGIL (proven)")("JSON (hopeful)")("JSON")("JSON"), /* @__PURE__ */ comparisonRow("Multi-agent")("Crew (CoW)")("no")("no")("no"), /* @__PURE__ */ comparisonRow("Attestation")("post-quantum")("no")("no")("no"), /* @__PURE__ */ comparisonRow("Memory (idle)")("~30MB")("~200MB")("~500MB")("~100MB"), /* @__PURE__ */ comparisonRow("Open source")("MIT")("no")("no")("Apache")])])]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-center text-muted-foreground text-xs mt-6"])])([/* @__PURE__ */ text5("Benchmarks on Linux x86_64, 32 cores. Claude Code/Cursor measured via public APIs.")])])]);
+  var comparison = /* @__PURE__ */ section([/* @__PURE__ */ cls(["py-24 border-t border-border"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["max-w-[1100px] mx-auto px-6"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["text-center mb-16"])])([/* @__PURE__ */ h2([/* @__PURE__ */ cls(["text-3xl font-bold text-text mb-4"])])([/* @__PURE__ */ text5("Inference without the overhead")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-muted-foreground max-w-2xl mx-auto"])])([/* @__PURE__ */ text5("Others give you an API and wish you luck. We give you managed infrastructure optimized for agents.")])]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["overflow-x-auto -mx-6 px-6"])])([/* @__PURE__ */ table([/* @__PURE__ */ cls(["w-full min-w-[700px] text-sm"])])([/* @__PURE__ */ thead_([/* @__PURE__ */ tr([/* @__PURE__ */ cls(["border-b border-border"])])([/* @__PURE__ */ th([/* @__PURE__ */ cls(["py-4 text-left text-muted-foreground font-medium w-40"])])([/* @__PURE__ */ text5("")]), /* @__PURE__ */ th([/* @__PURE__ */ cls(["py-4 text-center text-orange-400 font-bold"])])([/* @__PURE__ */ text5("omega//boost")]), /* @__PURE__ */ th([/* @__PURE__ */ cls(["py-4 text-center text-muted-foreground font-medium"])])([/* @__PURE__ */ text5("OpenAI API")]), /* @__PURE__ */ th([/* @__PURE__ */ cls(["py-4 text-center text-muted-foreground font-medium"])])([/* @__PURE__ */ text5("Anthropic API")]), /* @__PURE__ */ th([/* @__PURE__ */ cls(["py-4 text-center text-muted-foreground font-medium"])])([/* @__PURE__ */ text5("AWS Bedrock")]), /* @__PURE__ */ th([/* @__PURE__ */ cls(["py-4 text-center text-muted-foreground font-medium"])])([/* @__PURE__ */ text5("Together.ai")])])]), /* @__PURE__ */ tbody_([/* @__PURE__ */ comparisonRow("API key mgmt")("none needed")("manual")("manual")("IAM")("manual"), /* @__PURE__ */ comparisonRow("Rate limits")("unlimited")("tier-based")("tier-based")("per-model")("tier-based"), /* @__PURE__ */ comparisonRow("Batching")("automatic")("manual")("no")("no")("manual"), /* @__PURE__ */ comparisonRow("Speculative decode")("yes")("no")("no")("no")("some models"), /* @__PURE__ */ comparisonRow("KV cache sharing")("yes")("prompt cache")("prompt cache")("no")("no"), /* @__PURE__ */ comparisonRow("Agent integration")("native")("DIY")("DIY")("DIY")("DIY"), /* @__PURE__ */ comparisonRow("Uptime SLA")("99.99%")("99.9%")("no")("99.9%")("99.9%"), /* @__PURE__ */ comparisonRow("Priority routing")("yes")("no")("no")("no")("no")])])]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-center text-muted-foreground text-xs mt-6"])])([/* @__PURE__ */ text5("Comparison based on publicly available documentation as of February 2026.")])])]);
+  var render8 = /* @__PURE__ */ div_([hero2, features, comparison, pricing, cta2]);
+  var omegaBoostPage = /* @__PURE__ */ mkComponent({
+    initialState: /* @__PURE__ */ $$const(unit),
+    render: /* @__PURE__ */ $$const(render8),
+    "eval": /* @__PURE__ */ mkEval(defaultEval)
+  });
+
+  // output/Straylight.Pages.Products.OmegaCode/index.js
+  var secondaryButton3 = function(href5) {
+    return function(label5) {
+      return a([href4(href5), cls(["inline-flex items-center justify-center px-6 py-3 border border-border text-text font-medium rounded-md hover:bg-card transition-colors"])])([text5(label5)]);
+    };
+  };
+  var primaryButton3 = function(href5) {
+    return function(label5) {
+      return a([href4(href5), cls(["inline-flex items-center justify-center px-6 py-3 bg-blue-300 text-background font-medium rounded-md hover:bg-blue-300/90 transition-colors"])])([text5(label5)]);
+    };
+  };
+  var hero3 = /* @__PURE__ */ section([/* @__PURE__ */ cls(["py-24 md:py-32"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["max-w-[1100px] mx-auto px-6 text-center"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["inline-flex items-center gap-2 px-3 py-1 bg-blue-300/10 border border-blue-300/20 rounded-full text-blue-300 text-sm mb-8"])])([/* @__PURE__ */ span3([/* @__PURE__ */ cls(["w-2 h-2 bg-blue-300 rounded-full animate-pulse"])])([]), /* @__PURE__ */ text5("Private beta")]), /* @__PURE__ */ h1([/* @__PURE__ */ cls(["text-4xl md:text-6xl font-bold text-text mb-6 leading-tight"])])([/* @__PURE__ */ text5("AI coding agent"), br_, /* @__PURE__ */ text5("that doesn't "), /* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-blue-300"])])([/* @__PURE__ */ text5("suck")])]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-xl text-muted-foreground mb-10 max-w-2xl mx-auto"])])([/* @__PURE__ */ text5("509k req/s. Native Haskell TUI. io_uring event loop. SIGIL protocol with Lean4 proofs. Not another Electron wrapper around the OpenAI SDK.")]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["flex flex-col sm:flex-row items-center justify-center gap-4"])])([/* @__PURE__ */ primaryButton3("/waitlist")("Join the waitlist"), /* @__PURE__ */ secondaryButton3("https://github.com/straylight-software")("View source")]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["mt-12 flex flex-col sm:flex-row items-center justify-center gap-3"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["bg-[#0a0c0f] border border-[#2a3038] rounded-lg px-5 py-3 font-mono text-sm flex items-center gap-6"])])([/* @__PURE__ */ code([/* @__PURE__ */ cls(["text-[#dde6f0] whitespace-nowrap"])])([/* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-[#596775]"])])([/* @__PURE__ */ text5("$ ")]), /* @__PURE__ */ text5("curl -fsSL omega.straylight.software | sh")]), /* @__PURE__ */ button([/* @__PURE__ */ cls(["text-[#596775] hover:text-[#80ccff] transition-colors text-xs shrink-0"])])([/* @__PURE__ */ text5("copy")])]), /* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-muted-foreground text-sm"])])([/* @__PURE__ */ text5("or")]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["bg-[#0a0c0f] border border-[#2a3038] rounded-lg px-5 py-3 font-mono text-sm flex items-center gap-6"])])([/* @__PURE__ */ code([/* @__PURE__ */ cls(["text-[#dde6f0] whitespace-nowrap"])])([/* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-[#596775]"])])([/* @__PURE__ */ text5("$ ")]), /* @__PURE__ */ text5("nix run github:straylight-software/omega")]), /* @__PURE__ */ button([/* @__PURE__ */ cls(["text-[#596775] hover:text-[#80ccff] transition-colors text-xs shrink-0"])])([/* @__PURE__ */ text5("copy")])])]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["mt-8 font-mono text-sm text-muted-foreground"])])([/* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-blue-300/60"])])([/* @__PURE__ */ text5("replaces ")]), /* @__PURE__ */ text5("Claude Code, Cursor, Windsurf, Aider, Copilot Workspace")])])]);
+  var featureCard2 = function(icon) {
+    return function(title3) {
+      return function(description) {
+        return div2([cls(["p-6 bg-card border border-border rounded-lg hover:border-blue-300/30 transition-colors"])])([div2([cls(["text-2xl text-blue-300 mb-4 font-mono"])])([text5(icon)]), h3([cls(["text-text text-lg font-semibold mb-2"])])([text5(title3)]), p([cls(["text-muted-foreground text-sm"])])([text5(description)])]);
+      };
+    };
+  };
+  var features2 = /* @__PURE__ */ section([/* @__PURE__ */ cls(["py-24 border-t border-border"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["max-w-[1100px] mx-auto px-6"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["text-center mb-16"])])([/* @__PURE__ */ h2([/* @__PURE__ */ cls(["text-3xl font-bold text-text mb-4"])])([/* @__PURE__ */ text5("Why omega//code?")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-muted-foreground max-w-xl mx-auto"])])([/* @__PURE__ */ text5("Built by engineers who got tired of slow, bloated, unreliable coding agents.")])]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"])])([/* @__PURE__ */ featureCard2(">")("509k req/s")("evring-wai vs Warp's 99k. io_uring share-nothing per-core rings. Linear multi-core scaling."), /* @__PURE__ */ featureCard2("{}")("Native TUI")("Haskell + Brick. No Electron. No React. No Node.js. Sub-millisecond rendering from a real binary."), /* @__PURE__ */ featureCard2("\u2234")("18 Lean4 proofs")("SIGIL protocol semantics proven correct. 0 sorry. Corrupted parse cannot propagate to your agent."), /* @__PURE__ */ featureCard2("++")("Crew orchestration")("Parallel competing agents. CoW filesystem isolation via bwrap. Best result wins. Attestation on merge."), /* @__PURE__ */ featureCard2("=")("Full API parity")("95 endpoints. Sessions, messages, files, PTY terminals, SSE streaming, sandboxed execution. 221 property tests."), /* @__PURE__ */ featureCard2("!")("Attestation-first")("Every change cryptographically anchored. Post-quantum hybrid signatures. Continuity kernel.")])])]);
+  var cta3 = /* @__PURE__ */ section([/* @__PURE__ */ cls(["py-24 border-t border-border"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["max-w-[800px] mx-auto px-6 text-center"])])([/* @__PURE__ */ h2([/* @__PURE__ */ cls(["text-3xl font-bold text-text mb-4"])])([/* @__PURE__ */ text5("Ready to stop fighting your tools?")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-muted-foreground mb-8"])])([/* @__PURE__ */ text5("omega//code is in private beta. Join the waitlist for early access.")]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["flex flex-col sm:flex-row items-center justify-center gap-4"])])([/* @__PURE__ */ primaryButton3("/waitlist")("Join the waitlist"), /* @__PURE__ */ secondaryButton3("/team")("Meet the team")])])]);
+  var compCell2 = function(value12) {
+    return span3([cls([function() {
+      if (value12 === "no") {
+        return "text-muted-foreground/50";
+      }
+      ;
+      return "text-muted-foreground";
+    }()])])([text5(value12)]);
+  };
+  var comparisonRow2 = function(feature) {
+    return function(us) {
+      return function(claude) {
+        return function(cursor) {
+          return function(aider) {
+            return tr([cls(["border-b border-border"])])([td([cls(["py-3 text-muted-foreground font-medium"])])([text5(feature)]), td([cls(["py-3 text-center text-blue-300 font-semibold"])])([text5(us)]), td([cls(["py-3 text-center"])])([compCell2(claude)]), td([cls(["py-3 text-center"])])([compCell2(cursor)]), td([cls(["py-3 text-center"])])([compCell2(aider)])]);
+          };
+        };
+      };
+    };
+  };
+  var comparison2 = /* @__PURE__ */ section([/* @__PURE__ */ cls(["py-24 border-t border-border"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["max-w-[1100px] mx-auto px-6"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["text-center mb-16"])])([/* @__PURE__ */ h2([/* @__PURE__ */ cls(["text-3xl font-bold text-text mb-4"])])([/* @__PURE__ */ text5("The complete agent platform")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-muted-foreground max-w-2xl mx-auto"])])([/* @__PURE__ */ text5("Others ship Electron wrappers with broken tool calls. We ship a native binary with proven protocol semantics.")])]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["overflow-x-auto -mx-6 px-6"])])([/* @__PURE__ */ table([/* @__PURE__ */ cls(["w-full min-w-[700px] text-sm"])])([/* @__PURE__ */ thead_([/* @__PURE__ */ tr([/* @__PURE__ */ cls(["border-b border-border"])])([/* @__PURE__ */ th([/* @__PURE__ */ cls(["py-4 text-left text-muted-foreground font-medium w-40"])])([/* @__PURE__ */ text5("")]), /* @__PURE__ */ th([/* @__PURE__ */ cls(["py-4 text-center text-blue-300 font-bold"])])([/* @__PURE__ */ text5("omega//code")]), /* @__PURE__ */ th([/* @__PURE__ */ cls(["py-4 text-center text-muted-foreground font-medium"])])([/* @__PURE__ */ text5("Claude Code")]), /* @__PURE__ */ th([/* @__PURE__ */ cls(["py-4 text-center text-muted-foreground font-medium"])])([/* @__PURE__ */ text5("Cursor")]), /* @__PURE__ */ th([/* @__PURE__ */ cls(["py-4 text-center text-muted-foreground font-medium"])])([/* @__PURE__ */ text5("Aider")])])]), /* @__PURE__ */ tbody_([/* @__PURE__ */ comparisonRow2("Runtime")("Native binary")("Node.js")("Electron")("Python"), /* @__PURE__ */ comparisonRow2("req/s")("509k")("~10k")("~5k")("~1k"), /* @__PURE__ */ comparisonRow2("Protocol proofs")("18 Lean4")("no")("no")("no"), /* @__PURE__ */ comparisonRow2("Tool call parsing")("SIGIL (proven)")("JSON (hopeful)")("JSON")("JSON"), /* @__PURE__ */ comparisonRow2("Multi-agent")("Crew (CoW)")("no")("no")("no"), /* @__PURE__ */ comparisonRow2("Attestation")("post-quantum")("no")("no")("no"), /* @__PURE__ */ comparisonRow2("Memory (idle)")("~30MB")("~200MB")("~500MB")("~100MB"), /* @__PURE__ */ comparisonRow2("Open source")("MIT")("no")("no")("Apache")])])]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-center text-muted-foreground text-xs mt-6"])])([/* @__PURE__ */ text5("Benchmarks on Linux x86_64, 32 cores. Claude Code/Cursor measured via public APIs.")])])]);
   var codeLine = function(prompt) {
     return function(content3) {
       return div_([span3([cls(["text-muted-foreground"])])([text5(prompt)]), span3([cls(["text-text"])])([text5(content3)])]);
     };
   };
   var quickstart = /* @__PURE__ */ section([/* @__PURE__ */ cls(["py-24 border-t border-border"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["max-w-[800px] mx-auto px-6"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["text-center mb-12"])])([/* @__PURE__ */ h2([/* @__PURE__ */ cls(["text-3xl font-bold text-text mb-4"])])([/* @__PURE__ */ text5("Get started in 30 seconds")])]), /* @__PURE__ */ codeBlock([/* @__PURE__ */ codeLine("# ")("Install (Nix)"), /* @__PURE__ */ codeLine("$ ")("nix profile install github:straylight-software/omega-code"), /* @__PURE__ */ text5("\n"), /* @__PURE__ */ codeLine("# ")("Or via curl"), /* @__PURE__ */ codeLine("$ ")("curl -fsSL https://omega.straylight.software/install.sh | sh"), /* @__PURE__ */ text5("\n"), /* @__PURE__ */ codeLine("# ")("Authenticate"), /* @__PURE__ */ codeLine("$ ")("omega auth login"), /* @__PURE__ */ text5("\n"), /* @__PURE__ */ codeLine("# ")("Start coding"), /* @__PURE__ */ codeLine("$ ")("omega")]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["mt-8 text-center"])])([/* @__PURE__ */ a([/* @__PURE__ */ href4("/docs/quickstart"), /* @__PURE__ */ cls(["text-blue-300 hover:text-blue-300/80 transition-colors"])])([/* @__PURE__ */ text5("Full quickstart guide \u2192")])])])]);
-  var render8 = /* @__PURE__ */ div_([hero2, features, comparison, quickstart, cta2]);
+  var render9 = /* @__PURE__ */ div_([hero3, features2, comparison2, quickstart, cta3]);
   var omegaCodePage = /* @__PURE__ */ mkComponent({
     initialState: /* @__PURE__ */ $$const(unit),
-    render: /* @__PURE__ */ $$const(render8),
+    render: /* @__PURE__ */ $$const(render9),
+    "eval": /* @__PURE__ */ mkEval(defaultEval)
+  });
+
+  // output/Straylight.Pages.Products.OmegaProxy/index.js
+  var secondaryButton4 = function(href5) {
+    return function(label5) {
+      return a([href4(href5), cls(["inline-flex items-center justify-center px-6 py-3 border border-border text-text font-medium rounded-md hover:bg-card transition-colors"])])([text5(label5)]);
+    };
+  };
+  var primaryButton4 = function(href5) {
+    return function(label5) {
+      return a([href4(href5), cls(["inline-flex items-center justify-center px-6 py-3 bg-purple-400 text-background font-medium rounded-md hover:bg-purple-400/90 transition-colors"])])([text5(label5)]);
+    };
+  };
+  var hero4 = /* @__PURE__ */ section([/* @__PURE__ */ cls(["py-24 md:py-32"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["max-w-[1100px] mx-auto px-6 text-center"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["inline-flex items-center gap-2 px-3 py-1 bg-purple-400/10 border border-purple-400/20 rounded-full text-purple-400 text-sm mb-8"])])([/* @__PURE__ */ span3([/* @__PURE__ */ cls(["w-2 h-2 bg-purple-400 rounded-full animate-pulse"])])([]), /* @__PURE__ */ text5("Now available")]), /* @__PURE__ */ h1([/* @__PURE__ */ cls(["text-4xl md:text-6xl font-bold text-text mb-6 leading-tight"])])([/* @__PURE__ */ text5("Verified inference"), br_, /* @__PURE__ */ text5("for "), /* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-purple-400"])])([/* @__PURE__ */ text5("every request")])]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-xl text-muted-foreground mb-10 max-w-2xl mx-auto"])])([/* @__PURE__ */ text5("Cryptographic attestation of every LLM request/response. Provider-agnostic. SIGIL protocol translation. Not another unverified passthrough.")]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["flex flex-col sm:flex-row items-center justify-center gap-4"])])([/* @__PURE__ */ primaryButton4("/docs/proxy/quickstart")("Get started"), /* @__PURE__ */ secondaryButton4("https://github.com/straylight-software/omega-proxy")("View source")]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["mt-12 flex flex-col sm:flex-row items-center justify-center gap-3"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["bg-[#0a0c0f] border border-[#2a3038] rounded-lg px-5 py-3 font-mono text-sm flex items-center gap-6"])])([/* @__PURE__ */ code([/* @__PURE__ */ cls(["text-[#dde6f0] whitespace-nowrap"])])([/* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-[#596775]"])])([/* @__PURE__ */ text5("$ ")]), /* @__PURE__ */ text5("docker run -p 8080:8080 straylight/omega-proxy")]), /* @__PURE__ */ button([/* @__PURE__ */ cls(["text-[#596775] hover:text-[#c4b5fd] transition-colors text-xs shrink-0"])])([/* @__PURE__ */ text5("copy")])]), /* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-muted-foreground text-sm"])])([/* @__PURE__ */ text5("or")]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["bg-[#0a0c0f] border border-[#2a3038] rounded-lg px-5 py-3 font-mono text-sm flex items-center gap-6"])])([/* @__PURE__ */ code([/* @__PURE__ */ cls(["text-[#dde6f0] whitespace-nowrap"])])([/* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-[#596775]"])])([/* @__PURE__ */ text5("$ ")]), /* @__PURE__ */ text5("nix run github:straylight-software/omega-proxy")]), /* @__PURE__ */ button([/* @__PURE__ */ cls(["text-[#596775] hover:text-[#c4b5fd] transition-colors text-xs shrink-0"])])([/* @__PURE__ */ text5("copy")])])]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["mt-8 font-mono text-sm text-muted-foreground"])])([/* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-purple-400/60"])])([/* @__PURE__ */ text5("replaces ")]), /* @__PURE__ */ text5("LiteLLM, OpenRouter, raw API calls, custom proxy scripts")])])]);
+  var featureCard3 = function(icon) {
+    return function(title3) {
+      return function(description) {
+        return div2([cls(["p-6 bg-card border border-border rounded-lg hover:border-purple-400/30 transition-colors"])])([div2([cls(["text-2xl text-purple-400 mb-4 font-mono"])])([text5(icon)]), h3([cls(["text-text text-lg font-semibold mb-2"])])([text5(title3)]), p([cls(["text-muted-foreground text-sm"])])([text5(description)])]);
+      };
+    };
+  };
+  var features3 = /* @__PURE__ */ section([/* @__PURE__ */ cls(["py-24 border-t border-border"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["max-w-[1100px] mx-auto px-6"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["text-center mb-16"])])([/* @__PURE__ */ h2([/* @__PURE__ */ cls(["text-3xl font-bold text-text mb-4"])])([/* @__PURE__ */ text5("Why omega//proxy?")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-muted-foreground max-w-xl mx-auto"])])([/* @__PURE__ */ text5("Built for agents that need cryptographic proof of what the LLM actually said.")])]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"])])([/* @__PURE__ */ featureCard3("\u2234")("Verified inference")("Cryptographic attestation on every request/response. Post-quantum signatures. Tamper-evident audit logs."), /* @__PURE__ */ featureCard3("\u2194")("Provider-agnostic")("OpenAI, Anthropic, Google, Mistral, local models via Ollama. Single unified API. Hot-swap providers."), /* @__PURE__ */ featureCard3("{}")("SIGIL translation")("Automatic JSON to proven SIGIL frames. Tool calls that can't be corrupted. Schema validation at the edge."), /* @__PURE__ */ featureCard3("\u2298")("Rate limiting")("Per-key, per-model, per-endpoint limits. Token bucket with burst. Redis-backed distributed state."), /* @__PURE__ */ featureCard3("$")("Cost tracking")("Real-time token counting. Budget alerts. Usage attribution by key, team, project. Export to your billing system."), /* @__PURE__ */ featureCard3("\u25CE")("Observability")("Request tracing with OpenTelemetry. Prometheus metrics. Structured JSON logs. Full request/response capture.")])])]);
+  var cta4 = /* @__PURE__ */ section([/* @__PURE__ */ cls(["py-24 border-t border-border"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["max-w-[800px] mx-auto px-6 text-center"])])([/* @__PURE__ */ h2([/* @__PURE__ */ cls(["text-3xl font-bold text-text mb-4"])])([/* @__PURE__ */ text5("Ready for verified inference?")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-muted-foreground mb-8"])])([/* @__PURE__ */ text5("omega//proxy is open source and free to self-host. Managed hosting available for teams.")]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["flex flex-col sm:flex-row items-center justify-center gap-4"])])([/* @__PURE__ */ primaryButton4("/docs/proxy/quickstart")("Deploy now"), /* @__PURE__ */ secondaryButton4("/pricing")("View pricing")])])]);
+  var compCell3 = function(value12) {
+    return span3([cls([function() {
+      if (value12 === "no") {
+        return "text-muted-foreground/50";
+      }
+      ;
+      if (value12 === "none") {
+        return "text-muted-foreground/50";
+      }
+      ;
+      if (value12 === "n/a") {
+        return "text-muted-foreground/50";
+      }
+      ;
+      return "text-muted-foreground";
+    }()])])([text5(value12)]);
+  };
+  var comparisonRow3 = function(feature) {
+    return function(us) {
+      return function(litellm) {
+        return function(openrouter) {
+          return function(direct) {
+            return tr([cls(["border-b border-border"])])([td([cls(["py-3 text-muted-foreground font-medium"])])([text5(feature)]), td([cls(["py-3 text-center text-purple-400 font-semibold"])])([text5(us)]), td([cls(["py-3 text-center"])])([compCell3(litellm)]), td([cls(["py-3 text-center"])])([compCell3(openrouter)]), td([cls(["py-3 text-center"])])([compCell3(direct)])]);
+          };
+        };
+      };
+    };
+  };
+  var comparison3 = /* @__PURE__ */ section([/* @__PURE__ */ cls(["py-24 border-t border-border"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["max-w-[1100px] mx-auto px-6"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["text-center mb-16"])])([/* @__PURE__ */ h2([/* @__PURE__ */ cls(["text-3xl font-bold text-text mb-4"])])([/* @__PURE__ */ text5("The verified inference layer")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-muted-foreground max-w-2xl mx-auto"])])([/* @__PURE__ */ text5("Others pass through requests and hope for the best. We prove what happened.")])]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["overflow-x-auto -mx-6 px-6"])])([/* @__PURE__ */ table([/* @__PURE__ */ cls(["w-full min-w-[700px] text-sm"])])([/* @__PURE__ */ thead_([/* @__PURE__ */ tr([/* @__PURE__ */ cls(["border-b border-border"])])([/* @__PURE__ */ th([/* @__PURE__ */ cls(["py-4 text-left text-muted-foreground font-medium w-40"])])([/* @__PURE__ */ text5("")]), /* @__PURE__ */ th([/* @__PURE__ */ cls(["py-4 text-center text-purple-400 font-bold"])])([/* @__PURE__ */ text5("omega//proxy")]), /* @__PURE__ */ th([/* @__PURE__ */ cls(["py-4 text-center text-muted-foreground font-medium"])])([/* @__PURE__ */ text5("LiteLLM")]), /* @__PURE__ */ th([/* @__PURE__ */ cls(["py-4 text-center text-muted-foreground font-medium"])])([/* @__PURE__ */ text5("OpenRouter")]), /* @__PURE__ */ th([/* @__PURE__ */ cls(["py-4 text-center text-muted-foreground font-medium"])])([/* @__PURE__ */ text5("Direct API")])])]), /* @__PURE__ */ tbody_([/* @__PURE__ */ comparisonRow3("Verified inference")("post-quantum")("no")("no")("no"), /* @__PURE__ */ comparisonRow3("SIGIL translation")("proven")("no")("no")("no"), /* @__PURE__ */ comparisonRow3("Provider support")("all + local")("all")("most")("one"), /* @__PURE__ */ comparisonRow3("Rate limiting")("distributed")("basic")("managed")("none"), /* @__PURE__ */ comparisonRow3("Caching")("semantic")("basic")("no")("no"), /* @__PURE__ */ comparisonRow3("Fallback routing")("automatic")("manual")("automatic")("no"), /* @__PURE__ */ comparisonRow3("Cost tracking")("real-time")("basic")("dashboard")("manual"), /* @__PURE__ */ comparisonRow3("Self-hosted")("yes")("yes")("no")("n/a")])])]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-center text-muted-foreground text-xs mt-6"])])([/* @__PURE__ */ text5("Feature comparison as of 2024. Verified inference is unique to omega//proxy.")])])]);
+  var codeLine2 = function(prompt) {
+    return function(content3) {
+      return div_([span3([cls(["text-muted-foreground"])])([text5(prompt)]), span3([cls(["text-text"])])([text5(content3)])]);
+    };
+  };
+  var quickstart2 = /* @__PURE__ */ section([/* @__PURE__ */ cls(["py-24 border-t border-border"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["max-w-[800px] mx-auto px-6"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["text-center mb-12"])])([/* @__PURE__ */ h2([/* @__PURE__ */ cls(["text-3xl font-bold text-text mb-4"])])([/* @__PURE__ */ text5("Deploy in 60 seconds")])]), /* @__PURE__ */ codeBlock([/* @__PURE__ */ codeLine2("# ")("Docker (quickest)"), /* @__PURE__ */ codeLine2("$ ")("docker run -p 8080:8080 \\"), /* @__PURE__ */ codeLine2("    ")("-e OPENAI_API_KEY=$OPENAI_API_KEY \\"), /* @__PURE__ */ codeLine2("    ")("-e ANTHROPIC_API_KEY=$ANTHROPIC_API_KEY \\"), /* @__PURE__ */ codeLine2("    ")("straylight/omega-proxy"), /* @__PURE__ */ text5("\n"), /* @__PURE__ */ codeLine2("# ")("Or via Nix"), /* @__PURE__ */ codeLine2("$ ")("nix run github:straylight-software/omega-proxy"), /* @__PURE__ */ text5("\n"), /* @__PURE__ */ codeLine2("# ")("Point your client at the proxy"), /* @__PURE__ */ codeLine2("$ ")("export OPENAI_BASE_URL=http://localhost:8080/v1"), /* @__PURE__ */ text5("\n"), /* @__PURE__ */ codeLine2("# ")("Every request is now verified"), /* @__PURE__ */ codeLine2("$ ")("curl http://localhost:8080/v1/chat/completions ...")]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["mt-8 text-center"])])([/* @__PURE__ */ a([/* @__PURE__ */ href4("/docs/proxy/quickstart"), /* @__PURE__ */ cls(["text-purple-400 hover:text-purple-400/80 transition-colors"])])([/* @__PURE__ */ text5("Full deployment guide \u2192")])])])]);
+  var render10 = /* @__PURE__ */ div_([hero4, features3, comparison3, quickstart2, cta4]);
+  var omegaProxyPage = /* @__PURE__ */ mkComponent({
+    initialState: /* @__PURE__ */ $$const(unit),
+    render: /* @__PURE__ */ $$const(render10),
+    "eval": /* @__PURE__ */ mkEval(defaultEval)
+  });
+
+  // output/Straylight.Pages.Products.OmegaWork/index.js
+  var secondaryButton5 = function(href5) {
+    return function(label5) {
+      return a([href4(href5), cls(["inline-flex items-center justify-center px-6 py-3 border border-border text-text font-medium rounded-md hover:bg-card transition-colors"])])([text5(label5)]);
+    };
+  };
+  var primaryButton5 = function(href5) {
+    return function(label5) {
+      return a([href4(href5), cls(["inline-flex items-center justify-center px-6 py-3 bg-green-400 text-background font-medium rounded-md hover:bg-green-400/90 transition-colors"])])([text5(label5)]);
+    };
+  };
+  var hero5 = /* @__PURE__ */ section([/* @__PURE__ */ cls(["py-24 md:py-32"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["max-w-[1100px] mx-auto px-6 text-center"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["inline-flex items-center gap-2 px-3 py-1 bg-green-400/10 border border-green-400/20 rounded-full text-green-400 text-sm mb-8"])])([/* @__PURE__ */ span3([/* @__PURE__ */ cls(["w-2 h-2 bg-green-400 rounded-full animate-pulse"])])([]), /* @__PURE__ */ text5("Private beta")]), /* @__PURE__ */ h1([/* @__PURE__ */ cls(["text-4xl md:text-6xl font-bold text-text mb-6 leading-tight"])])([/* @__PURE__ */ text5("AI coding agent"), br_, /* @__PURE__ */ text5("built for "), /* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-green-400"])])([/* @__PURE__ */ text5("teams")])]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-xl text-muted-foreground mb-10 max-w-2xl mx-auto"])])([/* @__PURE__ */ text5("Native desktop app. Shared sessions. Visual diffs. Same evring core, SIGIL protocol, Lean4 proofs. Finally, an AI coding agent your whole team can use together.")]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["flex flex-col sm:flex-row items-center justify-center gap-4"])])([/* @__PURE__ */ primaryButton5("/waitlist")("Request team access"), /* @__PURE__ */ secondaryButton5("/docs/work")("View documentation")]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["mt-12 flex flex-col sm:flex-row items-center justify-center gap-3"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["bg-[#0a0c0f] border border-[#2a3038] rounded-lg px-5 py-3 font-mono text-sm flex items-center gap-6"])])([/* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-[#dde6f0] whitespace-nowrap"])])([/* @__PURE__ */ text5("Download for macOS")]), /* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-green-400 text-xs shrink-0"])])([/* @__PURE__ */ text5("Apple Silicon")])]), /* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-muted-foreground text-sm"])])([/* @__PURE__ */ text5("or")]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["bg-[#0a0c0f] border border-[#2a3038] rounded-lg px-5 py-3 font-mono text-sm flex items-center gap-6"])])([/* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-[#dde6f0] whitespace-nowrap"])])([/* @__PURE__ */ text5("Download for Linux")]), /* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-green-400 text-xs shrink-0"])])([/* @__PURE__ */ text5("x86_64 / ARM64")])])]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["mt-8 font-mono text-sm text-muted-foreground"])])([/* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-green-400/60"])])([/* @__PURE__ */ text5("replaces ")]), /* @__PURE__ */ text5("VS Code Copilot, JetBrains AI, GitHub Copilot Workspace")])])]);
+  var featureCard4 = function(icon) {
+    return function(title3) {
+      return function(description) {
+        return div2([cls(["p-6 bg-card border border-border rounded-lg hover:border-green-400/30 transition-colors"])])([div2([cls(["text-2xl text-green-400 mb-4 font-mono"])])([text5(icon)]), h3([cls(["text-text text-lg font-semibold mb-2"])])([text5(title3)]), p([cls(["text-muted-foreground text-sm"])])([text5(description)])]);
+      };
+    };
+  };
+  var features4 = /* @__PURE__ */ section([/* @__PURE__ */ cls(["py-24 border-t border-border"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["max-w-[1100px] mx-auto px-6"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["text-center mb-16"])])([/* @__PURE__ */ h2([/* @__PURE__ */ cls(["text-3xl font-bold text-text mb-4"])])([/* @__PURE__ */ text5("Why omega//work?")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-muted-foreground max-w-xl mx-auto"])])([/* @__PURE__ */ text5("The same proven omega core, wrapped in a native desktop experience designed for team collaboration.")])]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"])])([/* @__PURE__ */ featureCard4("\u2394")("Native desktop")("Not Electron. Native GPU-accelerated UI. Visual diff views, project navigation, integrated terminal. Sub-millisecond response."), /* @__PURE__ */ featureCard4("\u21C4")("Shared sessions")("Multiple engineers on one session. See teammate cursors and selections in real-time. Hand off context seamlessly."), /* @__PURE__ */ featureCard4("\u2295")("Team context")("Shared knowledge base across your org. Institutional memory that persists across projects and team members."), /* @__PURE__ */ featureCard4("\u2299")("Audit logs")("Complete history of every AI action. Who prompted what, which files changed, full attestation chain. Compliance-ready."), /* @__PURE__ */ featureCard4("\u27E0")("SSO & RBAC")("SAML, OIDC, Okta, Azure AD. Role-based permissions. Control who can approve AI changes to production code."), /* @__PURE__ */ featureCard4("\u2B21")("On-prem deploy")("Air-gapped deployment. Your models, your infrastructure. No code leaves your network. SOC2 Type II ready.")])])]);
+  var cta5 = /* @__PURE__ */ section([/* @__PURE__ */ cls(["py-24 border-t border-border"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["max-w-[800px] mx-auto px-6 text-center"])])([/* @__PURE__ */ h2([/* @__PURE__ */ cls(["text-3xl font-bold text-text mb-4"])])([/* @__PURE__ */ text5("Ready to upgrade your team's workflow?")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-muted-foreground mb-8"])])([/* @__PURE__ */ text5("omega//work is in private beta. Request access for your team and get onboarded in days, not months.")]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["flex flex-col sm:flex-row items-center justify-center gap-4"])])([/* @__PURE__ */ primaryButton5("/waitlist")("Request team access"), /* @__PURE__ */ secondaryButton5("/team")("Talk to sales")])])]);
+  var compCell4 = function(value12) {
+    return span3([cls([function() {
+      if (value12 === "no") {
+        return "text-muted-foreground/50";
+      }
+      ;
+      return "text-muted-foreground";
+    }()])])([text5(value12)]);
+  };
+  var comparisonRow4 = function(feature) {
+    return function(us) {
+      return function(vscode) {
+        return function(jetbrains) {
+          return function(workspace) {
+            return tr([cls(["border-b border-border"])])([td([cls(["py-3 text-muted-foreground font-medium"])])([text5(feature)]), td([cls(["py-3 text-center text-green-400 font-semibold"])])([text5(us)]), td([cls(["py-3 text-center"])])([compCell4(vscode)]), td([cls(["py-3 text-center"])])([compCell4(jetbrains)]), td([cls(["py-3 text-center"])])([compCell4(workspace)])]);
+          };
+        };
+      };
+    };
+  };
+  var comparison4 = /* @__PURE__ */ section([/* @__PURE__ */ cls(["py-24 border-t border-border"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["max-w-[1100px] mx-auto px-6"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["text-center mb-16"])])([/* @__PURE__ */ h2([/* @__PURE__ */ cls(["text-3xl font-bold text-text mb-4"])])([/* @__PURE__ */ text5("Built for teams, not individuals")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-muted-foreground max-w-2xl mx-auto"])])([/* @__PURE__ */ text5('Other tools bolt on "collaboration" as an afterthought. omega//work was designed from day one for multi-engineer workflows.')])]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["overflow-x-auto -mx-6 px-6"])])([/* @__PURE__ */ table([/* @__PURE__ */ cls(["w-full min-w-[700px] text-sm"])])([/* @__PURE__ */ thead_([/* @__PURE__ */ tr([/* @__PURE__ */ cls(["border-b border-border"])])([/* @__PURE__ */ th([/* @__PURE__ */ cls(["py-4 text-left text-muted-foreground font-medium w-40"])])([/* @__PURE__ */ text5("")]), /* @__PURE__ */ th([/* @__PURE__ */ cls(["py-4 text-center text-green-400 font-bold"])])([/* @__PURE__ */ text5("omega//work")]), /* @__PURE__ */ th([/* @__PURE__ */ cls(["py-4 text-center text-muted-foreground font-medium"])])([/* @__PURE__ */ text5("VS Code Copilot")]), /* @__PURE__ */ th([/* @__PURE__ */ cls(["py-4 text-center text-muted-foreground font-medium"])])([/* @__PURE__ */ text5("JetBrains AI")]), /* @__PURE__ */ th([/* @__PURE__ */ cls(["py-4 text-center text-muted-foreground font-medium"])])([/* @__PURE__ */ text5("Copilot Workspace")])])]), /* @__PURE__ */ tbody_([/* @__PURE__ */ comparisonRow4("Runtime")("Native binary")("Electron")("JVM + Electron")("Web"), /* @__PURE__ */ comparisonRow4("Shared sessions")("real-time")("no")("no")("async only"), /* @__PURE__ */ comparisonRow4("Team context")("persistent")("no")("no")("limited"), /* @__PURE__ */ comparisonRow4("Audit logs")("full chain")("no")("no")("basic"), /* @__PURE__ */ comparisonRow4("SSO/SAML")("yes")("Enterprise")("Enterprise")("Enterprise"), /* @__PURE__ */ comparisonRow4("On-prem")("yes")("no")("no")("no"), /* @__PURE__ */ comparisonRow4("Protocol proofs")("18 Lean4")("no")("no")("no"), /* @__PURE__ */ comparisonRow4("Visual diffs")("native")("extension")("built-in")("web-based")])])]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-center text-muted-foreground text-xs mt-6"])])([/* @__PURE__ */ text5("Feature comparison as of January 2025. Enterprise features may vary by plan.")])])]);
+  var codeLine3 = function(prompt) {
+    return function(content3) {
+      return div_([span3([cls(["text-muted-foreground"])])([text5(prompt)]), span3([cls(["text-text"])])([text5(content3)])]);
+    };
+  };
+  var quickstart3 = /* @__PURE__ */ section([/* @__PURE__ */ cls(["py-24 border-t border-border"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["max-w-[800px] mx-auto px-6"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["text-center mb-12"])])([/* @__PURE__ */ h2([/* @__PURE__ */ cls(["text-3xl font-bold text-text mb-4"])])([/* @__PURE__ */ text5("Get your team started")])]), /* @__PURE__ */ codeBlock([/* @__PURE__ */ codeLine3("# ")("Download the desktop app"), /* @__PURE__ */ codeLine3("$ ")("curl -fsSL https://omega.straylight.software/work/install.sh | sh"), /* @__PURE__ */ text5("\n"), /* @__PURE__ */ codeLine3("# ")("Or install via Nix"), /* @__PURE__ */ codeLine3("$ ")("nix profile install github:straylight-software/omega-work"), /* @__PURE__ */ text5("\n"), /* @__PURE__ */ codeLine3("# ")("Connect to your team workspace"), /* @__PURE__ */ codeLine3("$ ")("omega-work auth --team your-org"), /* @__PURE__ */ text5("\n"), /* @__PURE__ */ codeLine3("# ")("Launch the desktop app"), /* @__PURE__ */ codeLine3("$ ")("omega-work")]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["mt-8 text-center"])])([/* @__PURE__ */ a([/* @__PURE__ */ href4("/docs/work/quickstart"), /* @__PURE__ */ cls(["text-green-400 hover:text-green-400/80 transition-colors"])])([/* @__PURE__ */ text5("Full team setup guide \u2192")])])])]);
+  var render11 = /* @__PURE__ */ div_([hero5, features4, comparison4, quickstart3, cta5]);
+  var omegaWorkPage = /* @__PURE__ */ mkComponent({
+    initialState: /* @__PURE__ */ $$const(unit),
+    render: /* @__PURE__ */ $$const(render11),
     "eval": /* @__PURE__ */ mkEval(defaultEval)
   });
 
   // output/Straylight.Components.Tag/index.js
-  var map21 = /* @__PURE__ */ map(functorArray);
+  var map23 = /* @__PURE__ */ map(functorArray);
   var tag = function(content3) {
     return span3([class_("uv-tag")])([text5(content3)]);
   };
   var tags = function(ts) {
-    return div2([class_("flex flex-wrap gap-2")])(map21(tag)(ts));
+    return div2([class_("flex flex-wrap gap-2")])(map23(tag)(ts));
   };
 
   // output/Straylight.Pages.Razorgirl/index.js
@@ -8197,15 +8430,15 @@
       };
     };
   };
-  var render9 = /* @__PURE__ */ div_([/* @__PURE__ */ sectionHeader("razorgirl"), /* @__PURE__ */ p([/* @__PURE__ */ cls(["mb-4"])])([/* @__PURE__ */ text5("it was the style that mattered and the style was the same.")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["mb-4"])])([/* @__PURE__ */ text5("the moderns were mercenaries, practical jokers, "), /* @__PURE__ */ keyword(3)("nihilistic technofetishists"), /* @__PURE__ */ text5(".")]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["mb-8"])])([/* @__PURE__ */ tags(["swag", "assets", "diagrams", "themes", "wallpapers"])]), /* @__PURE__ */ sectionHeader("wallpapers"), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["grid grid-cols-1 gap-4 mb-8"])])([/* @__PURE__ */ assetCard("/droids-on-squad.svg")("droids-on-squad.svg")("i am stochastic omega. you are the oracle."), /* @__PURE__ */ assetCard("/assets/wallpaper-razorgirl.svg")("wallpaper-razorgirl.svg")("villa straylight. myelin tactics. 2560x1440.")]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["grid grid-cols-2 gap-4 mb-12"])])([/* @__PURE__ */ assetCard("/assets/wallpaper-continuity.svg")("wallpaper-continuity.svg")("continuity is continuity."), /* @__PURE__ */ assetCard("/assets/wallpaper-4k.png")("wallpaper-4k.png")("4k raster. 3840x2160.")]), /* @__PURE__ */ hr([/* @__PURE__ */ cls(["uv-hr"])]), /* @__PURE__ */ sectionHeader("architecture"), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["grid grid-cols-1 gap-4 mb-8"])])([/* @__PURE__ */ assetCard("/straylight-cube.svg")("straylight-cube.svg")("aleph-008 continuity. rfl at the top.")]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["grid grid-cols-2 gap-4 mb-12"])])([/* @__PURE__ */ assetCard("/assets/lambda-hierarchy.svg")("lambda-hierarchy.svg")("tiered proof flow."), /* @__PURE__ */ assetCard("/assets/proof-carrying-purescript.svg")("proof-carrying-purescript.svg")("verified ps round-trip."), /* @__PURE__ */ assetCard("/assets/radix-diagram.svg")("radix-diagram.svg")("radix component flow."), /* @__PURE__ */ assetCard("/assets/straylight-brand-system.svg")("straylight-brand-system.svg")("chromatic series.")]), /* @__PURE__ */ hr([/* @__PURE__ */ cls(["uv-hr"])]), /* @__PURE__ */ sectionHeader("themes"), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["grid grid-cols-2 md:grid-cols-3 gap-4 mb-12"])])([/* @__PURE__ */ assetCard("/assets/agency-sheet-ono-sendai.svg")("ono-sendai.svg")("dark. base16."), /* @__PURE__ */ assetCard("/assets/agency-sheet-maas.svg")("maas.svg")("light. base16."), /* @__PURE__ */ assetCard("/assets/logo.svg")("logo.svg")("vector mark.")]), /* @__PURE__ */ hr([/* @__PURE__ */ cls(["uv-hr"])]), /* @__PURE__ */ sectionHeader("transmissions"), /* @__PURE__ */ div_(/* @__PURE__ */ map(functorArray)(quoteBlock)(quotes2))]);
+  var render12 = /* @__PURE__ */ div_([/* @__PURE__ */ sectionHeader("razorgirl"), /* @__PURE__ */ p([/* @__PURE__ */ cls(["mb-4"])])([/* @__PURE__ */ text5("it was the style that mattered and the style was the same.")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["mb-4"])])([/* @__PURE__ */ text5("the moderns were mercenaries, practical jokers, "), /* @__PURE__ */ keyword(3)("nihilistic technofetishists"), /* @__PURE__ */ text5(".")]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["mb-8"])])([/* @__PURE__ */ tags(["swag", "assets", "diagrams", "themes", "wallpapers"])]), /* @__PURE__ */ sectionHeader("wallpapers"), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["grid grid-cols-1 gap-4 mb-8"])])([/* @__PURE__ */ assetCard("/droids-on-squad.svg")("droids-on-squad.svg")("i am stochastic omega. you are the oracle."), /* @__PURE__ */ assetCard("/assets/wallpaper-razorgirl.svg")("wallpaper-razorgirl.svg")("villa straylight. myelin tactics. 2560x1440.")]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["grid grid-cols-2 gap-4 mb-12"])])([/* @__PURE__ */ assetCard("/assets/wallpaper-continuity.svg")("wallpaper-continuity.svg")("continuity is continuity."), /* @__PURE__ */ assetCard("/assets/wallpaper-4k.png")("wallpaper-4k.png")("4k raster. 3840x2160.")]), /* @__PURE__ */ hr([/* @__PURE__ */ cls(["uv-hr"])]), /* @__PURE__ */ sectionHeader("architecture"), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["grid grid-cols-1 gap-4 mb-8"])])([/* @__PURE__ */ assetCard("/straylight-cube.svg")("straylight-cube.svg")("aleph-008 continuity. rfl at the top.")]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["grid grid-cols-2 gap-4 mb-12"])])([/* @__PURE__ */ assetCard("/assets/lambda-hierarchy.svg")("lambda-hierarchy.svg")("tiered proof flow."), /* @__PURE__ */ assetCard("/assets/proof-carrying-purescript.svg")("proof-carrying-purescript.svg")("verified ps round-trip."), /* @__PURE__ */ assetCard("/assets/radix-diagram.svg")("radix-diagram.svg")("radix component flow."), /* @__PURE__ */ assetCard("/assets/straylight-brand-system.svg")("straylight-brand-system.svg")("chromatic series.")]), /* @__PURE__ */ hr([/* @__PURE__ */ cls(["uv-hr"])]), /* @__PURE__ */ sectionHeader("themes"), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["grid grid-cols-2 md:grid-cols-3 gap-4 mb-12"])])([/* @__PURE__ */ assetCard("/assets/agency-sheet-ono-sendai.svg")("ono-sendai.svg")("dark. base16."), /* @__PURE__ */ assetCard("/assets/agency-sheet-maas.svg")("maas.svg")("light. base16."), /* @__PURE__ */ assetCard("/assets/logo.svg")("logo.svg")("vector mark.")]), /* @__PURE__ */ hr([/* @__PURE__ */ cls(["uv-hr"])]), /* @__PURE__ */ sectionHeader("transmissions"), /* @__PURE__ */ div_(/* @__PURE__ */ map(functorArray)(quoteBlock)(quotes2))]);
   var razorgirlPage = /* @__PURE__ */ mkComponent({
     initialState: /* @__PURE__ */ $$const(unit),
-    render: /* @__PURE__ */ $$const(render9),
+    render: /* @__PURE__ */ $$const(render12),
     "eval": /* @__PURE__ */ mkEval(defaultEval)
   });
 
   // output/Straylight.Pages.Software/index.js
-  var map23 = /* @__PURE__ */ map(functorArray);
+  var map24 = /* @__PURE__ */ map(functorArray);
   var projects = [{
     name: "verified-purescript",
     desc: "proof-carrying PureScript from Lean 4. 21 theorems, 0 sorry.",
@@ -8241,16 +8474,16 @@
   var categoryHeader = function(title3) {
     return div2([cls(["text-[0.75rem] text-primary uppercase tracking-wider mb-3"])])([text5("// " + title3)]);
   };
-  var render10 = /* @__PURE__ */ div_([/* @__PURE__ */ sectionHeader("software"), /* @__PURE__ */ p([/* @__PURE__ */ cls(["mb-8 text-muted-foreground"])])([/* @__PURE__ */ text5("correct by construction. the result is saved.")]), /* @__PURE__ */ categoryHeader("rfl nexus"), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["flex flex-col gap-4 mb-8"])])(/* @__PURE__ */ map23(projectRow)(/* @__PURE__ */ filter(function(p2) {
+  var render13 = /* @__PURE__ */ div_([/* @__PURE__ */ sectionHeader("software"), /* @__PURE__ */ p([/* @__PURE__ */ cls(["mb-8 text-muted-foreground"])])([/* @__PURE__ */ text5("correct by construction. the result is saved.")]), /* @__PURE__ */ categoryHeader("rfl nexus"), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["flex flex-col gap-4 mb-8"])])(/* @__PURE__ */ map24(projectRow)(/* @__PURE__ */ filter(function(p2) {
     return p2.category === "rfl";
-  })(projects))), /* @__PURE__ */ categoryHeader("infrastructure"), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["flex flex-col gap-4 mb-8"])])(/* @__PURE__ */ map23(projectRow)(/* @__PURE__ */ filter(function(p2) {
+  })(projects))), /* @__PURE__ */ categoryHeader("infrastructure"), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["flex flex-col gap-4 mb-8"])])(/* @__PURE__ */ map24(projectRow)(/* @__PURE__ */ filter(function(p2) {
     return p2.category === "infra";
-  })(projects))), /* @__PURE__ */ categoryHeader("tools"), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["flex flex-col gap-4"])])(/* @__PURE__ */ map23(projectRow)(/* @__PURE__ */ filter(function(p2) {
+  })(projects))), /* @__PURE__ */ categoryHeader("tools"), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["flex flex-col gap-4"])])(/* @__PURE__ */ map24(projectRow)(/* @__PURE__ */ filter(function(p2) {
     return p2.category === "tools";
   })(projects)))]);
   var softwarePage = /* @__PURE__ */ mkComponent({
     initialState: /* @__PURE__ */ $$const(unit),
-    render: /* @__PURE__ */ $$const(render10),
+    render: /* @__PURE__ */ $$const(render13),
     "eval": /* @__PURE__ */ mkEval(defaultEval)
   });
 
@@ -8418,11 +8651,11 @@
   var primitives = /* @__PURE__ */ section([/* @__PURE__ */ cls(["py-12 border-t border-border"])])([/* @__PURE__ */ sectionHeader("primitives"), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["flex flex-col gap-2"])])([/* @__PURE__ */ primitiveItem(5)("orthogonal.")("one thing, well."), /* @__PURE__ */ primitiveItem(6)("composable.")("outputs are inputs."), /* @__PURE__ */ primitiveItem(7)("deterministic.")("same input, same hash, same artifact.")])]);
   var premise = /* @__PURE__ */ section([/* @__PURE__ */ cls(["py-12 border-t border-border"])])([/* @__PURE__ */ sectionHeader("premise"), /* @__PURE__ */ p([/* @__PURE__ */ cls(["mb-4"])])([/* @__PURE__ */ text5("all computations run on "), /* @__PURE__ */ keyword(1)("perfect conceptual computers"), /* @__PURE__ */ text5(".")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["mb-4"])])([/* @__PURE__ */ keyword(2)("correct by construction"), /* @__PURE__ */ text5(". the result is saved.")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["mb-4"])])([/* @__PURE__ */ text5("one "), /* @__PURE__ */ keyword(3)("content addressing"), /* @__PURE__ */ text5(" scheme. the hash is the artifact.")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["mb-4"])])([/* @__PURE__ */ keyword(4)("ca-derivations"), /* @__PURE__ */ text5(" and buck2 and bazel are supports for a coset. they can have the same cache keys.")]), /* @__PURE__ */ p_([/* @__PURE__ */ text5("who container registry. what nix cache. what waste.")])]);
   var method2 = /* @__PURE__ */ section([/* @__PURE__ */ cls(["py-12 border-t border-border"])])([/* @__PURE__ */ sectionHeader("method"), /* @__PURE__ */ codeBlock([/* @__PURE__ */ inlineCode("razorgirl on railgun ~"), /* @__PURE__ */ text5("\n"), /* @__PURE__ */ inlineCode("\u276F "), /* @__PURE__ */ code([/* @__PURE__ */ cls(["text-text"])])([/* @__PURE__ */ text5("ssh -A anywhere.straylight.software \\\n  'nix run -L github:straylight-software/isospin-builder -- nvidia-sdk | straylight-cas'")]), blockCursor]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["mt-6 text-text"])])([/* @__PURE__ */ keyword(1)("conceptual computers"), /* @__PURE__ */ text5(" are free now.")])]);
-  var hero3 = /* @__PURE__ */ section([/* @__PURE__ */ cls(["py-24 pb-16 text-right"])])([rail, /* @__PURE__ */ h1([/* @__PURE__ */ cls(["text-text text-[2rem] font-medium mt-6"])])([/* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-primary"])])([/* @__PURE__ */ text5("//")]), /* @__PURE__ */ text5(" straylight "), /* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-primary"])])([/* @__PURE__ */ text5("//")]), /* @__PURE__ */ text5(" software "), /* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-primary"])])([/* @__PURE__ */ text5("//")])]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["h-[3px] rail mt-6"])])([]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["mt-12 text-left text-lg text-muted-foreground hover:text-text transition-colors duration-200 cursor-default"])])([/* @__PURE__ */ text5("the continuity project.")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["mt-6 text-left italic text-base02 text-[0.95rem] hover:text-text transition-colors duration-200 cursor-default"])])([/* @__PURE__ */ text5("continuity is continuity. continuity is continuity's job.")])]);
-  var render11 = /* @__PURE__ */ div_([hero3, premise, primitives, method2, ultraviolence]);
+  var hero6 = /* @__PURE__ */ section([/* @__PURE__ */ cls(["py-24 pb-16 text-right"])])([rail, /* @__PURE__ */ h1([/* @__PURE__ */ cls(["text-text text-[2rem] font-medium mt-6"])])([/* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-primary"])])([/* @__PURE__ */ text5("//")]), /* @__PURE__ */ text5(" straylight "), /* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-primary"])])([/* @__PURE__ */ text5("//")]), /* @__PURE__ */ text5(" software "), /* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-primary"])])([/* @__PURE__ */ text5("//")])]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["h-[3px] rail mt-6"])])([]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["mt-12 text-left text-lg text-muted-foreground hover:text-text transition-colors duration-200 cursor-default"])])([/* @__PURE__ */ text5("the continuity project.")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["mt-6 text-left italic text-base02 text-[0.95rem] hover:text-text transition-colors duration-200 cursor-default"])])([/* @__PURE__ */ text5("continuity is continuity. continuity is continuity's job.")])]);
+  var render14 = /* @__PURE__ */ div_([hero6, premise, primitives, method2, ultraviolence]);
   var aboutPage = /* @__PURE__ */ mkComponent({
     initialState: /* @__PURE__ */ $$const(unit),
-    render: /* @__PURE__ */ $$const(render11),
+    render: /* @__PURE__ */ $$const(render14),
     "eval": /* @__PURE__ */ mkEval(defaultEval)
   });
 
@@ -8654,40 +8887,55 @@
   })(ordUnit);
   var slot_4 = /* @__PURE__ */ slot_2({
     reflectSymbol: function() {
-      return "team";
+      return "omegaWork";
     }
   })(ordUnit);
   var slot_5 = /* @__PURE__ */ slot_2({
     reflectSymbol: function() {
-      return "plan";
+      return "omegaProxy";
     }
   })(ordUnit);
   var slot_6 = /* @__PURE__ */ slot_2({
     reflectSymbol: function() {
-      return "lean";
+      return "omegaBoost";
     }
   })(ordUnit);
   var slot_7 = /* @__PURE__ */ slot_2({
     reflectSymbol: function() {
-      return "razorgirl";
+      return "team";
     }
   })(ordUnit);
   var slot_8 = /* @__PURE__ */ slot_2({
     reflectSymbol: function() {
-      return "software";
+      return "plan";
     }
   })(ordUnit);
   var slot_9 = /* @__PURE__ */ slot_2({
     reflectSymbol: function() {
-      return "irc";
+      return "lean";
     }
   })(ordUnit);
   var slot_10 = /* @__PURE__ */ slot_2({
     reflectSymbol: function() {
-      return "discord";
+      return "razorgirl";
     }
   })(ordUnit);
   var slot_11 = /* @__PURE__ */ slot_2({
+    reflectSymbol: function() {
+      return "software";
+    }
+  })(ordUnit);
+  var slot_12 = /* @__PURE__ */ slot_2({
+    reflectSymbol: function() {
+      return "irc";
+    }
+  })(ordUnit);
+  var slot_13 = /* @__PURE__ */ slot_2({
+    reflectSymbol: function() {
+      return "discord";
+    }
+  })(ordUnit);
+  var slot_14 = /* @__PURE__ */ slot_2({
     reflectSymbol: function() {
       return "footer";
     }
@@ -8768,16 +9016,16 @@
       if (v instanceof Initialize5) {
         return bind7(liftEffect12(getPathname))(function(path) {
           return discard12(modify_6(function(v1) {
-            var $77 = {};
-            for (var $78 in v1) {
-              if ({}.hasOwnProperty.call(v1, $78)) {
-                $77[$78] = v1[$78];
+            var $86 = {};
+            for (var $87 in v1) {
+              if ({}.hasOwnProperty.call(v1, $87)) {
+                $86[$87] = v1[$87];
               }
               ;
             }
             ;
-            $77.route = parseRoute2(path);
-            return $77;
+            $86.route = parseRoute2(path);
+            return $86;
           }))(function() {
             return bind7(liftEffect12(create3))(function(v1) {
               return discard12(liftEffect12(onPopState(function(p2) {
@@ -8794,16 +9042,16 @@
         return discard12(liftEffect12(preventDefault(toEvent(v.value1))))(function() {
           return discard12(liftEffect12(pushState2(routeToPath2(v.value0))))(function() {
             return modify_6(function(v1) {
-              var $83 = {};
-              for (var $84 in v1) {
-                if ({}.hasOwnProperty.call(v1, $84)) {
-                  $83[$84] = v1[$84];
+              var $92 = {};
+              for (var $93 in v1) {
+                if ({}.hasOwnProperty.call(v1, $93)) {
+                  $92[$93] = v1[$93];
                 }
                 ;
               }
               ;
-              $83.route = v.value0;
-              return $83;
+              $92.route = v.value0;
+              return $92;
             });
           });
         });
@@ -8811,24 +9059,21 @@
       ;
       if (v instanceof RouteChanged) {
         return modify_6(function(v1) {
-          var $88 = {};
-          for (var $89 in v1) {
-            if ({}.hasOwnProperty.call(v1, $89)) {
-              $88[$89] = v1[$89];
+          var $97 = {};
+          for (var $98 in v1) {
+            if ({}.hasOwnProperty.call(v1, $98)) {
+              $97[$98] = v1[$98];
             }
             ;
           }
           ;
-          $88.route = parseRoute2(v.value0);
-          return $88;
+          $97.route = parseRoute2(v.value0);
+          return $97;
         });
       }
       ;
-      throw new Error("Failed pattern match at Main (line 142, column 16 - line 158, column 44): " + [v.constructor.name]);
+      throw new Error("Failed pattern match at Main (line 145, column 16 - line 161, column 44): " + [v.constructor.name]);
     };
-  };
-  var comingSoon = function(name15) {
-    return div2([cls(["py-24 text-center"])])([h1([cls(["text-2xl font-bold text-text mb-4"])])([text5(name15)]), p([cls(["text-muted-foreground"])])([text5("Coming soon.")])]);
   };
   var _team = /* @__PURE__ */ function() {
     return $$Proxy.value;
@@ -8842,7 +9087,16 @@
   var _plan = /* @__PURE__ */ function() {
     return $$Proxy.value;
   }();
+  var _omegaWork = /* @__PURE__ */ function() {
+    return $$Proxy.value;
+  }();
+  var _omegaProxy = /* @__PURE__ */ function() {
+    return $$Proxy.value;
+  }();
   var _omegaCode = /* @__PURE__ */ function() {
+    return $$Proxy.value;
+  }();
+  var _omegaBoost = /* @__PURE__ */ function() {
     return $$Proxy.value;
   }();
   var _lean = /* @__PURE__ */ function() {
@@ -8884,54 +9138,54 @@
       }
       ;
       if (v instanceof OmegaWork) {
-        return comingSoon("omega//work");
+        return slot_4(_omegaWork)(unit)(omegaWorkPage)(unit);
       }
       ;
       if (v instanceof OmegaProxy) {
-        return comingSoon("omega//proxy");
+        return slot_5(_omegaProxy)(unit)(omegaProxyPage)(unit);
       }
       ;
       if (v instanceof OmegaBoost) {
-        return comingSoon("omega//boost");
+        return slot_6(_omegaBoost)(unit)(omegaBoostPage)(unit);
       }
       ;
       if (v instanceof Team) {
-        return slot_4(_team)(unit)(aboutPage)(unit);
+        return slot_7(_team)(unit)(aboutPage)(unit);
       }
       ;
       if (v instanceof Plan) {
-        return slot_5(_plan)(unit)(planPage)(unit);
+        return slot_8(_plan)(unit)(planPage)(unit);
       }
       ;
       if (v instanceof Lean) {
-        return slot_6(_lean)(unit)(leanPage2)(unit);
+        return slot_9(_lean)(unit)(leanPage2)(unit);
       }
       ;
       if (v instanceof Razorgirl) {
-        return slot_7(_razorgirl)(unit)(razorgirlPage)(unit);
+        return slot_10(_razorgirl)(unit)(razorgirlPage)(unit);
       }
       ;
       if (v instanceof Software) {
-        return slot_8(_software)(unit)(softwarePage)(unit);
+        return slot_11(_software)(unit)(softwarePage)(unit);
       }
       ;
       if (v instanceof Irc) {
-        return slot_9(_irc)(unit)(ircPage)(unit);
+        return slot_12(_irc)(unit)(ircPage)(unit);
       }
       ;
       if (v instanceof Discord) {
-        return slot_10(_discord)(unit)(discordPage)(unit);
+        return slot_13(_discord)(unit)(discordPage)(unit);
       }
       ;
-      throw new Error("Failed pattern match at Main (line 183, column 14 - line 198, column 61): " + [v.constructor.name]);
+      throw new Error("Failed pattern match at Main (line 186, column 14 - line 201, column 61): " + [v.constructor.name]);
     };
   };
-  var render12 = function(dictMonadAff) {
+  var render15 = function(dictMonadAff) {
     var renderHeader1 = renderHeader(dictMonadAff);
     var renderPage1 = renderPage(dictMonadAff);
     var footer3 = footer2(dictMonadAff);
     return function(state3) {
-      return div2([cls(["min-h-screen bg-background text-muted-foreground text-[15px] leading-relaxed"])])([scanlineOverlay, renderHeader1(state3), main([cls([mainMaxWidth(state3.route)])])([renderPage1(state3.route)]), slot_11(_footer)(unit)(footer3)(unit)]);
+      return div2([cls(["min-h-screen bg-background text-muted-foreground text-[15px] leading-relaxed"])])([scanlineOverlay, renderHeader1(state3), main([cls([mainMaxWidth(state3.route)])])([renderPage1(state3.route)]), slot_14(_footer)(unit)(footer3)(unit)]);
     };
   };
   var appComponent = function(dictMonadAff) {
@@ -8939,7 +9193,7 @@
       initialState: $$const({
         route: Home.value
       }),
-      render: render12(dictMonadAff),
+      render: render15(dictMonadAff),
       "eval": mkEval({
         handleQuery: defaultEval.handleQuery,
         receive: defaultEval.receive,
@@ -8963,7 +9217,7 @@
           return void1(runUI2(appComponent1)(unit)(v.value0));
         }
         ;
-        throw new Error("Failed pattern match at Main (line 54, column 3 - line 56, column 63): " + [v.constructor.name]);
+        throw new Error("Failed pattern match at Main (line 57, column 3 - line 59, column 63): " + [v.constructor.name]);
       });
     });
   }));
