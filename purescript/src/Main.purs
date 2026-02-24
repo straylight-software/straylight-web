@@ -229,4 +229,9 @@ routeThemeLock = case _ of
   -- Villa Straylight papers lock to memphis black
   Plan -> Just "ono-memphis"
   Lean -> Just "ono-memphis"
+  -- Product pages have their own themes
+  OmegaCode -> Just "ono-sprawl"
+  OmegaWork -> Just "ono-github"
+  OmegaProxy -> Just "ono-memphis"
+  OmegaBoost -> Just "maas-neoform"
   _ -> Nothing

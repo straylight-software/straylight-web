@@ -8985,6 +8985,22 @@
       return new Just("ono-memphis");
     }
     ;
+    if (v instanceof OmegaCode) {
+      return new Just("ono-sprawl");
+    }
+    ;
+    if (v instanceof OmegaWork) {
+      return new Just("ono-github");
+    }
+    ;
+    if (v instanceof OmegaProxy) {
+      return new Just("ono-memphis");
+    }
+    ;
+    if (v instanceof OmegaBoost) {
+      return new Just("maas-neoform");
+    }
+    ;
     return Nothing.value;
   };
   var mainMaxWidth = function(v) {
