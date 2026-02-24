@@ -755,12 +755,12 @@
   };
   var ap = function(dictMonad) {
     var bind8 = bind(dictMonad.Bind1());
-    var pure11 = pure(dictMonad.Applicative0());
+    var pure10 = pure(dictMonad.Applicative0());
     return function(f) {
       return function(a2) {
         return bind8(f)(function(f$prime) {
           return bind8(a2)(function(a$prime) {
-            return pure11(f$prime(a$prime));
+            return pure10(f$prime(a$prime));
           });
         });
       };
@@ -1790,10 +1790,10 @@
     var catchError1 = catchError(dictMonadError);
     var Monad0 = dictMonadError.MonadThrow0().Monad0();
     var map24 = map(Monad0.Bind1().Apply0().Functor0());
-    var pure11 = pure(Monad0.Applicative0());
+    var pure10 = pure(Monad0.Applicative0());
     return function(a2) {
       return catchError1(map24(Right.create)(a2))(function($52) {
-        return pure11(Left.create($52));
+        return pure10(Left.create($52));
       });
     };
   };
@@ -1988,13 +1988,13 @@
   };
   var traverse_ = function(dictApplicative) {
     var applySecond2 = applySecond(dictApplicative.Apply0());
-    var pure11 = pure(dictApplicative);
+    var pure10 = pure(dictApplicative);
     return function(dictFoldable) {
       var foldr22 = foldr(dictFoldable);
       return function(f) {
         return foldr22(function($454) {
           return applySecond2(f($454));
-        })(pure11(unit));
+        })(pure10(unit));
       };
     };
   };
@@ -4858,7 +4858,7 @@
     return Lift.create;
   }();
   var goLeft = function(dictApplicative) {
-    var pure11 = pure(dictApplicative);
+    var pure10 = pure(dictApplicative);
     return function(fStack) {
       return function(valStack) {
         return function(nat) {
@@ -4866,7 +4866,7 @@
             return function(count) {
               if (func instanceof Pure) {
                 return new Tuple(new Cons({
-                  func: pure11(func.value0),
+                  func: pure10(func.value0),
                   count
                 }, fStack), valStack);
               }
@@ -4937,7 +4937,7 @@
   };
   var foldFreeAp = function(dictApplicative) {
     var goApply1 = goApply(dictApplicative);
-    var pure11 = pure(dictApplicative);
+    var pure10 = pure(dictApplicative);
     var goLeft1 = goLeft(dictApplicative);
     return function(nat) {
       return function(z) {
@@ -4946,7 +4946,7 @@
           var $tco_result;
           function $tco_loop(v) {
             if (v.value1.value0 instanceof Pure) {
-              var v1 = goApply1(v.value0)(v.value1.value1)(pure11(v.value1.value0.value0));
+              var v1 = goApply1(v.value0)(v.value1.value1)(pure10(v.value1.value0.value0));
               if (v1 instanceof Left) {
                 $tco_done = true;
                 return v1.value0;
@@ -7035,6 +7035,12 @@
       return localStorage.getItem("straylight-theme") || defaultTheme;
     };
   };
+  var navigateImpl = function(path) {
+    return function() {
+      window.history.pushState({}, "", path);
+      window.dispatchEvent(new PopStateEvent("popstate"));
+    };
+  };
 
   // output/Web.Event.Event/foreign.js
   function preventDefault(e) {
@@ -7068,7 +7074,6 @@
   var get2 = /* @__PURE__ */ get(monadStateHalogenM);
   var discard5 = /* @__PURE__ */ discard(discardUnit)(bindHalogenM);
   var modify_4 = /* @__PURE__ */ modify_(monadStateHalogenM);
-  var pure9 = /* @__PURE__ */ pure(applicativeHalogenM);
   var Initialize3 = /* @__PURE__ */ function() {
     function Initialize6() {
     }
@@ -7093,110 +7098,48 @@
     ToggleMobileMenu2.value = new ToggleMobileMenu2();
     return ToggleMobileMenu2;
   }();
-  var ToggleThemeMenu = /* @__PURE__ */ function() {
-    function ToggleThemeMenu2() {
+  var ToggleProductMenu = /* @__PURE__ */ function() {
+    function ToggleProductMenu2() {
     }
     ;
-    ToggleThemeMenu2.value = new ToggleThemeMenu2();
-    return ToggleThemeMenu2;
+    ToggleProductMenu2.value = new ToggleProductMenu2();
+    return ToggleProductMenu2;
   }();
-  var SetTheme = /* @__PURE__ */ function() {
-    function SetTheme2(value0) {
+  var SelectProduct = /* @__PURE__ */ function() {
+    function SelectProduct2(value0, value1) {
       this.value0 = value0;
+      this.value1 = value1;
     }
     ;
-    SetTheme2.create = function(value0) {
-      return new SetTheme2(value0);
+    SelectProduct2.create = function(value0) {
+      return function(value1) {
+        return new SelectProduct2(value0, value1);
+      };
     };
-    return SetTheme2;
+    return SelectProduct2;
   }();
-  var themeOption = function(state3) {
-    return function(themeId) {
+  var productOption = function(state3) {
+    return function(path) {
       return function(name15) {
         return function(desc) {
-          return button([cls(["text-left px-2 py-1.5 transition-colors flex items-center justify-between group cursor-pointer", function() {
-            var $30 = state3.currentTheme === themeId;
-            if ($30) {
-              return "bg-primary/10 text-text";
-            }
-            ;
-            return "hover:bg-card text-muted-foreground hover:text-text";
-          }()]), onClick(function(v) {
-            return new SetTheme(themeId);
-          }), type_19(ButtonButton.value)])([span3([cls(["text-[11px]"])])([text5(name15)]), span3([cls(["text-[9px] text-muted-foreground group-hover:text-base02"])])([text5(desc)])]);
+          return function(theme) {
+            return button([cls(["text-left px-3 py-2 rounded transition-colors flex items-center justify-between group cursor-pointer w-full", function() {
+              var $30 = state3.currentPath === path;
+              if ($30) {
+                return "bg-primary/10 text-text";
+              }
+              ;
+              return "hover:bg-card text-muted-foreground hover:text-text";
+            }()]), onClick(function(v) {
+              return new SelectProduct(path, theme);
+            }), type_19(ButtonButton.value)])([div_([div2([cls(["text-[12px] font-medium"])])([text5(name15)]), div2([cls(["text-[10px] text-muted-foreground"])])([text5(desc)])]), span3([cls(["text-[9px] text-muted-foreground font-mono"])])([text5(theme)])]);
+          };
         };
       };
     };
   };
-  var themeMenu = function(state3) {
-    return div2([cls(["absolute top-full left-0 mt-2 bg-card border border-border p-4 min-w-[320px] z-50 theme-menu"])])([div2([cls(["text-[10px] text-muted-foreground uppercase tracking-widest mb-3"])])([text5("// chromatic series")]), div2([cls(["mb-4"])])([div2([cls(["text-[9px] text-primary uppercase tracking-wider mb-2 flex items-center gap-2"])])([span3([cls(["w-1.5 h-1.5 bg-primary inline-block"])])([]), text5("ONO-SENDAI DARK")]), div2([cls(["flex flex-col gap-1"])])([themeOption(state3)("ono-tuned")("TUNED")("HSL perceptual / daily driver"), themeOption(state3)("ono-sprawl")("SPRAWL")("carbon black / best compromise"), themeOption(state3)("ono-memphis")("MEMPHIS")("true black / OLED perfect"), themeOption(state3)("ono-github")("GITHUB")("robust default / maximum compat")])]), div_([div2([cls(["text-[9px] text-status uppercase tracking-wider mb-2 flex items-center gap-2"])])([span3([cls(["w-1.5 h-1.5 bg-status inline-block"])])([]), text5("MAAS BIOLABS LIGHT")]), div2([cls(["flex flex-col gap-1"])])([themeOption(state3)("maas-neoform")("NEOFORM")("clean room schematics / daily driver"), themeOption(state3)("maas-bioptic")("BIOPTIC")("warm cream paper / long reading"), themeOption(state3)("maas-ghost")("GHOST")("low contrast / photosensitivity"), themeOption(state3)("maas-tessier")("TESSIER")("maximum contrast / clinical QA")])]), div2([cls(["mt-4 pt-3 border-t border-border"])])([div2([cls(["text-[8px] text-muted-foreground uppercase tracking-wider"])])([text5("211\xB0 hue lock / base16 compatible")])])]);
-  };
-  var themeDisplayName = function(v) {
-    if (v === "ono-tuned") {
-      return "ono-tuned";
-    }
-    ;
-    if (v === "ono-sprawl") {
-      return "ono-sprawl";
-    }
-    ;
-    if (v === "ono-memphis") {
-      return "ono-memphis";
-    }
-    ;
-    if (v === "ono-github") {
-      return "ono-github";
-    }
-    ;
-    if (v === "maas-neoform") {
-      return "maas-neoform";
-    }
-    ;
-    if (v === "maas-bioptic") {
-      return "maas-bioptic";
-    }
-    ;
-    if (v === "maas-ghost") {
-      return "maas-ghost";
-    }
-    ;
-    if (v === "maas-tessier") {
-      return "maas-tessier";
-    }
-    ;
-    return v;
-  };
-  var themeLockIndicator = function(state3) {
-    if (state3.themeLock instanceof Nothing) {
-      return text5("");
-    }
-    ;
-    if (state3.themeLock instanceof Just) {
-      return span3([cls(["ml-4 text-[11px] text-muted-foreground"])])([text5(themeDisplayName(state3.themeLock.value0)), span3([cls(["ml-1 text-primary"])])([text5("\u25A0")])]);
-    }
-    ;
-    throw new Error("Failed pattern match at Straylight.Layout.Header (line 189, column 3 - line 196, column 10): " + [state3.themeLock.constructor.name]);
-  };
-  var themeSwitcher = function(state3) {
-    return div2([cls(["relative flex items-center"])])([button([cls(["text-text font-medium text-sm transition-colors geo-hover", function() {
-      if (state3.themeLock instanceof Just) {
-        return "cursor-default";
-      }
-      ;
-      if (state3.themeLock instanceof Nothing) {
-        return "hover:text-primary cursor-pointer";
-      }
-      ;
-      throw new Error("Failed pattern match at Straylight.Layout.Header (line 172, column 17 - line 174, column 65): " + [state3.themeLock.constructor.name]);
-    }()]), onClick(function(v) {
-      return ToggleThemeMenu.value;
-    }), type_19(ButtonButton.value)])([span3([cls(["text-primary"])])([text5("//")]), text5(" straylight "), span3([cls(["text-primary"])])([text5("//")])]), themeLockIndicator(state3), function() {
-      if (state3.themeMenuOpen) {
-        return themeMenu(state3);
-      }
-      ;
-      return text5("");
-    }()]);
+  var productMenu = function(state3) {
+    return div2([cls(["absolute top-full left-0 mt-2 bg-card border border-border rounded-lg p-4 min-w-[340px] z-50 shadow-lg"])])([div2([cls(["mb-4"])])([div2([cls(["text-[9px] text-primary uppercase tracking-wider mb-2 flex items-center gap-2"])])([span3([cls(["w-1.5 h-1.5 bg-primary inline-block"])])([]), text5("SENSE // NET")]), div2([cls(["flex flex-col gap-1"])])([productOption(state3)("/")("straylight")("Product Map")("ono-tuned")])]), div2([cls(["mb-4"])])([div2([cls(["text-[9px] text-blue-300 uppercase tracking-wider mb-2 flex items-center gap-2"])])([span3([cls(["w-1.5 h-1.5 bg-blue-300 inline-block"])])([]), text5("// \u03A9 // AGENT INFRASTRUCTURE")]), div2([cls(["flex flex-col gap-1"])])([productOption(state3)("/omega/code")("omega//code")("Native terminal AI agent")("ono-sprawl"), productOption(state3)("/omega/work")("omega//work")("Desktop app for teams")("ono-github"), productOption(state3)("/omega/proxy")("omega//proxy")("Verified inference proxy")("ono-memphis"), productOption(state3)("/omega/boost")("omega//boost")("Managed inference")("maas-neoform")])]), div_([div2([cls(["text-[9px] text-status uppercase tracking-wider mb-2 flex items-center gap-2"])])([span3([cls(["w-1.5 h-1.5 bg-status inline-block"])])([]), text5("TEAM")]), div2([cls(["flex flex-col gap-1"])])([productOption(state3)("/team")("about")("The continuity project")("ono-tuned")])]), div2([cls(["mt-4 pt-3 border-t border-border"])])([div2([cls(["text-[8px] text-muted-foreground uppercase tracking-wider"])])([text5("each product \xB7 its own theme")])])]);
   };
   var navLink = function(href5) {
     return function(label5) {
@@ -7207,9 +7150,10 @@
   var initialState = function(input3) {
     return {
       mobileMenuOpen: false,
-      themeMenuOpen: false,
+      productMenuOpen: false,
       currentTheme: "ono-tuned",
-      themeLock: input3.themeLock
+      themeLock: input3.themeLock,
+      currentPath: input3.currentPath
     };
   };
   var handleAction2 = function(dictMonadAff) {
@@ -7220,16 +7164,16 @@
           if (state3.themeLock instanceof Just) {
             return discard5(liftEffect7(setThemeImpl(state3.themeLock.value0)))(function() {
               return modify_4(function(v1) {
-                var $39 = {};
-                for (var $40 in v1) {
-                  if ({}.hasOwnProperty.call(v1, $40)) {
-                    $39[$40] = v1[$40];
+                var $33 = {};
+                for (var $34 in v1) {
+                  if ({}.hasOwnProperty.call(v1, $34)) {
+                    $33[$34] = v1[$34];
                   }
                   ;
                 }
                 ;
-                $39.currentTheme = state3.themeLock.value0;
-                return $39;
+                $33.currentTheme = state3.themeLock.value0;
+                return $33;
               });
             });
           }
@@ -7238,51 +7182,52 @@
             return bind5(liftEffect7(getStoredThemeImpl("ono-tuned")))(function(theme) {
               return discard5(liftEffect7(setThemeImpl(theme)))(function() {
                 return modify_4(function(v1) {
-                  var $43 = {};
-                  for (var $44 in v1) {
-                    if ({}.hasOwnProperty.call(v1, $44)) {
-                      $43[$44] = v1[$44];
+                  var $37 = {};
+                  for (var $38 in v1) {
+                    if ({}.hasOwnProperty.call(v1, $38)) {
+                      $37[$38] = v1[$38];
                     }
                     ;
                   }
                   ;
-                  $43.currentTheme = theme;
-                  return $43;
+                  $37.currentTheme = theme;
+                  return $37;
                 });
               });
             });
           }
           ;
-          throw new Error("Failed pattern match at Straylight.Layout.Header (line 75, column 5 - line 82, column 45): " + [state3.themeLock.constructor.name]);
+          throw new Error("Failed pattern match at Straylight.Layout.Header (line 77, column 5 - line 84, column 45): " + [state3.themeLock.constructor.name]);
         });
       }
       ;
       if (v instanceof Receive2) {
         return discard5(modify_4(function(v1) {
-          var $46 = {};
-          for (var $47 in v1) {
-            if ({}.hasOwnProperty.call(v1, $47)) {
-              $46[$47] = v1[$47];
+          var $40 = {};
+          for (var $41 in v1) {
+            if ({}.hasOwnProperty.call(v1, $41)) {
+              $40[$41] = v1[$41];
             }
             ;
           }
           ;
-          $46.themeLock = v.value0.themeLock;
-          return $46;
+          $40.themeLock = v.value0.themeLock;
+          $40.currentPath = v.value0.currentPath;
+          return $40;
         }))(function() {
           if (v.value0.themeLock instanceof Just) {
             return discard5(liftEffect7(setThemeImpl(v.value0.themeLock.value0)))(function() {
               return modify_4(function(v1) {
-                var $50 = {};
-                for (var $51 in v1) {
-                  if ({}.hasOwnProperty.call(v1, $51)) {
-                    $50[$51] = v1[$51];
+                var $44 = {};
+                for (var $45 in v1) {
+                  if ({}.hasOwnProperty.call(v1, $45)) {
+                    $44[$45] = v1[$45];
                   }
                   ;
                 }
                 ;
-                $50.currentTheme = v.value0.themeLock.value0;
-                return $50;
+                $44.currentTheme = v.value0.themeLock.value0;
+                return $44;
               });
             });
           }
@@ -7291,94 +7236,77 @@
             return bind5(liftEffect7(getStoredThemeImpl("ono-tuned")))(function(theme) {
               return discard5(liftEffect7(setThemeImpl(theme)))(function() {
                 return modify_4(function(v1) {
-                  var $54 = {};
-                  for (var $55 in v1) {
-                    if ({}.hasOwnProperty.call(v1, $55)) {
-                      $54[$55] = v1[$55];
+                  var $48 = {};
+                  for (var $49 in v1) {
+                    if ({}.hasOwnProperty.call(v1, $49)) {
+                      $48[$49] = v1[$49];
                     }
                     ;
                   }
                   ;
-                  $54.currentTheme = theme;
-                  return $54;
+                  $48.currentTheme = theme;
+                  return $48;
                 });
               });
             });
           }
           ;
-          throw new Error("Failed pattern match at Straylight.Layout.Header (line 87, column 5 - line 95, column 45): " + [v.value0.themeLock.constructor.name]);
+          throw new Error("Failed pattern match at Straylight.Layout.Header (line 88, column 5 - line 95, column 45): " + [v.value0.themeLock.constructor.name]);
         });
       }
       ;
       if (v instanceof ToggleMobileMenu) {
         return modify_4(function(s) {
-          var $58 = {};
-          for (var $59 in s) {
-            if ({}.hasOwnProperty.call(s, $59)) {
-              $58[$59] = s[$59];
+          var $52 = {};
+          for (var $53 in s) {
+            if ({}.hasOwnProperty.call(s, $53)) {
+              $52[$53] = s[$53];
             }
             ;
           }
           ;
-          $58.mobileMenuOpen = !s.mobileMenuOpen;
-          return $58;
+          $52.mobileMenuOpen = !s.mobileMenuOpen;
+          return $52;
         });
       }
       ;
-      if (v instanceof ToggleThemeMenu) {
-        return bind5(get2)(function(state3) {
-          if (state3.themeLock instanceof Just) {
-            return pure9(unit);
+      if (v instanceof ToggleProductMenu) {
+        return modify_4(function(s) {
+          var $55 = {};
+          for (var $56 in s) {
+            if ({}.hasOwnProperty.call(s, $56)) {
+              $55[$56] = s[$56];
+            }
+            ;
           }
           ;
-          if (state3.themeLock instanceof Nothing) {
-            return modify_4(function(s) {
-              var $63 = {};
-              for (var $64 in s) {
-                if ({}.hasOwnProperty.call(s, $64)) {
-                  $63[$64] = s[$64];
+          $55.productMenuOpen = !s.productMenuOpen;
+          return $55;
+        });
+      }
+      ;
+      if (v instanceof SelectProduct) {
+        return discard5(liftEffect7(setThemeImpl(v.value1)))(function() {
+          return discard5(liftEffect7(navigateImpl(v.value0)))(function() {
+            return modify_4(function(v1) {
+              var $58 = {};
+              for (var $59 in v1) {
+                if ({}.hasOwnProperty.call(v1, $59)) {
+                  $58[$59] = v1[$59];
                 }
                 ;
               }
               ;
-              $63.themeMenuOpen = !s.themeMenuOpen;
-              return $63;
+              $58.currentTheme = v.value1;
+              $58.productMenuOpen = false;
+              $58.currentPath = v.value0;
+              return $58;
             });
-          }
-          ;
-          throw new Error("Failed pattern match at Straylight.Layout.Header (line 103, column 5 - line 105, column 75): " + [state3.themeLock.constructor.name]);
+          });
         });
       }
       ;
-      if (v instanceof SetTheme) {
-        return bind5(get2)(function(state3) {
-          if (state3.themeLock instanceof Just) {
-            return pure9(unit);
-          }
-          ;
-          if (state3.themeLock instanceof Nothing) {
-            return discard5(liftEffect7(setThemeImpl(v.value0)))(function() {
-              return modify_4(function(v1) {
-                var $68 = {};
-                for (var $69 in v1) {
-                  if ({}.hasOwnProperty.call(v1, $69)) {
-                    $68[$69] = v1[$69];
-                  }
-                  ;
-                }
-                ;
-                $68.currentTheme = v.value0;
-                $68.themeMenuOpen = false;
-                return $68;
-              });
-            });
-          }
-          ;
-          throw new Error("Failed pattern match at Straylight.Layout.Header (line 110, column 5 - line 114, column 68): " + [state3.themeLock.constructor.name]);
-        });
-      }
-      ;
-      throw new Error("Failed pattern match at Straylight.Layout.Header (line 71, column 16 - line 114, column 68): " + [v.constructor.name]);
+      throw new Error("Failed pattern match at Straylight.Layout.Header (line 74, column 16 - line 106, column 86): " + [v.constructor.name]);
     };
   };
   var externalLink = function(href5) {
@@ -7386,10 +7314,48 @@
       return a([href4(href5), target5("_blank"), rel4("noopener noreferrer"), cls(["text-muted-foreground text-[13px] hover:text-text transition-colors link-trace"])])([text5(label5)]);
     };
   };
-  var mobileMenu = /* @__PURE__ */ div2([/* @__PURE__ */ cls(["md:hidden py-4 border-t border-border mt-4"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["flex flex-col gap-4"])])([/* @__PURE__ */ navLink("/omega/code")("omega//code"), /* @__PURE__ */ navLink("/team")("team"), /* @__PURE__ */ navLink("/software")("software"), /* @__PURE__ */ externalLink("https://github.com/straylight-software")("github"), /* @__PURE__ */ navLink("/discord")("discord")])]);
+  var mobileMenu = /* @__PURE__ */ div2([/* @__PURE__ */ cls(["md:hidden py-4 border-t border-border mt-4"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["flex flex-col gap-4"])])([/* @__PURE__ */ navLink("/omega/code")("omega//code"), /* @__PURE__ */ navLink("/omega/work")("omega//work"), /* @__PURE__ */ navLink("/omega/proxy")("omega//proxy"), /* @__PURE__ */ navLink("/omega/boost")("omega//boost"), /* @__PURE__ */ navLink("/team")("team"), /* @__PURE__ */ navLink("/software")("software"), /* @__PURE__ */ externalLink("https://github.com/straylight-software")("github"), /* @__PURE__ */ navLink("/discord")("discord")])]);
+  var currentProductName = function(v) {
+    if (v === "/") {
+      return "straylight";
+    }
+    ;
+    if (v === "/omega/code") {
+      return "omega//code";
+    }
+    ;
+    if (v === "/omega/work") {
+      return "omega//work";
+    }
+    ;
+    if (v === "/omega/proxy") {
+      return "omega//proxy";
+    }
+    ;
+    if (v === "/omega/boost") {
+      return "omega//boost";
+    }
+    ;
+    if (v === "/team") {
+      return "team";
+    }
+    ;
+    return "straylight";
+  };
+  var productSwitcher = function(state3) {
+    return div2([cls(["relative flex items-center"])])([button([cls(["text-text font-medium text-sm transition-colors hover:text-primary cursor-pointer flex items-center gap-2"]), onClick(function(v) {
+      return ToggleProductMenu.value;
+    }), type_19(ButtonButton.value)])([span3([cls(["text-primary"])])([text5("//")]), text5(" " + (currentProductName(state3.currentPath) + " ")), span3([cls(["text-primary"])])([text5("//")]), span3([cls(["text-muted-foreground text-xs ml-1"])])([text5("\u25BC")])]), function() {
+      if (state3.productMenuOpen) {
+        return productMenu(state3);
+      }
+      ;
+      return text5("");
+    }()]);
+  };
   var closeIcon = /* @__PURE__ */ elementNS(svgNS)("svg")([/* @__PURE__ */ cls(["w-6 h-6"]), /* @__PURE__ */ attr2("fill")("none"), /* @__PURE__ */ attr2("stroke")("currentColor"), /* @__PURE__ */ attr2("viewBox")("0 0 24 24")])([/* @__PURE__ */ elementNS(svgNS)("path")([/* @__PURE__ */ attr2("stroke-linecap")("round"), /* @__PURE__ */ attr2("stroke-linejoin")("round"), /* @__PURE__ */ attr2("stroke-width")("2"), /* @__PURE__ */ attr2("d")("M6 18L18 6M6 6l12 12")])([])]);
   var render2 = function(state3) {
-    return header([cls(["sticky top-0 z-50 bg-background border-b border-border"])])([div2([cls(["max-w-[900px] mx-auto px-8 py-4"])])([div2([cls(["flex justify-between items-center"])])([themeSwitcher(state3), nav([cls(["hidden md:flex items-center gap-6"])])([navLink("/omega/code")("omega//code"), navLink("/team")("team"), navLink("/software")("software"), externalLink("https://github.com/straylight-software")("github"), navLink("/discord")("discord")]), div2([cls(["flex items-center gap-2 text-xs text-muted-foreground"])])([span3([cls(["w-2 h-2 bg-status inline-block status-pulse"])])([]), text5("NOMINAL")]), button([cls(["md:hidden p-2 cursor-pointer text-text"]), onClick(function(v) {
+    return header([cls(["sticky top-0 z-50 bg-background border-b border-border"])])([div2([cls(["max-w-[1100px] mx-auto px-8 py-4"])])([div2([cls(["flex justify-between items-center"])])([productSwitcher(state3), nav([cls(["hidden md:flex items-center gap-6"])])([navLink("/team")("team"), navLink("/software")("software"), externalLink("https://github.com/straylight-software")("github"), navLink("/discord")("discord")]), div2([cls(["hidden md:flex items-center gap-2 text-xs text-muted-foreground"])])([span3([cls(["w-2 h-2 bg-status inline-block status-pulse"])])([]), text5("NOMINAL")]), button([cls(["md:hidden p-2 cursor-pointer text-text"]), onClick(function(v) {
       return ToggleMobileMenu.value;
     }), type_19(ButtonButton.value)])([function() {
       if (state3.mobileMenuOpen) {
@@ -7414,8 +7380,8 @@
         finalize: defaultEval.finalize,
         handleAction: handleAction2(dictMonadAff),
         initialize: new Just(Initialize3.value),
-        receive: function($74) {
-          return Just.create(Receive2.create($74));
+        receive: function($67) {
+          return Just.create(Receive2.create($67));
         }
       })
     });
@@ -8730,7 +8696,7 @@
   var liftEffect6 = /* @__PURE__ */ liftEffect(monadEffectAff);
   var bind22 = /* @__PURE__ */ bind(bindEffect);
   var bind32 = /* @__PURE__ */ bind(bindMaybe);
-  var pure10 = /* @__PURE__ */ pure(applicativeAff);
+  var pure9 = /* @__PURE__ */ pure(applicativeAff);
   var void1 = /* @__PURE__ */ $$void(functorAff);
   var Initialize5 = /* @__PURE__ */ function() {
     function Initialize6() {
@@ -8990,7 +8956,7 @@
       return bind15(liftEffect6(querySelector("#straylight-app")(parent2)))(function(mbContainer) {
         var v = bind32(mbContainer)(fromElement);
         if (v instanceof Nothing) {
-          return pure10(unit);
+          return pure9(unit);
         }
         ;
         if (v instanceof Just) {
