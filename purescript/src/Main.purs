@@ -31,6 +31,9 @@ import Straylight.Layout.Footer as Footer
 -- Product pages
 import Straylight.Pages.Home as Home
 import Straylight.Pages.Products.OmegaCode as OmegaCode
+import Straylight.Pages.Products.OmegaWork as OmegaWork
+import Straylight.Pages.Products.OmegaProxy as OmegaProxy
+import Straylight.Pages.Products.OmegaBoost as OmegaBoost
 -- Team pages
 import Straylight.Pages.Team.About as TeamAbout
 import Straylight.Pages.Plan as Plan
@@ -184,9 +187,9 @@ renderPage = case _ of
   -- Product pages
   Home -> HH.slot_ _home unit Home.homePage unit
   OmegaCode -> HH.slot_ _omegaCode unit OmegaCode.omegaCodePage unit
-  OmegaWork -> comingSoon "omega//work"
-  OmegaProxy -> comingSoon "omega//proxy"
-  OmegaBoost -> comingSoon "omega//boost"
+  OmegaWork -> HH.slot_ _omegaWork unit OmegaWork.omegaWorkPage unit
+  OmegaProxy -> HH.slot_ _omegaProxy unit OmegaProxy.omegaProxyPage unit
+  OmegaBoost -> HH.slot_ _omegaBoost unit OmegaBoost.omegaBoostPage unit
   -- Team pages
   Team -> HH.slot_ _team unit TeamAbout.aboutPage unit
   Plan -> HH.slot_ _plan unit Plan.planPage unit
