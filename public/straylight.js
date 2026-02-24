@@ -91,10 +91,10 @@
   };
   var applySecond = function(dictApply) {
     var apply1 = apply(dictApply);
-    var map25 = map(dictApply.Functor0());
+    var map24 = map(dictApply.Functor0());
     return function(a2) {
       return function(b2) {
-        return apply1(map25($$const(identity2))(a2))(b2);
+        return apply1(map24($$const(identity2))(a2))(b2);
       };
     };
   };
@@ -1789,10 +1789,10 @@
   var $$try = function(dictMonadError) {
     var catchError1 = catchError(dictMonadError);
     var Monad0 = dictMonadError.MonadThrow0().Monad0();
-    var map25 = map(Monad0.Bind1().Apply0().Functor0());
+    var map24 = map(Monad0.Bind1().Apply0().Functor0());
     var pure11 = pure(Monad0.Applicative0());
     return function(a2) {
-      return catchError1(map25(Right.create)(a2))(function($52) {
+      return catchError1(map24(Right.create)(a2))(function($52) {
         return pure11(Left.create($52));
       });
     };
@@ -5859,6 +5859,7 @@
   var footer = /* @__PURE__ */ element2("footer");
   var h1 = /* @__PURE__ */ element2("h1");
   var h2 = /* @__PURE__ */ element2("h2");
+  var h3 = /* @__PURE__ */ element2("h3");
   var header = /* @__PURE__ */ element2("header");
   var hr = function(props) {
     return element2("hr")(props)([]);
@@ -5866,7 +5867,6 @@
   var img = function(props) {
     return element2("img")(props)([]);
   };
-  var li = /* @__PURE__ */ element2("li");
   var main = /* @__PURE__ */ element2("main");
   var nav = /* @__PURE__ */ element2("nav");
   var p = /* @__PURE__ */ element2("p");
@@ -5877,12 +5877,23 @@
   var span_ = /* @__PURE__ */ span3([]);
   var strong = /* @__PURE__ */ element2("strong");
   var strong_ = /* @__PURE__ */ strong([]);
-  var ul = /* @__PURE__ */ element2("ul");
+  var table = /* @__PURE__ */ element2("table");
+  var tbody = /* @__PURE__ */ element2("tbody");
+  var tbody_ = /* @__PURE__ */ tbody([]);
+  var td = /* @__PURE__ */ element2("td");
+  var th = /* @__PURE__ */ element2("th");
+  var thead = /* @__PURE__ */ element2("thead");
+  var thead_ = /* @__PURE__ */ thead([]);
+  var tr = /* @__PURE__ */ element2("tr");
   var div2 = /* @__PURE__ */ element2("div");
   var div_ = /* @__PURE__ */ div2([]);
   var code = /* @__PURE__ */ element2("code");
   var code_ = /* @__PURE__ */ code([]);
   var button = /* @__PURE__ */ element2("button");
+  var br = function(props) {
+    return element2("br")(props)([]);
+  };
+  var br_ = /* @__PURE__ */ br([]);
   var aside = /* @__PURE__ */ element2("aside");
   var a = /* @__PURE__ */ element2("a");
 
@@ -8116,31 +8127,9 @@
   });
 
   // output/Straylight.Pages.Products.OmegaCode/index.js
-  var show3 = /* @__PURE__ */ show(showInt);
-  var div4 = /* @__PURE__ */ div(euclideanRingInt);
-  var map21 = /* @__PURE__ */ map(functorArray);
-  var throughputBar = function(label5) {
-    return function(value12) {
-      return function(color) {
-        return div_([div2([cls(["flex justify-between text-sm mb-2"])])([span3([cls(["text-muted-foreground"])])([text5(label5)]), span3([cls([color, "font-mono"])])([text5(show3(value12) + "k")])]), div2([cls(["h-4 bg-background rounded-full overflow-hidden"])])([div2([cls(["h-full rounded-full transition-all duration-1000", function() {
-          var $7 = value12 > 200;
-          if ($7) {
-            return "bg-blue-300";
-          }
-          ;
-          return "bg-muted-foreground/50";
-        }()]), style("width: " + (show3(div4(value12 * 100 | 0)(509)) + "%"))])([])])]);
-      };
-    };
-  };
   var secondaryButton2 = function(href5) {
     return function(label5) {
-      return a([href4(href5), target5("_blank"), rel4("noopener noreferrer"), cls(["inline-flex items-center justify-center px-6 py-3 border border-border text-text font-medium rounded-md hover:bg-card transition-colors"])])([text5(label5)]);
-    };
-  };
-  var proofCard = function(value12) {
-    return function(label5) {
-      return div2([cls(["bg-card border border-border rounded-lg p-6 text-center"])])([p([cls(["text-2xl font-bold text-blue-300 mb-1"])])([text5(value12)]), p([cls(["text-sm text-muted-foreground"])])([text5(label5)])]);
+      return a([href4(href5), cls(["inline-flex items-center justify-center px-6 py-3 border border-border text-text font-medium rounded-md hover:bg-card transition-colors"])])([text5(label5)]);
     };
   };
   var primaryButton2 = function(href5) {
@@ -8148,63 +8137,44 @@
       return a([href4(href5), cls(["inline-flex items-center justify-center px-6 py-3 bg-blue-300 text-background font-medium rounded-md hover:bg-blue-300/90 transition-colors"])])([text5(label5)]);
     };
   };
-  var featureItem = function(text6) {
-    return li([cls(["flex items-start gap-3"])])([span3([cls(["text-blue-300 mt-1"])])([text5("+")]), span3([cls(["text-muted-foreground"])])([text5(text6)])]);
-  };
-  var featureList = function(items2) {
-    return ul([cls(["space-y-3"])])(map21(featureItem)(items2));
-  };
-  var cta2 = /* @__PURE__ */ section([/* @__PURE__ */ cls(["py-24 border-t border-border"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["text-center"])])([/* @__PURE__ */ h2([/* @__PURE__ */ cls(["text-3xl font-bold text-text mb-4"])])([/* @__PURE__ */ text5("Ready to try it?")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-muted-foreground mb-8 max-w-xl mx-auto"])])([/* @__PURE__ */ text5("omega//code is in private beta. Join the waitlist or check out the source.")]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["flex flex-col sm:flex-row items-center justify-center gap-4"])])([/* @__PURE__ */ primaryButton2("/waitlist")("Join waitlist"), /* @__PURE__ */ secondaryButton2("https://github.com/straylight-software")("View on GitHub")])])]);
-  var crewAgent = function(name15) {
-    return function(_task) {
-      return function(status2) {
-        return div2([cls(["flex items-center justify-between p-3 bg-background rounded"])])([div2([cls(["flex items-center gap-3"])])([span3([cls(["w-2 h-2 rounded-full", function() {
-          var $8 = status2 === "complete \u2713";
-          if ($8) {
-            return "bg-green-500";
-          }
-          ;
-          return "bg-blue-300 animate-pulse";
-        }()])])([]), span3([cls(["font-mono text-sm text-text"])])([text5(name15)])]), span3([cls(["text-xs text-muted-foreground"])])([text5(status2)])]);
+  var hero2 = /* @__PURE__ */ section([/* @__PURE__ */ cls(["py-24 md:py-32"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["max-w-[1100px] mx-auto px-6 text-center"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["inline-flex items-center gap-2 px-3 py-1 bg-blue-300/10 border border-blue-300/20 rounded-full text-blue-300 text-sm mb-8"])])([/* @__PURE__ */ span3([/* @__PURE__ */ cls(["w-2 h-2 bg-blue-300 rounded-full animate-pulse"])])([]), /* @__PURE__ */ text5("Private beta")]), /* @__PURE__ */ h1([/* @__PURE__ */ cls(["text-4xl md:text-6xl font-bold text-text mb-6 leading-tight"])])([/* @__PURE__ */ text5("AI coding agent"), br_, /* @__PURE__ */ text5("that doesn't "), /* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-blue-300"])])([/* @__PURE__ */ text5("suck")])]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-xl text-muted-foreground mb-10 max-w-2xl mx-auto"])])([/* @__PURE__ */ text5("509k req/s. Native Haskell TUI. io_uring event loop. SIGIL protocol with Lean4 proofs. Not another Electron wrapper around the OpenAI SDK.")]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["flex flex-col sm:flex-row items-center justify-center gap-4"])])([/* @__PURE__ */ primaryButton2("/waitlist")("Join the waitlist"), /* @__PURE__ */ secondaryButton2("https://github.com/straylight-software")("View source")]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["mt-12 flex flex-col sm:flex-row items-center justify-center gap-3"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["bg-[#0a0c0f] border border-[#2a3038] rounded-lg px-5 py-3 font-mono text-sm flex items-center gap-6"])])([/* @__PURE__ */ code([/* @__PURE__ */ cls(["text-[#dde6f0] whitespace-nowrap"])])([/* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-[#596775]"])])([/* @__PURE__ */ text5("$ ")]), /* @__PURE__ */ text5("curl -fsSL omega.straylight.software | sh")]), /* @__PURE__ */ button([/* @__PURE__ */ cls(["text-[#596775] hover:text-[#80ccff] transition-colors text-xs shrink-0"])])([/* @__PURE__ */ text5("copy")])]), /* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-muted-foreground text-sm"])])([/* @__PURE__ */ text5("or")]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["bg-[#0a0c0f] border border-[#2a3038] rounded-lg px-5 py-3 font-mono text-sm flex items-center gap-6"])])([/* @__PURE__ */ code([/* @__PURE__ */ cls(["text-[#dde6f0] whitespace-nowrap"])])([/* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-[#596775]"])])([/* @__PURE__ */ text5("$ ")]), /* @__PURE__ */ text5("nix run github:straylight-software/omega")]), /* @__PURE__ */ button([/* @__PURE__ */ cls(["text-[#596775] hover:text-[#80ccff] transition-colors text-xs shrink-0"])])([/* @__PURE__ */ text5("copy")])])]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["mt-8 font-mono text-sm text-muted-foreground"])])([/* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-blue-300/60"])])([/* @__PURE__ */ text5("replaces ")]), /* @__PURE__ */ text5("Claude Code, Cursor, Windsurf, Aider, Copilot Workspace")])])]);
+  var featureCard = function(icon) {
+    return function(title3) {
+      return function(description) {
+        return div2([cls(["p-6 bg-card border border-border rounded-lg hover:border-blue-300/30 transition-colors"])])([div2([cls(["text-2xl text-blue-300 mb-4 font-mono"])])([text5(icon)]), h3([cls(["text-text text-lg font-semibold mb-2"])])([text5(title3)]), p([cls(["text-muted-foreground text-sm"])])([text5(description)])]);
       };
     };
   };
-  var codeBlock2 = function(children2) {
-    return pre([cls(["font-mono text-sm leading-relaxed"])])(children2);
+  var features = /* @__PURE__ */ section([/* @__PURE__ */ cls(["py-24 border-t border-border"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["max-w-[1100px] mx-auto px-6"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["text-center mb-16"])])([/* @__PURE__ */ h2([/* @__PURE__ */ cls(["text-3xl font-bold text-text mb-4"])])([/* @__PURE__ */ text5("Why omega//code?")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-muted-foreground max-w-xl mx-auto"])])([/* @__PURE__ */ text5("Built by engineers who got tired of slow, bloated, unreliable coding agents.")])]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"])])([/* @__PURE__ */ featureCard(">")("509k req/s")("evring-wai vs Warp's 99k. io_uring share-nothing per-core rings. Linear multi-core scaling."), /* @__PURE__ */ featureCard("{}")("Native TUI")("Haskell + Brick. No Electron. No React. No Node.js. Sub-millisecond rendering from a real binary."), /* @__PURE__ */ featureCard("\u2234")("18 Lean4 proofs")("SIGIL protocol semantics proven correct. 0 sorry. Corrupted parse cannot propagate to your agent."), /* @__PURE__ */ featureCard("++")("Crew orchestration")("Parallel competing agents. CoW filesystem isolation via bwrap. Best result wins. Attestation on merge."), /* @__PURE__ */ featureCard("=")("Full API parity")("95 endpoints. Sessions, messages, files, PTY terminals, SSE streaming, sandboxed execution. 221 property tests."), /* @__PURE__ */ featureCard("!")("Attestation-first")("Every change cryptographically anchored. Post-quantum hybrid signatures. Continuity kernel.")])])]);
+  var cta2 = /* @__PURE__ */ section([/* @__PURE__ */ cls(["py-24 border-t border-border"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["max-w-[800px] mx-auto px-6 text-center"])])([/* @__PURE__ */ h2([/* @__PURE__ */ cls(["text-3xl font-bold text-text mb-4"])])([/* @__PURE__ */ text5("Ready to stop fighting your tools?")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-muted-foreground mb-8"])])([/* @__PURE__ */ text5("omega//code is in private beta. Join the waitlist for early access.")]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["flex flex-col sm:flex-row items-center justify-center gap-4"])])([/* @__PURE__ */ primaryButton2("/waitlist")("Join the waitlist"), /* @__PURE__ */ secondaryButton2("/team")("Meet the team")])])]);
+  var compCell = function(value12) {
+    return span3([cls([function() {
+      if (value12 === "no") {
+        return "text-muted-foreground/50";
+      }
+      ;
+      return "text-muted-foreground";
+    }()])])([text5(value12)]);
   };
-  var benchItem = function(value12) {
-    return function(label5) {
-      return div2([cls(["bg-card border border-border rounded-lg p-6 text-center hover:border-blue-300/50 transition-colors"])])([div2([cls(["font-mono font-bold text-3xl text-blue-300 mb-1"])])([text5(value12)]), div2([cls(["font-mono text-xs text-muted-foreground"])])([text5(label5)])]);
+  var comparisonRow = function(feature) {
+    return function(us) {
+      return function(claude) {
+        return function(cursor) {
+          return function(aider) {
+            return tr([cls(["border-b border-border"])])([td([cls(["py-3 text-muted-foreground font-medium"])])([text5(feature)]), td([cls(["py-3 text-center text-blue-300 font-semibold"])])([text5(us)]), td([cls(["py-3 text-center"])])([compCell(claude)]), td([cls(["py-3 text-center"])])([compCell(cursor)]), td([cls(["py-3 text-center"])])([compCell(aider)])]);
+          };
+        };
+      };
     };
   };
-  var benchmarks = /* @__PURE__ */ section([/* @__PURE__ */ cls(["py-16 border-t border-border"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["grid grid-cols-2 md:grid-cols-4 gap-4"])])([/* @__PURE__ */ benchItem("509k")("req/s (evring-wai)"), /* @__PURE__ */ benchItem("5.1\xD7")("vs Warp throughput"), /* @__PURE__ */ benchItem("63\xD7")("better p99 latency"), /* @__PURE__ */ benchItem("95")("API endpoints (100%)")])]);
-  var badge2 = function(label5) {
-    return span3([cls(["inline-block px-3 py-1 bg-blue-300/10 border border-blue-300/20 rounded-full text-blue-300 text-sm font-medium mb-4"])])([text5(label5)]);
-  };
-  var featureCrew = /* @__PURE__ */ section([/* @__PURE__ */ cls(["py-24 border-t border-border"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["grid grid-cols-1 lg:grid-cols-2 gap-16 items-center"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["order-2 lg:order-1"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["bg-card border border-border rounded-lg p-6"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["font-mono text-xs text-muted-foreground mb-4"])])([/* @__PURE__ */ text5("// crew orchestration")]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["space-y-3"])])([/* @__PURE__ */ crewAgent("agent-1")("refactoring")("running"), /* @__PURE__ */ crewAgent("agent-2")("refactoring")("running"), /* @__PURE__ */ crewAgent("agent-3")("refactoring")("complete \u2713")]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["mt-4 pt-4 border-t border-border text-sm text-muted-foreground"])])([/* @__PURE__ */ text5("best result wins \xB7 losers discarded \xB7 attestation on merge")])])]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["order-1 lg:order-2"])])([/* @__PURE__ */ badge2("COW"), /* @__PURE__ */ h2([/* @__PURE__ */ cls(["text-3xl font-bold text-text mb-6"])])([/* @__PURE__ */ text5("Crew orchestration")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-muted-foreground mb-6"])])([/* @__PURE__ */ text5("Parallel competing agents on the same task. CoW filesystem isolation per agent via bwrap. Best result wins. Losers discarded. Attestation on merge.")]), /* @__PURE__ */ featureList(["Parallel agent execution", "Copy-on-write filesystem isolation via bubblewrap", "Automatic result comparison and selection", "Attestation-first: every merge is cryptographically signed", "Post-quantum hybrid signatures via Continuity kernel"])])])]);
-  var featureIoUring = /* @__PURE__ */ section([/* @__PURE__ */ cls(["py-24 border-t border-border"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["grid grid-cols-1 lg:grid-cols-2 gap-16 items-center"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["order-2 lg:order-1"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["bg-card border border-border rounded-lg p-6 space-y-4"])])([/* @__PURE__ */ throughputBar("evring-wai")(509)("text-blue-300"), /* @__PURE__ */ throughputBar("Warp")(99)("text-muted-foreground"), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-sm text-muted-foreground text-center pt-2"])])([/* @__PURE__ */ text5("req/s (thousands) \u2014 higher is better")])])]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["order-1 lg:order-2"])])([/* @__PURE__ */ badge2("EVRING"), /* @__PURE__ */ h2([/* @__PURE__ */ cls(["text-3xl font-bold text-text mb-6"])])([/* @__PURE__ */ text5("io_uring event loop")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-muted-foreground mb-6"])])([/* @__PURE__ */ text5("evring-wai: 509k req/s vs Warp's 99k. Share-nothing per-core rings with SO_REUSEPORT. Warp shows negative multi-core scaling. We scale linearly.")]), /* @__PURE__ */ featureList(["Linux io_uring for async I/O", "Share-nothing per-core architecture", "SO_REUSEPORT load balancing", "Zero-copy where possible", "Deterministic state machines (testable without I/O)"])])])]);
-  var featureNative = /* @__PURE__ */ section([/* @__PURE__ */ cls(["py-24 border-t border-border"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["grid grid-cols-1 lg:grid-cols-2 gap-16 items-center"])])([/* @__PURE__ */ div_([/* @__PURE__ */ badge2("NO REACT"), /* @__PURE__ */ h2([/* @__PURE__ */ cls(["text-3xl font-bold text-text mb-6"])])([/* @__PURE__ */ text5("Haskell + Brick TUI")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-muted-foreground mb-6"])])([/* @__PURE__ */ text5("Native terminal rendering. No Ink. No Electron. No virtual DOM rebuilding monospace text. Sub-millisecond rendering from a real compiled binary.")]), /* @__PURE__ */ featureList(["Pure Haskell with Brick terminal UI library", "No Node.js runtime, no React reconciler overhead", "Sub-millisecond render cycles", "Static binary \u2014 no dependencies at runtime", "10x smaller memory footprint than Electron alternatives"])]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["bg-card border border-border rounded-lg p-6"])])([/* @__PURE__ */ codeBlock2([/* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-muted-foreground"])])([/* @__PURE__ */ text5("-- weapon-server-hs/Main.hs")]), /* @__PURE__ */ text5("\n"), /* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-blue-300"])])([/* @__PURE__ */ text5("main")]), /* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-muted-foreground"])])([/* @__PURE__ */ text5(" :: ")]), /* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-text"])])([/* @__PURE__ */ text5("IO ()")]), /* @__PURE__ */ text5("\n"), /* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-blue-300"])])([/* @__PURE__ */ text5("main")]), /* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-muted-foreground"])])([/* @__PURE__ */ text5(" = ")]), /* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-text"])])([/* @__PURE__ */ text5("runEvring $ do")]), /* @__PURE__ */ text5("\n"), /* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-text"])])([/* @__PURE__ */ text5("  server <- startWeaponServer")]), /* @__PURE__ */ text5("\n"), /* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-text"])])([/* @__PURE__ */ text5("  runBrickApp server")])])])])]);
-  var featureSigil = /* @__PURE__ */ section([/* @__PURE__ */ cls(["py-24 border-t border-border"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["grid grid-cols-1 lg:grid-cols-2 gap-16 items-center"])])([/* @__PURE__ */ div_([/* @__PURE__ */ badge2("18 PROOFS"), /* @__PURE__ */ h2([/* @__PURE__ */ cls(["text-3xl font-bold text-text mb-6"])])([/* @__PURE__ */ text5("SIGIL-native protocol")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-muted-foreground mb-6"])])([/* @__PURE__ */ text5("Semantic frames via jaylene-slide, not JSON string parsing. 18 Lean4-proven theorems, 0 sorry. Reset-on-ambiguity: corrupted parse cannot propagate to your agent.")]), /* @__PURE__ */ featureList(["Lean4-proven protocol semantics", "18 theorems, 0 sorry (no incomplete proofs)", "Reset-on-ambiguity prevents corruption propagation", "jaylene-slide for streaming SSE \u2192 SIGIL", "200\u2013600% wire compression vs JSON"])]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["grid grid-cols-2 gap-4"])])([/* @__PURE__ */ proofCard("18")("Lean4 theorems"), /* @__PURE__ */ proofCard("0")("sorry (incomplete)"), /* @__PURE__ */ proofCard("221")("property tests"), /* @__PURE__ */ proofCard("95")("API endpoints")])])]);
-  var hero2 = /* @__PURE__ */ section([/* @__PURE__ */ cls(["py-24 md:py-32"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["text-center"])])([/* @__PURE__ */ badge2("Private Beta"), /* @__PURE__ */ h1([/* @__PURE__ */ cls(["text-4xl md:text-6xl font-bold text-text mb-6 leading-tight"])])([/* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-blue-300"])])([/* @__PURE__ */ text5("omega//")]), /* @__PURE__ */ text5("code")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-xl text-muted-foreground max-w-2xl mx-auto mb-4"])])([/* @__PURE__ */ text5("Native Terminal AI Coding Agent")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["font-mono text-sm text-muted-foreground"])])([/* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-blue-300/60"])])([/* @__PURE__ */ text5("replaces ")]), /* @__PURE__ */ text5("Claude Code, Cursor, Windsurf, Aider, Copilot Workspace")])])]);
-  var archNode = function(label5) {
-    return function(highlight) {
-      return span3([cls(["px-4 py-2 rounded-md border transition-colors", function() {
-        if (highlight) {
-          return "border-primary text-primary bg-primary/10";
-        }
-        ;
-        return "border-border text-text hover:border-blue-300";
-      }()])])([text5(label5)]);
+  var comparison = /* @__PURE__ */ section([/* @__PURE__ */ cls(["py-24 border-t border-border"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["max-w-[1100px] mx-auto px-6"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["text-center mb-16"])])([/* @__PURE__ */ h2([/* @__PURE__ */ cls(["text-3xl font-bold text-text mb-4"])])([/* @__PURE__ */ text5("The complete agent platform")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-muted-foreground max-w-2xl mx-auto"])])([/* @__PURE__ */ text5("Others ship Electron wrappers with broken tool calls. We ship a native binary with proven protocol semantics.")])]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["overflow-x-auto -mx-6 px-6"])])([/* @__PURE__ */ table([/* @__PURE__ */ cls(["w-full min-w-[700px] text-sm"])])([/* @__PURE__ */ thead_([/* @__PURE__ */ tr([/* @__PURE__ */ cls(["border-b border-border"])])([/* @__PURE__ */ th([/* @__PURE__ */ cls(["py-4 text-left text-muted-foreground font-medium w-40"])])([/* @__PURE__ */ text5("")]), /* @__PURE__ */ th([/* @__PURE__ */ cls(["py-4 text-center text-blue-300 font-bold"])])([/* @__PURE__ */ text5("omega//code")]), /* @__PURE__ */ th([/* @__PURE__ */ cls(["py-4 text-center text-muted-foreground font-medium"])])([/* @__PURE__ */ text5("Claude Code")]), /* @__PURE__ */ th([/* @__PURE__ */ cls(["py-4 text-center text-muted-foreground font-medium"])])([/* @__PURE__ */ text5("Cursor")]), /* @__PURE__ */ th([/* @__PURE__ */ cls(["py-4 text-center text-muted-foreground font-medium"])])([/* @__PURE__ */ text5("Aider")])])]), /* @__PURE__ */ tbody_([/* @__PURE__ */ comparisonRow("Runtime")("Native binary")("Node.js")("Electron")("Python"), /* @__PURE__ */ comparisonRow("req/s")("509k")("~10k")("~5k")("~1k"), /* @__PURE__ */ comparisonRow("Protocol proofs")("18 Lean4")("no")("no")("no"), /* @__PURE__ */ comparisonRow("Tool call parsing")("SIGIL (proven)")("JSON (hopeful)")("JSON")("JSON"), /* @__PURE__ */ comparisonRow("Multi-agent")("Crew (CoW)")("no")("no")("no"), /* @__PURE__ */ comparisonRow("Attestation")("post-quantum")("no")("no")("no"), /* @__PURE__ */ comparisonRow("Memory (idle)")("~30MB")("~200MB")("~500MB")("~100MB"), /* @__PURE__ */ comparisonRow("Open source")("MIT")("no")("no")("Apache")])])]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-center text-muted-foreground text-xs mt-6"])])([/* @__PURE__ */ text5("Benchmarks on Linux x86_64, 32 cores. Claude Code/Cursor measured via public APIs.")])])]);
+  var codeLine = function(prompt) {
+    return function(content3) {
+      return div_([span3([cls(["text-muted-foreground"])])([text5(prompt)]), span3([cls(["text-text"])])([text5(content3)])]);
     };
   };
-  var archLegend = function(dotColor) {
-    return function(label5) {
-      return span3([cls(["flex items-center gap-2"])])([span3([cls(["w-2 h-2 rounded-full", dotColor])])([]), text5(label5)]);
-    };
-  };
-  var archArrow = /* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-muted-foreground"])])([/* @__PURE__ */ text5("\u2192")]);
-  var architecture = /* @__PURE__ */ section([/* @__PURE__ */ cls(["py-24 border-t border-border"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["text-center mb-12"])])([/* @__PURE__ */ badge2("RUNTIME"), /* @__PURE__ */ h2([/* @__PURE__ */ cls(["text-3xl font-bold text-text mb-4"])])([/* @__PURE__ */ text5("Architecture")])]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["bg-card border border-border rounded-lg p-8"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["flex items-center justify-center gap-2 flex-wrap font-mono text-sm mb-6"])])([/* @__PURE__ */ archNode("LLM Provider")(false), archArrow, /* @__PURE__ */ archNode("jaylene-slide")(true), archArrow, /* @__PURE__ */ archNode("SIGIL / ZMQ")(false), archArrow, /* @__PURE__ */ archNode("weapon-server")(true), archArrow, /* @__PURE__ */ archNode("evring / io_uring")(false), archArrow, /* @__PURE__ */ archNode("Brick TUI")(false)]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["flex justify-center gap-8 text-xs text-muted-foreground"])])([/* @__PURE__ */ archLegend("bg-green-500")("Haskell (weapon-server, slide, Brick)"), /* @__PURE__ */ archLegend("bg-blue-400")("C++23 (libevring, io_uring)"), /* @__PURE__ */ archLegend("bg-blue-300")("Lean4 (Cornell proofs, Continuity)")])])]);
-  var render8 = /* @__PURE__ */ div_([hero2, benchmarks, featureNative, featureIoUring, featureSigil, featureCrew, architecture, cta2]);
+  var quickstart = /* @__PURE__ */ section([/* @__PURE__ */ cls(["py-24 border-t border-border"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["max-w-[800px] mx-auto px-6"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["text-center mb-12"])])([/* @__PURE__ */ h2([/* @__PURE__ */ cls(["text-3xl font-bold text-text mb-4"])])([/* @__PURE__ */ text5("Get started in 30 seconds")])]), /* @__PURE__ */ codeBlock([/* @__PURE__ */ codeLine("# ")("Install (Nix)"), /* @__PURE__ */ codeLine("$ ")("nix profile install github:straylight-software/omega-code"), /* @__PURE__ */ text5("\n"), /* @__PURE__ */ codeLine("# ")("Or via curl"), /* @__PURE__ */ codeLine("$ ")("curl -fsSL https://omega.straylight.software/install.sh | sh"), /* @__PURE__ */ text5("\n"), /* @__PURE__ */ codeLine("# ")("Authenticate"), /* @__PURE__ */ codeLine("$ ")("omega auth login"), /* @__PURE__ */ text5("\n"), /* @__PURE__ */ codeLine("# ")("Start coding"), /* @__PURE__ */ codeLine("$ ")("omega")]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["mt-8 text-center"])])([/* @__PURE__ */ a([/* @__PURE__ */ href4("/docs/quickstart"), /* @__PURE__ */ cls(["text-blue-300 hover:text-blue-300/80 transition-colors"])])([/* @__PURE__ */ text5("Full quickstart guide \u2192")])])])]);
+  var render8 = /* @__PURE__ */ div_([hero2, features, comparison, quickstart, cta2]);
   var omegaCodePage = /* @__PURE__ */ mkComponent({
     initialState: /* @__PURE__ */ $$const(unit),
     render: /* @__PURE__ */ $$const(render8),
@@ -8212,12 +8182,12 @@
   });
 
   // output/Straylight.Components.Tag/index.js
-  var map23 = /* @__PURE__ */ map(functorArray);
+  var map21 = /* @__PURE__ */ map(functorArray);
   var tag = function(content3) {
     return span3([class_("uv-tag")])([text5(content3)]);
   };
   var tags = function(ts) {
-    return div2([class_("flex flex-wrap gap-2")])(map23(tag)(ts));
+    return div2([class_("flex flex-wrap gap-2")])(map21(tag)(ts));
   };
 
   // output/Straylight.Pages.Razorgirl/index.js
@@ -8269,7 +8239,7 @@
   });
 
   // output/Straylight.Pages.Software/index.js
-  var map24 = /* @__PURE__ */ map(functorArray);
+  var map23 = /* @__PURE__ */ map(functorArray);
   var projects = [{
     name: "verified-purescript",
     desc: "proof-carrying PureScript from Lean 4. 21 theorems, 0 sorry.",
@@ -8305,11 +8275,11 @@
   var categoryHeader = function(title3) {
     return div2([cls(["text-[0.75rem] text-primary uppercase tracking-wider mb-3"])])([text5("// " + title3)]);
   };
-  var render10 = /* @__PURE__ */ div_([/* @__PURE__ */ sectionHeader("software"), /* @__PURE__ */ p([/* @__PURE__ */ cls(["mb-8 text-muted-foreground"])])([/* @__PURE__ */ text5("correct by construction. the result is saved.")]), /* @__PURE__ */ categoryHeader("rfl nexus"), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["flex flex-col gap-4 mb-8"])])(/* @__PURE__ */ map24(projectRow)(/* @__PURE__ */ filter(function(p2) {
+  var render10 = /* @__PURE__ */ div_([/* @__PURE__ */ sectionHeader("software"), /* @__PURE__ */ p([/* @__PURE__ */ cls(["mb-8 text-muted-foreground"])])([/* @__PURE__ */ text5("correct by construction. the result is saved.")]), /* @__PURE__ */ categoryHeader("rfl nexus"), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["flex flex-col gap-4 mb-8"])])(/* @__PURE__ */ map23(projectRow)(/* @__PURE__ */ filter(function(p2) {
     return p2.category === "rfl";
-  })(projects))), /* @__PURE__ */ categoryHeader("infrastructure"), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["flex flex-col gap-4 mb-8"])])(/* @__PURE__ */ map24(projectRow)(/* @__PURE__ */ filter(function(p2) {
+  })(projects))), /* @__PURE__ */ categoryHeader("infrastructure"), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["flex flex-col gap-4 mb-8"])])(/* @__PURE__ */ map23(projectRow)(/* @__PURE__ */ filter(function(p2) {
     return p2.category === "infra";
-  })(projects))), /* @__PURE__ */ categoryHeader("tools"), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["flex flex-col gap-4"])])(/* @__PURE__ */ map24(projectRow)(/* @__PURE__ */ filter(function(p2) {
+  })(projects))), /* @__PURE__ */ categoryHeader("tools"), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["flex flex-col gap-4"])])(/* @__PURE__ */ map23(projectRow)(/* @__PURE__ */ filter(function(p2) {
     return p2.category === "tools";
   })(projects)))]);
   var softwarePage = /* @__PURE__ */ mkComponent({

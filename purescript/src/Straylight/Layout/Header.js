@@ -12,3 +12,10 @@ export const getStoredThemeImpl = function(defaultTheme) {
     return localStorage.getItem('straylight-theme') || defaultTheme;
   };
 };
+
+export const navigateImpl = function(path) {
+  return function() {
+    window.history.pushState({}, '', path);
+    window.dispatchEvent(new PopStateEvent('popstate'));
+  };
+};

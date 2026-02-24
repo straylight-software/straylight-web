@@ -20,6 +20,7 @@ import Straylight.UI (cls, svgNS)
 
 foreign import setThemeImpl :: String -> Effect Unit
 foreign import getStoredThemeImpl :: String -> Effect String
+foreign import navigateImpl :: String -> Effect Unit
 
 -- ============================================================
 -- TYPES
@@ -27,21 +28,22 @@ foreign import getStoredThemeImpl :: String -> Effect String
 
 type State =
   { mobileMenuOpen :: Boolean
-  , themeMenuOpen :: Boolean
+  , productMenuOpen :: Boolean
   , currentTheme :: String
   , themeLock :: Maybe String
+  , currentPath :: String
   }
 
 data Action
   = Initialize
   | Receive Input
   | ToggleMobileMenu
-  | ToggleThemeMenu
-  | SetTheme String
+  | ToggleProductMenu
+  | SelectProduct String String  -- path, theme
 
 type Input = 
   { currentPath :: String
-  , themeLock :: Maybe String  -- Just "ono-memphis" = page locks theme
+  , themeLock :: Maybe String
   }
 
 -- ============================================================
@@ -62,16 +64,16 @@ header = H.mkComponent
 initialState :: Input -> State
 initialState input =
   { mobileMenuOpen: false
-  , themeMenuOpen: false
+  , productMenuOpen: false
   , currentTheme: "ono-tuned"
   , themeLock: input.themeLock
+  , currentPath: input.currentPath
   }
 
 handleAction :: forall o m. MonadAff m => Action -> H.HalogenM State Action () o m Unit
 handleAction = case _ of
   Initialize -> do
     state <- H.get
-    -- If page has theme lock, use that; otherwise use stored preference
     case state.themeLock of
       Just lockedTheme -> do
         liftEffect $ setThemeImpl lockedTheme
@@ -82,14 +84,12 @@ handleAction = case _ of
         H.modify_ _ { currentTheme = theme }
 
   Receive input -> do
-    -- Update theme lock when navigating to new page
-    H.modify_ _ { themeLock = input.themeLock }
+    H.modify_ _ { themeLock = input.themeLock, currentPath = input.currentPath }
     case input.themeLock of
       Just lockedTheme -> do
         liftEffect $ setThemeImpl lockedTheme
         H.modify_ _ { currentTheme = lockedTheme }
       Nothing -> do
-        -- Restore user preference when leaving locked page
         theme <- liftEffect $ getStoredThemeImpl "ono-tuned"
         liftEffect $ setThemeImpl theme
         H.modify_ _ { currentTheme = theme }
@@ -97,21 +97,13 @@ handleAction = case _ of
   ToggleMobileMenu -> 
     H.modify_ \s -> s { mobileMenuOpen = not s.mobileMenuOpen }
   
-  ToggleThemeMenu -> do
-    state <- H.get
-    -- Don't open theme menu if locked
-    case state.themeLock of
-      Just _ -> pure unit
-      Nothing -> H.modify_ \s -> s { themeMenuOpen = not s.themeMenuOpen }
+  ToggleProductMenu ->
+    H.modify_ \s -> s { productMenuOpen = not s.productMenuOpen }
   
-  SetTheme theme -> do
-    state <- H.get
-    -- Can't change theme if locked
-    case state.themeLock of
-      Just _ -> pure unit
-      Nothing -> do
-        liftEffect $ setThemeImpl theme
-        H.modify_ _ { currentTheme = theme, themeMenuOpen = false }
+  SelectProduct path theme -> do
+    liftEffect $ setThemeImpl theme
+    liftEffect $ navigateImpl path
+    H.modify_ _ { currentTheme = theme, productMenuOpen = false, currentPath = path }
 
 -- ============================================================
 -- RENDER
@@ -122,17 +114,16 @@ render state =
   HH.header
     [ cls [ "sticky top-0 z-50 bg-background border-b border-border" ] ]
     [ HH.div
-        [ cls [ "max-w-[900px] mx-auto px-8 py-4" ] ]
+        [ cls [ "max-w-[1100px] mx-auto px-8 py-4" ] ]
         [ HH.div
             [ cls [ "flex justify-between items-center" ] ]
-            [ -- Logo / Theme switcher
-              themeSwitcher state
+            [ -- Product switcher
+              productSwitcher state
               
               -- Desktop Nav
             , HH.nav
                 [ cls [ "hidden md:flex items-center gap-6" ] ]
-                [ navLink "/omega/code" "omega//code"
-                , navLink "/team" "team"
+                [ navLink "/team" "team"
                 , navLink "/software" "software"
                 , externalLink "https://github.com/straylight-software" "github"
                 , navLink "/discord" "discord"
@@ -140,7 +131,7 @@ render state =
               
               -- Status indicator
             , HH.div
-                [ cls [ "flex items-center gap-2 text-xs text-muted-foreground" ] ]
+                [ cls [ "hidden md:flex items-center gap-2 text-xs text-muted-foreground" ] ]
                 [ HH.span [ cls [ "w-2 h-2 bg-status inline-block status-pulse" ] ] []
                 , HH.text "NOMINAL"
                 ]
@@ -160,91 +151,81 @@ render state =
     ]
 
 -- ============================================================
--- SUB-COMPONENTS
+-- PRODUCT SWITCHER
 -- ============================================================
 
-themeSwitcher :: forall m. State -> H.ComponentHTML Action () m
-themeSwitcher state =
+productSwitcher :: forall m. State -> H.ComponentHTML Action () m
+productSwitcher state =
   HH.div
     [ cls [ "relative flex items-center" ] ]
     [ HH.button
-        [ cls [ "text-text font-medium text-sm transition-colors geo-hover"
-              , case state.themeLock of
-                  Just _ -> "cursor-default"
-                  Nothing -> "hover:text-primary cursor-pointer"
-              ]
-        , HE.onClick \_ -> ToggleThemeMenu
+        [ cls [ "text-text font-medium text-sm transition-colors hover:text-primary cursor-pointer flex items-center gap-2" ]
+        , HE.onClick \_ -> ToggleProductMenu
         , HP.type_ HP.ButtonButton
         ]
         [ HH.span [ cls [ "text-primary" ] ] [ HH.text "//" ]
-        , HH.text " straylight "
+        , HH.text $ " " <> currentProductName state.currentPath <> " "
         , HH.span [ cls [ "text-primary" ] ] [ HH.text "//" ]
+        , HH.span [ cls [ "text-muted-foreground text-xs ml-1" ] ] [ HH.text "▼" ]
         ]
-    , themeLockIndicator state
-    , if state.themeMenuOpen then themeMenu state else HH.text ""
+    , if state.productMenuOpen then productMenu state else HH.text ""
     ]
 
-themeLockIndicator :: forall m. State -> H.ComponentHTML Action () m
-themeLockIndicator state =
-  case state.themeLock of
-    Nothing -> HH.text ""
-    Just lockedTheme ->
-      HH.span
-        [ cls [ "ml-4 text-[11px] text-muted-foreground" ] ]
-        [ HH.text (themeDisplayName lockedTheme)
-        , HH.span [ cls [ "ml-1 text-primary" ] ] [ HH.text "■" ]
-        ]
+currentProductName :: String -> String
+currentProductName = case _ of
+  "/" -> "straylight"
+  "/omega/code" -> "omega//code"
+  "/omega/work" -> "omega//work"
+  "/omega/proxy" -> "omega//proxy"
+  "/omega/boost" -> "omega//boost"
+  "/team" -> "team"
+  _ -> "straylight"
 
-themeDisplayName :: String -> String
-themeDisplayName = case _ of
-  "ono-tuned" -> "ono-tuned"
-  "ono-sprawl" -> "ono-sprawl"
-  "ono-memphis" -> "ono-memphis"
-  "ono-github" -> "ono-github"
-  "maas-neoform" -> "maas-neoform"
-  "maas-bioptic" -> "maas-bioptic"
-  "maas-ghost" -> "maas-ghost"
-  "maas-tessier" -> "maas-tessier"
-  other -> other
-
-themeMenu :: forall m. State -> H.ComponentHTML Action () m
-themeMenu state =
+productMenu :: forall m. State -> H.ComponentHTML Action () m
+productMenu state =
   HH.div
-    [ cls [ "absolute top-full left-0 mt-2 bg-card border border-border p-4 min-w-[320px] z-50 theme-menu" ] ]
-    [ HH.div
-        [ cls [ "text-[10px] text-muted-foreground uppercase tracking-widest mb-3" ] ]
-        [ HH.text "// chromatic series" ]
-    
-      -- Ono-Sendai Dark
-    , HH.div
+    [ cls [ "absolute top-full left-0 mt-2 bg-card border border-border rounded-lg p-4 min-w-[340px] z-50 shadow-lg" ] ]
+    [ -- SENSE//NET
+      HH.div
         [ cls [ "mb-4" ] ]
         [ HH.div
             [ cls [ "text-[9px] text-primary uppercase tracking-wider mb-2 flex items-center gap-2" ] ]
             [ HH.span [ cls [ "w-1.5 h-1.5 bg-primary inline-block" ] ] []
-            , HH.text "ONO-SENDAI DARK"
+            , HH.text "SENSE // NET"
             ]
         , HH.div
             [ cls [ "flex flex-col gap-1" ] ]
-            [ themeOption state "ono-tuned" "TUNED" "HSL perceptual / daily driver"
-            , themeOption state "ono-sprawl" "SPRAWL" "carbon black / best compromise"
-            , themeOption state "ono-memphis" "MEMPHIS" "true black / OLED perfect"
-            , themeOption state "ono-github" "GITHUB" "robust default / maximum compat"
+            [ productOption state "/" "straylight" "Product Map" "ono-tuned"
             ]
         ]
     
-      -- MAAS Light
+      -- OMEGA
+    , HH.div
+        [ cls [ "mb-4" ] ]
+        [ HH.div
+            [ cls [ "text-[9px] text-blue-300 uppercase tracking-wider mb-2 flex items-center gap-2" ] ]
+            [ HH.span [ cls [ "w-1.5 h-1.5 bg-blue-300 inline-block" ] ] []
+            , HH.text "// Ω // AGENT INFRASTRUCTURE"
+            ]
+        , HH.div
+            [ cls [ "flex flex-col gap-1" ] ]
+            [ productOption state "/omega/code" "omega//code" "Native terminal AI agent" "ono-sprawl"
+            , productOption state "/omega/work" "omega//work" "Desktop app for teams" "ono-github"
+            , productOption state "/omega/proxy" "omega//proxy" "Verified inference proxy" "ono-memphis"
+            , productOption state "/omega/boost" "omega//boost" "Managed inference" "maas-neoform"
+            ]
+        ]
+    
+      -- TEAM
     , HH.div_
         [ HH.div
             [ cls [ "text-[9px] text-status uppercase tracking-wider mb-2 flex items-center gap-2" ] ]
             [ HH.span [ cls [ "w-1.5 h-1.5 bg-status inline-block" ] ] []
-            , HH.text "MAAS BIOLABS LIGHT"
+            , HH.text "TEAM"
             ]
         , HH.div
             [ cls [ "flex flex-col gap-1" ] ]
-            [ themeOption state "maas-neoform" "NEOFORM" "clean room schematics / daily driver"
-            , themeOption state "maas-bioptic" "BIOPTIC" "warm cream paper / long reading"
-            , themeOption state "maas-ghost" "GHOST" "low contrast / photosensitivity"
-            , themeOption state "maas-tessier" "TESSIER" "maximum contrast / clinical QA"
+            [ productOption state "/team" "about" "The continuity project" "ono-tuned"
             ]
         ]
     
@@ -252,23 +233,28 @@ themeMenu state =
         [ cls [ "mt-4 pt-3 border-t border-border" ] ]
         [ HH.div
             [ cls [ "text-[8px] text-muted-foreground uppercase tracking-wider" ] ]
-            [ HH.text "211° hue lock / base16 compatible" ]
+            [ HH.text "each product · its own theme" ]
         ]
     ]
 
-themeOption :: forall m. State -> String -> String -> String -> H.ComponentHTML Action () m
-themeOption state themeId name desc =
+productOption :: forall m. State -> String -> String -> String -> String -> H.ComponentHTML Action () m
+productOption state path name desc theme =
   HH.button
-    [ cls [ "text-left px-2 py-1.5 transition-colors flex items-center justify-between group cursor-pointer"
-          , if state.currentTheme == themeId 
+    [ cls [ "text-left px-3 py-2 rounded transition-colors flex items-center justify-between group cursor-pointer w-full"
+          , if state.currentPath == path 
               then "bg-primary/10 text-text" 
               else "hover:bg-card text-muted-foreground hover:text-text"
           ]
-    , HE.onClick \_ -> SetTheme themeId
+    , HE.onClick \_ -> SelectProduct path theme
     , HP.type_ HP.ButtonButton
     ]
-    [ HH.span [ cls [ "text-[11px]" ] ] [ HH.text name ]
-    , HH.span [ cls [ "text-[9px] text-muted-foreground group-hover:text-base02" ] ] [ HH.text desc ]
+    [ HH.div_
+        [ HH.div [ cls [ "text-[12px] font-medium" ] ] [ HH.text name ]
+        , HH.div [ cls [ "text-[10px] text-muted-foreground" ] ] [ HH.text desc ]
+        ]
+    , HH.span 
+        [ cls [ "text-[9px] text-muted-foreground font-mono" ] ] 
+        [ HH.text theme ]
     ]
 
 navLink :: forall w i. String -> String -> HH.HTML w i
@@ -296,6 +282,9 @@ mobileMenu =
     [ HH.div
         [ cls [ "flex flex-col gap-4" ] ]
         [ navLink "/omega/code" "omega//code"
+        , navLink "/omega/work" "omega//work"
+        , navLink "/omega/proxy" "omega//proxy"
+        , navLink "/omega/boost" "omega//boost"
         , navLink "/team" "team"
         , navLink "/software" "software"
         , externalLink "https://github.com/straylight-software" "github"
