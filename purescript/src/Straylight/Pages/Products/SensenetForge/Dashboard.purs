@@ -181,9 +181,35 @@ repoCard config =
 diffsTab :: forall w i. HH.HTML w i
 diffsTab =
   HH.div_
-    [ HH.div
+    [ -- Active stacks section
+      HH.div
+        [ cls [ "mb-8" ] ]
+        [ HH.h2 [ cls [ "text-lg font-semibold text-text mb-4" ] ] [ HH.text "Active Stacks" ]
+        , HH.div
+            [ cls [ "grid grid-cols-1 md:grid-cols-2 gap-4" ] ]
+            [ stackCard
+                { name: "Auth improvements"
+                , repo: "straylight-web"
+                , diffs:
+                    [ { id: "D042", title: "Add rate limiting", status: "needs_review" }
+                    , { id: "D041", title: "Refactor auth module", status: "approved" }
+                    , { id: "D040", title: "Add OAuth support", status: "needs_review" }
+                    ]
+                }
+            , stackCard
+                { name: "CLI enhancements"
+                , repo: "forge-cli"
+                , diffs:
+                    [ { id: "D045", title: "Add verbose output", status: "needs_review" }
+                    , { id: "D044", title: "Improve error messages", status: "approved" }
+                    ]
+                }
+            ]
+        ]
+      -- Individual diffs section
+    , HH.div
         [ cls [ "flex items-center justify-between mb-6" ] ]
-        [ HH.h2 [ cls [ "text-lg font-semibold text-text" ] ] [ HH.text "Your Diffs" ]
+        [ HH.h2 [ cls [ "text-lg font-semibold text-text" ] ] [ HH.text "All Diffs" ]
         , HH.div
             [ cls [ "flex items-center gap-2" ] ]
             [ filterButton "all" "All" true
@@ -232,6 +258,50 @@ diffsTab =
             }
         ]
     ]
+
+-- Stack visualization card
+type StackConfig =
+  { name :: String
+  , repo :: String
+  , diffs :: Array { id :: String, title :: String, status :: String }
+  }
+
+stackCard :: forall w i. StackConfig -> HH.HTML w i
+stackCard config =
+  HH.div
+    [ cls [ "bg-card border border-border rounded-lg p-4 hover:border-rose-400/50 transition-colors" ] ]
+    [ HH.div
+        [ cls [ "flex items-center justify-between mb-3" ] ]
+        [ HH.span [ cls [ "text-text font-medium" ] ] [ HH.text config.name ]
+        , HH.span [ cls [ "text-xs text-muted-foreground" ] ] [ HH.text config.repo ]
+        ]
+    , HH.div
+        [ cls [ "space-y-2" ] ]
+        (map stackDiffItem config.diffs)
+    ]
+
+stackDiffItem :: forall w i. { id :: String, title :: String, status :: String } -> HH.HTML w i
+stackDiffItem diff =
+  HH.div
+    [ cls [ "flex items-center gap-3 pl-3 border-l-2 border-rose-400/30" ] ]
+    [ HH.span [ cls [ "text-rose-400 font-mono text-xs" ] ] [ HH.text diff.id ]
+    , HH.span [ cls [ "text-sm text-muted-foreground flex-1 truncate" ] ] [ HH.text diff.title ]
+    , stackStatusDot diff.status
+    ]
+
+stackStatusDot :: forall w i. String -> HH.HTML w i
+stackStatusDot status =
+  HH.span
+    [ cls [ "w-2 h-2 rounded-full", statusDotColor status ] ]
+    []
+
+statusDotColor :: String -> String
+statusDotColor = case _ of
+  "needs_review" -> "bg-yellow-400"
+  "approved" -> "bg-green-400"
+  "landed" -> "bg-muted-foreground"
+  "changes_requested" -> "bg-red-400"
+  _ -> "bg-muted-foreground"
 
 filterButton :: forall w i. String -> String -> Boolean -> HH.HTML w i
 filterButton _ label active =

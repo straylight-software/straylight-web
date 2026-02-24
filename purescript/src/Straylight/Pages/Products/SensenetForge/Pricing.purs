@@ -67,17 +67,18 @@ plans =
     [ HH.div
         [ cls [ "max-w-[1100px] mx-auto px-6" ] ]
         [ HH.div
-            [ cls [ "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6" ] ]
+            [ cls [ "grid grid-cols-1 md:grid-cols-3 gap-8" ] ]
             [ pricingCard
-                { name: "Open Source"
+                { name: "Free"
                 , price: "$0"
                 , period: "/month"
-                , description: "Free forever for public repos."
+                , description: "Free forever for public repositories."
                 , features:
                     [ "Unlimited public repos"
                     , "Unlimited collaborators"
                     , "Stacked diffs"
-                    , "jujutsu support"
+                    , "jujutsu native support"
+                    , "Git compatibility"
                     , "Community support"
                     ]
                 , cta: "Get started"
@@ -86,15 +87,17 @@ plans =
                 }
             , pricingCard
                 { name: "Pro"
-                , price: "$15"
+                , price: "$19"
                 , period: "/user/month"
-                , description: "For individual developers and small teams."
+                , description: "For teams shipping production software."
                 , features:
-                    [ "Everything in Open Source"
+                    [ "Everything in Free"
                     , "Unlimited private repos"
                     , "Agent attestation"
-                    , "Semantic search"
-                    , "Email support"
+                    , "Semantic code search"
+                    , "SSO/SAML"
+                    , "Audit logs"
+                    , "Priority email support"
                     , "API access"
                     ]
                 , cta: "Start free trial"
@@ -102,34 +105,19 @@ plans =
                 , highlighted: true
                 }
             , pricingCard
-                { name: "Team"
-                , price: "$30"
-                , period: "/user/month"
-                , description: "For growing teams shipping production software."
-                , features:
-                    [ "Everything in Pro"
-                    , "SSO/SAML"
-                    , "Audit logs"
-                    , "Priority support"
-                    , "Custom integrations"
-                    , "SLA guarantee"
-                    ]
-                , cta: "Start free trial"
-                , ctaHref: "/sensenet/forge/dashboard?plan=team"
-                , highlighted: false
-                }
-            , pricingCard
                 { name: "Enterprise"
                 , price: "Custom"
                 , period: ""
-                , description: "For organizations with compliance needs."
+                , description: "For organizations with compliance and self-hosting needs."
                 , features:
-                    [ "Everything in Team"
-                    , "Self-hosted option"
-                    , "Air-gapped deployment"
+                    [ "Everything in Pro"
+                    , "Self-hosted deployment"
+                    , "Air-gapped environments"
+                    , "Custom agent policies"
                     , "Dedicated support"
                     , "Custom SLA"
                     , "Professional services"
+                    , "Advanced security controls"
                     ]
                 , cta: "Contact sales"
                 , ctaHref: "/sensenet/forge/legal"

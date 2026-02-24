@@ -144,7 +144,7 @@ pricingCard config =
   HH.div
     [ cls [ "p-6 rounded-lg border"
           , if config.highlighted 
-              then "bg-card border-rose-400" 
+              then "bg-card border-green-400" 
               else "bg-card border-border"
           ]
     ]
@@ -170,7 +170,7 @@ pricingCard config =
         [ HP.href config.ctaHref
         , cls [ "block text-center py-3 rounded-md font-medium transition-colors"
               , if config.highlighted
-                  then "bg-rose-400 text-background hover:bg-rose-400/90"
+                  then "bg-green-400 text-background hover:bg-green-400/90"
                   else "border border-border text-text hover:bg-card"
               ]
         ]
@@ -181,7 +181,7 @@ featureItem :: forall w i. String -> HH.HTML w i
 featureItem text =
   HH.li
     [ cls [ "flex items-center gap-2 text-sm text-muted-foreground" ] ]
-    [ HH.span [ cls [ "text-rose-400" ] ] [ HH.text "+" ]
+    [ HH.span [ cls [ "text-green-400" ] ] [ HH.text "+" ]
     , HH.text text
     ]
 
@@ -248,7 +248,7 @@ enterprise =
             [ HH.text "We work with enterprises on custom deployments, SLAs, and integrations. Let's talk." ]
         , HH.a
             [ HP.href "mailto:enterprise@straylight.software"
-            , cls [ "inline-flex items-center justify-center px-6 py-3 bg-rose-400 text-background font-medium rounded-md hover:bg-rose-400/90 transition-colors" ]
+            , cls [ "inline-flex items-center justify-center px-6 py-3 bg-green-400 text-background font-medium rounded-md hover:bg-green-400/90 transition-colors" ]
             ]
             [ HH.text "Contact sales" ]
         ]

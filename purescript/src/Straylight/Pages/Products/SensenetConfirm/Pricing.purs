@@ -67,57 +67,43 @@ plans =
     [ HH.div
         [ cls [ "max-w-[1100px] mx-auto px-6" ] ]
         [ HH.div
-            [ cls [ "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6" ] ]
+            [ cls [ "grid grid-cols-1 md:grid-cols-3 gap-6" ] ]
             [ pricingCard
-                { name: "Free"
+                { name: "Starter"
                 , price: "$0"
                 , period: "/month"
                 , description: "For open source and personal projects."
                 , features:
                     [ "Unlimited public repos"
-                    , "1,000 build minutes/month"
-                    , "Basic proof obligations"
-                    , "Community support"
+                    , "2,000 build minutes/month"
+                    , "10 proof verifications/day"
+                    , "Basic agent code detection"
                     , "Dhall pipelines"
+                    , "Community support"
+                    , "Build attestation (SHA-256)"
                     ]
-                , cta: "Get started"
-                , ctaHref: "/sensenet/confirm/pricing"
+                , cta: "Get started free"
+                , ctaHref: "/sensenet/confirm/signup"
                 , highlighted: false
                 }
             , pricingCard
                 { name: "Pro"
-                , price: "$29"
-                , period: "/month"
-                , description: "For individual developers and small teams."
+                , price: "$49"
+                , period: "/seat/month"
+                , description: "For teams with proof obligations."
                 , features:
                     [ "Unlimited private repos"
-                    , "5,000 build minutes/month"
-                    , "Full proof obligations"
-                    , "Agent code review"
-                    , "Email support"
-                    , "Build attestation"
+                    , "10,000 build minutes/month"
+                    , "Unlimited proof verifications"
+                    , "Full agent code review"
+                    , "Custom proof obligations"
+                    , "Post-quantum attestation"
+                    , "Priority email support"
+                    , "Audit logs"
                     ]
-                , cta: "Start free trial"
+                , cta: "Start 14-day trial"
                 , ctaHref: "/sensenet/confirm/signup?plan=pro"
                 , highlighted: true
-                }
-            , pricingCard
-                { name: "Team"
-                , price: "$99"
-                , period: "/month"
-                , description: "For teams shipping production software."
-                , features:
-                    [ "Everything in Pro"
-                    , "25,000 build minutes/month"
-                    , "5 team seats included"
-                    , "SSO/SAML"
-                    , "Priority support"
-                    , "Audit logs"
-                    , "Custom proof obligations"
-                    ]
-                , cta: "Start free trial"
-                , ctaHref: "/sensenet/confirm/signup?plan=team"
-                , highlighted: false
                 }
             , pricingCard
                 { name: "Enterprise"
@@ -125,13 +111,14 @@ plans =
                 , period: ""
                 , description: "For organizations with compliance needs."
                 , features:
-                    [ "Everything in Team"
+                    [ "Everything in Pro"
                     , "Unlimited build minutes"
                     , "Unlimited seats"
-                    , "Dedicated support"
-                    , "SLA guarantee"
-                    , "Self-hosted option"
+                    , "Self-hosted deployment"
+                    , "SSO/SAML/SCIM"
+                    , "Dedicated support + SLA"
                     , "Custom integrations"
+                    , "Formal verification tools"
                     ]
                 , cta: "Contact sales"
                 , ctaHref: "/sensenet/confirm/contact"
@@ -140,7 +127,7 @@ plans =
             ]
         , HH.p
             [ cls [ "text-center text-muted-foreground text-sm mt-8" ] ]
-            [ HH.text "All plans include: Typed Dhall pipelines, cryptographic attestation, Nix integration, REST API access" ]
+            [ HH.text "All plans include: Typed Dhall pipelines, Nix integration, REST API, GitHub/GitLab integration" ]
         ]
     ]
 
@@ -227,6 +214,12 @@ faq =
             , faqItem
                 "Can I migrate from GitHub Actions?"
                 "Yes. We provide a migration tool that converts your YAML workflows to typed Dhall. Most pipelines convert automatically."
+            , faqItem
+                "How are build minutes counted?"
+                "Build minutes count wall-clock time from job start to completion. Parallel jobs run simultaneously, so 4 parallel jobs for 1 minute uses 4 build minutes. Caching reduces build times significantly."
+            , faqItem
+                "What counts as a proof verification?"
+                "Each proof obligation checked counts as one verification. Built-in proofs (testsPass, noSecrets) and custom proofs are counted the same way. Pro and Enterprise plans have unlimited verifications."
             , faqItem
                 "Is the server open source?"
                 "The core pipeline engine is MIT licensed on GitHub. You can self-host or use our managed service."

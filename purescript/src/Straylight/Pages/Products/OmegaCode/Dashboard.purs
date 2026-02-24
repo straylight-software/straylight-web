@@ -60,7 +60,7 @@ header =
         [ HH.text "omega//code Dashboard" ]
     , HH.p
         [ cls [ "text-muted-foreground" ] ]
-        [ HH.text "Manage your agents, sessions, and attestations." ]
+        [ HH.text "Session history, token usage, active contexts, and attestation records." ]
     ]
 
 tabs :: forall m. State -> H.ComponentHTML Action () m
@@ -70,8 +70,9 @@ tabs state =
     [ tabButton state "overview" "Overview"
     , tabButton state "sessions" "Sessions"
     , tabButton state "agents" "Agents"
+    , tabButton state "tokens" "Token Usage"
+    , tabButton state "contexts" "Contexts"
     , tabButton state "attestations" "Attestations"
-    , tabButton state "usage" "Usage"
     ]
 
 tabButton :: forall m. State -> String -> String -> H.ComponentHTML Action () m
@@ -91,8 +92,9 @@ content state = case state.activeTab of
   "overview" -> overviewTab
   "sessions" -> sessionsTab
   "agents" -> agentsTab
+  "tokens" -> tokensTab
+  "contexts" -> contextsTab
   "attestations" -> attestationsTab
-  "usage" -> usageTab
   _ -> overviewTab
 
 -- ============================================================
@@ -285,63 +287,158 @@ attestationCard hash action scope time status =
     ]
 
 -- ============================================================
--- USAGE TAB
+-- TOKEN USAGE TAB
 -- ============================================================
 
-usageTab :: forall w i. HH.HTML w i
-usageTab =
+tokensTab :: forall w i. HH.HTML w i
+tokensTab =
   HH.div_
-    [ -- Usage bars
+    [ -- Token summary
       HH.div
-        [ cls [ "grid grid-cols-1 md:grid-cols-2 gap-6 mb-8" ] ]
-        [ usageCard "Requests" 12847 25000 "this month"
-        , usageCard "Agents" 3 10 "concurrent"
+        [ cls [ "grid grid-cols-1 md:grid-cols-4 gap-4 mb-8" ] ]
+        [ tokenStatCard "Input Tokens" "2.4M" "this month" "text-blue-400"
+        , tokenStatCard "Output Tokens" "847K" "this month" "text-blue-400"
+        , tokenStatCard "Total Cost" "$127.43" "this month" "text-text"
+        , tokenStatCard "Avg per Session" "18.2K" "tokens" "text-muted-foreground"
         ]
     
-      -- Plan info
+      -- Usage by model
+    , HH.div
+        [ cls [ "bg-card border border-border rounded-lg p-6 mb-6" ] ]
+        [ HH.h3 [ cls [ "text-lg font-semibold text-text mb-4" ] ] [ HH.text "Usage by Model" ]
+        , HH.div
+            [ cls [ "space-y-4" ] ]
+            [ modelUsageBar "claude-sonnet-4-20250514" 1847000 2400000 "$89.21"
+            , modelUsageBar "claude-opus-4-20250514" 423000 2400000 "$31.72"
+            , modelUsageBar "gpt-4o" 130000 2400000 "$6.50"
+            ]
+        ]
+    
+      -- Daily usage chart placeholder
     , HH.div
         [ cls [ "bg-card border border-border rounded-lg p-6" ] ]
-        [ HH.h3 [ cls [ "text-lg font-semibold text-text mb-4" ] ] [ HH.text "Current Plan: Pro" ]
+        [ HH.h3 [ cls [ "text-lg font-semibold text-text mb-4" ] ] [ HH.text "Daily Usage" ]
         , HH.div
-            [ cls [ "grid grid-cols-2 md:grid-cols-4 gap-4 mb-6" ] ]
-            [ planStat "Requests" "Unlimited"
-            , planStat "Agents" "10 concurrent"
-            , planStat "Crew Mode" "Enabled"
-            , planStat "Attestation" "Full history"
+            [ cls [ "flex items-end justify-between h-32 gap-1" ] ]
+            (map (\h -> usageBar h) [45, 62, 38, 71, 55, 89, 43, 67, 52, 78, 61, 85, 49, 73])
+        , HH.div
+            [ cls [ "flex justify-between text-xs text-muted-foreground mt-2" ] ]
+            [ HH.span_ [ HH.text "Feb 10" ]
+            , HH.span_ [ HH.text "Feb 24" ]
             ]
-        , HH.a
-            [ HP.href "/omega/code/settings"
-            , cls [ "inline-block px-4 py-2 border border-border text-text text-sm font-medium rounded-md hover:bg-card transition-colors" ]
-            ]
-            [ HH.text "Manage Plan" ]
         ]
     ]
 
-usageCard :: forall w i. String -> Int -> Int -> String -> HH.HTML w i
-usageCard label current limit period =
+tokenStatCard :: forall w i. String -> String -> String -> String -> HH.HTML w i
+tokenStatCard label value subtitle color =
   HH.div
-    [ cls [ "bg-card border border-border rounded-lg p-6" ] ]
+    [ cls [ "bg-card border border-border rounded-lg p-4" ] ]
+    [ HH.p [ cls [ "text-sm text-muted-foreground mb-1" ] ] [ HH.text label ]
+    , HH.p [ cls [ "text-2xl font-bold", color ] ] [ HH.text value ]
+    , HH.p [ cls [ "text-xs text-muted-foreground" ] ] [ HH.text subtitle ]
+    ]
+
+modelUsageBar :: forall w i. String -> Int -> Int -> String -> HH.HTML w i
+modelUsageBar model tokens total cost =
+  HH.div_
     [ HH.div
-        [ cls [ "flex items-center justify-between mb-4" ] ]
-        [ HH.span [ cls [ "text-sm font-medium text-text" ] ] [ HH.text label ]
-        , HH.span [ cls [ "text-sm text-muted-foreground" ] ] 
-            [ HH.text $ show current <> " / " <> show limit <> " " <> period ]
+        [ cls [ "flex items-center justify-between mb-2" ] ]
+        [ HH.code [ cls [ "text-sm text-text font-mono" ] ] [ HH.text model ]
+        , HH.span [ cls [ "text-sm text-muted-foreground" ] ] [ HH.text cost ]
         ]
     , HH.div
         [ cls [ "h-3 bg-muted rounded-full overflow-hidden" ] ]
         [ HH.div
-            [ cls [ "h-full bg-blue-300 rounded-full" ]
-            , HP.style $ "width: " <> show (current * 100 / limit) <> "%"
+            [ cls [ "h-full bg-blue-400 rounded-full" ]
+            , HP.style $ "width: " <> show (tokens * 100 / total) <> "%"
             ]
             []
         ]
     ]
 
-planStat :: forall w i. String -> String -> HH.HTML w i
-planStat label value =
+usageBar :: forall w i. Int -> HH.HTML w i
+usageBar height =
+  HH.div
+    [ cls [ "flex-1 bg-blue-400/60 rounded-t" ]
+    , HP.style $ "height: " <> show height <> "%"
+    ]
+    []
+
+-- ============================================================
+-- CONTEXTS TAB
+-- ============================================================
+
+contextsTab :: forall w i. HH.HTML w i
+contextsTab =
+  HH.div_
+    [ HH.div
+        [ cls [ "flex items-center justify-between mb-6" ] ]
+        [ HH.h2 [ cls [ "text-lg font-semibold text-text" ] ] [ HH.text "Active Contexts" ]
+        , HH.button
+            [ cls [ "px-4 py-2 bg-blue-400 text-background text-sm font-medium rounded-md hover:bg-blue-400/90 transition-colors cursor-pointer" ]
+            , HP.type_ HP.ButtonButton
+            ]
+            [ HH.text "+ New Context" ]
+        ]
+    
+      -- Context cards
+    , HH.div
+        [ cls [ "space-y-4" ] ]
+        [ contextCard "ctx_main" "Main Project" "straylight-web" 47 "2 min ago" true
+        , contextCard "ctx_api" "API Development" "omega-server" 23 "15 min ago" true
+        , contextCard "ctx_docs" "Documentation" "omega-docs" 8 "1 hour ago" false
+        ]
+    
+      -- Context info
+    , HH.div
+        [ cls [ "bg-card border border-border rounded-lg p-6 mt-8" ] ]
+        [ HH.h3 [ cls [ "text-lg font-semibold text-text mb-4" ] ] [ HH.text "About Contexts" ]
+        , HH.p [ cls [ "text-sm text-muted-foreground mb-4" ] ]
+            [ HH.text "Contexts persist agent memory across sessions. Each context maintains file awareness, conversation history, and attestation chains." ]
+        , HH.div
+            [ cls [ "grid grid-cols-2 md:grid-cols-4 gap-4" ] ]
+            [ contextStatBox "Total Contexts" "3"
+            , contextStatBox "Files Indexed" "1,247"
+            , contextStatBox "Memory Used" "128 MB"
+            , contextStatBox "Attestations" "847"
+            ]
+        ]
+    ]
+
+contextCard :: forall w i. String -> String -> String -> Int -> String -> Boolean -> HH.HTML w i
+contextCard id name project files lastActive active =
+  HH.div
+    [ cls [ "bg-card border rounded-lg p-4"
+          , if active then "border-blue-400/50" else "border-border"
+          ]
+    ]
+    [ HH.div
+        [ cls [ "flex items-center justify-between mb-2" ] ]
+        [ HH.div
+            [ cls [ "flex items-center gap-3" ] ]
+            [ HH.span [ cls [ "text-text font-medium" ] ] [ HH.text name ]
+            , HH.code [ cls [ "text-xs text-muted-foreground" ] ] [ HH.text id ]
+            ]
+        , HH.span
+            [ cls [ "text-xs px-2 py-0.5 rounded"
+                  , if active then "bg-blue-400/20 text-blue-400" else "bg-muted text-muted-foreground"
+                  ]
+            ]
+            [ HH.text $ if active then "Active" else "Inactive" ]
+        ]
+    , HH.div
+        [ cls [ "flex items-center gap-4 text-sm text-muted-foreground" ] ]
+        [ HH.span_ [ HH.text project ]
+        , HH.span_ [ HH.text $ show files <> " files" ]
+        , HH.span_ [ HH.text lastActive ]
+        ]
+    ]
+
+contextStatBox :: forall w i. String -> String -> HH.HTML w i
+contextStatBox label value =
   HH.div_
     [ HH.p [ cls [ "text-xs text-muted-foreground" ] ] [ HH.text label ]
-    , HH.p [ cls [ "text-sm text-text font-medium" ] ] [ HH.text value ]
+    , HH.p [ cls [ "text-lg font-bold text-text" ] ] [ HH.text value ]
     ]
 
 -- ============================================================
@@ -378,8 +475,8 @@ activityItem category action time =
     ]
 
 codeLine :: forall w i. String -> String -> HH.HTML w i
-codeLine prompt content =
+codeLine prompt text =
   HH.div_
     [ HH.span [ cls [ "text-muted-foreground" ] ] [ HH.text prompt ]
-    , HH.span [ cls [ "text-text" ] ] [ HH.text content ]
+    , HH.span [ cls [ "text-text" ] ] [ HH.text text ]
     ]

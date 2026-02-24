@@ -4,7 +4,6 @@ module Straylight.Pages.Products.SensenetConfirm.Settings where
 
 import Prelude
 
-import Data.Maybe (Maybe(..))
 import Effect.Aff.Class (class MonadAff)
 import Halogen as H
 import Halogen.HTML as HH
@@ -79,6 +78,9 @@ sidebar state =
   HH.div
     [ cls [ "space-y-1" ] ]
     [ sidebarButton state "account" "Account"
+    , sidebarButton state "pipelines" "Pipeline Config"
+    , sidebarButton state "proofs" "Proof Requirements"
+    , sidebarButton state "integrations" "Integrations"
     , sidebarButton state "billing" "Billing"
     , sidebarButton state "team" "Team"
     , sidebarButton state "notifications" "Notifications"
@@ -100,6 +102,9 @@ sidebarButton state value label =
 content :: forall m. MonadAff m => State -> H.ComponentHTML Action Slots m
 content state = case state.activeTab of
   "account" -> accountTab
+  "pipelines" -> pipelinesTab
+  "proofs" -> proofsTab
+  "integrations" -> integrationsTab
   "billing" -> billingTab
   "team" -> teamTab
   "notifications" -> notificationsTab
@@ -162,6 +167,309 @@ formField label input =
   HH.div_
     [ HH.label [ cls [ "block text-sm font-medium text-muted-foreground mb-1" ] ] [ HH.text label ]
     , input
+    ]
+
+-- ============================================================
+-- PIPELINES TAB
+-- ============================================================
+
+pipelinesTab :: forall m. MonadAff m => H.ComponentHTML Action Slots m
+pipelinesTab =
+  HH.div
+    [ cls [ "space-y-6" ] ]
+    [ -- Default pipeline settings
+      HH.div
+        [ cls [ "bg-card border border-border rounded-lg p-6" ] ]
+        [ HH.h3 [ cls [ "text-lg font-semibold text-text mb-4" ] ] [ HH.text "Default Pipeline Settings" ]
+        , HH.div
+            [ cls [ "space-y-4" ] ]
+            [ formField "Pipeline file"
+                ( HH.input
+                    [ cls [ "w-full px-3 py-2 bg-background border border-border rounded-md text-text text-sm font-mono" ]
+                    , HP.value "pipeline.dhall"
+                    ]
+                )
+            , formField "Parallelism"
+                ( HH.select
+                    [ cls [ "w-full px-3 py-2 bg-background border border-border rounded-md text-text text-sm" ] ]
+                    [ HH.option_ [ HH.text "4 cores" ]
+                    , HH.option_ [ HH.text "8 cores" ]
+                    , HH.option_ [ HH.text "16 cores" ]
+                    , HH.option_ [ HH.text "32 cores" ]
+                    ]
+                )
+            , formField "Timeout"
+                ( HH.input
+                    [ cls [ "w-full px-3 py-2 bg-background border border-border rounded-md text-text text-sm" ]
+                    , HP.value "30m"
+                    ]
+                )
+            ]
+        , HH.div
+            [ cls [ "mt-6" ] ]
+            [ HH.button
+                [ cls [ "px-4 py-2 bg-amber-400 text-background text-sm font-medium rounded-md hover:bg-amber-400/90 transition-colors cursor-pointer" ]
+                , HP.type_ HP.ButtonButton
+                ]
+                [ HH.text "Save Settings" ]
+            ]
+        ]
+    
+      -- Agent code settings
+    , HH.div
+        [ cls [ "bg-card border border-amber-400/30 rounded-lg p-6" ] ]
+        [ HH.h3 [ cls [ "text-lg font-semibold text-text mb-2" ] ] [ HH.text "Agent Code Detection" ]
+        , HH.p [ cls [ "text-sm text-muted-foreground mb-4" ] ] 
+            [ HH.text "Configure how AI-generated code is detected and handled in your pipelines." ]
+        , HH.div
+            [ cls [ "space-y-4" ] ]
+            [ toggleSetting "Enable agent detection" "Automatically detect AI-generated commits" true
+            , toggleSetting "Require elevated review" "Agent code requires additional approvals" true
+            , toggleSetting "Block untrusted agents" "Reject commits from unknown AI sources" false
+            ]
+        ]
+    
+      -- Caching
+    , HH.div
+        [ cls [ "bg-card border border-border rounded-lg p-6" ] ]
+        [ HH.h3 [ cls [ "text-lg font-semibold text-text mb-4" ] ] [ HH.text "Caching" ]
+        , HH.div
+            [ cls [ "space-y-4" ] ]
+            [ toggleSetting "Enable build caching" "Cache build outputs for faster rebuilds" true
+            , toggleSetting "Content-addressed caching" "Use Nix-style content addressing" true
+            , formField "Cache TTL"
+                ( HH.input
+                    [ cls [ "w-full px-3 py-2 bg-background border border-border rounded-md text-text text-sm" ]
+                    , HP.value "7d"
+                    ]
+                )
+            ]
+        ]
+    ]
+
+toggleSetting :: forall w i. String -> String -> Boolean -> HH.HTML w i
+toggleSetting title description enabled =
+  HH.div
+    [ cls [ "flex items-center justify-between py-2" ] ]
+    [ HH.div_
+        [ HH.p [ cls [ "text-sm text-text" ] ] [ HH.text title ]
+        , HH.p [ cls [ "text-xs text-muted-foreground" ] ] [ HH.text description ]
+        ]
+    , HH.div
+        [ cls [ "w-10 h-6 rounded-full transition-colors cursor-pointer"
+              , if enabled then "bg-amber-400" else "bg-muted"
+              ]
+        ]
+        [ HH.div
+            [ cls [ "w-4 h-4 bg-background rounded-full mt-1 transition-transform"
+                  , if enabled then "ml-5" else "ml-1"
+                  ]
+            ]
+            []
+        ]
+    ]
+
+-- ============================================================
+-- PROOFS TAB
+-- ============================================================
+
+proofsTab :: forall m. MonadAff m => H.ComponentHTML Action Slots m
+proofsTab =
+  HH.div
+    [ cls [ "space-y-6" ] ]
+    [ -- Global proof requirements
+      HH.div
+        [ cls [ "bg-card border border-border rounded-lg p-6" ] ]
+        [ HH.h3 [ cls [ "text-lg font-semibold text-text mb-4" ] ] [ HH.text "Global Proof Requirements" ]
+        , HH.p [ cls [ "text-sm text-muted-foreground mb-4" ] ] 
+            [ HH.text "These proofs are required for all pipelines in your organization." ]
+        , HH.div
+            [ cls [ "space-y-3" ] ]
+            [ proofRequirement "testsPass" "All tests must pass" true
+            , proofRequirement "noSecrets" "No secrets in code" true
+            , proofRequirement "coverageMin(80)" "Minimum 80% test coverage" false
+            , proofRequirement "noWarnings" "No compiler warnings" false
+            ]
+        , HH.button
+            [ cls [ "mt-4 text-sm text-amber-400 hover:text-amber-400/80 cursor-pointer" ]
+            , HP.type_ HP.ButtonButton
+            ]
+            [ HH.text "+ Add proof requirement" ]
+        ]
+    
+      -- Agent code proofs
+    , HH.div
+        [ cls [ "bg-card border border-amber-400/30 rounded-lg p-6" ] ]
+        [ HH.h3 [ cls [ "text-lg font-semibold text-text mb-2" ] ] [ HH.text "Agent Code Proof Burden" ]
+        , HH.p [ cls [ "text-sm text-muted-foreground mb-4" ] ] 
+            [ HH.text "Additional requirements for AI-generated code." ]
+        , HH.div
+            [ cls [ "space-y-4" ] ]
+            [ formField "Human approvals required"
+                ( HH.select
+                    [ cls [ "w-full px-3 py-2 bg-background border border-border rounded-md text-text text-sm" ] ]
+                    [ HH.option_ [ HH.text "2 approvals" ]
+                    , HH.option_ [ HH.text "3 approvals" ]
+                    , HH.option_ [ HH.text "4 approvals" ]
+                    ]
+                )
+            , toggleSetting "Require security review" "Agent commits need security team approval" true
+            , toggleSetting "Require proof of correctness" "Agent code must include formal proofs" false
+            ]
+        ]
+    
+      -- Strict mode
+    , HH.div
+        [ cls [ "bg-card border border-border rounded-lg p-6" ] ]
+        [ HH.h3 [ cls [ "text-lg font-semibold text-text mb-4" ] ] [ HH.text "Proof Verification Mode" ]
+        , HH.div
+            [ cls [ "space-y-3" ] ]
+            [ HH.label
+                [ cls [ "flex items-start gap-3 p-3 rounded-lg border border-border hover:border-amber-400/30 cursor-pointer" ] ]
+                [ HH.input [ HP.type_ HP.InputRadio, HP.name "proof-mode", HP.checked true, cls [ "mt-1" ] ]
+                , HH.div_
+                    [ HH.p [ cls [ "text-sm text-text font-medium" ] ] [ HH.text "Strict" ]
+                    , HH.p [ cls [ "text-xs text-muted-foreground" ] ] [ HH.text "All proofs must pass. Failures block merge." ]
+                    ]
+                ]
+            , HH.label
+                [ cls [ "flex items-start gap-3 p-3 rounded-lg border border-border hover:border-amber-400/30 cursor-pointer" ] ]
+                [ HH.input [ HP.type_ HP.InputRadio, HP.name "proof-mode", cls [ "mt-1" ] ]
+                , HH.div_
+                    [ HH.p [ cls [ "text-sm text-text font-medium" ] ] [ HH.text "Advisory" ]
+                    , HH.p [ cls [ "text-xs text-muted-foreground" ] ] [ HH.text "Proof failures are warnings only." ]
+                    ]
+                ]
+            ]
+        ]
+    ]
+
+proofRequirement :: forall w i. String -> String -> Boolean -> HH.HTML w i
+proofRequirement name description enabled =
+  HH.div
+    [ cls [ "flex items-center justify-between py-2 border-b border-border last:border-0" ] ]
+    [ HH.div_
+        [ HH.code [ cls [ "text-sm font-mono text-amber-400" ] ] [ HH.text name ]
+        , HH.p [ cls [ "text-xs text-muted-foreground" ] ] [ HH.text description ]
+        ]
+    , HH.div
+        [ cls [ "w-10 h-6 rounded-full transition-colors cursor-pointer"
+              , if enabled then "bg-amber-400" else "bg-muted"
+              ]
+        ]
+        [ HH.div
+            [ cls [ "w-4 h-4 bg-background rounded-full mt-1 transition-transform"
+                  , if enabled then "ml-5" else "ml-1"
+                  ]
+            ]
+            []
+        ]
+    ]
+
+-- ============================================================
+-- INTEGRATIONS TAB
+-- ============================================================
+
+integrationsTab :: forall m. MonadAff m => H.ComponentHTML Action Slots m
+integrationsTab =
+  HH.div
+    [ cls [ "space-y-6" ] ]
+    [ -- Connected integrations
+      HH.div
+        [ cls [ "bg-card border border-border rounded-lg p-6" ] ]
+        [ HH.h3 [ cls [ "text-lg font-semibold text-text mb-4" ] ] [ HH.text "Connected Integrations" ]
+        , HH.div
+            [ cls [ "space-y-4" ] ]
+            [ integrationCard "GitHub" "Connected" "github.com/my-org" true
+            , integrationCard "Slack" "Connected" "#builds channel" true
+            ]
+        ]
+    
+      -- Available integrations
+    , HH.div
+        [ cls [ "bg-card border border-border rounded-lg p-6" ] ]
+        [ HH.h3 [ cls [ "text-lg font-semibold text-text mb-4" ] ] [ HH.text "Available Integrations" ]
+        , HH.div
+            [ cls [ "grid grid-cols-1 md:grid-cols-2 gap-4" ] ]
+            [ availableIntegration "GitLab" "Connect GitLab repositories"
+            , availableIntegration "Jira" "Link builds to Jira tickets"
+            , availableIntegration "PagerDuty" "Alert on build failures"
+            , availableIntegration "Datadog" "Export build metrics"
+            ]
+        ]
+    
+      -- Webhooks
+    , HH.div
+        [ cls [ "bg-card border border-border rounded-lg p-6" ] ]
+        [ HH.div
+            [ cls [ "flex items-center justify-between mb-4" ] ]
+            [ HH.h3 [ cls [ "text-lg font-semibold text-text" ] ] [ HH.text "Webhooks" ]
+            , HH.button
+                [ cls [ "px-4 py-2 bg-amber-400 text-background text-sm font-medium rounded-md hover:bg-amber-400/90 transition-colors cursor-pointer" ]
+                , HP.type_ HP.ButtonButton
+                ]
+                [ HH.text "+ Add Webhook" ]
+            ]
+        , HH.div
+            [ cls [ "space-y-3" ] ]
+            [ webhookRow "https://api.example.com/builds" "build.completed, proof.verified"
+            , webhookRow "https://hooks.slack.com/..." "build.failed"
+            ]
+        ]
+    ]
+
+integrationCard :: forall w i. String -> String -> String -> Boolean -> HH.HTML w i
+integrationCard name status details connected =
+  HH.div
+    [ cls [ "flex items-center justify-between p-4 bg-background rounded-lg" ] ]
+    [ HH.div_
+        [ HH.div
+            [ cls [ "flex items-center gap-2 mb-1" ] ]
+            [ HH.span [ cls [ "text-text font-medium" ] ] [ HH.text name ]
+            , HH.span
+                [ cls [ "text-xs px-2 py-0.5 rounded"
+                      , if connected then "bg-green-500/20 text-green-400" else "bg-muted text-muted-foreground"
+                      ]
+                ]
+                [ HH.text status ]
+            ]
+        , HH.p [ cls [ "text-xs text-muted-foreground" ] ] [ HH.text details ]
+        ]
+    , HH.button
+        [ cls [ "text-sm text-red-400 hover:text-red-400/80 cursor-pointer" ]
+        , HP.type_ HP.ButtonButton
+        ]
+        [ HH.text "Disconnect" ]
+    ]
+
+availableIntegration :: forall w i. String -> String -> HH.HTML w i
+availableIntegration name description =
+  HH.div
+    [ cls [ "flex items-center justify-between p-4 bg-background rounded-lg" ] ]
+    [ HH.div_
+        [ HH.p [ cls [ "text-sm text-text font-medium" ] ] [ HH.text name ]
+        , HH.p [ cls [ "text-xs text-muted-foreground" ] ] [ HH.text description ]
+        ]
+    , HH.button
+        [ cls [ "px-3 py-1 text-sm border border-amber-400 text-amber-400 rounded hover:bg-amber-400/10 transition-colors cursor-pointer" ]
+        , HP.type_ HP.ButtonButton
+        ]
+        [ HH.text "Connect" ]
+    ]
+
+webhookRow :: forall w i. String -> String -> HH.HTML w i
+webhookRow url events =
+  HH.div
+    [ cls [ "flex items-center justify-between py-3 border-b border-border last:border-0" ] ]
+    [ HH.div_
+        [ HH.code [ cls [ "text-sm font-mono text-text" ] ] [ HH.text url ]
+        , HH.p [ cls [ "text-xs text-muted-foreground" ] ] [ HH.text events ]
+        ]
+    , HH.button
+        [ cls [ "text-sm text-red-400 hover:text-red-400/80 cursor-pointer" ]
+        , HP.type_ HP.ButtonButton
+        ]
+        [ HH.text "Delete" ]
     ]
 
 -- ============================================================

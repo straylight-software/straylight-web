@@ -70,6 +70,7 @@ sidebar currentPath =
             ]
         , sidebarSection "Guides"
             [ sidebarLink "/omega/code/docs/configuration" "Configuration" currentPath
+            , sidebarLink "/omega/code/docs/providers" "Providers" currentPath
             , sidebarLink "/omega/code/docs/crew-mode" "Crew Mode" currentPath
             , sidebarLink "/omega/code/docs/sigil" "SIGIL Protocol" currentPath
             , sidebarLink "/omega/code/docs/attestation" "Attestation" currentPath
@@ -132,6 +133,7 @@ renderContent path = case path of
   "/omega/code/docs/quickstart" -> quickstartContent
   "/omega/code/docs/installation" -> installationContent
   "/omega/code/docs/configuration" -> configurationContent
+  "/omega/code/docs/providers" -> providersContent
   "/omega/code/docs/crew-mode" -> crewModeContent
   "/omega/code/docs/sigil" -> sigilContent
   "/omega/code/docs/attestation" -> attestationContent
@@ -317,6 +319,84 @@ configurationContent =
         , codeLine "" "OMEGA_LLM_PROVIDER  # Override LLM provider"
         , codeLine "" "OMEGA_LLM_MODEL     # Override model"
         , codeLine "" "OMEGA_CONFIG        # Custom config path"
+        ]
+    ]
+
+-- ============================================================
+-- PROVIDERS
+-- ============================================================
+
+providersContent :: forall w i. HH.HTML w i
+providersContent =
+  article
+    [ h1 "Providers"
+    , p "omega//code supports multiple LLM providers. Use your own API keys (BYOK) or managed inference with Pro."
+    
+    , h2 "Supported Providers"
+    , HH.ul
+        [ cls [ "space-y-2 text-muted-foreground mb-6" ] ]
+        [ li' "Anthropic \x2014 Claude Sonnet, Claude Opus"
+        , li' "OpenAI \x2014 GPT-4, GPT-4o, GPT-4 Turbo"
+        , li' "OpenRouter \x2014 Multi-provider gateway"
+        , li' "Groq \x2014 Fast inference for Llama, Mixtral"
+        , li' "Together AI \x2014 Open source models"
+        , li' "Ollama \x2014 Local models on your machine"
+        ]
+    
+    , h2 "Configuration"
+    , codeBlock
+        [ HH.span [ cls [ "text-text" ] ] [ HH.text "[llm]" ]
+        , HH.text "\n"
+        , HH.span [ cls [ "text-text" ] ] [ HH.text "provider = \"anthropic\"" ]
+        , HH.text "\n"
+        , HH.span [ cls [ "text-text" ] ] [ HH.text "model = \"claude-sonnet-4-20250514\"" ]
+        , HH.text "\n\n"
+        , HH.span [ cls [ "text-muted-foreground" ] ] [ HH.text "# Or use OpenRouter for access to many models" ]
+        , HH.text "\n"
+        , HH.span [ cls [ "text-text" ] ] [ HH.text "provider = \"openrouter\"" ]
+        , HH.text "\n"
+        , HH.span [ cls [ "text-text" ] ] [ HH.text "model = \"anthropic/claude-sonnet-4-20250514\"" ]
+        ]
+    
+    , h2 "Environment Variables"
+    , codeBlock
+        [ codeLine "" "# Anthropic"
+        , codeLine "" "export ANTHROPIC_API_KEY=\"sk-ant-...\""
+        , HH.text "\n"
+        , codeLine "" "# OpenAI"
+        , codeLine "" "export OPENAI_API_KEY=\"sk-...\""
+        , HH.text "\n"
+        , codeLine "" "# OpenRouter"
+        , codeLine "" "export OPENROUTER_API_KEY=\"sk-or-...\""
+        , HH.text "\n"
+        , codeLine "" "# Groq"
+        , codeLine "" "export GROQ_API_KEY=\"gsk_...\""
+        ]
+    
+    , h2 "Local Models with Ollama"
+    , codeBlock
+        [ codeLine "# " "Start Ollama"
+        , codeLine "$ " "ollama serve"
+        , HH.text "\n"
+        , codeLine "# " "Pull a model"
+        , codeLine "$ " "ollama pull codellama:34b"
+        , HH.text "\n"
+        , codeLine "# " "Configure omega//code"
+        , HH.span [ cls [ "text-text" ] ] [ HH.text "provider = \"ollama\"" ]
+        , HH.text "\n"
+        , HH.span [ cls [ "text-text" ] ] [ HH.text "model = \"codellama:34b\"" ]
+        ]
+    
+    , h2 "Custom Endpoints"
+    , p "Any OpenAI-compatible API can be used:"
+    , codeBlock
+        [ HH.span [ cls [ "text-text" ] ] [ HH.text "[llm]" ]
+        , HH.text "\n"
+        , HH.span [ cls [ "text-text" ] ] [ HH.text "provider = \"custom\"" ]
+        , HH.text "\n"
+        , HH.span [ cls [ "text-text" ] ] [ HH.text "base_url = \"https://your-endpoint.example.com/v1\"" ]
+        , HH.text "\n"
+        , HH.span [ cls [ "text-text" ] ] [ HH.text "model = \"your-model-name\"" ]
         ]
     ]
 

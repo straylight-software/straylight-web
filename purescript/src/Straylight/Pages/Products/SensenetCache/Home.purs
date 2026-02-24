@@ -77,10 +77,10 @@ hero =
             , secondaryButton "/sensenet/cache/docs" "Read the docs"
             ]
           
-          -- Social proof placeholder
+          -- Social proof
         , HH.p
             [ cls [ "mt-12 text-sm text-muted-foreground" ] ]
-            [ HH.text "Trusted by teams who need cryptographic certainty" ]
+            [ HH.text "Securing supply chains for teams who refuse to trust blindly" ]
         ]
     ]
 
@@ -270,7 +270,7 @@ cta =
             [ HH.text "Ready for artifacts you can trust?" ]
         , HH.p
             [ cls [ "text-muted-foreground mb-8" ] ]
-            [ HH.text "Free tier includes 10GB storage and 100GB transfer. No credit card required." ]
+            [ HH.text "Free tier includes 5GB storage and 50GB transfer. No credit card required." ]
         , HH.div
             [ cls [ "flex flex-col sm:flex-row items-center justify-center gap-4" ] ]
             [ primaryButton "/sensenet/cache/pricing" "Start for free"
