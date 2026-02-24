@@ -30,6 +30,14 @@ import Straylight.Layout.Header as Header
 import Straylight.Layout.Footer as Footer
 -- Product pages
 import Straylight.Pages.Home as Home
+-- SENSE//NET
+import Straylight.Pages.Products.SensenetCache as SensenetCache
+import Straylight.Pages.Products.SensenetBuild as SensenetBuild
+import Straylight.Pages.Products.SensenetConverge as SensenetConverge
+import Straylight.Pages.Products.SensenetConfirm as SensenetConfirm
+import Straylight.Pages.Products.SensenetForge as SensenetForge
+import Straylight.Pages.Products.SensenetPublish as SensenetPublish
+-- Ω
 import Straylight.Pages.Products.OmegaCode as OmegaCode
 import Straylight.Pages.Products.OmegaWork as OmegaWork
 import Straylight.Pages.Products.OmegaProxy as OmegaProxy
@@ -74,6 +82,14 @@ type AppSlots =
   , footer :: H.Slot (Const Void) Void Unit
   -- Product pages
   , home :: H.Slot (Const Void) Void Unit
+  -- SENSE//NET
+  , sensenetCache :: H.Slot (Const Void) Void Unit
+  , sensenetBuild :: H.Slot (Const Void) Void Unit
+  , sensenetConverge :: H.Slot (Const Void) Void Unit
+  , sensenetConfirm :: H.Slot (Const Void) Void Unit
+  , sensenetForge :: H.Slot (Const Void) Void Unit
+  , sensenetPublish :: H.Slot (Const Void) Void Unit
+  -- Ω
   , omegaCode :: H.Slot (Const Void) Void Unit
   , omegaWork :: H.Slot (Const Void) Void Unit
   , omegaProxy :: H.Slot (Const Void) Void Unit
@@ -98,6 +114,26 @@ _footer = Proxy
 _home :: Proxy "home"
 _home = Proxy
 
+-- SENSE//NET
+_sensenetCache :: Proxy "sensenetCache"
+_sensenetCache = Proxy
+
+_sensenetBuild :: Proxy "sensenetBuild"
+_sensenetBuild = Proxy
+
+_sensenetConverge :: Proxy "sensenetConverge"
+_sensenetConverge = Proxy
+
+_sensenetConfirm :: Proxy "sensenetConfirm"
+_sensenetConfirm = Proxy
+
+_sensenetForge :: Proxy "sensenetForge"
+_sensenetForge = Proxy
+
+_sensenetPublish :: Proxy "sensenetPublish"
+_sensenetPublish = Proxy
+
+-- Ω
 _omegaCode :: Proxy "omegaCode"
 _omegaCode = Proxy
 
@@ -176,6 +212,14 @@ render state =
 mainMaxWidth :: Route -> String
 mainMaxWidth = case _ of
   Home -> "max-w-[1100px] mx-auto px-8 py-12"
+  -- SENSE//NET
+  SensenetCache -> "max-w-[1100px] mx-auto px-8 py-12"
+  SensenetBuild -> "max-w-[1100px] mx-auto px-8 py-12"
+  SensenetConverge -> "max-w-[1100px] mx-auto px-8 py-12"
+  SensenetConfirm -> "max-w-[1100px] mx-auto px-8 py-12"
+  SensenetForge -> "max-w-[1100px] mx-auto px-8 py-12"
+  SensenetPublish -> "max-w-[1100px] mx-auto px-8 py-12"
+  -- Ω
   OmegaCode -> "max-w-[1100px] mx-auto px-8 py-12"
   OmegaWork -> "max-w-[1100px] mx-auto px-8 py-12"
   OmegaProxy -> "max-w-[1100px] mx-auto px-8 py-12"
@@ -186,6 +230,14 @@ renderPage :: forall m. MonadAff m => Route -> H.ComponentHTML AppAction AppSlot
 renderPage = case _ of
   -- Product pages
   Home -> HH.slot_ _home unit Home.homePage unit
+  -- SENSE//NET
+  SensenetCache -> HH.slot_ _sensenetCache unit SensenetCache.sensenetCachePage unit
+  SensenetBuild -> HH.slot_ _sensenetBuild unit SensenetBuild.sensenetBuildPage unit
+  SensenetConverge -> HH.slot_ _sensenetConverge unit SensenetConverge.sensenetConvergePage unit
+  SensenetConfirm -> HH.slot_ _sensenetConfirm unit SensenetConfirm.sensenetConfirmPage unit
+  SensenetForge -> HH.slot_ _sensenetForge unit SensenetForge.sensenetForgePage unit
+  SensenetPublish -> HH.slot_ _sensenetPublish unit SensenetPublish.sensenetPublishPage unit
+  -- Ω
   OmegaCode -> HH.slot_ _omegaCode unit OmegaCode.omegaCodePage unit
   OmegaWork -> HH.slot_ _omegaWork unit OmegaWork.omegaWorkPage unit
   OmegaProxy -> HH.slot_ _omegaProxy unit OmegaProxy.omegaProxyPage unit
@@ -229,7 +281,14 @@ routeThemeLock = case _ of
   -- Villa Straylight papers lock to memphis black
   Plan -> Just "ono-memphis"
   Lean -> Just "ono-memphis"
-  -- Product pages have their own themes
+  -- SENSE//NET products
+  SensenetCache -> Just "ono-sprawl"
+  SensenetBuild -> Just "ono-sprawl"
+  SensenetConverge -> Just "ono-sprawl"
+  SensenetConfirm -> Just "ono-sprawl"
+  SensenetForge -> Just "ono-sprawl"
+  SensenetPublish -> Just "ono-sprawl"
+  -- Ω products
   OmegaCode -> Just "ono-sprawl"
   OmegaWork -> Just "ono-github"
   OmegaProxy -> Just "ono-memphis"

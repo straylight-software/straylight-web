@@ -16,6 +16,14 @@ import Hydrogen.Router (class IsRoute, class RouteMetadata, parseRoute, routeToP
 data Route
   -- Product pages (public landing)
   = Home                -- Product map overview
+  -- SENSE//NET - Build infrastructure
+  | SensenetCache       -- sensenet//cache
+  | SensenetBuild       -- sensenet//build
+  | SensenetConverge    -- sensenet//converge
+  | SensenetConfirm     -- sensenet//confirm
+  | SensenetForge       -- sensenet//forge
+  | SensenetPublish     -- sensenet//publish
+  -- Ω - Agent infrastructure
   | OmegaCode           -- omega//code product page
   | OmegaWork           -- omega//work product page
   | OmegaProxy          -- omega//proxy product page
@@ -40,6 +48,14 @@ instance isRouteRoute :: IsRoute Route where
   parseRoute path = case normalizeTrailingSlash path of
     -- Product routes
     "/" -> Home
+    -- SENSE//NET
+    "/sensenet/cache" -> SensenetCache
+    "/sensenet/build" -> SensenetBuild
+    "/sensenet/converge" -> SensenetConverge
+    "/sensenet/confirm" -> SensenetConfirm
+    "/sensenet/forge" -> SensenetForge
+    "/sensenet/publish" -> SensenetPublish
+    -- Ω
     "/omega/code" -> OmegaCode
     "/omega/work" -> OmegaWork
     "/omega/proxy" -> OmegaProxy
@@ -61,6 +77,14 @@ instance isRouteRoute :: IsRoute Route where
   routeToPath = case _ of
     -- Product routes
     Home -> "/"
+    -- SENSE//NET
+    SensenetCache -> "/sensenet/cache"
+    SensenetBuild -> "/sensenet/build"
+    SensenetConverge -> "/sensenet/converge"
+    SensenetConfirm -> "/sensenet/confirm"
+    SensenetForge -> "/sensenet/forge"
+    SensenetPublish -> "/sensenet/publish"
+    -- Ω
     OmegaCode -> "/omega/code"
     OmegaWork -> "/omega/work"
     OmegaProxy -> "/omega/proxy"
@@ -86,6 +110,14 @@ instance routeMetadataRoute :: RouteMetadata Route where
   
   routeTitle = case _ of
     Home -> "Straylight Software — Product Map"
+    -- SENSE//NET
+    SensenetCache -> "sensenet//cache — Attestation-aware Binary Cache"
+    SensenetBuild -> "sensenet//build — Typed Build System"
+    SensenetConverge -> "sensenet//converge — Typed Infrastructure-as-Code"
+    SensenetConfirm -> "sensenet//confirm — CI with Proof Obligations"
+    SensenetForge -> "sensenet//forge — Code Hosting + Review"
+    SensenetPublish -> "sensenet//publish — Scope-graph Documentation"
+    -- Ω
     OmegaCode -> "omega//code — Native Terminal AI Coding Agent"
     OmegaWork -> "omega//work — Desktop AI for Teams"
     OmegaProxy -> "omega//proxy — Verified Inference Proxy"
@@ -100,6 +132,14 @@ instance routeMetadataRoute :: RouteMetadata Route where
   
   routeDescription = case _ of
     Home -> "Two product families. Ten external products. One attestation layer."
+    -- SENSE//NET
+    SensenetCache -> "Attestation-aware binary cache & artifact store. Content-addressed. Post-quantum signatures."
+    SensenetBuild -> "Typed build system with formal verification. Dhall configs. Lean4-proven derivations."
+    SensenetConverge -> "Typed infrastructure-as-code. Desired-state convergence. No state files, no drift."
+    SensenetConfirm -> "CI with proof obligations. Typed Dhall pipelines. Agent code faces higher review burden."
+    SensenetForge -> "Code hosting + review. Stacked diffs, not PRs. jujutsu first-class. Agent-era design."
+    SensenetPublish -> "Scope-graph documentation. References resolve or the build fails. Cross-language. Machine-readable."
+    -- Ω
     OmegaCode -> "Native terminal AI coding agent. Haskell + Brick TUI. io_uring event loop. 509k req/s. SIGIL-native."
     OmegaWork -> "Electron desktop app for non-coders. Same agent engine, GUI surface."
     OmegaProxy -> "Verified inference proxy. SSE → SIGIL over ZeroMQ. Reset-on-ambiguity."

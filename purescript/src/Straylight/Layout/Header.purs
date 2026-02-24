@@ -174,6 +174,14 @@ productSwitcher state =
 currentProductName :: String -> String
 currentProductName = case _ of
   "/" -> "straylight"
+  -- SENSE//NET
+  "/sensenet/cache" -> "sensenet//cache"
+  "/sensenet/build" -> "sensenet//build"
+  "/sensenet/converge" -> "sensenet//converge"
+  "/sensenet/confirm" -> "sensenet//confirm"
+  "/sensenet/forge" -> "sensenet//forge"
+  "/sensenet/publish" -> "sensenet//publish"
+  -- Ω
   "/omega/code" -> "omega//code"
   "/omega/work" -> "omega//work"
   "/omega/proxy" -> "omega//proxy"
@@ -184,22 +192,27 @@ currentProductName = case _ of
 productMenu :: forall m. State -> H.ComponentHTML Action () m
 productMenu state =
   HH.div
-    [ cls [ "absolute top-full left-0 mt-2 bg-card border border-border rounded-lg p-4 min-w-[340px] z-50 shadow-lg" ] ]
-    [ -- SENSE//NET
+    [ cls [ "absolute top-full left-0 mt-2 bg-card border border-border rounded-lg p-4 min-w-[380px] z-50 shadow-lg" ] ]
+    [ -- SENSE//NET - Build infrastructure
       HH.div
         [ cls [ "mb-4" ] ]
         [ HH.div
-            [ cls [ "text-[9px] text-primary uppercase tracking-wider mb-2 flex items-center gap-2" ] ]
-            [ HH.span [ cls [ "w-1.5 h-1.5 bg-primary inline-block" ] ] []
-            , HH.text "SENSE // NET"
+            [ cls [ "text-[9px] text-cyan-400 uppercase tracking-wider mb-2 flex items-center gap-2" ] ]
+            [ HH.span [ cls [ "w-1.5 h-1.5 bg-cyan-400 inline-block" ] ] []
+            , HH.text "SENSE // NET · BUILD INFRASTRUCTURE"
             ]
         , HH.div
             [ cls [ "flex flex-col gap-1" ] ]
-            [ productOption state "/" "straylight" "Product Map" "ono-tuned"
+            [ productOption state "/sensenet/cache" "sensenet//cache" "Binary cache & artifact store" "ono-sprawl"
+            , productOption state "/sensenet/build" "sensenet//build" "Typed build system" "ono-sprawl"
+            , productOption state "/sensenet/converge" "sensenet//converge" "Infrastructure-as-code" "ono-sprawl"
+            , productOption state "/sensenet/confirm" "sensenet//confirm" "CI with proof obligations" "ono-sprawl"
+            , productOption state "/sensenet/forge" "sensenet//forge" "Code hosting + review" "ono-sprawl"
+            , productOption state "/sensenet/publish" "sensenet//publish" "Scope-graph documentation" "ono-sprawl"
             ]
         ]
     
-      -- OMEGA
+      -- Ω - Agent infrastructure
     , HH.div
         [ cls [ "mb-4" ] ]
         [ HH.div
@@ -216,16 +229,17 @@ productMenu state =
             ]
         ]
     
-      -- TEAM
+      -- Navigation
     , HH.div_
         [ HH.div
             [ cls [ "text-[9px] text-status uppercase tracking-wider mb-2 flex items-center gap-2" ] ]
             [ HH.span [ cls [ "w-1.5 h-1.5 bg-status inline-block" ] ] []
-            , HH.text "TEAM"
+            , HH.text "NAVIGATION"
             ]
         , HH.div
             [ cls [ "flex flex-col gap-1" ] ]
-            [ productOption state "/team" "about" "The continuity project" "ono-tuned"
+            [ productOption state "/" "product map" "All products overview" "ono-tuned"
+            , productOption state "/team" "team" "The continuity project" "ono-tuned"
             ]
         ]
     
