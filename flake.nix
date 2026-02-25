@@ -45,6 +45,9 @@
           bunNix = ./bun.nix;
         };
 
+        # Haskell API server with OpenAPI specs
+        straylight-api = pkgs.haskellPackages.callCabal2nix "straylight-api" ./server { };
+
         # Production build
         straylight-web = pkgs.stdenv.mkDerivation {
           pname = "straylight-web";
@@ -109,6 +112,7 @@
         packages = {
           default = straylight-web;
           web = straylight-web;
+          api = straylight-api;
         };
 
         # Checks run by `nix flake check`
@@ -217,6 +221,10 @@
             pkgs.esbuild
             pkgs.git
             bun2nixPkg
+            # Haskell
+            pkgs.ghc
+            pkgs.cabal-install
+            pkgs.haskell-language-server
           ];
 
           shellHook = ''
