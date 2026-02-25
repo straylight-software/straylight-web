@@ -21,6 +21,7 @@ import Data.Aeson (Value, encode, toJSON)
 import Data.ByteString.Lazy qualified as BSL
 import Data.Text (Text)
 import Data.Text qualified as T
+import Network.HTTP.Types (status200)
 import Network.Wai
 import Network.Wai.Handler.Warp
 import Servant
@@ -79,7 +80,22 @@ runServer port = do
 
 
 app :: Application
-app = serve (Proxy :: Proxy OpenApiEndpointsOnly) openApiHandlers
+app = corsMiddleware $ serve (Proxy :: Proxy OpenApiEndpointsOnly) openApiHandlers
+
+-- Simple CORS middleware
+corsMiddleware :: Middleware
+corsMiddleware baseApp req respond = 
+    case requestMethod req of
+        "OPTIONS" -> respond $ responseLBS status200 corsHeaders ""
+        _ -> baseApp req $ \response -> 
+            respond $ mapResponseHeaders (++ corsHeaders) response
+  where
+    corsHeaders =
+        [ ("Access-Control-Allow-Origin", "*")
+        , ("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
+        , ("Access-Control-Allow-Headers", "Content-Type, Authorization")
+        , ("Access-Control-Max-Age", "86400")
+        ]
 
 -- Only serve OpenAPI endpoints (no actual API handlers yet)
 type OpenApiEndpointsOnly = OpenApiEndpoints
