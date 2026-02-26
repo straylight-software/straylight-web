@@ -53371,8 +53371,7 @@ Learn more: https://clerk.com/docs/components/clerk-provider`.trim());
   var signInImpl = () => {
     if (clerkInstance) {
       clerkInstance.openSignIn({
-        afterSignInUrl: "/omega/code/dashboard",
-        afterSignUpUrl: "/omega/code/dashboard"
+        forceRedirectUrl: "/omega/code/dashboard"
       });
     }
   };

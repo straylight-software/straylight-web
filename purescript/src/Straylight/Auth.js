@@ -49,8 +49,7 @@ export const getAuthStateImpl = () => {
 export const signInImpl = () => {
   if (clerkInstance) {
     clerkInstance.openSignIn({
-      afterSignInUrl: "/omega/code/dashboard",
-      afterSignUpUrl: "/omega/code/dashboard",
+      forceRedirectUrl: "/omega/code/dashboard",
     });
   }
 };
@@ -58,8 +57,7 @@ export const signInImpl = () => {
 export const signUpImpl = () => {
   if (clerkInstance) {
     clerkInstance.openSignUp({
-      afterSignInUrl: "/omega/code/dashboard",
-      afterSignUpUrl: "/omega/code/dashboard",
+      forceRedirectUrl: "/omega/code/dashboard",
     });
   }
 };
