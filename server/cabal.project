@@ -8,5 +8,5 @@ optimization: 2
 
 -- Allow newer versions where safe
 allow-newer:
-    openapi3:base
+    openapi3:base,
     openapi3:aeson

@@ -225,6 +225,8 @@
             pkgs.ghc
             pkgs.cabal-install
             pkgs.haskell-language-server
+            pkgs.zlib
+            pkgs.pkg-config
           ];
 
           shellHook = ''
