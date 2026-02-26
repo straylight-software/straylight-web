@@ -40,6 +40,22 @@ module Api.Types
       -- * Common API Patterns
     , HealthAPI
     , InfoAPI
+    
+      -- * sensenet//cache Request/Response
+    , CacheResponse (..)
+    , CreateCacheReq (..)
+    
+      -- * sensenet//build Request/Response
+    , BuildResponse (..)
+    , TriggerBuildReq (..)
+    
+      -- * omega//code Request/Response
+    , AgentSessionResponse (..)
+    , CreateAgentSessionReq (..)
+    
+      -- * omega//work Request/Response
+    , WorkspaceResponse (..)
+    , CreateWorkspaceReq (..)
     ) where
 
 import Data.Aeson (FromJSON, ToJSON, Value)
@@ -225,3 +241,117 @@ instance ToParamSchema OrganizationId
 type HealthAPI = "health" :> Get '[JSON] Health
 
 type InfoAPI = "info" :> Get '[JSON] ApiInfo
+
+
+-- ═══════════════════════════════════════════════════════════════════════════
+-- // sensenet//cache types //
+-- ═══════════════════════════════════════════════════════════════════════════
+
+data CacheResponse = CacheResponse
+    { cacheId :: Text
+    , cacheName :: Text
+    , cacheIsPrivate :: Bool
+    , cacheSizeBytes :: Integer
+    , cachePathCount :: Int
+    , cachePublicKey :: Text
+    , cacheSubstituterUrl :: Text
+    }
+    deriving (Eq, Show, Generic)
+
+instance ToJSON CacheResponse
+instance FromJSON CacheResponse
+instance ToSchema CacheResponse
+
+data CreateCacheReq = CreateCacheReq
+    { cacheName :: Text
+    , cacheIsPrivate :: Bool
+    }
+    deriving (Eq, Show, Generic)
+
+instance ToJSON CreateCacheReq
+instance FromJSON CreateCacheReq
+instance ToSchema CreateCacheReq
+
+
+-- ═══════════════════════════════════════════════════════════════════════════
+-- // sensenet//build types //
+-- ═══════════════════════════════════════════════════════════════════════════
+
+data BuildResponse = BuildResponse
+    { buildId :: Text
+    , buildName :: Text
+    , buildFlakeRef :: Maybe Text
+    , buildStatus :: Text
+    , buildDurationMs :: Maybe Int
+    , buildPathsBuilt :: Int
+    , buildPathsCached :: Int
+    }
+    deriving (Eq, Show, Generic)
+
+instance ToJSON BuildResponse
+instance FromJSON BuildResponse
+instance ToSchema BuildResponse
+
+data TriggerBuildReq = TriggerBuildReq
+    { buildName :: Text
+    , buildFlakeRef :: Text
+    }
+    deriving (Eq, Show, Generic)
+
+instance ToJSON TriggerBuildReq
+instance FromJSON TriggerBuildReq
+instance ToSchema TriggerBuildReq
+
+
+-- ═══════════════════════════════════════════════════════════════════════════
+-- // omega//code types //
+-- ═══════════════════════════════════════════════════════════════════════════
+
+data AgentSessionResponse = AgentSessionResponse
+    { sessionId :: Text
+    , sessionDirectory :: Text
+    , sessionStatus :: Text
+    , sessionModel :: Text
+    , sessionTotalTokens :: Int
+    }
+    deriving (Eq, Show, Generic)
+
+instance ToJSON AgentSessionResponse
+instance FromJSON AgentSessionResponse
+instance ToSchema AgentSessionResponse
+
+data CreateAgentSessionReq = CreateAgentSessionReq
+    { sessionDirectory :: Text
+    , sessionModel :: Text
+    }
+    deriving (Eq, Show, Generic)
+
+instance ToJSON CreateAgentSessionReq
+instance FromJSON CreateAgentSessionReq
+instance ToSchema CreateAgentSessionReq
+
+
+-- ═══════════════════════════════════════════════════════════════════════════
+-- // omega//work types //
+-- ═══════════════════════════════════════════════════════════════════════════
+
+data WorkspaceResponse = WorkspaceResponse
+    { workspaceId :: Text
+    , workspaceName :: Text
+    , workspaceType :: Text
+    }
+    deriving (Eq, Show, Generic)
+
+instance ToJSON WorkspaceResponse
+instance FromJSON WorkspaceResponse
+instance ToSchema WorkspaceResponse
+
+data CreateWorkspaceReq = CreateWorkspaceReq
+    { workspaceName :: Text
+    , workspaceType :: Text
+    }
+    deriving (Eq, Show, Generic)
+
+instance ToJSON CreateWorkspaceReq
+instance FromJSON CreateWorkspaceReq
+instance ToSchema CreateWorkspaceReq

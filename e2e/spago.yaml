@@ -1,33 +1,39 @@
 package:
-  name: straylight-web
+  name: straylight-e2e
   dependencies:
     - aff
+    - aff-promise
     - arrays
     - console
     - effect
+    - either
+    - foreign
+    - foreign-object
     - foldable-traversable
-    - halogen
-    - halogen-vdom
-    - hydrogen
+    - literals
     - maybe
+    - node-buffer
+    - node-process
+    - nullable
+    - playwright
     - prelude
     - strings
-    - web-dom
-    - web-html
-    - web-events
+    - untagged-union
+  build:
+    strict: true
+    censor_project_warnings:
+      - WildcardInferredType
   bundle:
-    platform: browser
-    type: app
-    module: Main
-    outfile: ../public/straylight.js
+    module: E2E.Main
+    outfile: dist/e2e.js
+    platform: node
+    extra_args:
+      - "--external:playwright"
 
 workspace:
   package_set:
     registry: 73.2.0
   extra_packages:
-    hydrogen:
-      git: https://github.com/straylight-software/hydrogen.git
-      ref: main
     playwright:
       git: https://github.com/klntsky/purescript-playwright.git
       ref: master

@@ -37,3 +37,16 @@ next-env.d.ts
 .direnv
 .devshell
 result
+
+# e2e tests
+e2e/.spago/
+e2e/output/
+e2e/dist/
+e2e/spago.lock
+
+# local databases (dev-all)
+.postgres-data/
+.clickhouse-data/
+
+# haskell
+server/dist-newstyle/
