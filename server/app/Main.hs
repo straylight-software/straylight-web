@@ -29,7 +29,7 @@ import System.Environment (getArgs)
 import System.IO
 
 import Api
-import Api.OpenApi
+import Api.OpenApi (ProductSpec(..), allProductSpecs, cacheOpenApi, buildOpenApi, convergeOpenApi, confirmOpenApi, forgeOpenApi, publishOpenApi, codeOpenApi, workOpenApi, proxyOpenApi, boostOpenApi)
 
 
 -- ═══════════════════════════════════════════════════════════════════════════
@@ -123,12 +123,12 @@ openApiHandlers =
 specIndex :: Value
 specIndex = toJSON $ map specEntry allProductSpecs
   where
-    specEntry spec = 
-        [ ("name" :: Text, toJSON $ specName spec)
-        , ("title", toJSON $ specTitle spec)
-        , ("description", toJSON $ specDescription spec)
-        , ("version", toJSON $ specVersion spec)
-        , ("path", toJSON $ specPath spec)
+    specEntry (ProductSpec name title desc ver path _openapi) = 
+        [ ("name" :: Text, toJSON name)
+        , ("title", toJSON title)
+        , ("description", toJSON desc)
+        , ("version", toJSON ver)
+        , ("path", toJSON path)
         ]
 
 

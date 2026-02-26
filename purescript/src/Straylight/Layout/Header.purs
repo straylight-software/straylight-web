@@ -7,13 +7,15 @@ import Data.Maybe (Maybe(..))
 import Data.String as Data.String
 import Effect (Effect)
 import Effect.Class (liftEffect)
-import Effect.Aff.Class (class MonadAff)
+import Effect.Aff.Class (class MonadAff, liftAff)
 import Halogen as H
 import Halogen.HTML as HH
 import Halogen.HTML.Events as HE
 import Halogen.HTML.Properties as HP
+import Halogen.Subscription as HS
 
 import Straylight.UI (cls, svgNS)
+import Straylight.Auth as Auth
 
 -- ============================================================
 -- FFI
@@ -33,6 +35,7 @@ type State =
   , currentTheme :: String
   , themeLock :: Maybe String
   , currentPath :: String
+  , authState :: Auth.AuthState
   }
 
 data Action
@@ -41,6 +44,9 @@ data Action
   | ToggleMobileMenu
   | ToggleProductMenu
   | SelectProduct String String  -- path, theme
+  | SignIn
+  | SignOut
+  | AuthStateChanged
 
 type Input = 
   { currentPath :: String
@@ -69,6 +75,7 @@ initialState input =
   , currentTheme: "ono-tuned"
   , themeLock: input.themeLock
   , currentPath: input.currentPath
+  , authState: Auth.Loading
   }
 
 handleAction :: forall o m. MonadAff m => Action -> H.HalogenM State Action () o m Unit
@@ -83,6 +90,13 @@ handleAction = case _ of
         theme <- liftEffect $ getStoredThemeImpl "ono-tuned"
         liftEffect $ setThemeImpl theme
         H.modify_ _ { currentTheme = theme }
+    -- Initialize auth state
+    authState <- liftEffect Auth.getAuthState
+    H.modify_ _ { authState = authState }
+    -- Subscribe to auth changes
+    { emitter, listener } <- liftEffect HS.create
+    void $ liftEffect $ Auth.onAuthStateChange (HS.notify listener AuthStateChanged)
+    void $ H.subscribe emitter
 
   Receive input -> do
     H.modify_ _ { themeLock = input.themeLock, currentPath = input.currentPath }
@@ -106,6 +120,16 @@ handleAction = case _ of
     liftEffect $ navigateImpl path
     H.modify_ _ { currentTheme = theme, productMenuOpen = false, currentPath = path }
 
+  SignIn -> liftEffect Auth.signIn
+
+  SignOut -> do
+    liftAff Auth.signOut
+    H.modify_ _ { authState = Auth.SignedOut }
+
+  AuthStateChanged -> do
+    authState <- liftEffect Auth.getAuthState
+    H.modify_ _ { authState = authState }
+
 -- ============================================================
 -- RENDER
 -- ============================================================
@@ -124,13 +148,17 @@ render state =
               -- Desktop Nav - show product sub-pages or global nav
             , HH.nav
                 [ cls [ "hidden md:flex items-center gap-6" ] ]
-                (productNav state.currentPath)
+                (productNav state.authState state.currentPath)
               
-              -- Status indicator
+              -- Auth / Status
             , HH.div
-                [ cls [ "hidden md:flex items-center gap-2 text-xs text-muted-foreground" ] ]
-                [ HH.span [ cls [ "w-2 h-2 bg-status inline-block status-pulse" ] ] []
-                , HH.text "NOMINAL"
+                [ cls [ "hidden md:flex items-center gap-4" ] ]
+                [ authButton state.authState
+                , HH.div
+                    [ cls [ "flex items-center gap-2 text-xs text-muted-foreground" ] ]
+                    [ HH.span [ cls [ "w-2 h-2 bg-status inline-block status-pulse" ] ] []
+                    , HH.text "NOMINAL"
+                    ]
                 ]
               
               -- Mobile menu button
@@ -146,6 +174,39 @@ render state =
         , if state.mobileMenuOpen then mobileMenu else HH.text ""
         ]
     ]
+
+-- ============================================================
+-- AUTH BUTTON
+-- ============================================================
+
+authButton :: forall m. Auth.AuthState -> H.ComponentHTML Action () m
+authButton = case _ of
+  Auth.Loading -> 
+    HH.span 
+      [ cls [ "text-xs text-muted-foreground" ] ] 
+      [ HH.text "..." ]
+  
+  Auth.SignedOut ->
+    HH.button
+      [ cls [ "text-xs text-muted-foreground hover:text-text transition-colors cursor-pointer border border-border px-3 py-1 rounded hover:border-primary" ]
+      , HE.onClick \_ -> SignIn
+      , HP.type_ HP.ButtonButton
+      ]
+      [ HH.text "sign in" ]
+  
+  Auth.SignedIn user _ ->
+    HH.div
+      [ cls [ "flex items-center gap-2" ] ]
+      [ HH.span 
+          [ cls [ "text-xs text-text" ] ] 
+          [ HH.text user.email ]
+      , HH.button
+          [ cls [ "text-xs text-muted-foreground hover:text-text transition-colors cursor-pointer" ]
+          , HE.onClick \_ -> SignOut
+          , HP.type_ HP.ButtonButton
+          ]
+          [ HH.text "[sign out]" ]
+      ]
 
 -- ============================================================
 -- PRODUCT SWITCHER
@@ -193,18 +254,19 @@ startsWith prefix str =
     Nothing -> false
 
 -- | Returns navigation links - product sub-pages when on a product, global nav otherwise
-productNav :: forall w i. String -> Array (HH.HTML w i)
-productNav path
-  | startsWith "/sensenet/cache" path = productSubNav "/sensenet/cache" path
-  | startsWith "/sensenet/build" path = productSubNav "/sensenet/build" path
-  | startsWith "/sensenet/converge" path = productSubNav "/sensenet/converge" path
-  | startsWith "/sensenet/confirm" path = productSubNav "/sensenet/confirm" path
-  | startsWith "/sensenet/forge" path = productSubNav "/sensenet/forge" path
-  | startsWith "/sensenet/publish" path = productSubNav "/sensenet/publish" path
-  | startsWith "/omega/code" path = productSubNav "/omega/code" path
-  | startsWith "/omega/work" path = productSubNav "/omega/work" path
-  | startsWith "/omega/proxy" path = productSubNav "/omega/proxy" path
-  | startsWith "/omega/boost" path = productSubNav "/omega/boost" path
+-- | Logged-in users see dashboard/settings, logged-out users see marketing pages
+productNav :: forall w i. Auth.AuthState -> String -> Array (HH.HTML w i)
+productNav authState path
+  | startsWith "/sensenet/cache" path = productSubNav authState "/sensenet/cache" path
+  | startsWith "/sensenet/build" path = productSubNav authState "/sensenet/build" path
+  | startsWith "/sensenet/converge" path = productSubNav authState "/sensenet/converge" path
+  | startsWith "/sensenet/confirm" path = productSubNav authState "/sensenet/confirm" path
+  | startsWith "/sensenet/forge" path = productSubNav authState "/sensenet/forge" path
+  | startsWith "/sensenet/publish" path = productSubNav authState "/sensenet/publish" path
+  | startsWith "/omega/code" path = productSubNav authState "/omega/code" path
+  | startsWith "/omega/work" path = productSubNav authState "/omega/work" path
+  | startsWith "/omega/proxy" path = productSubNav authState "/omega/proxy" path
+  | startsWith "/omega/boost" path = productSubNav authState "/omega/boost" path
   | otherwise = globalNav
 
 globalNav :: forall w i. Array (HH.HTML w i)
@@ -215,13 +277,22 @@ globalNav =
   , navLink "/discord" "discord"
   ]
 
-productSubNav :: forall w i. String -> String -> Array (HH.HTML w i)
-productSubNav base currentPath =
-  [ subNavLink (base) "home" currentPath
-  , subNavLink (base <> "/features") "features" currentPath
-  , subNavLink (base <> "/pricing") "pricing" currentPath
-  , subNavLink (base <> "/docs") "docs" currentPath
-  ]
+productSubNav :: forall w i. Auth.AuthState -> String -> String -> Array (HH.HTML w i)
+productSubNav authState base currentPath =
+  case authState of
+    Auth.SignedIn _ _ ->
+      -- Logged in: show app navigation
+      [ subNavLink (base <> "/dashboard") "dashboard" currentPath
+      , subNavLink (base <> "/settings") "settings" currentPath
+      , subNavLink (base <> "/docs") "docs" currentPath
+      ]
+    _ ->
+      -- Logged out: show marketing navigation
+      [ subNavLink base "home" currentPath
+      , subNavLink (base <> "/features") "features" currentPath
+      , subNavLink (base <> "/pricing") "pricing" currentPath
+      , subNavLink (base <> "/docs") "docs" currentPath
+      ]
 
 subNavLink :: forall w i. String -> String -> String -> HH.HTML w i
 subNavLink href label currentPath =

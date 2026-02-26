@@ -19,7 +19,7 @@ import Effect.Aff (Aff)
 import Effect.Class (liftEffect)
 import Effect.Console (log)
 import Playwright (goto) as PW
-import Playwright.Data (Page, URL(..), Selector(..))
+import Playwright.Data (Page, URL(..))
 
 import E2E.Core.Selector (css)
 import E2E.Core.Element (getText)

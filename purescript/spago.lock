@@ -708,6 +708,33 @@
       "hydrogen": {
         "git": "https://github.com/straylight-software/hydrogen.git",
         "ref": "main"
+      },
+      "playwright": {
+        "git": "https://github.com/klntsky/purescript-playwright.git",
+        "ref": "master",
+        "dependencies": [
+          "aff",
+          "aff-promise",
+          "argonaut-core",
+          "console",
+          "datetime",
+          "effect",
+          "either",
+          "exceptions",
+          "foreign",
+          "foreign-object",
+          "literals",
+          "maybe",
+          "node-buffer",
+          "node-fs",
+          "node-streams",
+          "ordered-collections",
+          "prelude",
+          "refs",
+          "strings",
+          "transformers",
+          "untagged-union"
+        ]
       }
     }
   },

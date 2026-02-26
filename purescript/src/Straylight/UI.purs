@@ -21,6 +21,11 @@ module Straylight.UI
   , codeBlock
   , inlineCode
   , blockCursor
+    -- * Empty states
+  , emptyState
+  , emptyDashboard
+  , emptySettings
+  , connectPrompt
   ) where
 
 import Prelude
@@ -136,3 +141,78 @@ inlineCode content =
 -- | Block cursor (blinking)
 blockCursor :: forall w i. HH.HTML w i
 blockCursor = HH.span [ cls [ "block-cursor" ] ] []
+
+-- ============================================================
+-- EMPTY STATES
+-- ============================================================
+
+-- | Generic empty state with icon, title, and description
+emptyState :: forall w i. { icon :: String, title :: String, description :: String } -> HH.HTML w i
+emptyState opts =
+  HH.div
+    [ cls [ "flex flex-col items-center justify-center py-16 px-8 text-center" ] ]
+    [ HH.div 
+        [ cls [ "text-4xl mb-4 opacity-30" ] ] 
+        [ HH.text opts.icon ]
+    , HH.h3 
+        [ cls [ "text-lg font-medium text-text mb-2" ] ] 
+        [ HH.text opts.title ]
+    , HH.p 
+        [ cls [ "text-sm text-muted-foreground max-w-md" ] ] 
+        [ HH.text opts.description ]
+    ]
+
+-- | Empty dashboard state
+emptyDashboard :: forall w i. String -> HH.HTML w i
+emptyDashboard productName =
+  HH.div
+    [ cls [ "flex flex-col items-center justify-center py-24 px-8 text-center border border-dashed border-border rounded-lg" ] ]
+    [ HH.div 
+        [ cls [ "text-5xl mb-6 opacity-20" ] ] 
+        [ HH.text "◇" ]
+    , HH.h3 
+        [ cls [ "text-xl font-medium text-text mb-3" ] ] 
+        [ HH.text $ "No data yet" ]
+    , HH.p 
+        [ cls [ "text-sm text-muted-foreground max-w-lg mb-6" ] ] 
+        [ HH.text $ "Connect " <> productName <> " to your infrastructure to see metrics and activity here." ]
+    , HH.a
+        [ HP.href "#"
+        , cls [ "inline-flex items-center px-4 py-2 bg-primary text-background text-sm font-medium rounded hover:bg-primary/90 transition-colors" ]
+        ]
+        [ HH.text "Get Started" ]
+    ]
+
+-- | Empty settings state
+emptySettings :: forall w i. HH.HTML w i
+emptySettings =
+  HH.div
+    [ cls [ "flex flex-col items-center justify-center py-16 px-8 text-center" ] ]
+    [ HH.div 
+        [ cls [ "text-4xl mb-4 opacity-20" ] ] 
+        [ HH.text "⚙" ]
+    , HH.h3 
+        [ cls [ "text-lg font-medium text-text mb-2" ] ] 
+        [ HH.text "Sign in to configure" ]
+    , HH.p 
+        [ cls [ "text-sm text-muted-foreground max-w-md" ] ] 
+        [ HH.text "Settings will appear here after you sign in and connect your account." ]
+    ]
+
+-- | Connect account prompt
+connectPrompt :: forall w i. { title :: String, description :: String, buttonText :: String, buttonHref :: String } -> HH.HTML w i
+connectPrompt opts =
+  HH.div
+    [ cls [ "bg-card border border-border rounded-lg p-6 text-center" ] ]
+    [ HH.h4 
+        [ cls [ "text-base font-medium text-text mb-2" ] ] 
+        [ HH.text opts.title ]
+    , HH.p 
+        [ cls [ "text-sm text-muted-foreground mb-4" ] ] 
+        [ HH.text opts.description ]
+    , HH.a
+        [ HP.href opts.buttonHref
+        , cls [ "inline-flex items-center px-4 py-2 bg-primary text-background text-sm font-medium rounded hover:bg-primary/90 transition-colors" ]
+        ]
+        [ HH.text opts.buttonText ]
+    ]

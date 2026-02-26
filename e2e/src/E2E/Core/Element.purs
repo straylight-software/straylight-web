@@ -12,7 +12,7 @@ module E2E.Core.Element
 
 import Prelude
 
-import Data.Maybe (Maybe(..))
+import Data.Maybe (Maybe)
 import Effect.Aff (Aff)
 import Literals.Null (Null)
 import Playwright (click, fill, textContent, waitForSelector, query, queryMany) as PW
@@ -34,10 +34,10 @@ getText page sel = do
 
 isVisible :: Page -> Selector -> Aff Boolean
 isVisible page sel = do
-  el <- query page sel
-  case el of
-    Nothing -> pure false
-    Just _ -> pure true
+  result <- PW.query page (toPlaywright sel)
+  pure $ not $ isNull result
+
+foreign import isNull :: forall a. a -> Boolean
 
 waitFor :: Page -> Selector -> Aff Unit
 waitFor page sel = do

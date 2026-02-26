@@ -10,6 +10,7 @@ import Effect.Console (log)
 
 import E2E.Core.Harness (defaultConfig, withBrowser)
 import E2E.Test.ProductsSpec as ProductsSpec
+import E2E.Test.NavigationSpec as NavigationSpec
 
 main :: Effect Unit
 main = launchAff_ do
@@ -25,6 +26,7 @@ main = launchAff_ do
   liftEffect $ log ""
   
   withBrowser defaultConfig \env -> do
+    NavigationSpec.runNavigationTests env
     ProductsSpec.spec env
     
     liftEffect $ log ""

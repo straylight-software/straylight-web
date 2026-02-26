@@ -28,6 +28,7 @@ import Straylight.UI (cls, scanlineOverlay)
 import Straylight.Router (Route(..), Product(..), ProductPage(..), parseRoute, routeToPath, pushState, getPathname, onPopState, interceptLinks)
 import Straylight.Layout.Header as Header
 import Straylight.Layout.Footer as Footer
+import Straylight.Auth as Auth
 
 -- Product pages - Home
 import Straylight.Pages.Home as Home
@@ -126,12 +127,24 @@ import Straylight.Pages.Irc as Irc
 import Straylight.Pages.Discord as Discord
 
 -- ============================================================
+-- CONFIG
+-- ============================================================
+
+-- | Clerk publishable key for authentication
+-- | TODO: Move to environment/secrets management
+clerkPublishableKey :: String
+clerkPublishableKey = "pk_test_cmFwaWQtd2FzcC04Ny5jbGVyay5hY2NvdW50cy5kZXYk"
+
+-- ============================================================
 -- MAIN ENTRY
 -- ============================================================
 
 main :: Effect Unit
 main = launchAff_ do
   HA.awaitLoad
+  -- Initialize Clerk authentication
+  Auth.initClerk clerkPublishableKey
+  -- Mount the app
   doc <- liftEffect $ window >>= document
   let parent = HTMLDocument.toParentNode doc
   mbContainer <- liftEffect $ querySelector (QuerySelector "#straylight-app") parent

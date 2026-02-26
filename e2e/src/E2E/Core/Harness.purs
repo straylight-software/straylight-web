@@ -17,7 +17,7 @@ import Prelude
 
 import Data.Array (length)
 import Data.Maybe (Maybe(..))
-import Effect (Effect)
+
 import Effect.Aff (Aff, bracket, throwError, error)
 import Effect.Class (liftEffect)
 import Effect.Console (log)
