@@ -2,38 +2,109 @@
 module Straylight.Pages.Products.OmegaBoost.Dashboard where
 
 import Prelude
+
+import Data.Array (length)
+import Data.Maybe (Maybe(..))
 import Halogen as H
 import Halogen.HTML as HH
-import Straylight.UI (cls, codeBlock, emptyDashboard)
+import Halogen.HTML.Events as HE
+import Straylight.UI (cls, sectionHeader, emptyDashboard, settingsButton, statusIndicator)
+
+type InferenceJob = 
+  { id :: String
+  , model :: String
+  , latency :: String
+  , cost :: String
+  , status :: String
+  }
+
+type State = 
+  { jobs :: Array InferenceJob
+  , loading :: Boolean
+  }
+
+data Action 
+  = Initialize
+  | RunInference
+  | RefreshJobs
 
 dashboardPage :: forall q i o m. H.Component q i o m
 dashboardPage = H.mkComponent
-  { initialState: const unit
-  , render: const render
+  { initialState: const 
+      { jobs: []
+      , loading: false
+      }
+  , render
   , eval: H.mkEval H.defaultEval
+      { handleAction = handleAction
+      , initialize = Just Initialize
+      }
   }
 
-render :: forall w i. HH.HTML w i
-render =
-  HH.div
-    [ cls [ "max-w-[1100px] mx-auto px-6 py-8" ] ]
-    [ header, quickStart, emptyDashboard "omega//boost" ]
+handleAction :: forall o m. Action -> H.HalogenM State Action () o m Unit
+handleAction = case _ of
+  Initialize -> do
+    handleAction RefreshJobs
+  
+  RefreshJobs -> do
+    H.modify_ _ { loading = true }
+    let mockJobs = 
+          [ { id: "job-8821", model: "llama-3-70b", latency: "142ms", cost: "$0.002", status: "completed" }
+          , { id: "job-8822", model: "gpt-4o", latency: "890ms", cost: "$0.015", status: "completed" }
+          , { id: "job-8823", model: "claude-3-5-sonnet", latency: "420ms", cost: "$0.008", status: "processing" }
+          ]
+    H.modify_ _ { jobs = mockJobs, loading = false }
+  
+  RunInference -> do
+    H.modify_ _ { loading = true }
+    H.modify_ \s -> s { jobs = s.jobs <> [{ id: "job-new", model: "llama-3-8b", latency: "-", cost: "-", status: "queued" }], loading = false }
 
-header :: forall w i. HH.HTML w i
-header =
-  HH.div [ cls [ "mb-8" ] ]
-    [ HH.h1 [ cls [ "text-2xl font-bold text-text mb-2" ] ] [ HH.text "Dashboard" ]
-    , HH.p [ cls [ "text-muted-foreground" ] ] 
-        [ HH.text "Inference usage, latency metrics, and cost tracking." ]
+render :: forall m. State -> H.ComponentHTML Action () m
+render state =
+  HH.div_
+    [ sectionHeader "omega//boost // dashboard"
+    , if length state.jobs == 0 && not state.loading
+        then emptyDashboard "omega//boost" RunInference
+        else HH.div_
+            [ HH.div [ cls [ "flex justify-between items-center mb-6" ] ]
+                [ HH.div_ [ statusIndicator (show (length state.jobs) <> " JOBS RECORDED") ]
+                , settingsButton "run inference" RunInference
+                ]
+            , HH.div [ cls [ "bg-card border border-border rounded-lg overflow-hidden" ] ]
+                [ HH.table [ cls [ "w-full text-left text-xs" ] ]
+                    [ HH.thead [ cls [ "bg-muted/30 border-b border-border text-[10px] uppercase tracking-widest text-muted-foreground" ] ]
+                        [ HH.tr_
+                            [ HH.th [ cls [ "px-6 py-3 font-medium" ] ] [ HH.text "job id" ]
+                            , HH.th [ cls [ "px-6 py-3 font-medium" ] ] [ HH.text "model" ]
+                            , HH.th [ cls [ "px-6 py-3 font-medium" ] ] [ HH.text "latency" ]
+                            , HH.th [ cls [ "px-6 py-3 font-medium" ] ] [ HH.text "cost" ]
+                            , HH.th [ cls [ "px-6 py-3 font-medium" ] ] [ HH.text "status" ]
+                            ]
+                        ]
+                    , HH.tbody [ cls [ "divide-y divide-border" ] ]
+                        (map renderJob state.jobs)
+                    ]
+                ]
+            ]
     ]
 
-quickStart :: forall w i. HH.HTML w i
-quickStart =
-  HH.div [ cls [ "bg-card border border-border rounded-lg p-6 mb-8" ] ]
-    [ HH.h3 [ cls [ "text-lg font-semibold text-text mb-4" ] ] [ HH.text "Quick Start" ]
-    , codeBlock
-        [ HH.span [ cls [ "text-muted-foreground" ] ] [ HH.text "# Point your SDK to omega//boost\n" ]
-        , HH.span [ cls [ "text-primary" ] ] [ HH.text "export " ]
-        , HH.text "OPENAI_BASE_URL=https://boost.omega.dev/v1"
+renderJob :: forall w i. InferenceJob -> HH.HTML w i
+renderJob job =
+  HH.tr [ cls [ "hover:bg-muted/5 transition-colors group cursor-pointer" ] ]
+    [ HH.td [ cls [ "px-6 py-4 font-mono text-primary" ] ] [ HH.text job.id ]
+    , HH.td [ cls [ "px-6 py-4 text-text" ] ] [ HH.text job.model ]
+    , HH.td [ cls [ "px-6 py-4 text-muted-foreground font-mono" ] ] [ HH.text job.latency ]
+    , HH.td [ cls [ "px-6 py-4 text-muted-foreground font-mono" ] ] [ HH.text job.cost ]
+    , HH.td [ cls [ "px-6 py-4" ] ] 
+        [ HH.span 
+            [ cls [ "px-2 py-0.5 rounded text-[10px] uppercase tracking-tighter"
+                  , case job.status of
+                      "completed" -> "bg-status/20 text-status"
+                      "processing" -> "bg-blue-500/20 text-blue-400 status-pulse"
+                      "queued" -> "bg-muted text-muted-foreground"
+                      _ -> "bg-muted text-muted-foreground"
+                  ] 
+            ] 
+            [ HH.text job.status ]
         ]
     ]

@@ -26,11 +26,18 @@ module Straylight.UI
   , emptyDashboard
   , emptySettings
   , connectPrompt
+    -- * Settings components
+  , settingsGroup
+  , settingsItem
+  , settingsToggle
+  , settingsInput
+  , settingsButton
   ) where
 
 import Prelude
 
 import Halogen.HTML as HH
+import Halogen.HTML.Events as HE
 import Halogen.HTML.Properties as HP
 import Hydrogen.UI.Core (classes, cls, svgCls, flex, row, column, box, container, section, svgNS)
 
@@ -163,10 +170,10 @@ emptyState opts =
     ]
 
 -- | Empty dashboard state
-emptyDashboard :: forall w i. String -> HH.HTML w i
-emptyDashboard productName =
+emptyDashboard :: forall w i. String -> i -> HH.HTML w i
+emptyDashboard productName action =
   HH.div
-    [ cls [ "flex flex-col items-center justify-center py-24 px-8 text-center border border-dashed border-border rounded-lg" ] ]
+    [ cls [ "flex flex-col items-center justify-center py-24 px-8 text-center border border-dashed border-border rounded-lg w-full" ] ]
     [ HH.div 
         [ cls [ "text-5xl mb-6 opacity-20" ] ] 
         [ HH.text "◇" ]
@@ -176,9 +183,9 @@ emptyDashboard productName =
     , HH.p 
         [ cls [ "text-sm text-muted-foreground max-w-lg mb-6" ] ] 
         [ HH.text $ "Connect " <> productName <> " to your infrastructure to see metrics and activity here." ]
-    , HH.a
-        [ HP.href "#"
-        , cls [ "inline-flex items-center px-4 py-2 bg-primary text-background text-sm font-medium rounded hover:bg-primary/90 transition-colors" ]
+    , HH.button
+        [ HE.onClick \_ -> action
+        , cls [ "inline-flex items-center px-4 py-2 bg-primary text-background text-sm font-medium rounded hover:bg-primary/90 transition-colors cursor-pointer border-none" ]
         ]
         [ HH.text "Get Started" ]
     ]
@@ -212,7 +219,72 @@ connectPrompt opts =
         [ HH.text opts.description ]
     , HH.a
         [ HP.href opts.buttonHref
-        , cls [ "inline-flex items-center px-4 py-2 bg-primary text-background text-sm font-medium rounded hover:bg-primary/90 transition-colors" ]
+        , cls [ "inline-flex items-center px-4 py-2 bg-primary text-background text-sm font-medium rounded hover:bg-primary/90 transition-colors border-none" ]
         ]
         [ HH.text opts.buttonText ]
     ]
+
+-- ============================================================
+-- SETTINGS COMPONENTS
+-- ============================================================
+
+-- | Group of settings with a title
+settingsGroup :: forall w i. String -> Array (HH.HTML w i) -> HH.HTML w i
+settingsGroup title children =
+  HH.div
+    [ cls [ "mb-8 bg-card border border-border rounded-lg overflow-hidden" ] ]
+    [ HH.div 
+        [ cls [ "px-6 py-4 border-b border-border bg-muted/30" ] ] 
+        [ HH.h3 [ cls [ "text-[11px] font-medium text-text uppercase tracking-widest" ] ] [ HH.text title ] ]
+    , HH.div 
+        [ cls [ "divide-y divide-border" ] ] 
+        children
+    ]
+
+-- | A single setting item with label and control
+settingsItem :: forall w i. String -> String -> HH.HTML w i -> HH.HTML w i
+settingsItem title description control =
+  HH.div
+    [ cls [ "px-6 py-4 flex items-center justify-between gap-8 hover:bg-muted/5 transition-colors" ] ]
+    [ HH.div 
+        [ cls [ "flex-1" ] ] 
+        [ HH.h4 [ cls [ "text-sm font-medium text-text mb-1 lowercase" ] ] [ HH.text title ]
+        , HH.p [ cls [ "text-[11px] text-muted-foreground" ] ] [ HH.text description ]
+        ]
+    , HH.div [ cls [ "flex-shrink-0" ] ] [ control ]
+    ]
+
+-- | A toggle switch for settings
+settingsToggle :: forall w i. Boolean -> i -> HH.HTML w i
+settingsToggle active action =
+  HH.button
+    [ cls [ "relative inline-flex h-5 w-10 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-1 focus:ring-primary focus:ring-offset-1 border-none outline-none"
+          , if active then "bg-primary" else "bg-border"
+          ]
+    , HE.onClick \_ -> action
+    ]
+    [ HH.span 
+        [ cls [ "pointer-events-none inline-block h-4 w-4 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
+              , if active then "translate-x-5" else "translate-x-0"
+              ] 
+        ] []
+    ]
+
+-- | An input field for settings
+settingsInput :: forall w i. String -> String -> (String -> i) -> HH.HTML w i
+settingsInput val placeholder onChange =
+  HH.input
+    [ cls [ "bg-background border border-border rounded px-3 py-1.5 text-xs text-text focus:border-primary outline-none transition-colors w-64 font-mono" ]
+    , HP.value val
+    , HP.placeholder placeholder
+    , HE.onValueInput onChange
+    ]
+
+-- | A button for settings actions
+settingsButton :: forall w i. String -> i -> HH.HTML w i
+settingsButton label action =
+  HH.button
+    [ cls [ "px-4 py-2 bg-primary text-background text-[11px] font-medium rounded hover:bg-primary/90 transition-colors cursor-pointer uppercase tracking-wider border-none" ]
+    , HE.onClick \_ -> action
+    ]
+    [ HH.text label ]

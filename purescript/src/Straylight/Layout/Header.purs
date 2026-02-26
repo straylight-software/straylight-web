@@ -32,6 +32,8 @@ foreign import navigateImpl :: String -> Effect Unit
 type State =
   { mobileMenuOpen :: Boolean
   , productMenuOpen :: Boolean
+  , searchOpen :: Boolean
+  , searchQuery :: String
   , currentTheme :: String
   , themeLock :: Maybe String
   , currentPath :: String
@@ -43,6 +45,8 @@ data Action
   | Receive Input
   | ToggleMobileMenu
   | ToggleProductMenu
+  | ToggleSearch
+  | SetSearchQuery String
   | SelectProduct String String  -- path, theme
   | SignIn
   | SignOut
@@ -72,6 +76,8 @@ initialState :: Input -> State
 initialState input =
   { mobileMenuOpen: false
   , productMenuOpen: false
+  , searchOpen: false
+  , searchQuery: ""
   , currentTheme: "ono-tuned"
   , themeLock: input.themeLock
   , currentPath: input.currentPath
@@ -114,6 +120,12 @@ handleAction = case _ of
   
   ToggleProductMenu ->
     H.modify_ \s -> s { productMenuOpen = not s.productMenuOpen }
+
+  ToggleSearch -> 
+    H.modify_ \s -> s { searchOpen = not s.searchOpen }
+  
+  SetSearchQuery query -> 
+    H.modify_ _ { searchQuery = query }
   
   SelectProduct path theme -> do
     liftEffect $ setThemeImpl theme
@@ -150,10 +162,16 @@ render state =
                 [ cls [ "hidden md:flex items-center gap-6" ] ]
                 (productNav state.authState state.currentPath)
               
-              -- Auth / Status
+              -- Auth / Status / Search
             , HH.div
                 [ cls [ "hidden md:flex items-center gap-4" ] ]
-                [ authButton state.authState
+                [ HH.button
+                    [ cls [ "p-1.5 text-muted-foreground hover:text-text transition-colors cursor-pointer rounded hover:bg-muted/30" ]
+                    , HE.onClick \_ -> ToggleSearch
+                    , HP.type_ HP.ButtonButton
+                    ]
+                    [ searchIcon ]
+                , authButton state.authState
                 , HH.div
                     [ cls [ "flex items-center gap-2 text-xs text-muted-foreground" ] ]
                     [ HH.span [ cls [ "w-2 h-2 bg-status inline-block status-pulse" ] ] []
@@ -172,6 +190,38 @@ render state =
           
           -- Mobile menu
         , if state.mobileMenuOpen then mobileMenu else HH.text ""
+        
+          -- Search overlay
+        , if state.searchOpen then renderSearch state else HH.text ""
+        ]
+    ]
+
+renderSearch :: forall m. State -> H.ComponentHTML Action () m
+renderSearch state =
+  HH.div
+    [ cls [ "absolute top-full left-0 right-0 bg-card border-b border-border px-8 py-6 shadow-xl z-40" ] ]
+    [ HH.div 
+        [ cls [ "max-w-[800px] mx-auto" ] ]
+        [ HH.div [ cls [ "flex items-center gap-4" ] ]
+            [ HH.span [ cls [ "text-primary text-xl" ] ] [ HH.text ">" ]
+            , HH.input
+                [ cls [ "flex-1 bg-transparent border-none text-xl text-text outline-none font-mono" ]
+                , HP.placeholder "search products, docs, and commands..."
+                , HP.value state.searchQuery
+                , HE.onValueInput SetSearchQuery
+                ]
+            , HH.button
+                [ cls [ "text-muted-foreground hover:text-text transition-colors" ]
+                , HE.onClick \_ -> ToggleSearch
+                ]
+                [ HH.text "[ESC]" ]
+            ]
+        , if state.searchQuery /= ""
+            then HH.div [ cls [ "mt-6 pt-6 border-t border-border" ] ]
+                [ HH.div [ cls [ "text-xs text-muted-foreground uppercase tracking-widest mb-4" ] ] [ HH.text "results" ]
+                , HH.div [ cls [ "text-sm text-text italic opacity-50" ] ] [ HH.text $ "no results found for '" <> state.searchQuery <> "'" ]
+                ]
+            else HH.text ""
         ]
     ]
 
@@ -300,8 +350,8 @@ subNavLink href label currentPath =
     [ HP.href href
     , cls [ "text-[13px] transition-colors link-trace"
           , if isActive href currentPath
-              then "text-primary"
-              else "text-muted-foreground hover:text-text"
+               then "text-primary"
+               else "text-muted-foreground hover:text-text"
           ]
     ]
     [ HH.text label ]
@@ -387,8 +437,8 @@ productOption state path name desc theme =
   HH.button
     [ cls [ "text-left px-3 py-2 rounded transition-colors flex items-center justify-between group cursor-pointer w-full"
           , if startsWith path state.currentPath
-              then "bg-primary/10 text-text" 
-              else "hover:bg-card text-muted-foreground hover:text-text"
+               then "bg-primary/10 text-text" 
+               else "hover:bg-card text-muted-foreground hover:text-text"
           ]
     , HE.onClick \_ -> SelectProduct path theme
     , HP.type_ HP.ButtonButton
@@ -440,6 +490,23 @@ mobileMenu =
 -- ============================================================
 -- ICONS
 -- ============================================================
+
+searchIcon :: forall w i. HH.HTML w i
+searchIcon =
+  HH.elementNS svgNS (HH.ElemName "svg")
+    [ cls [ "w-4 h-4" ]
+    , HP.attr (HH.AttrName "fill") "none"
+    , HP.attr (HH.AttrName "stroke") "currentColor"
+    , HP.attr (HH.AttrName "viewBox") "0 0 24 24"
+    ]
+    [ HH.elementNS svgNS (HH.ElemName "path")
+        [ HP.attr (HH.AttrName "stroke-linecap") "round"
+        , HP.attr (HH.AttrName "stroke-linejoin") "round"
+        , HP.attr (HH.AttrName "stroke-width") "2"
+        , HP.attr (HH.AttrName "d") "M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+        ]
+        []
+    ]
 
 menuIcon :: forall w i. HH.HTML w i
 menuIcon =

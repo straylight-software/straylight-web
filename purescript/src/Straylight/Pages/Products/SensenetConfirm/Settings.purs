@@ -3,42 +3,73 @@ module Straylight.Pages.Products.SensenetConfirm.Settings where
 
 import Prelude
 
+import Data.Maybe (Maybe(..))
 import Halogen as H
 import Halogen.HTML as HH
+import Halogen.HTML.Events as HE
+import Straylight.UI (cls, sectionHeader, settingsGroup, settingsItem, settingsToggle, settingsInput, settingsButton)
 
-import Straylight.UI (cls, emptySettings)
+type State = 
+  { pipelinePrefix :: String
+  , autoVerify :: Boolean
+  , notifyOnFailure :: Boolean
+  , saved :: Boolean
+  }
 
--- ============================================================
--- COMPONENT
--- ============================================================
+data Action 
+  = UpdatePipelinePrefix String
+  | ToggleAutoVerify
+  | ToggleNotifyOnFailure
+  | SaveChanges
 
 settingsPage :: forall q i o m. H.Component q i o m
 settingsPage = H.mkComponent
-  { initialState: const unit
-  , render: const render
+  { initialState: const 
+      { pipelinePrefix: "ci-confirm-"
+      , autoVerify: true
+      , notifyOnFailure: true
+      , saved: false
+      }
+  , render
   , eval: H.mkEval H.defaultEval
+      { handleAction = handleAction
+      }
   }
 
--- ============================================================
--- RENDER
--- ============================================================
+handleAction :: forall o m. Action -> H.HalogenM State Action () o m Unit
+handleAction = case _ of
+  UpdatePipelinePrefix prefix -> do
+    H.modify_ _ { pipelinePrefix = prefix, saved = false }
+  
+  ToggleAutoVerify -> do
+    H.modify_ \s -> s { autoVerify = not s.autoVerify, saved = false }
+    handleAction SaveChanges
+  
+  ToggleNotifyOnFailure -> do
+    H.modify_ \s -> s { notifyOnFailure = not s.notifyOnFailure, saved = false }
+    handleAction SaveChanges
 
-render :: forall w i. HH.HTML w i
-render =
-  HH.div
-    [ cls [ "max-w-[1100px] mx-auto px-6 py-8" ] ]
-    [ header
-    , emptySettings
-    ]
+  SaveChanges -> do
+    H.modify_ _ { saved = true }
 
-header :: forall w i. HH.HTML w i
-header =
-  HH.div
-    [ cls [ "mb-8" ] ]
-    [ HH.h1
-        [ cls [ "text-2xl font-bold text-text" ] ]
-        [ HH.text "Settings" ]
-    , HH.p
-        [ cls [ "text-muted-foreground" ] ]
-        [ HH.text "Pipeline config, proof requirements, integrations, and billing." ]
+render :: forall m. State -> H.ComponentHTML Action () m
+render state =
+  HH.div_
+    [ sectionHeader "sensenet//confirm // settings"
+    , HH.div [ cls [ "max-w-4xl" ] ]
+        [ settingsGroup "Pipeline Verification"
+            [ settingsItem "Pipeline Prefix" "Prefix for automatically discovered pipelines" 
+                (settingsInput state.pipelinePrefix "ci-confirm-" UpdatePipelinePrefix)
+            , settingsItem "Auto-verify" "Verify proofs automatically on pipeline completion" 
+                (settingsToggle state.autoVerify ToggleAutoVerify)
+            , settingsItem "Failure Notifications" "Send alerts when a proof fails verification" 
+                (settingsToggle state.notifyOnFailure ToggleNotifyOnFailure)
+            ]
+        , HH.div [ cls [ "flex items-center gap-4" ] ]
+            [ settingsButton "Save Changes" SaveChanges
+            , if state.saved 
+                then HH.span [ cls [ "text-status text-xs animate-pulse" ] ] [ HH.text "Changes saved successfully" ]
+                else HH.text ""
+            ]
+        ]
     ]

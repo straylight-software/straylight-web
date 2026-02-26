@@ -3,60 +3,97 @@ module Straylight.Pages.Products.OmegaProxy.Dashboard where
 
 import Prelude
 
+import Data.Array (length)
+import Data.Maybe (Maybe(..))
 import Halogen as H
 import Halogen.HTML as HH
+import Halogen.HTML.Events as HE
+import Straylight.UI (cls, sectionHeader, emptyDashboard, settingsButton, statusIndicator)
 
-import Straylight.UI (cls, codeBlock, emptyDashboard)
+type Endpoint = 
+  { id :: String
+  , path :: String
+  , target :: String
+  , requests :: Int
+  , latency :: String
+  }
 
--- ============================================================
--- COMPONENT
--- ============================================================
+type State = 
+  { endpoints :: Array Endpoint
+  , loading :: Boolean
+  }
+
+data Action 
+  = Initialize
+  | AddEndpoint
+  | RefreshEndpoints
 
 dashboardPage :: forall q i o m. H.Component q i o m
 dashboardPage = H.mkComponent
-  { initialState: const unit
-  , render: const render
+  { initialState: const 
+      { endpoints: []
+      , loading: false
+      }
+  , render
   , eval: H.mkEval H.defaultEval
+      { handleAction = handleAction
+      , initialize = Just Initialize
+      }
   }
 
--- ============================================================
--- RENDER
--- ============================================================
+handleAction :: forall o m. Action -> H.HalogenM State Action () o m Unit
+handleAction = case _ of
+  Initialize -> do
+    handleAction RefreshEndpoints
+  
+  RefreshEndpoints -> do
+    H.modify_ _ { loading = true }
+    let mockEndpoints = 
+          [ { id: "ep-1", path: "/api/v1", target: "http://backend-1:8080", requests: 12400, latency: "12ms" }
+          , { id: "ep-2", path: "/auth", target: "http://auth-service:3000", requests: 5200, latency: "45ms" }
+          , { id: "ep-3", path: "/socket.io", target: "ws://gateway:9000", requests: 850, latency: "2ms" }
+          ]
+    H.modify_ _ { endpoints = mockEndpoints, loading = false }
+  
+  AddEndpoint -> do
+    H.modify_ _ { loading = true }
+    H.modify_ \s -> s { endpoints = s.endpoints <> [{ id: "ep-new", path: "/new-route", target: "http://localhost:8000", requests: 0, latency: "-" }], loading = false }
 
-render :: forall w i. HH.HTML w i
-render =
-  HH.div
-    [ cls [ "max-w-[1100px] mx-auto px-6 py-8" ] ]
-    [ header
-    , quickStart
-    , emptyDashboard "omega//proxy"
+render :: forall m. State -> H.ComponentHTML Action () m
+render state =
+  HH.div_
+    [ sectionHeader "omega//proxy // dashboard"
+    , if length state.endpoints == 0 && not state.loading
+        then emptyDashboard "omega//proxy" AddEndpoint
+        else HH.div_
+            [ HH.div [ cls [ "flex justify-between items-center mb-6" ] ]
+                [ HH.div_ [ statusIndicator (show (length state.endpoints) <> " ENDPOINTS ACTIVE") ]
+                , settingsButton "add endpoint" AddEndpoint
+                ]
+            , HH.div [ cls [ "bg-card border border-border rounded-lg overflow-hidden" ] ]
+                [ HH.table [ cls [ "w-full text-left text-xs" ] ]
+                    [ HH.thead [ cls [ "bg-muted/30 border-b border-border text-[10px] uppercase tracking-widest text-muted-foreground" ] ]
+                        [ HH.tr_
+                            [ HH.th [ cls [ "px-6 py-3 font-medium" ] ] [ HH.text "endpoint id" ]
+                            , HH.th [ cls [ "px-6 py-3 font-medium" ] ] [ HH.text "path" ]
+                            , HH.th [ cls [ "px-6 py-3 font-medium" ] ] [ HH.text "target" ]
+                            , HH.th [ cls [ "px-6 py-3 font-medium" ] ] [ HH.text "requests (24h)" ]
+                            , HH.th [ cls [ "px-6 py-3 font-medium" ] ] [ HH.text "avg latency" ]
+                            ]
+                        ]
+                    , HH.tbody [ cls [ "divide-y divide-border" ] ]
+                        (map renderEndpoint state.endpoints)
+                    ]
+                ]
+            ]
     ]
 
-header :: forall w i. HH.HTML w i
-header =
-  HH.div
-    [ cls [ "mb-8" ] ]
-    [ HH.h1
-        [ cls [ "text-2xl font-bold text-text mb-2" ] ]
-        [ HH.text "Dashboard" ]
-    , HH.p
-        [ cls [ "text-muted-foreground" ] ]
-        [ HH.text "Request metrics, compression ratios, and provider health." ]
-    ]
-
-quickStart :: forall w i. HH.HTML w i
-quickStart =
-  HH.div
-    [ cls [ "bg-card border border-border rounded-lg p-6 mb-8" ] ]
-    [ HH.h3
-        [ cls [ "text-lg font-semibold text-text mb-4" ] ]
-        [ HH.text "Quick Start" ]
-    , codeBlock
-        [ HH.span [ cls [ "text-muted-foreground" ] ] [ HH.text "# Configure your API endpoint\n" ]
-        , HH.span [ cls [ "text-orange-400" ] ] [ HH.text "$ " ]
-        , HH.text "export OMEGA_PROXY_URL=https://proxy.omega.dev\n\n"
-        , HH.span [ cls [ "text-muted-foreground" ] ] [ HH.text "# Route requests through omega//proxy\n" ]
-        , HH.span [ cls [ "text-orange-400" ] ] [ HH.text "$ " ]
-        , HH.text "omega proxy start"
-        ]
+renderEndpoint :: forall w i. Endpoint -> HH.HTML w i
+renderEndpoint ep =
+  HH.tr [ cls [ "hover:bg-muted/5 transition-colors group cursor-pointer" ] ]
+    [ HH.td [ cls [ "px-6 py-4 font-mono text-primary" ] ] [ HH.text ep.id ]
+    , HH.td [ cls [ "px-6 py-4 text-text font-medium" ] ] [ HH.text ep.path ]
+    , HH.td [ cls [ "px-6 py-4 text-muted-foreground font-mono" ] ] [ HH.text ep.target ]
+    , HH.td [ cls [ "px-6 py-4 text-muted-foreground font-mono" ] ] [ HH.text $ show ep.requests ]
+    , HH.td [ cls [ "px-6 py-4 text-status font-mono" ] ] [ HH.text ep.latency ]
     ]

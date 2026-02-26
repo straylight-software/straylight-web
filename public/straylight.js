@@ -91,10 +91,10 @@
   };
   var applySecond = function(dictApply) {
     var apply1 = apply(dictApply);
-    var map45 = map(dictApply.Functor0());
+    var map57 = map(dictApply.Functor0());
     return function(a3) {
       return function(b3) {
-        return apply1(map45($$const(identity2))(a3))(b3);
+        return apply1(map57($$const(identity2))(a3))(b3);
       };
     };
   };
@@ -174,6 +174,26 @@
   };
   var bindFlipped = function(dictBind) {
     return flip(bind(dictBind));
+  };
+  var composeKleisliFlipped = function(dictBind) {
+    var bindFlipped1 = bindFlipped(dictBind);
+    return function(f2) {
+      return function(g2) {
+        return function(a3) {
+          return bindFlipped1(f2)(g2(a3));
+        };
+      };
+    };
+  };
+  var composeKleisli = function(dictBind) {
+    var bind16 = bind(dictBind);
+    return function(f2) {
+      return function(g2) {
+        return function(a3) {
+          return bind16(f2(a3))(g2);
+        };
+      };
+    };
   };
   var discardUnit = {
     discard: function(dictBind) {
@@ -755,12 +775,12 @@
   };
   var ap = function(dictMonad) {
     var bind8 = bind(dictMonad.Bind1());
-    var pure10 = pure(dictMonad.Applicative0());
+    var pure13 = pure(dictMonad.Applicative0());
     return function(f2) {
       return function(a3) {
         return bind8(f2)(function(f$prime) {
           return bind8(a3)(function(a$prime) {
-            return pure10(f$prime(a$prime));
+            return pure13(f$prime(a$prime));
           });
         });
       };
@@ -1660,8 +1680,8 @@
       if (aff.tag === Aff.Pure.tag) {
         return Aff.Pure(f2(aff._1));
       } else {
-        return Aff.Bind(aff, function(value12) {
-          return Aff.Pure(f2(value12));
+        return Aff.Bind(aff, function(value15) {
+          return Aff.Pure(f2(value15));
         });
       }
     };
@@ -1751,6 +1771,21 @@
     };
     return Right2;
   }();
+  var functorEither = {
+    map: function(f2) {
+      return function(m2) {
+        if (m2 instanceof Left) {
+          return new Left(m2.value0);
+        }
+        ;
+        if (m2 instanceof Right) {
+          return new Right(f2(m2.value0));
+        }
+        ;
+        throw new Error("Failed pattern match at Data.Either (line 0, column 0 - line 0, column 0): " + [m2.constructor.name]);
+      };
+    }
+  };
   var either = function(v) {
     return function(v1) {
       return function(v2) {
@@ -1783,19 +1818,68 @@
   };
 
   // output/Control.Monad.Error.Class/index.js
+  var throwError = function(dict) {
+    return dict.throwError;
+  };
   var catchError = function(dict) {
     return dict.catchError;
   };
   var $$try = function(dictMonadError) {
     var catchError1 = catchError(dictMonadError);
     var Monad0 = dictMonadError.MonadThrow0().Monad0();
-    var map45 = map(Monad0.Bind1().Apply0().Functor0());
-    var pure10 = pure(Monad0.Applicative0());
+    var map57 = map(Monad0.Bind1().Apply0().Functor0());
+    var pure13 = pure(Monad0.Applicative0());
     return function(a3) {
-      return catchError1(map45(Right.create)(a3))(function($52) {
-        return pure10(Left.create($52));
+      return catchError1(map57(Right.create)(a3))(function($52) {
+        return pure13(Left.create($52));
       });
     };
+  };
+
+  // output/Data.Identity/index.js
+  var Identity = function(x) {
+    return x;
+  };
+  var functorIdentity = {
+    map: function(f2) {
+      return function(m2) {
+        return f2(m2);
+      };
+    }
+  };
+  var applyIdentity = {
+    apply: function(v) {
+      return function(v1) {
+        return v(v1);
+      };
+    },
+    Functor0: function() {
+      return functorIdentity;
+    }
+  };
+  var bindIdentity = {
+    bind: function(v) {
+      return function(f2) {
+        return f2(v);
+      };
+    },
+    Apply0: function() {
+      return applyIdentity;
+    }
+  };
+  var applicativeIdentity = {
+    pure: Identity,
+    Apply0: function() {
+      return applyIdentity;
+    }
+  };
+  var monadIdentity = {
+    Applicative0: function() {
+      return applicativeIdentity;
+    },
+    Bind1: function() {
+      return bindIdentity;
+    }
   };
 
   // output/Effect.Ref/foreign.js
@@ -1927,6 +2011,93 @@
     return dict.liftEffect;
   };
 
+  // output/Control.Monad.Except.Trans/index.js
+  var map4 = /* @__PURE__ */ map(functorEither);
+  var ExceptT = function(x) {
+    return x;
+  };
+  var runExceptT = function(v) {
+    return v;
+  };
+  var mapExceptT = function(f2) {
+    return function(v) {
+      return f2(v);
+    };
+  };
+  var functorExceptT = function(dictFunctor) {
+    var map110 = map(dictFunctor);
+    return {
+      map: function(f2) {
+        return mapExceptT(map110(map4(f2)));
+      }
+    };
+  };
+  var monadExceptT = function(dictMonad) {
+    return {
+      Applicative0: function() {
+        return applicativeExceptT(dictMonad);
+      },
+      Bind1: function() {
+        return bindExceptT(dictMonad);
+      }
+    };
+  };
+  var bindExceptT = function(dictMonad) {
+    var bind8 = bind(dictMonad.Bind1());
+    var pure13 = pure(dictMonad.Applicative0());
+    return {
+      bind: function(v) {
+        return function(k) {
+          return bind8(v)(either(function($193) {
+            return pure13(Left.create($193));
+          })(function(a3) {
+            var v1 = k(a3);
+            return v1;
+          }));
+        };
+      },
+      Apply0: function() {
+        return applyExceptT(dictMonad);
+      }
+    };
+  };
+  var applyExceptT = function(dictMonad) {
+    var functorExceptT1 = functorExceptT(dictMonad.Bind1().Apply0().Functor0());
+    return {
+      apply: ap(monadExceptT(dictMonad)),
+      Functor0: function() {
+        return functorExceptT1;
+      }
+    };
+  };
+  var applicativeExceptT = function(dictMonad) {
+    return {
+      pure: function() {
+        var $194 = pure(dictMonad.Applicative0());
+        return function($195) {
+          return ExceptT($194(Right.create($195)));
+        };
+      }(),
+      Apply0: function() {
+        return applyExceptT(dictMonad);
+      }
+    };
+  };
+  var monadThrowExceptT = function(dictMonad) {
+    var monadExceptT1 = monadExceptT(dictMonad);
+    return {
+      throwError: function() {
+        var $204 = pure(dictMonad.Applicative0());
+        return function($205) {
+          return ExceptT($204(Left.create($205)));
+        };
+      }(),
+      Monad0: function() {
+        return monadExceptT1;
+      }
+    };
+  };
+
   // output/Control.Plus/index.js
   var empty = function(dict) {
     return dict.empty;
@@ -1988,13 +2159,13 @@
   };
   var traverse_ = function(dictApplicative) {
     var applySecond2 = applySecond(dictApplicative.Apply0());
-    var pure10 = pure(dictApplicative);
+    var pure13 = pure(dictApplicative);
     return function(dictFoldable) {
       var foldr22 = foldr(dictFoldable);
       return function(f2) {
         return foldr22(function($454) {
           return applySecond2(f2($454));
-        })(pure10(unit));
+        })(pure13(unit));
       };
     };
   };
@@ -2010,7 +2181,7 @@
   var intercalate = function(dictFoldable) {
     var foldl2 = foldl(dictFoldable);
     return function(dictMonoid) {
-      var append6 = append(dictMonoid.Semigroup0());
+      var append9 = append(dictMonoid.Semigroup0());
       var mempty2 = mempty(dictMonoid);
       return function(sep) {
         return function(xs) {
@@ -2025,7 +2196,7 @@
               ;
               return {
                 init: false,
-                acc: append6(v.acc)(append6(sep)(v1))
+                acc: append9(v.acc)(append9(sep)(v1))
               };
             };
           };
@@ -2088,12 +2259,12 @@
   var foldMapDefaultR = function(dictFoldable) {
     var foldr22 = foldr(dictFoldable);
     return function(dictMonoid) {
-      var append6 = append(dictMonoid.Semigroup0());
+      var append9 = append(dictMonoid.Semigroup0());
       var mempty2 = mempty(dictMonoid);
       return function(f2) {
         return foldr22(function(x) {
           return function(acc) {
-            return append6(f2(x))(acc);
+            return append9(f2(x))(acc);
           };
         })(mempty2);
       };
@@ -2181,7 +2352,7 @@
   };
   var pure2 = /* @__PURE__ */ pure(applicativeEffect);
   var $$void3 = /* @__PURE__ */ $$void(functorEffect);
-  var map4 = /* @__PURE__ */ map(functorEffect);
+  var map5 = /* @__PURE__ */ map(functorEffect);
   var Canceler = function(x) {
     return x;
   };
@@ -2335,7 +2506,7 @@
   };
   var joinFiber = function(v) {
     return makeAff(function(k) {
-      return map4(effectCanceler)(v.join(k));
+      return map5(effectCanceler)(v.join(k));
     });
   };
   var functorFiber = {
@@ -2353,7 +2524,7 @@
         }
         ;
         return makeAff(function(k) {
-          return map4(effectCanceler)(v.kill(e2, k));
+          return map5(effectCanceler)(v.kill(e2, k));
         });
       });
     };
@@ -2453,9 +2624,9 @@
   };
 
   // output/Web.DOM.ParentNode/index.js
-  var map5 = /* @__PURE__ */ map(functorEffect);
+  var map6 = /* @__PURE__ */ map(functorEffect);
   var querySelector = function(qs) {
-    var $2 = map5(toMaybe);
+    var $2 = map6(toMaybe);
     var $3 = _querySelector(qs);
     return function($4) {
       return $2($3($4));
@@ -2547,11 +2718,11 @@
   };
 
   // output/Web.HTML.HTMLDocument/index.js
-  var map6 = /* @__PURE__ */ map(functorEffect);
+  var map7 = /* @__PURE__ */ map(functorEffect);
   var toParentNode = unsafeCoerce2;
   var toDocument = unsafeCoerce2;
   var readyState = function(doc) {
-    return map6(function() {
+    return map7(function() {
       var $4 = fromMaybe(Loading.value);
       return function($5) {
         return $4(parse($5));
@@ -2562,10 +2733,10 @@
   };
 
   // output/Web.HTML.HTMLElement/foreign.js
-  function _read(nothing, just, value12) {
-    var tag2 = Object.prototype.toString.call(value12);
+  function _read(nothing, just, value15) {
+    var tag2 = Object.prototype.toString.call(value15);
     if (tag2.indexOf("[object HTML") === 0 && tag2.indexOf("Element]") === tag2.length - 8) {
-      return just(value12);
+      return just(value15);
     } else {
       return nothing;
     }
@@ -2593,13 +2764,13 @@
           return function(f2) {
             return function(b3) {
               var result = [];
-              var value12 = b3;
+              var value15 = b3;
               while (true) {
-                var maybe2 = f2(value12);
+                var maybe2 = f2(value15);
                 if (isNothing2(maybe2)) return result;
                 var tuple = fromJust5(maybe2);
                 result.push(fst2(tuple));
-                value12 = snd2(tuple);
+                value15 = snd2(tuple);
               }
             };
           };
@@ -2616,13 +2787,13 @@
           return function(f2) {
             return function(b3) {
               var result = [];
-              var value12 = b3;
+              var value15 = b3;
               while (true) {
-                var tuple = f2(value12);
+                var tuple = f2(value15);
                 result.push(fst2(tuple));
                 var maybe2 = snd2(tuple);
                 if (isNothing2(maybe2)) return result;
-                value12 = fromJust5(maybe2);
+                value15 = fromJust5(maybe2);
               }
             };
           };
@@ -2737,16 +2908,17 @@
   var toEventTarget = unsafeCoerce2;
 
   // output/Web.HTML.Event.EventTypes/index.js
+  var input = "input";
   var domcontentloaded = "DOMContentLoaded";
 
   // output/Halogen.Aff.Util/index.js
   var bindFlipped4 = /* @__PURE__ */ bindFlipped(bindEffect);
-  var map7 = /* @__PURE__ */ map(functorEffect);
+  var map8 = /* @__PURE__ */ map(functorEffect);
   var awaitLoad = /* @__PURE__ */ makeAff(function(callback) {
     return function __do3() {
       var rs = bindFlipped4(readyState)(bindFlipped4(document2)(windowImpl))();
       if (rs instanceof Loading) {
-        var et = map7(toEventTarget)(windowImpl)();
+        var et = map8(toEventTarget)(windowImpl)();
         var listener = eventListener(function(v) {
           return callback(new Right(unit));
         })();
@@ -3029,7 +3201,7 @@
       return val;
     };
   };
-  var map8 = /* @__PURE__ */ map(functorMaybe);
+  var map9 = /* @__PURE__ */ map(functorMaybe);
   var Leaf = /* @__PURE__ */ function() {
     function Leaf2() {
     }
@@ -3255,7 +3427,7 @@
     return function(k) {
       return function(m2) {
         var v = unsafeSplit(compare2, k, m2);
-        return map8(function(a3) {
+        return map9(function(a3) {
           return new Tuple(a3, unsafeJoinNodes(v.value1, v.value2));
         })(v.value0);
       };
@@ -3382,7 +3554,7 @@
     },
     foldMap: function(dictMonoid) {
       var mempty2 = mempty(dictMonoid);
-      var append13 = append(dictMonoid.Semigroup0());
+      var append19 = append(dictMonoid.Semigroup0());
       return function(f2) {
         var go2 = function(v) {
           if (v instanceof Leaf) {
@@ -3390,7 +3562,7 @@
           }
           ;
           if (v instanceof Node2) {
-            return append13(go2(v.value4))(append13(f2(v.value3))(go2(v.value5)));
+            return append19(go2(v.value4))(append19(f2(v.value3))(go2(v.value5)));
           }
           ;
           throw new Error("Failed pattern match at Data.Map.Internal (line 181, column 10 - line 184, column 28): " + [v.constructor.name]);
@@ -3629,18 +3801,18 @@
   }();
 
   // output/Data.Array/foreign.js
-  var replicateFill = function(count, value12) {
+  var replicateFill = function(count, value15) {
     if (count < 1) {
       return [];
     }
     var result = new Array(count);
-    return result.fill(value12);
+    return result.fill(value15);
   };
-  var replicatePolyfill = function(count, value12) {
+  var replicatePolyfill = function(count, value15) {
     var result = [];
     var n2 = 0;
     for (var i3 = 0; i3 < count; i3++) {
-      result[n2++] = value12;
+      result[n2++] = value15;
     }
     return result;
   };
@@ -3769,7 +3941,7 @@
   });
 
   // output/Halogen.VDom.Types/index.js
-  var map9 = /* @__PURE__ */ map(functorArray);
+  var map10 = /* @__PURE__ */ map(functorArray);
   var map12 = /* @__PURE__ */ map(functorTuple);
   var Text = /* @__PURE__ */ function() {
     function Text2(value0) {
@@ -3882,11 +4054,11 @@
       }
       ;
       if (v2 instanceof Elem) {
-        return new Elem(v2.value0, v2.value1, v.value0(v2.value2), map9(go2)(v2.value3));
+        return new Elem(v2.value0, v2.value1, v.value0(v2.value2), map10(go2)(v2.value3));
       }
       ;
       if (v2 instanceof Keyed) {
-        return new Keyed(v2.value0, v2.value1, v.value0(v2.value2), map9(map12(go2))(v2.value3));
+        return new Keyed(v2.value0, v2.value1, v.value0(v2.value2), map10(map12(go2))(v2.value3));
       }
       ;
       if (v2 instanceof Widget) {
@@ -4362,11 +4534,14 @@
   };
 
   // output/Foreign/foreign.js
-  function typeOf(value12) {
-    return typeof value12;
+  function typeOf(value15) {
+    return typeof value15;
   }
-  var isArray = Array.isArray || function(value12) {
-    return Object.prototype.toString.call(value12) === "[object Array]";
+  function tagOf(value15) {
+    return Object.prototype.toString.call(value15).slice(8, -1);
+  }
+  var isArray = Array.isArray || function(value15) {
+    return Object.prototype.toString.call(value15) === "[object Array]";
   };
 
   // output/Data.List/index.js
@@ -4492,6 +4667,49 @@
     return function($24) {
       return isJust($23($24));
     };
+  };
+
+  // output/Foreign/index.js
+  var TypeMismatch = /* @__PURE__ */ function() {
+    function TypeMismatch2(value0, value1) {
+      this.value0 = value0;
+      this.value1 = value1;
+    }
+    ;
+    TypeMismatch2.create = function(value0) {
+      return function(value1) {
+        return new TypeMismatch2(value0, value1);
+      };
+    };
+    return TypeMismatch2;
+  }();
+  var unsafeToForeign = unsafeCoerce2;
+  var unsafeFromForeign = unsafeCoerce2;
+  var fail = function(dictMonad) {
+    var $153 = throwError(monadThrowExceptT(dictMonad));
+    return function($154) {
+      return $153(singleton4($154));
+    };
+  };
+  var unsafeReadTagged = function(dictMonad) {
+    var pure13 = pure(applicativeExceptT(dictMonad));
+    var fail1 = fail(dictMonad);
+    return function(tag2) {
+      return function(value15) {
+        if (tagOf(value15) === tag2) {
+          return pure13(unsafeFromForeign(value15));
+        }
+        ;
+        if (otherwise) {
+          return fail1(new TypeMismatch(tag2, tagOf(value15)));
+        }
+        ;
+        throw new Error("Failed pattern match at Foreign (line 123, column 1 - line 123, column 104): " + [tag2.constructor.name, value15.constructor.name]);
+      };
+    };
+  };
+  var readString = function(dictMonad) {
+    return unsafeReadTagged(dictMonad)("String");
   };
 
   // output/Foreign.Object/foreign.js
@@ -4893,7 +5111,7 @@
     return Lift.create;
   }();
   var goLeft = function(dictApplicative) {
-    var pure10 = pure(dictApplicative);
+    var pure13 = pure(dictApplicative);
     return function(fStack) {
       return function(valStack) {
         return function(nat) {
@@ -4901,7 +5119,7 @@
             return function(count) {
               if (func instanceof Pure) {
                 return new Tuple(new Cons({
-                  func: pure10(func.value0),
+                  func: pure13(func.value0),
                   count
                 }, fStack), valStack);
               }
@@ -4972,7 +5190,7 @@
   };
   var foldFreeAp = function(dictApplicative) {
     var goApply1 = goApply(dictApplicative);
-    var pure10 = pure(dictApplicative);
+    var pure13 = pure(dictApplicative);
     var goLeft1 = goLeft(dictApplicative);
     return function(nat) {
       return function(z) {
@@ -4981,7 +5199,7 @@
           var $tco_result;
           function $tco_loop(v) {
             if (v.value1.value0 instanceof Pure) {
-              var v1 = goApply1(v.value0)(v.value1.value1)(pure10(v.value1.value0.value0));
+              var v1 = goApply1(v.value0)(v.value1.value1)(pure13(v.value1.value0.value0));
               if (v1 instanceof Left) {
                 $tco_done = true;
                 return v1.value0;
@@ -5670,14 +5888,14 @@
 
   // output/Halogen.Query.HalogenQ/index.js
   var Initialize = /* @__PURE__ */ function() {
-    function Initialize6(value0) {
+    function Initialize17(value0) {
       this.value0 = value0;
     }
     ;
-    Initialize6.create = function(value0) {
-      return new Initialize6(value0);
+    Initialize17.create = function(value0) {
+      return new Initialize17(value0);
     };
-    return Initialize6;
+    return Initialize17;
   }();
   var Finalize = /* @__PURE__ */ function() {
     function Finalize2(value0) {
@@ -5782,7 +6000,7 @@
   // output/Halogen.Component/index.js
   var voidLeft2 = /* @__PURE__ */ voidLeft(functorHalogenM);
   var traverse_3 = /* @__PURE__ */ traverse_(applicativeHalogenM)(foldableMaybe);
-  var map10 = /* @__PURE__ */ map(functorHalogenM);
+  var map11 = /* @__PURE__ */ map(functorHalogenM);
   var pure4 = /* @__PURE__ */ pure(applicativeHalogenM);
   var lookup4 = /* @__PURE__ */ lookup2();
   var pop3 = /* @__PURE__ */ pop2();
@@ -5829,7 +6047,7 @@
       ;
       if (v instanceof Query) {
         return unCoyoneda(function(g2) {
-          var $45 = map10(maybe(v.value1(unit))(g2));
+          var $45 = map11(maybe(v.value1(unit))(g2));
           return function($46) {
             return $45(args.handleQuery($46));
           };
@@ -5903,6 +6121,9 @@
   var img = function(props) {
     return element2("img")(props)([]);
   };
+  var input2 = function(props) {
+    return element2("input")(props)([]);
+  };
   var li = /* @__PURE__ */ element2("li");
   var li_ = /* @__PURE__ */ li([]);
   var main = /* @__PURE__ */ element2("main");
@@ -5924,6 +6145,7 @@
   var thead = /* @__PURE__ */ element2("thead");
   var thead_ = /* @__PURE__ */ thead([]);
   var tr = /* @__PURE__ */ element2("tr");
+  var tr_ = /* @__PURE__ */ tr([]);
   var ul = /* @__PURE__ */ element2("ul");
   var div2 = /* @__PURE__ */ element2("div");
   var div_ = /* @__PURE__ */ div2([]);
@@ -5950,6 +6172,10 @@
   var type_17 = function(dictIsProp) {
     return prop2(dictIsProp)("type");
   };
+  var value12 = function(dictIsProp) {
+    return prop2(dictIsProp)("value");
+  };
+  var placeholder3 = /* @__PURE__ */ prop22("placeholder");
   var href4 = /* @__PURE__ */ prop22("href");
   var class_ = /* @__PURE__ */ function() {
     var $36 = prop22("className");
@@ -6085,9 +6311,9 @@
   var fork3 = /* @__PURE__ */ fork(monadForkAff);
   var parSequence_2 = /* @__PURE__ */ parSequence_(parallelAff)(applicativeParAff)(foldableList);
   var pure6 = /* @__PURE__ */ pure(applicativeAff);
-  var map13 = /* @__PURE__ */ map(functorCoyoneda);
+  var map14 = /* @__PURE__ */ map(functorCoyoneda);
   var parallel3 = /* @__PURE__ */ parallel(parallelAff);
-  var map14 = /* @__PURE__ */ map(functorAff);
+  var map15 = /* @__PURE__ */ map(functorAff);
   var sequential2 = /* @__PURE__ */ sequential(parallelAff);
   var map22 = /* @__PURE__ */ map(functorMaybe);
   var insert4 = /* @__PURE__ */ insert(ordSubscriptionId);
@@ -6159,7 +6385,7 @@
     return function(ref2) {
       return function(q2) {
         return bind12(liftEffect3(read(ref2)))(function(v) {
-          return evalM(render72)(ref2)(v["component"]["eval"](new Query(map13(Just.create)(liftCoyoneda(q2)), $$const(Nothing.value))));
+          return evalM(render72)(ref2)(v["component"]["eval"](new Query(map14(Just.create)(liftCoyoneda(q2)), $$const(Nothing.value))));
         });
       };
     };
@@ -6178,7 +6404,7 @@
                     })(dsx);
                   }));
                 };
-                return map14(v2.value2)(sequential2(v2.value0(applicativeParAff)(evalChild)(v1.children)));
+                return map15(v2.value2)(sequential2(v2.value0(applicativeParAff)(evalChild)(v1.children)));
               })(cqb);
             });
           };
@@ -6369,7 +6595,7 @@
   var parSequence_3 = /* @__PURE__ */ parSequence_(parallelAff)(applicativeParAff)(foldableList);
   var liftEffect4 = /* @__PURE__ */ liftEffect(monadEffectAff);
   var pure7 = /* @__PURE__ */ pure(applicativeEffect);
-  var map15 = /* @__PURE__ */ map(functorEffect);
+  var map16 = /* @__PURE__ */ map(functorEffect);
   var pure1 = /* @__PURE__ */ pure(applicativeAff);
   var when2 = /* @__PURE__ */ when(applicativeEffect);
   var renderStateX2 = /* @__PURE__ */ renderStateX(functorEffect);
@@ -6467,7 +6693,7 @@
               return function(childrenOutRef) {
                 return unComponentSlot(function(slot) {
                   return function __do3() {
-                    var childrenIn = map15(slot.pop)(read(childrenInRef))();
+                    var childrenIn = map16(slot.pop)(read(childrenInRef))();
                     var $$var2 = function() {
                       if (childrenIn instanceof Just) {
                         write(childrenIn.value0.value1)(childrenInRef)();
@@ -6497,7 +6723,7 @@
                       ;
                       throw new Error("Failed pattern match at Halogen.Aff.Driver (line 213, column 14 - line 222, column 98): " + [childrenIn.constructor.name]);
                     }();
-                    var isDuplicate = map15(function($69) {
+                    var isDuplicate = map16(function($69) {
                       return isJust(slot.get($69));
                     })(read(childrenOutRef))();
                     when2(isDuplicate)(warn("Halogen: Duplicate slot address was detected during rendering, unexpected results may occur"))();
@@ -6523,7 +6749,7 @@
           return function($$var2) {
             return function __do3() {
               var v = read($$var2)();
-              var shouldProcessHandlers = map15(isNothing)(read(v.pendingHandlers))();
+              var shouldProcessHandlers = map16(isNothing)(read(v.pendingHandlers))();
               when2(shouldProcessHandlers)(write(new Just(Nil.value))(v.pendingHandlers))();
               write(empty3)(v.childrenOut)();
               write(v.children)(v.childrenIn)();
@@ -6716,15 +6942,15 @@
   }
 
   // output/Web.DOM.Node/index.js
-  var map16 = /* @__PURE__ */ map(functorEffect);
+  var map17 = /* @__PURE__ */ map(functorEffect);
   var parentNode2 = /* @__PURE__ */ function() {
-    var $6 = map16(toMaybe);
+    var $6 = map17(toMaybe);
     return function($7) {
       return $6(_parentNode($7));
     };
   }();
   var nextSibling = /* @__PURE__ */ function() {
-    var $15 = map16(toMaybe);
+    var $15 = map17(toMaybe);
     return function($16) {
       return $15(_nextSibling($16));
     };
@@ -6752,7 +6978,7 @@
   var identity7 = /* @__PURE__ */ identity(categoryFn);
   var bind14 = /* @__PURE__ */ bind(bindAff);
   var liftEffect5 = /* @__PURE__ */ liftEffect(monadEffectAff);
-  var map17 = /* @__PURE__ */ map(functorEffect);
+  var map18 = /* @__PURE__ */ map(functorEffect);
   var bindFlipped7 = /* @__PURE__ */ bindFlipped(bindEffect);
   var substInParent = function(v) {
     return function(v1) {
@@ -6900,7 +7126,7 @@
   var runUI2 = function(component) {
     return function(i3) {
       return function(element3) {
-        return bind14(liftEffect5(map17(toDocument)(bindFlipped7(document2)(windowImpl))))(function(document3) {
+        return bind14(liftEffect5(map18(toDocument)(bindFlipped7(document2)(windowImpl))))(function(document3) {
           return runUI(renderSpec(document3)(element3))(component)(i3);
         });
       };
@@ -53459,8 +53685,8 @@ Learn more: https://clerk.com/docs/components/clerk-provider`.trim());
   };
   var getAuthState = function __do2() {
     var state3 = getAuthStateImpl();
-    var $29 = !state3.isLoaded;
-    if ($29) {
+    var $30 = !state3.isLoaded;
+    if ($30) {
       return Loading2.value;
     }
     ;
@@ -53475,14 +53701,14 @@ Learn more: https://clerk.com/docs/components/clerk-provider`.trim());
         return SignedOut.value;
       }
       ;
-      throw new Error("Failed pattern match at Straylight.Auth (line 78, column 20 - line 80, column 34): " + [v1.constructor.name]);
+      throw new Error("Failed pattern match at Straylight.Auth (line 80, column 20 - line 82, column 34): " + [v1.constructor.name]);
     }
     ;
     if (v instanceof Nothing) {
       return SignedOut.value;
     }
     ;
-    throw new Error("Failed pattern match at Straylight.Auth (line 77, column 10 - line 81, column 32): " + [v.constructor.name]);
+    throw new Error("Failed pattern match at Straylight.Auth (line 79, column 10 - line 83, column 32): " + [v.constructor.name]);
   };
 
   // output/Straylight.Layout.Footer/foreign.js
@@ -53501,11 +53727,11 @@ Learn more: https://clerk.com/docs/components/clerk-provider`.trim());
   var modify_3 = /* @__PURE__ */ modify_(monadStateHalogenM);
   var mod2 = /* @__PURE__ */ mod(euclideanRingInt);
   var Initialize2 = /* @__PURE__ */ function() {
-    function Initialize6() {
+    function Initialize17() {
     }
     ;
-    Initialize6.value = new Initialize6();
-    return Initialize6;
+    Initialize17.value = new Initialize17();
+    return Initialize17;
   }();
   var Tick = /* @__PURE__ */ function() {
     function Tick2() {
@@ -53611,18 +53837,63 @@ Learn more: https://clerk.com/docs/components/clerk-provider`.trim());
     };
   };
 
+  // output/Control.Monad.Except/index.js
+  var unwrap4 = /* @__PURE__ */ unwrap();
+  var runExcept = function($3) {
+    return unwrap4(runExceptT($3));
+  };
+
+  // output/Foreign.Index/foreign.js
+  function unsafeReadPropImpl(f2, s2, key, value15) {
+    return value15 == null ? f2 : s2(value15[key]);
+  }
+
+  // output/Foreign.Index/index.js
+  var unsafeReadProp = function(dictMonad) {
+    var fail2 = fail(dictMonad);
+    var pure13 = pure(applicativeExceptT(dictMonad));
+    return function(k) {
+      return function(value15) {
+        return unsafeReadPropImpl(fail2(new TypeMismatch("object", typeOf(value15))), pure13, k, value15);
+      };
+    };
+  };
+  var readProp = function(dictMonad) {
+    return unsafeReadProp(dictMonad);
+  };
+
   // output/Web.Event.Event/foreign.js
+  function _currentTarget(e2) {
+    return e2.currentTarget;
+  }
   function preventDefault(e2) {
     return function() {
       return e2.preventDefault();
     };
   }
 
+  // output/Web.Event.Event/index.js
+  var currentTarget = function($5) {
+    return toMaybe(_currentTarget($5));
+  };
+
   // output/Web.UIEvent.MouseEvent.EventTypes/index.js
   var click2 = "click";
 
   // output/Halogen.HTML.Events/index.js
+  var map19 = /* @__PURE__ */ map(functorMaybe);
+  var composeKleisli2 = /* @__PURE__ */ composeKleisli(bindMaybe);
+  var composeKleisliFlipped2 = /* @__PURE__ */ composeKleisliFlipped(/* @__PURE__ */ bindExceptT(monadIdentity));
+  var readProp2 = /* @__PURE__ */ readProp(monadIdentity);
+  var readString2 = /* @__PURE__ */ readString(monadIdentity);
   var mouseHandler = unsafeCoerce2;
+  var handler$prime = function(et) {
+    return function(f2) {
+      return handler(et)(function(ev) {
+        return map19(Action.create)(f2(ev));
+      });
+    };
+  };
   var handler2 = function(et) {
     return function(f2) {
       return handler(et)(function(ev) {
@@ -53636,8 +53907,26 @@ Learn more: https://clerk.com/docs/components/clerk-provider`.trim());
       return $15(mouseHandler($16));
     };
   }();
+  var addForeignPropHandler = function(key) {
+    return function(prop3) {
+      return function(reader) {
+        return function(f2) {
+          var go2 = function(a3) {
+            return composeKleisliFlipped2(reader)(readProp2(prop3))(unsafeToForeign(a3));
+          };
+          return handler$prime(key)(composeKleisli2(currentTarget)(function(e2) {
+            return either($$const(Nothing.value))(function($85) {
+              return Just.create(f2($85));
+            })(runExcept(go2(e2)));
+          }));
+        };
+      };
+    };
+  };
+  var onValueInput = /* @__PURE__ */ addForeignPropHandler(input)("value")(readString2);
 
   // output/Straylight.Layout.Header/index.js
+  var value13 = /* @__PURE__ */ value12(isPropString);
   var type_19 = /* @__PURE__ */ type_17(isPropButtonType);
   var bind5 = /* @__PURE__ */ bind(bindHalogenM);
   var get2 = /* @__PURE__ */ get(monadStateHalogenM);
@@ -53645,11 +53934,11 @@ Learn more: https://clerk.com/docs/components/clerk-provider`.trim());
   var modify_4 = /* @__PURE__ */ modify_(monadStateHalogenM);
   var $$void8 = /* @__PURE__ */ $$void(functorHalogenM);
   var Initialize3 = /* @__PURE__ */ function() {
-    function Initialize6() {
+    function Initialize17() {
     }
     ;
-    Initialize6.value = new Initialize6();
-    return Initialize6;
+    Initialize17.value = new Initialize17();
+    return Initialize17;
   }();
   var Receive2 = /* @__PURE__ */ function() {
     function Receive13(value0) {
@@ -53674,6 +53963,23 @@ Learn more: https://clerk.com/docs/components/clerk-provider`.trim());
     ;
     ToggleProductMenu2.value = new ToggleProductMenu2();
     return ToggleProductMenu2;
+  }();
+  var ToggleSearch = /* @__PURE__ */ function() {
+    function ToggleSearch2() {
+    }
+    ;
+    ToggleSearch2.value = new ToggleSearch2();
+    return ToggleSearch2;
+  }();
+  var SetSearchQuery = /* @__PURE__ */ function() {
+    function SetSearchQuery2(value0) {
+      this.value0 = value0;
+    }
+    ;
+    SetSearchQuery2.create = function(value0) {
+      return new SetSearchQuery2(value0);
+    };
+    return SetSearchQuery2;
   }();
   var SelectProduct = /* @__PURE__ */ function() {
     function SelectProduct2(value0, value1) {
@@ -53721,9 +54027,22 @@ Learn more: https://clerk.com/docs/components/clerk-provider`.trim());
           return false;
         }
         ;
-        throw new Error("Failed pattern match at Straylight.Layout.Header (line 252, column 20 - line 254, column 21): " + [v.constructor.name]);
+        throw new Error("Failed pattern match at Straylight.Layout.Header (line 302, column 20 - line 304, column 21): " + [v.constructor.name]);
       }();
     };
+  };
+  var searchIcon = /* @__PURE__ */ elementNS(svgNS)("svg")([/* @__PURE__ */ cls(["w-4 h-4"]), /* @__PURE__ */ attr2("fill")("none"), /* @__PURE__ */ attr2("stroke")("currentColor"), /* @__PURE__ */ attr2("viewBox")("0 0 24 24")])([/* @__PURE__ */ elementNS(svgNS)("path")([/* @__PURE__ */ attr2("stroke-linecap")("round"), /* @__PURE__ */ attr2("stroke-linejoin")("round"), /* @__PURE__ */ attr2("stroke-width")("2"), /* @__PURE__ */ attr2("d")("M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z")])([])]);
+  var renderSearch = function(state3) {
+    return div2([cls(["absolute top-full left-0 right-0 bg-card border-b border-border px-8 py-6 shadow-xl z-40"])])([div2([cls(["max-w-[800px] mx-auto"])])([div2([cls(["flex items-center gap-4"])])([span3([cls(["text-primary text-xl"])])([text5(">")]), input2([cls(["flex-1 bg-transparent border-none text-xl text-text outline-none font-mono"]), placeholder3("search products, docs, and commands..."), value13(state3.searchQuery), onValueInput(SetSearchQuery.create)]), button([cls(["text-muted-foreground hover:text-text transition-colors"]), onClick(function(v) {
+      return ToggleSearch.value;
+    })])([text5("[ESC]")])]), function() {
+      var $50 = state3.searchQuery !== "";
+      if ($50) {
+        return div2([cls(["mt-6 pt-6 border-t border-border"])])([div2([cls(["text-xs text-muted-foreground uppercase tracking-widest mb-4"])])([text5("results")]), div2([cls(["text-sm text-text italic opacity-50"])])([text5("no results found for '" + (state3.searchQuery + "'"))])]);
+      }
+      ;
+      return text5("");
+    }()])]);
   };
   var productOption = function(state3) {
     return function(path) {
@@ -53731,8 +54050,8 @@ Learn more: https://clerk.com/docs/components/clerk-provider`.trim());
         return function(desc) {
           return function(theme) {
             return button([cls(["text-left px-3 py-2 rounded transition-colors flex items-center justify-between group cursor-pointer w-full", function() {
-              var $44 = startsWith(path)(state3.currentPath);
-              if ($44) {
+              var $51 = startsWith(path)(state3.currentPath);
+              if ($51) {
                 return "bg-primary/10 text-text";
               }
               ;
@@ -53776,15 +54095,15 @@ Learn more: https://clerk.com/docs/components/clerk-provider`.trim());
         return currentPath === href5;
       }
       ;
-      throw new Error("Failed pattern match at Straylight.Layout.Header (line 309, column 1 - line 309, column 40): " + [href5.constructor.name, currentPath.constructor.name]);
+      throw new Error("Failed pattern match at Straylight.Layout.Header (line 359, column 1 - line 359, column 40): " + [href5.constructor.name, currentPath.constructor.name]);
     };
   };
   var subNavLink = function(href5) {
     return function(label5) {
       return function(currentPath) {
         return a([href4(href5), cls(["text-[13px] transition-colors link-trace", function() {
-          var $47 = isActive(href5)(currentPath);
-          if ($47) {
+          var $54 = isActive(href5)(currentPath);
+          if ($54) {
             return "text-primary";
           }
           ;
@@ -53808,6 +54127,8 @@ Learn more: https://clerk.com/docs/components/clerk-provider`.trim());
     return {
       mobileMenuOpen: false,
       productMenuOpen: false,
+      searchOpen: false,
+      searchQuery: "",
       currentTheme: "ono-tuned",
       themeLock: input3.themeLock,
       currentPath: input3.currentPath,
@@ -53824,16 +54145,16 @@ Learn more: https://clerk.com/docs/components/clerk-provider`.trim());
             if (state3.themeLock instanceof Just) {
               return discard5(liftEffect7(setThemeImpl(state3.themeLock.value0)))(function() {
                 return modify_4(function(v1) {
-                  var $53 = {};
-                  for (var $54 in v1) {
-                    if ({}.hasOwnProperty.call(v1, $54)) {
-                      $53[$54] = v1[$54];
+                  var $60 = {};
+                  for (var $61 in v1) {
+                    if ({}.hasOwnProperty.call(v1, $61)) {
+                      $60[$61] = v1[$61];
                     }
                     ;
                   }
                   ;
-                  $53.currentTheme = state3.themeLock.value0;
-                  return $53;
+                  $60.currentTheme = state3.themeLock.value0;
+                  return $60;
                 });
               });
             }
@@ -53842,35 +54163,35 @@ Learn more: https://clerk.com/docs/components/clerk-provider`.trim());
               return bind5(liftEffect7(getStoredThemeImpl("ono-tuned")))(function(theme) {
                 return discard5(liftEffect7(setThemeImpl(theme)))(function() {
                   return modify_4(function(v1) {
-                    var $57 = {};
-                    for (var $58 in v1) {
-                      if ({}.hasOwnProperty.call(v1, $58)) {
-                        $57[$58] = v1[$58];
+                    var $64 = {};
+                    for (var $65 in v1) {
+                      if ({}.hasOwnProperty.call(v1, $65)) {
+                        $64[$65] = v1[$65];
                       }
                       ;
                     }
                     ;
-                    $57.currentTheme = theme;
-                    return $57;
+                    $64.currentTheme = theme;
+                    return $64;
                   });
                 });
               });
             }
             ;
-            throw new Error("Failed pattern match at Straylight.Layout.Header (line 85, column 5 - line 92, column 45): " + [state3.themeLock.constructor.name]);
+            throw new Error("Failed pattern match at Straylight.Layout.Header (line 91, column 5 - line 98, column 45): " + [state3.themeLock.constructor.name]);
           }())(function() {
             return bind5(liftEffect7(getAuthState))(function(authState) {
               return discard5(modify_4(function(v1) {
-                var $60 = {};
-                for (var $61 in v1) {
-                  if ({}.hasOwnProperty.call(v1, $61)) {
-                    $60[$61] = v1[$61];
+                var $67 = {};
+                for (var $68 in v1) {
+                  if ({}.hasOwnProperty.call(v1, $68)) {
+                    $67[$68] = v1[$68];
                   }
                   ;
                 }
                 ;
-                $60.authState = authState;
-                return $60;
+                $67.authState = authState;
+                return $67;
               }))(function() {
                 return bind5(liftEffect7(create3))(function(v1) {
                   return discard5($$void8(liftEffect7(onAuthStateChange(notify(v1.listener)(AuthStateChanged.value)))))(function() {
@@ -53885,31 +54206,31 @@ Learn more: https://clerk.com/docs/components/clerk-provider`.trim());
       ;
       if (v instanceof Receive2) {
         return discard5(modify_4(function(v1) {
-          var $66 = {};
-          for (var $67 in v1) {
-            if ({}.hasOwnProperty.call(v1, $67)) {
-              $66[$67] = v1[$67];
+          var $73 = {};
+          for (var $74 in v1) {
+            if ({}.hasOwnProperty.call(v1, $74)) {
+              $73[$74] = v1[$74];
             }
             ;
           }
           ;
-          $66.themeLock = v.value0.themeLock;
-          $66.currentPath = v.value0.currentPath;
-          return $66;
+          $73.themeLock = v.value0.themeLock;
+          $73.currentPath = v.value0.currentPath;
+          return $73;
         }))(function() {
           if (v.value0.themeLock instanceof Just) {
             return discard5(liftEffect7(setThemeImpl(v.value0.themeLock.value0)))(function() {
               return modify_4(function(v1) {
-                var $70 = {};
-                for (var $71 in v1) {
-                  if ({}.hasOwnProperty.call(v1, $71)) {
-                    $70[$71] = v1[$71];
+                var $77 = {};
+                for (var $78 in v1) {
+                  if ({}.hasOwnProperty.call(v1, $78)) {
+                    $77[$78] = v1[$78];
                   }
                   ;
                 }
                 ;
-                $70.currentTheme = v.value0.themeLock.value0;
-                return $70;
+                $77.currentTheme = v.value0.themeLock.value0;
+                return $77;
               });
             });
           }
@@ -53918,52 +54239,82 @@ Learn more: https://clerk.com/docs/components/clerk-provider`.trim());
             return bind5(liftEffect7(getStoredThemeImpl("ono-tuned")))(function(theme) {
               return discard5(liftEffect7(setThemeImpl(theme)))(function() {
                 return modify_4(function(v1) {
-                  var $74 = {};
-                  for (var $75 in v1) {
-                    if ({}.hasOwnProperty.call(v1, $75)) {
-                      $74[$75] = v1[$75];
+                  var $81 = {};
+                  for (var $82 in v1) {
+                    if ({}.hasOwnProperty.call(v1, $82)) {
+                      $81[$82] = v1[$82];
                     }
                     ;
                   }
                   ;
-                  $74.currentTheme = theme;
-                  return $74;
+                  $81.currentTheme = theme;
+                  return $81;
                 });
               });
             });
           }
           ;
-          throw new Error("Failed pattern match at Straylight.Layout.Header (line 103, column 5 - line 110, column 45): " + [v.value0.themeLock.constructor.name]);
+          throw new Error("Failed pattern match at Straylight.Layout.Header (line 109, column 5 - line 116, column 45): " + [v.value0.themeLock.constructor.name]);
         });
       }
       ;
       if (v instanceof ToggleMobileMenu) {
         return modify_4(function(s2) {
-          var $78 = {};
-          for (var $79 in s2) {
-            if ({}.hasOwnProperty.call(s2, $79)) {
-              $78[$79] = s2[$79];
+          var $85 = {};
+          for (var $86 in s2) {
+            if ({}.hasOwnProperty.call(s2, $86)) {
+              $85[$86] = s2[$86];
             }
             ;
           }
           ;
-          $78.mobileMenuOpen = !s2.mobileMenuOpen;
-          return $78;
+          $85.mobileMenuOpen = !s2.mobileMenuOpen;
+          return $85;
         });
       }
       ;
       if (v instanceof ToggleProductMenu) {
         return modify_4(function(s2) {
-          var $81 = {};
-          for (var $82 in s2) {
-            if ({}.hasOwnProperty.call(s2, $82)) {
-              $81[$82] = s2[$82];
+          var $88 = {};
+          for (var $89 in s2) {
+            if ({}.hasOwnProperty.call(s2, $89)) {
+              $88[$89] = s2[$89];
             }
             ;
           }
           ;
-          $81.productMenuOpen = !s2.productMenuOpen;
-          return $81;
+          $88.productMenuOpen = !s2.productMenuOpen;
+          return $88;
+        });
+      }
+      ;
+      if (v instanceof ToggleSearch) {
+        return modify_4(function(s2) {
+          var $91 = {};
+          for (var $92 in s2) {
+            if ({}.hasOwnProperty.call(s2, $92)) {
+              $91[$92] = s2[$92];
+            }
+            ;
+          }
+          ;
+          $91.searchOpen = !s2.searchOpen;
+          return $91;
+        });
+      }
+      ;
+      if (v instanceof SetSearchQuery) {
+        return modify_4(function(v1) {
+          var $94 = {};
+          for (var $95 in v1) {
+            if ({}.hasOwnProperty.call(v1, $95)) {
+              $94[$95] = v1[$95];
+            }
+            ;
+          }
+          ;
+          $94.searchQuery = v.value0;
+          return $94;
         });
       }
       ;
@@ -53971,18 +54322,18 @@ Learn more: https://clerk.com/docs/components/clerk-provider`.trim());
         return discard5(liftEffect7(setThemeImpl(v.value1)))(function() {
           return discard5(liftEffect7(navigateImpl(v.value0)))(function() {
             return modify_4(function(v1) {
-              var $84 = {};
-              for (var $85 in v1) {
-                if ({}.hasOwnProperty.call(v1, $85)) {
-                  $84[$85] = v1[$85];
+              var $98 = {};
+              for (var $99 in v1) {
+                if ({}.hasOwnProperty.call(v1, $99)) {
+                  $98[$99] = v1[$99];
                 }
                 ;
               }
               ;
-              $84.currentTheme = v.value1;
-              $84.productMenuOpen = false;
-              $84.currentPath = v.value0;
-              return $84;
+              $98.currentTheme = v.value1;
+              $98.productMenuOpen = false;
+              $98.currentPath = v.value0;
+              return $98;
             });
           });
         });
@@ -53995,16 +54346,16 @@ Learn more: https://clerk.com/docs/components/clerk-provider`.trim());
       if (v instanceof SignOut) {
         return discard5(liftAff2(signOut))(function() {
           return modify_4(function(v1) {
-            var $89 = {};
-            for (var $90 in v1) {
-              if ({}.hasOwnProperty.call(v1, $90)) {
-                $89[$90] = v1[$90];
+            var $103 = {};
+            for (var $104 in v1) {
+              if ({}.hasOwnProperty.call(v1, $104)) {
+                $103[$104] = v1[$104];
               }
               ;
             }
             ;
-            $89.authState = SignedOut.value;
-            return $89;
+            $103.authState = SignedOut.value;
+            return $103;
           });
         });
       }
@@ -54012,21 +54363,21 @@ Learn more: https://clerk.com/docs/components/clerk-provider`.trim());
       if (v instanceof AuthStateChanged) {
         return bind5(liftEffect7(getAuthState))(function(authState) {
           return modify_4(function(v1) {
-            var $92 = {};
-            for (var $93 in v1) {
-              if ({}.hasOwnProperty.call(v1, $93)) {
-                $92[$93] = v1[$93];
+            var $106 = {};
+            for (var $107 in v1) {
+              if ({}.hasOwnProperty.call(v1, $107)) {
+                $106[$107] = v1[$107];
               }
               ;
             }
             ;
-            $92.authState = authState;
-            return $92;
+            $106.authState = authState;
+            return $106;
           });
         });
       }
       ;
-      throw new Error("Failed pattern match at Straylight.Layout.Header (line 82, column 16 - line 131, column 42): " + [v.constructor.name]);
+      throw new Error("Failed pattern match at Straylight.Layout.Header (line 88, column 16 - line 143, column 42): " + [v.constructor.name]);
     };
   };
   var externalLink = function(href5) {
@@ -54081,7 +54432,7 @@ Learn more: https://clerk.com/docs/components/clerk-provider`.trim());
         return globalNav;
       }
       ;
-      throw new Error("Failed pattern match at Straylight.Layout.Header (line 258, column 1 - line 258, column 74): " + [authState.constructor.name, path.constructor.name]);
+      throw new Error("Failed pattern match at Straylight.Layout.Header (line 308, column 1 - line 308, column 74): " + [authState.constructor.name, path.constructor.name]);
     };
   };
   var mobileMenu = /* @__PURE__ */ div2([/* @__PURE__ */ cls(["md:hidden py-4 border-t border-border mt-4"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["flex flex-col gap-4"])])([/* @__PURE__ */ navLink("/omega/code")("omega//code"), /* @__PURE__ */ navLink("/omega/work")("omega//work"), /* @__PURE__ */ navLink("/omega/proxy")("omega//proxy"), /* @__PURE__ */ navLink("/omega/boost")("omega//boost"), /* @__PURE__ */ navLink("/team")("team"), /* @__PURE__ */ navLink("/software")("software"), /* @__PURE__ */ externalLink("https://github.com/straylight-software")("github"), /* @__PURE__ */ navLink("/discord")("discord")])]);
@@ -54138,7 +54489,7 @@ Learn more: https://clerk.com/docs/components/clerk-provider`.trim());
       return "straylight";
     }
     ;
-    throw new Error("Failed pattern match at Straylight.Layout.Header (line 232, column 1 - line 232, column 39): " + [path.constructor.name]);
+    throw new Error("Failed pattern match at Straylight.Layout.Header (line 282, column 1 - line 282, column 39): " + [path.constructor.name]);
   };
   var productSwitcher = function(state3) {
     return div2([cls(["relative flex items-center"])])([button([cls(["text-text font-medium text-sm transition-colors hover:text-primary cursor-pointer flex items-center gap-2"]), onClick(function(v) {
@@ -54169,10 +54520,12 @@ Learn more: https://clerk.com/docs/components/clerk-provider`.trim());
       }), type_19(ButtonButton.value)])([text5("[sign out]")])]);
     }
     ;
-    throw new Error("Failed pattern match at Straylight.Layout.Header (line 183, column 14 - line 209, column 8): " + [v.constructor.name]);
+    throw new Error("Failed pattern match at Straylight.Layout.Header (line 233, column 14 - line 259, column 8): " + [v.constructor.name]);
   };
   var render2 = function(state3) {
-    return header([cls(["sticky top-0 z-50 bg-background border-b border-border"])])([div2([cls(["max-w-[1100px] mx-auto px-8 py-4"])])([div2([cls(["flex justify-between items-center"])])([productSwitcher(state3), nav([cls(["hidden md:flex items-center gap-6"])])(productNav(state3.authState)(state3.currentPath)), div2([cls(["hidden md:flex items-center gap-4"])])([authButton(state3.authState), div2([cls(["flex items-center gap-2 text-xs text-muted-foreground"])])([span3([cls(["w-2 h-2 bg-status inline-block status-pulse"])])([]), text5("NOMINAL")])]), button([cls(["md:hidden p-2 cursor-pointer text-text"]), onClick(function(v) {
+    return header([cls(["sticky top-0 z-50 bg-background border-b border-border"])])([div2([cls(["max-w-[1100px] mx-auto px-8 py-4"])])([div2([cls(["flex justify-between items-center"])])([productSwitcher(state3), nav([cls(["hidden md:flex items-center gap-6"])])(productNav(state3.authState)(state3.currentPath)), div2([cls(["hidden md:flex items-center gap-4"])])([button([cls(["p-1.5 text-muted-foreground hover:text-text transition-colors cursor-pointer rounded hover:bg-muted/30"]), onClick(function(v) {
+      return ToggleSearch.value;
+    }), type_19(ButtonButton.value)])([searchIcon]), authButton(state3.authState), div2([cls(["flex items-center gap-2 text-xs text-muted-foreground"])])([span3([cls(["w-2 h-2 bg-status inline-block status-pulse"])])([]), text5("NOMINAL")])]), button([cls(["md:hidden p-2 cursor-pointer text-text"]), onClick(function(v) {
       return ToggleMobileMenu.value;
     }), type_19(ButtonButton.value)])([function() {
       if (state3.mobileMenuOpen) {
@@ -54183,6 +54536,12 @@ Learn more: https://clerk.com/docs/components/clerk-provider`.trim());
     }()])]), function() {
       if (state3.mobileMenuOpen) {
         return mobileMenu;
+      }
+      ;
+      return text5("");
+    }(), function() {
+      if (state3.searchOpen) {
+        return renderSearch(state3);
       }
       ;
       return text5("");
@@ -54197,15 +54556,64 @@ Learn more: https://clerk.com/docs/components/clerk-provider`.trim());
         finalize: defaultEval.finalize,
         handleAction: handleAction2(dictMonadAff),
         initialize: new Just(Initialize3.value),
-        receive: function($104) {
-          return Just.create(Receive2.create($104));
+        receive: function($119) {
+          return Just.create(Receive2.create($119));
         }
       })
     });
   };
 
   // output/Straylight.UI/index.js
+  var value14 = /* @__PURE__ */ value12(isPropString);
   var show2 = /* @__PURE__ */ show(showInt);
+  var statusIndicator = function(label5) {
+    return div2([cls(["flex items-center gap-2 text-xs text-muted-foreground"])])([span3([cls(["w-2 h-2 bg-status inline-block status-pulse"])])([]), text5(label5)]);
+  };
+  var settingsToggle = function(active) {
+    return function(action2) {
+      return button([cls(["relative inline-flex h-5 w-10 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-1 focus:ring-primary focus:ring-offset-1 border-none outline-none", function() {
+        if (active) {
+          return "bg-primary";
+        }
+        ;
+        return "bg-border";
+      }()]), onClick(function(v) {
+        return action2;
+      })])([span3([cls(["pointer-events-none inline-block h-4 w-4 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out", function() {
+        if (active) {
+          return "translate-x-5";
+        }
+        ;
+        return "translate-x-0";
+      }()])])([])]);
+    };
+  };
+  var settingsItem = function(title3) {
+    return function(description) {
+      return function(control) {
+        return div2([cls(["px-6 py-4 flex items-center justify-between gap-8 hover:bg-muted/5 transition-colors"])])([div2([cls(["flex-1"])])([h4([cls(["text-sm font-medium text-text mb-1 lowercase"])])([text5(title3)]), p([cls(["text-[11px] text-muted-foreground"])])([text5(description)])]), div2([cls(["flex-shrink-0"])])([control])]);
+      };
+    };
+  };
+  var settingsInput = function(val) {
+    return function(placeholder4) {
+      return function(onChange) {
+        return input2([cls(["bg-background border border-border rounded px-3 py-1.5 text-xs text-text focus:border-primary outline-none transition-colors w-64 font-mono"]), value14(val), placeholder3(placeholder4), onValueInput(onChange)]);
+      };
+    };
+  };
+  var settingsGroup = function(title3) {
+    return function(children2) {
+      return div2([cls(["mb-8 bg-card border border-border rounded-lg overflow-hidden"])])([div2([cls(["px-6 py-4 border-b border-border bg-muted/30"])])([h3([cls(["text-[11px] font-medium text-text uppercase tracking-widest"])])([text5(title3)])]), div2([cls(["divide-y divide-border"])])(children2)]);
+    };
+  };
+  var settingsButton = function(label5) {
+    return function(action2) {
+      return button([cls(["px-4 py-2 bg-primary text-background text-[11px] font-medium rounded hover:bg-primary/90 transition-colors cursor-pointer uppercase tracking-wider border-none"]), onClick(function(v) {
+        return action2;
+      })])([text5(label5)]);
+    };
+  };
   var sectionHeader = function(title3) {
     return h2([cls(["text-primary text-[0.85rem] font-medium mb-6 lowercase section-header"])])([code_([text5("// " + title3)])]);
   };
@@ -54219,9 +54627,12 @@ Learn more: https://clerk.com/docs/components/clerk-provider`.trim());
   var inlineCode = function(content3) {
     return code([cls(["text-muted-foreground"])])([text5(content3)]);
   };
-  var emptySettings = /* @__PURE__ */ div2([/* @__PURE__ */ cls(["flex flex-col items-center justify-center py-16 px-8 text-center"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["text-4xl mb-4 opacity-20"])])([/* @__PURE__ */ text5("\u2699")]), /* @__PURE__ */ h3([/* @__PURE__ */ cls(["text-lg font-medium text-text mb-2"])])([/* @__PURE__ */ text5("Sign in to configure")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-sm text-muted-foreground max-w-md"])])([/* @__PURE__ */ text5("Settings will appear here after you sign in and connect your account.")])]);
   var emptyDashboard = function(productName) {
-    return div2([cls(["flex flex-col items-center justify-center py-24 px-8 text-center border border-dashed border-border rounded-lg"])])([div2([cls(["text-5xl mb-6 opacity-20"])])([text5("\u25C7")]), h3([cls(["text-xl font-medium text-text mb-3"])])([text5("No data yet")]), p([cls(["text-sm text-muted-foreground max-w-lg mb-6"])])([text5("Connect " + (productName + " to your infrastructure to see metrics and activity here."))]), a([href4("#"), cls(["inline-flex items-center px-4 py-2 bg-primary text-background text-sm font-medium rounded hover:bg-primary/90 transition-colors"])])([text5("Get Started")])]);
+    return function(action2) {
+      return div2([cls(["flex flex-col items-center justify-center py-24 px-8 text-center border border-dashed border-border rounded-lg w-full"])])([div2([cls(["text-5xl mb-6 opacity-20"])])([text5("\u25C7")]), h3([cls(["text-xl font-medium text-text mb-3"])])([text5("No data yet")]), p([cls(["text-sm text-muted-foreground max-w-lg mb-6"])])([text5("Connect " + (productName + " to your infrastructure to see metrics and activity here."))]), button([onClick(function(v) {
+        return action2;
+      }), cls(["inline-flex items-center px-4 py-2 bg-primary text-background text-sm font-medium rounded hover:bg-primary/90 transition-colors cursor-pointer border-none"])])([text5("Get Started")])]);
+    };
   };
   var codeBlock = function(children2) {
     return pre([cls(["bg-card p-4 overflow-x-auto text-[0.9rem] leading-relaxed"])])(children2);
@@ -54412,8 +54823,8 @@ Learn more: https://clerk.com/docs/components/clerk-provider`.trim());
   // output/Straylight.Pages.Irc/index.js
   var webchatUrl = "https://web.libera.chat/#straylight";
   var row2 = function(label5) {
-    return function(value12) {
-      return div2([cls(["grid grid-cols-[100px_1fr] gap-4 items-baseline"])])([span3([cls(["text-text"])])([text5(label5)]), span3([cls(["text-muted-foreground"])])([text5(value12)])]);
+    return function(value15) {
+      return div2([cls(["grid grid-cols-[100px_1fr] gap-4 items-baseline"])])([span3([cls(["text-text"])])([text5(label5)]), span3([cls(["text-muted-foreground"])])([text5(value15)])]);
     };
   };
   var render5 = /* @__PURE__ */ div_([/* @__PURE__ */ sectionHeader("irc"), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["flex flex-col gap-4 mb-6"])])([/* @__PURE__ */ row2("network")("libera.chat"), /* @__PURE__ */ row2("channel")("#straylight")]), /* @__PURE__ */ a([/* @__PURE__ */ href4(webchatUrl), /* @__PURE__ */ target5("_blank"), /* @__PURE__ */ rel4("noopener"), /* @__PURE__ */ cls(["inline-block px-4 py-2 border border-border text-text hover:bg-accent transition-colors"])])([/* @__PURE__ */ text5("open webchat")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["mt-6 text-[0.85rem] text-muted-foreground"])])([/* @__PURE__ */ text5("or connect with your client:")]), /* @__PURE__ */ codeBlock([/* @__PURE__ */ inlineCode("/connect"), /* @__PURE__ */ text5(" irc.libera.chat\n"), /* @__PURE__ */ inlineCode("/join"), /* @__PURE__ */ text5(" #straylight")])]);
@@ -54476,7 +54887,7 @@ Learn more: https://clerk.com/docs/components/clerk-provider`.trim());
 
   // output/Data.String.CodePoints/index.js
   var fromEnum2 = /* @__PURE__ */ fromEnum(boundedEnumChar);
-  var map18 = /* @__PURE__ */ map(functorMaybe);
+  var map20 = /* @__PURE__ */ map(functorMaybe);
   var unfoldr2 = /* @__PURE__ */ unfoldr(unfoldableArray);
   var div3 = /* @__PURE__ */ div(euclideanRingInt);
   var mod3 = /* @__PURE__ */ mod(euclideanRingInt);
@@ -54520,7 +54931,7 @@ Learn more: https://clerk.com/docs/components/clerk-provider`.trim());
     });
   };
   var unconsButWithTuple = function(s2) {
-    return map18(function(v) {
+    return map20(function(v) {
       return new Tuple(v.head, v.tail);
     })(uncons4(s2));
   };
@@ -54588,7 +54999,7 @@ Learn more: https://clerk.com/docs/components/clerk-provider`.trim());
   var elem3 = /* @__PURE__ */ elem2(eqString);
   var append12 = /* @__PURE__ */ append(semigroupArray);
   var intercalate3 = /* @__PURE__ */ intercalate2(monoidArray);
-  var map19 = /* @__PURE__ */ map(functorArray);
+  var map21 = /* @__PURE__ */ map(functorArray);
   var isWordBreak = function(c2) {
     return c2 === " " || (c2 === "(" || (c2 === ")" || (c2 === "[" || (c2 === "]" || (c2 === "{" || (c2 === "}" || (c2 === ":" || (c2 === "," || (c2 === "\n" || (c2 === "\u27E8" || (c2 === "\u27E9" || (c2 === "\u2192" || (c2 === "\u2190" || (c2 === "\u2194" || (c2 === "\u2227" || (c2 === "\u2228" || (c2 === "\xAC" || (c2 === "\u2200" || (c2 === "\u2203" || (c2 === "=" || (c2 === "<" || (c2 === ">" || (c2 === "+" || (c2 === "-" || (c2 === "*" || (c2 === "/" || (c2 === "|" || c2 === "\xB7")))))))))))))))))))))))))));
   };
@@ -54811,18 +55222,18 @@ Learn more: https://clerk.com/docs/components/clerk-provider`.trim());
     throw new Error("Failed pattern match at Straylight.Pages.Lean.Highlight (line 55, column 1 - line 55, column 59): " + [line.constructor.name]);
   };
   var highlightLean = function(content3) {
-    return intercalate3([text5("\n")])(map19(highlightLine)(split("\n")(content3)));
+    return intercalate3([text5("\n")])(map21(highlightLine)(split("\n")(content3)));
   };
 
   // output/Straylight.Pages.Lean/index.js
   var bind6 = /* @__PURE__ */ bind(bindHalogenM);
   var modify_5 = /* @__PURE__ */ modify_(monadStateHalogenM);
   var Initialize4 = /* @__PURE__ */ function() {
-    function Initialize6() {
+    function Initialize17() {
     }
     ;
-    Initialize6.value = new Initialize6();
-    return Initialize6;
+    Initialize17.value = new Initialize17();
+    return Initialize17;
   }();
   var SetContent = /* @__PURE__ */ function() {
     function SetContent2(value0) {
@@ -54900,7 +55311,7 @@ Learn more: https://clerk.com/docs/components/clerk-provider`.trim());
   };
 
   // output/Straylight.Pages.Plan/index.js
-  var map20 = /* @__PURE__ */ map(functorArray);
+  var map23 = /* @__PURE__ */ map(functorArray);
   var posts = [{
     title: "The Villa Straylight Papers",
     subtitle: "Jensen's Razor and the malevolent combinatorics of CUDA architecture. Encoding NVIDIA's theorems as types through Gibson's lens.",
@@ -54946,10 +55357,10 @@ Learn more: https://clerk.com/docs/components/clerk-provider`.trim());
     return span3([cls(["text-[0.7rem] text-primary/70"])])([text5("// " + t2)]);
   };
   var postCard = function(post) {
-    return a([href4(post.href), cls(["block p-4 bg-card border-l-4 border-l-primary hover:border-l-status transition-colors group"])])([div2([cls(["flex items-baseline justify-between mb-1"])])([div2([cls(["text-text font-medium group-hover:text-primary transition-colors"])])([text5(post.title)]), div2([cls(["text-[0.75rem] text-muted-foreground"])])([text5(post.date)])]), div2([cls(["text-[0.85rem] text-muted-foreground mb-2"])])([text5(post.subtitle)]), div2([cls(["flex flex-wrap gap-2"])])(map20(postTag)(post.postTags))]);
+    return a([href4(post.href), cls(["block p-4 bg-card border-l-4 border-l-primary hover:border-l-status transition-colors group"])])([div2([cls(["flex items-baseline justify-between mb-1"])])([div2([cls(["text-text font-medium group-hover:text-primary transition-colors"])])([text5(post.title)]), div2([cls(["text-[0.75rem] text-muted-foreground"])])([text5(post.date)])]), div2([cls(["text-[0.85rem] text-muted-foreground mb-2"])])([text5(post.subtitle)]), div2([cls(["flex flex-wrap gap-2"])])(map23(postTag)(post.postTags))]);
   };
   var featuredCard = function(post) {
-    return a([href4(post.href), cls(["block mb-8 group"])])([div2([cls(["bg-card border border-border p-6 hover:border-primary transition-colors"])])([div2([cls(["flex items-center gap-2 mb-3"])])([span3([cls(["text-[0.7rem] text-primary uppercase tracking-wider"])])([text5("Featured")]), span3([cls(["text-[0.7rem] text-muted-foreground"])])([text5(post.date + (" // " + post.readTime))])]), h2([cls(["text-text text-[1.5rem] font-medium mb-2 group-hover:text-primary transition-colors"])])([text5(post.title)]), p([cls(["text-muted-foreground mb-4"])])([text5(post.subtitle)]), div2([cls(["flex flex-wrap gap-2"])])(map20(postTag)(post.postTags))])]);
+    return a([href4(post.href), cls(["block mb-8 group"])])([div2([cls(["bg-card border border-border p-6 hover:border-primary transition-colors"])])([div2([cls(["flex items-center gap-2 mb-3"])])([span3([cls(["text-[0.7rem] text-primary uppercase tracking-wider"])])([text5("Featured")]), span3([cls(["text-[0.7rem] text-muted-foreground"])])([text5(post.date + (" // " + post.readTime))])]), h2([cls(["text-text text-[1.5rem] font-medium mb-2 group-hover:text-primary transition-colors"])])([text5(post.title)]), p([cls(["text-muted-foreground mb-4"])])([text5(post.subtitle)]), div2([cls(["flex flex-wrap gap-2"])])(map23(postTag)(post.postTags))])]);
   };
   var render7 = /* @__PURE__ */ function() {
     var otherPosts = filter(function() {
@@ -54973,7 +55384,7 @@ Learn more: https://clerk.com/docs/components/clerk-provider`.trim());
       }
       ;
       throw new Error("Failed pattern match at Straylight.Pages.Plan (line 92, column 7 - line 94, column 30): " + [featuredPost.constructor.name]);
-    }(), hr([cls(["uv-hr"])]), div2([cls(["flex flex-col gap-4"])])(map20(postCard)(otherPosts))]);
+    }(), hr([cls(["uv-hr"])]), div2([cls(["flex flex-col gap-4"])])(map23(postCard)(otherPosts))]);
   }();
   var planPage = /* @__PURE__ */ mkComponent({
     initialState: /* @__PURE__ */ $$const(unit),
@@ -54982,17 +55393,181 @@ Learn more: https://clerk.com/docs/components/clerk-provider`.trim());
   });
 
   // output/Straylight.Pages.Products.OmegaBoost.Dashboard/index.js
-  var quickStart = /* @__PURE__ */ div2([/* @__PURE__ */ cls(["bg-card border border-border rounded-lg p-6 mb-8"])])([/* @__PURE__ */ h3([/* @__PURE__ */ cls(["text-lg font-semibold text-text mb-4"])])([/* @__PURE__ */ text5("Quick Start")]), /* @__PURE__ */ codeBlock([/* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-muted-foreground"])])([/* @__PURE__ */ text5("# Point your SDK to omega//boost\n")]), /* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-primary"])])([/* @__PURE__ */ text5("export ")]), /* @__PURE__ */ text5("OPENAI_BASE_URL=https://boost.omega.dev/v1")])]);
-  var header3 = /* @__PURE__ */ div2([/* @__PURE__ */ cls(["mb-8"])])([/* @__PURE__ */ h1([/* @__PURE__ */ cls(["text-2xl font-bold text-text mb-2"])])([/* @__PURE__ */ text5("Dashboard")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-muted-foreground"])])([/* @__PURE__ */ text5("Inference usage, latency metrics, and cost tracking.")])]);
-  var render8 = /* @__PURE__ */ div2([/* @__PURE__ */ cls(["max-w-[1100px] mx-auto px-6 py-8"])])([header3, quickStart, /* @__PURE__ */ emptyDashboard("omega//boost")]);
-  var dashboardPage = /* @__PURE__ */ mkComponent({
-    initialState: /* @__PURE__ */ $$const(unit),
-    render: /* @__PURE__ */ $$const(render8),
-    "eval": /* @__PURE__ */ mkEval(defaultEval)
-  });
+  var show3 = /* @__PURE__ */ show(showInt);
+  var map24 = /* @__PURE__ */ map(functorArray);
+  var discard6 = /* @__PURE__ */ discard(discardUnit)(bindHalogenM);
+  var modify_6 = /* @__PURE__ */ modify_(monadStateHalogenM);
+  var append13 = /* @__PURE__ */ append(semigroupArray);
+  var Initialize5 = /* @__PURE__ */ function() {
+    function Initialize17() {
+    }
+    ;
+    Initialize17.value = new Initialize17();
+    return Initialize17;
+  }();
+  var RunInference = /* @__PURE__ */ function() {
+    function RunInference2() {
+    }
+    ;
+    RunInference2.value = new RunInference2();
+    return RunInference2;
+  }();
+  var RefreshJobs = /* @__PURE__ */ function() {
+    function RefreshJobs2() {
+    }
+    ;
+    RefreshJobs2.value = new RefreshJobs2();
+    return RefreshJobs2;
+  }();
+  var renderJob = function(job) {
+    return tr([cls(["hover:bg-muted/5 transition-colors group cursor-pointer"])])([td([cls(["px-6 py-4 font-mono text-primary"])])([text5(job.id)]), td([cls(["px-6 py-4 text-text"])])([text5(job.model)]), td([cls(["px-6 py-4 text-muted-foreground font-mono"])])([text5(job.latency)]), td([cls(["px-6 py-4 text-muted-foreground font-mono"])])([text5(job.cost)]), td([cls(["px-6 py-4"])])([span3([cls(["px-2 py-0.5 rounded text-[10px] uppercase tracking-tighter", function() {
+      if (job.status === "completed") {
+        return "bg-status/20 text-status";
+      }
+      ;
+      if (job.status === "processing") {
+        return "bg-blue-500/20 text-blue-400 status-pulse";
+      }
+      ;
+      if (job.status === "queued") {
+        return "bg-muted text-muted-foreground";
+      }
+      ;
+      return "bg-muted text-muted-foreground";
+    }()])])([text5(job.status)])])]);
+  };
+  var render8 = function(state3) {
+    return div_([sectionHeader("omega//boost // dashboard"), function() {
+      var $17 = length3(state3.jobs) === 0 && !state3.loading;
+      if ($17) {
+        return emptyDashboard("omega//boost")(RunInference.value);
+      }
+      ;
+      return div_([div2([cls(["flex justify-between items-center mb-6"])])([div_([statusIndicator(show3(length3(state3.jobs)) + " JOBS RECORDED")]), settingsButton("run inference")(RunInference.value)]), div2([cls(["bg-card border border-border rounded-lg overflow-hidden"])])([table([cls(["w-full text-left text-xs"])])([thead([cls(["bg-muted/30 border-b border-border text-[10px] uppercase tracking-widest text-muted-foreground"])])([tr_([th([cls(["px-6 py-3 font-medium"])])([text5("job id")]), th([cls(["px-6 py-3 font-medium"])])([text5("model")]), th([cls(["px-6 py-3 font-medium"])])([text5("latency")]), th([cls(["px-6 py-3 font-medium"])])([text5("cost")]), th([cls(["px-6 py-3 font-medium"])])([text5("status")])])]), tbody([cls(["divide-y divide-border"])])(map24(renderJob)(state3.jobs))])])]);
+    }()]);
+  };
+  var handleAction4 = function($copy_v) {
+    var $tco_done = false;
+    var $tco_result;
+    function $tco_loop(v) {
+      if (v instanceof Initialize5) {
+        $copy_v = RefreshJobs.value;
+        return;
+      }
+      ;
+      if (v instanceof RefreshJobs) {
+        $tco_done = true;
+        return discard6(modify_6(function(v1) {
+          var $19 = {};
+          for (var $20 in v1) {
+            if ({}.hasOwnProperty.call(v1, $20)) {
+              $19[$20] = v1[$20];
+            }
+            ;
+          }
+          ;
+          $19.loading = true;
+          return $19;
+        }))(function() {
+          var mockJobs = [{
+            id: "job-8821",
+            model: "llama-3-70b",
+            latency: "142ms",
+            cost: "$0.002",
+            status: "completed"
+          }, {
+            id: "job-8822",
+            model: "gpt-4o",
+            latency: "890ms",
+            cost: "$0.015",
+            status: "completed"
+          }, {
+            id: "job-8823",
+            model: "claude-3-5-sonnet",
+            latency: "420ms",
+            cost: "$0.008",
+            status: "processing"
+          }];
+          return modify_6(function(v1) {
+            var $22 = {};
+            for (var $23 in v1) {
+              if ({}.hasOwnProperty.call(v1, $23)) {
+                $22[$23] = v1[$23];
+              }
+              ;
+            }
+            ;
+            $22.jobs = mockJobs;
+            $22.loading = false;
+            return $22;
+          });
+        });
+      }
+      ;
+      if (v instanceof RunInference) {
+        $tco_done = true;
+        return discard6(modify_6(function(v1) {
+          var $25 = {};
+          for (var $26 in v1) {
+            if ({}.hasOwnProperty.call(v1, $26)) {
+              $25[$26] = v1[$26];
+            }
+            ;
+          }
+          ;
+          $25.loading = true;
+          return $25;
+        }))(function() {
+          return modify_6(function(s2) {
+            var $28 = {};
+            for (var $29 in s2) {
+              if ({}.hasOwnProperty.call(s2, $29)) {
+                $28[$29] = s2[$29];
+              }
+              ;
+            }
+            ;
+            $28.jobs = append13(s2.jobs)([{
+              id: "job-new",
+              model: "llama-3-8b",
+              latency: "-",
+              cost: "-",
+              status: "queued"
+            }]);
+            $28.loading = false;
+            return $28;
+          });
+        });
+      }
+      ;
+      throw new Error("Failed pattern match at Straylight.Pages.Products.OmegaBoost.Dashboard (line 45, column 16 - line 60, column 144): " + [v.constructor.name]);
+    }
+    ;
+    while (!$tco_done) {
+      $tco_result = $tco_loop($copy_v);
+    }
+    ;
+    return $tco_result;
+  };
+  var dashboardPage = /* @__PURE__ */ function() {
+    return mkComponent({
+      initialState: $$const({
+        jobs: [],
+        loading: false
+      }),
+      render: render8,
+      "eval": mkEval({
+        handleQuery: defaultEval.handleQuery,
+        receive: defaultEval.receive,
+        finalize: defaultEval.finalize,
+        handleAction: handleAction4,
+        initialize: new Just(Initialize5.value)
+      })
+    });
+  }();
 
   // output/Straylight.Pages.Products.OmegaBoost.Docs/index.js
-  var modify_6 = /* @__PURE__ */ modify_(monadStateHalogenM);
+  var modify_7 = /* @__PURE__ */ modify_(monadStateHalogenM);
   var Receive3 = /* @__PURE__ */ function() {
     function Receive13(value0) {
       this.value0 = value0;
@@ -55043,8 +55618,8 @@ Learn more: https://clerk.com/docs/components/clerk-provider`.trim());
       };
     };
   };
-  var handleAction4 = function(v) {
-    return modify_6(function(v1) {
+  var handleAction5 = function(v) {
+    return modify_7(function(v1) {
       var $8 = {};
       for (var $9 in v1) {
         if ({}.hasOwnProperty.call(v1, $9)) {
@@ -55162,7 +55737,7 @@ Learn more: https://clerk.com/docs/components/clerk-provider`.trim());
         handleQuery: defaultEval.handleQuery,
         initialize: defaultEval.initialize,
         finalize: defaultEval.finalize,
-        handleAction: handleAction4,
+        handleAction: handleAction5,
         receive: function($13) {
           return Just.create(Receive3.create($13));
         }
@@ -55171,8 +55746,8 @@ Learn more: https://clerk.com/docs/components/clerk-provider`.trim());
   }();
 
   // output/Straylight.Pages.Products.OmegaBoost.Features/index.js
-  var map21 = /* @__PURE__ */ map(functorArray);
-  var show3 = /* @__PURE__ */ show(showInt);
+  var map25 = /* @__PURE__ */ map(functorArray);
+  var show4 = /* @__PURE__ */ show(showInt);
   var vendorRow = function(vendor) {
     return function(key) {
       return function(status2) {
@@ -55188,9 +55763,9 @@ Learn more: https://clerk.com/docs/components/clerk-provider`.trim());
     };
   };
   var kernelMetric = function(label5) {
-    return function(value12) {
+    return function(value15) {
       return function(note) {
-        return div2([cls(["flex items-center justify-between p-3 bg-background rounded-md"])])([span3([cls(["text-text font-medium"])])([text5(label5)]), div2([cls(["flex items-center gap-2"])])([span3([cls(["text-yellow-400 font-bold font-mono"])])([text5(value12)]), span3([cls(["text-xs text-muted-foreground"])])([text5(note)])])]);
+        return div2([cls(["flex items-center justify-between p-3 bg-background rounded-md"])])([span3([cls(["text-text font-medium"])])([text5(label5)]), div2([cls(["flex items-center gap-2"])])([span3([cls(["text-yellow-400 font-bold font-mono"])])([text5(value15)]), span3([cls(["text-xs text-muted-foreground"])])([text5(note)])])]);
       };
     };
   };
@@ -55199,7 +55774,7 @@ Learn more: https://clerk.com/docs/components/clerk-provider`.trim());
     return li([cls(["flex items-start gap-3"])])([span3([cls(["text-yellow-400 mt-1"])])([text5("+")]), span3([cls(["text-muted-foreground"])])([text5(text6)])]);
   };
   var featureList = function(items2) {
-    return ul([cls(["space-y-3"])])(map21(featureItem)(items2));
+    return ul([cls(["space-y-3"])])(map25(featureItem)(items2));
   };
   var cta2 = /* @__PURE__ */ section([/* @__PURE__ */ cls(["py-24 border-t border-border"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["max-w-[800px] mx-auto px-6 text-center"])])([/* @__PURE__ */ h2([/* @__PURE__ */ cls(["text-3xl font-bold text-text mb-4"])])([/* @__PURE__ */ text5("Ready for managed inference?")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-muted-foreground mb-8"])])([/* @__PURE__ */ text5("Custom CUTLASS kernels. BYOK co-location. Replace vLLM. Start in minutes.")]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["flex flex-col sm:flex-row items-center justify-center gap-4"])])([/* @__PURE__ */ a([/* @__PURE__ */ href4("/omega/boost/dashboard"), /* @__PURE__ */ cls(["inline-flex items-center justify-center px-8 py-4 bg-yellow-400 text-background font-medium rounded-md hover:bg-yellow-400/90 transition-colors"])])([/* @__PURE__ */ text5("Get started")]), /* @__PURE__ */ a([/* @__PURE__ */ href4("/omega/boost/docs"), /* @__PURE__ */ cls(["inline-flex items-center justify-center px-8 py-4 border border-border text-text font-medium rounded-md hover:bg-card transition-colors"])])([/* @__PURE__ */ text5("Read the docs")])])])]);
   var codeLine2 = function(prefix) {
@@ -55213,7 +55788,7 @@ Learn more: https://clerk.com/docs/components/clerk-provider`.trim());
   var batchVisual = function(label5) {
     return function(size4) {
       return function(status2) {
-        return div2([cls(["flex items-center gap-3"])])([div2([cls(["flex-1 h-8 bg-background rounded overflow-hidden"])])([div2([cls(["h-full bg-yellow-400/30 rounded"]), style("width: " + (show3(size4) + "%"))])([])]), span3([cls(["text-xs text-muted-foreground w-20"])])([text5(label5)]), span3([cls(["text-xs text-green-400"])])([text5(status2)])]);
+        return div2([cls(["flex items-center gap-3"])])([div2([cls(["flex-1 h-8 bg-background rounded overflow-hidden"])])([div2([cls(["h-full bg-yellow-400/30 rounded"]), style("width: " + (show4(size4) + "%"))])([])]), span3([cls(["text-xs text-muted-foreground w-20"])])([text5(label5)]), span3([cls(["text-xs text-green-400"])])([text5(status2)])]);
       };
     };
   };
@@ -55250,9 +55825,9 @@ Learn more: https://clerk.com/docs/components/clerk-provider`.trim());
       return a([href4(href5), cls(["inline-flex items-center justify-center px-6 py-3 bg-yellow-400 text-background font-medium rounded-md hover:bg-yellow-400/90 transition-colors"])])([text5(label5)]);
     };
   };
-  var metricBadge = function(value12) {
+  var metricBadge = function(value15) {
     return function(label5) {
-      return div2([cls(["flex items-baseline gap-2"])])([span3([cls(["text-3xl font-bold text-yellow-400"])])([text5(value12)]), span3([cls(["text-muted-foreground text-sm"])])([text5(label5)])]);
+      return div2([cls(["flex items-baseline gap-2"])])([span3([cls(["text-3xl font-bold text-yellow-400"])])([text5(value15)]), span3([cls(["text-muted-foreground text-sm"])])([text5(label5)])]);
     };
   };
   var howItWorks = /* @__PURE__ */ section([/* @__PURE__ */ cls(["py-24 border-t border-border"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["max-w-[1100px] mx-auto px-6"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["text-center mb-16"])])([/* @__PURE__ */ h2([/* @__PURE__ */ cls(["text-3xl font-bold text-text mb-4"])])([/* @__PURE__ */ text5("How it works")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-muted-foreground max-w-xl mx-auto"])])([/* @__PURE__ */ text5("Three steps to managed inference with custom kernels.")])]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["grid grid-cols-1 md:grid-cols-3 gap-8"])])([/* @__PURE__ */ stepCard("01")("Connect your keys")("Add your OpenAI, Anthropic, or other provider API keys. We co-locate with your vendor for optimal routing."), /* @__PURE__ */ stepCard("02")("Point to boost.omega.dev")("Replace your provider's base URL. Our CUTLASS kernels and evring stack handle the rest."), /* @__PURE__ */ stepCard("03")("Scale without ops")("Auto-scaling, continuous batching, failover. No GPU clusters to manage. No vLLM configs to tune.")])])]);
@@ -55296,7 +55871,7 @@ Learn more: https://clerk.com/docs/components/clerk-provider`.trim());
   });
 
   // output/Straylight.Pages.Products.OmegaBoost.Pricing/index.js
-  var map23 = /* @__PURE__ */ map(functorArray);
+  var map26 = /* @__PURE__ */ map(functorArray);
   var pricingFeature = function(feature) {
     return li([cls(["flex items-start gap-2 text-sm"])])([span3([cls(["text-yellow-400 mt-0.5"])])([text5("+")]), span3([cls(["text-muted-foreground"])])([text5(feature)])]);
   };
@@ -55313,7 +55888,7 @@ Learn more: https://clerk.com/docs/components/clerk-provider`.trim());
       }
       ;
       return "text-muted-foreground";
-    }()])])([text5(t2.name)])]), div2([cls(["mb-4"])])([span3([cls(["text-4xl font-bold text-text"])])([text5(t2.price)]), span3([cls(["text-muted-foreground"])])([text5(t2.period)])]), p([cls(["text-muted-foreground text-sm mb-6"])])([text5(t2.description)]), ul([cls(["space-y-3 mb-8 flex-grow"])])(map23(pricingFeature)(t2.features)), a([href4(t2.ctaHref), cls(["inline-flex items-center justify-center px-6 py-3 font-medium rounded-md transition-colors text-center", function() {
+    }()])])([text5(t2.name)])]), div2([cls(["mb-4"])])([span3([cls(["text-4xl font-bold text-text"])])([text5(t2.price)]), span3([cls(["text-muted-foreground"])])([text5(t2.period)])]), p([cls(["text-muted-foreground text-sm mb-6"])])([text5(t2.description)]), ul([cls(["space-y-3 mb-8 flex-grow"])])(map26(pricingFeature)(t2.features)), a([href4(t2.ctaHref), cls(["inline-flex items-center justify-center px-6 py-3 font-medium rounded-md transition-colors text-center", function() {
       if (t2.highlighted) {
         return "bg-yellow-400 text-background hover:bg-yellow-400/90";
       }
@@ -55373,26 +55948,300 @@ Learn more: https://clerk.com/docs/components/clerk-provider`.trim());
   });
 
   // output/Straylight.Pages.Products.OmegaBoost.Settings/index.js
-  var header4 = /* @__PURE__ */ div2([/* @__PURE__ */ cls(["mb-8"])])([/* @__PURE__ */ h1([/* @__PURE__ */ cls(["text-2xl font-bold text-text"])])([/* @__PURE__ */ text5("Settings")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-muted-foreground"])])([/* @__PURE__ */ text5("Model configs, scaling rules, and BYOK credentials.")])]);
-  var render13 = /* @__PURE__ */ div2([/* @__PURE__ */ cls(["max-w-[1100px] mx-auto px-6 py-8"])])([header4, emptySettings]);
-  var settingsPage = /* @__PURE__ */ mkComponent({
-    initialState: /* @__PURE__ */ $$const(unit),
-    render: /* @__PURE__ */ $$const(render13),
-    "eval": /* @__PURE__ */ mkEval(defaultEval)
-  });
+  var modify_8 = /* @__PURE__ */ modify_(monadStateHalogenM);
+  var discard7 = /* @__PURE__ */ discard(discardUnit)(bindHalogenM);
+  var UpdateInstanceName = /* @__PURE__ */ function() {
+    function UpdateInstanceName2(value0) {
+      this.value0 = value0;
+    }
+    ;
+    UpdateInstanceName2.create = function(value0) {
+      return new UpdateInstanceName2(value0);
+    };
+    return UpdateInstanceName2;
+  }();
+  var ToggleAutoUpdate = /* @__PURE__ */ function() {
+    function ToggleAutoUpdate2() {
+    }
+    ;
+    ToggleAutoUpdate2.value = new ToggleAutoUpdate2();
+    return ToggleAutoUpdate2;
+  }();
+  var ToggleDebugMode = /* @__PURE__ */ function() {
+    function ToggleDebugMode2() {
+    }
+    ;
+    ToggleDebugMode2.value = new ToggleDebugMode2();
+    return ToggleDebugMode2;
+  }();
+  var SaveChanges = /* @__PURE__ */ function() {
+    function SaveChanges11() {
+    }
+    ;
+    SaveChanges11.value = new SaveChanges11();
+    return SaveChanges11;
+  }();
+  var render13 = function(state3) {
+    return div_([sectionHeader("omega//boost // settings"), div2([cls(["max-w-4xl"])])([settingsGroup("General Settings")([settingsItem("Instance Name")("Unique identifier for this boost instance")(settingsInput(state3.instanceName)("primary-boost-instance")(UpdateInstanceName.create)), settingsItem("Auto-update")("Automatically apply performance patches")(settingsToggle(state3.autoUpdate)(ToggleAutoUpdate.value)), settingsItem("Debug Mode")("Enable verbose logging for inference calls")(settingsToggle(state3.debugMode)(ToggleDebugMode.value))]), div2([cls(["flex items-center gap-4"])])([settingsButton("Save Changes")(SaveChanges.value), function() {
+      if (state3.saved) {
+        return span3([cls(["text-status text-xs animate-pulse"])])([text5("Changes saved successfully")]);
+      }
+      ;
+      return text5("");
+    }()])])]);
+  };
+  var handleAction6 = function(v) {
+    if (v instanceof UpdateInstanceName) {
+      return modify_8(function(v1) {
+        var $12 = {};
+        for (var $13 in v1) {
+          if ({}.hasOwnProperty.call(v1, $13)) {
+            $12[$13] = v1[$13];
+          }
+          ;
+        }
+        ;
+        $12.instanceName = v.value0;
+        $12.saved = false;
+        return $12;
+      });
+    }
+    ;
+    if (v instanceof ToggleAutoUpdate) {
+      return discard7(modify_8(function(s2) {
+        var $16 = {};
+        for (var $17 in s2) {
+          if ({}.hasOwnProperty.call(s2, $17)) {
+            $16[$17] = s2[$17];
+          }
+          ;
+        }
+        ;
+        $16.autoUpdate = !s2.autoUpdate;
+        $16.saved = false;
+        return $16;
+      }))(function() {
+        return handleAction6(SaveChanges.value);
+      });
+    }
+    ;
+    if (v instanceof ToggleDebugMode) {
+      return discard7(modify_8(function(s2) {
+        var $19 = {};
+        for (var $20 in s2) {
+          if ({}.hasOwnProperty.call(s2, $20)) {
+            $19[$20] = s2[$20];
+          }
+          ;
+        }
+        ;
+        $19.debugMode = !s2.debugMode;
+        $19.saved = false;
+        return $19;
+      }))(function() {
+        return handleAction6(SaveChanges.value);
+      });
+    }
+    ;
+    if (v instanceof SaveChanges) {
+      return modify_8(function(v1) {
+        var $22 = {};
+        for (var $23 in v1) {
+          if ({}.hasOwnProperty.call(v1, $23)) {
+            $22[$23] = v1[$23];
+          }
+          ;
+        }
+        ;
+        $22.saved = true;
+        return $22;
+      });
+    }
+    ;
+    throw new Error("Failed pattern match at Straylight.Pages.Products.OmegaBoost.Settings (line 40, column 16 - line 54, column 33): " + [v.constructor.name]);
+  };
+  var settingsPage = /* @__PURE__ */ function() {
+    return mkComponent({
+      initialState: $$const({
+        instanceName: "primary-boost-instance",
+        autoUpdate: true,
+        debugMode: false,
+        saved: false
+      }),
+      render: render13,
+      "eval": mkEval({
+        handleQuery: defaultEval.handleQuery,
+        receive: defaultEval.receive,
+        initialize: defaultEval.initialize,
+        finalize: defaultEval.finalize,
+        handleAction: handleAction6
+      })
+    });
+  }();
 
   // output/Straylight.Pages.Products.OmegaCode.Dashboard/index.js
-  var quickStart2 = /* @__PURE__ */ div2([/* @__PURE__ */ cls(["bg-card border border-border rounded-lg p-6 mb-8"])])([/* @__PURE__ */ h3([/* @__PURE__ */ cls(["text-lg font-semibold text-text mb-4"])])([/* @__PURE__ */ text5("Quick Start")]), /* @__PURE__ */ codeBlock([/* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-muted-foreground"])])([/* @__PURE__ */ text5("# Install omega//code\n")]), /* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-blue-300"])])([/* @__PURE__ */ text5("$ ")]), /* @__PURE__ */ text5("curl -fsSL https://get.omega.code | sh\n\n"), /* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-muted-foreground"])])([/* @__PURE__ */ text5("# Start a session\n")]), /* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-blue-300"])])([/* @__PURE__ */ text5("$ ")]), /* @__PURE__ */ text5("omega")])]);
-  var header5 = /* @__PURE__ */ div2([/* @__PURE__ */ cls(["mb-8"])])([/* @__PURE__ */ h1([/* @__PURE__ */ cls(["text-2xl font-bold text-text mb-2"])])([/* @__PURE__ */ text5("Dashboard")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-muted-foreground"])])([/* @__PURE__ */ text5("Session history, token usage, and attestation records.")])]);
-  var render14 = /* @__PURE__ */ div2([/* @__PURE__ */ cls(["max-w-[1100px] mx-auto px-6 py-8"])])([header5, quickStart2, /* @__PURE__ */ emptyDashboard("omega//code")]);
-  var dashboardPage2 = /* @__PURE__ */ mkComponent({
-    initialState: /* @__PURE__ */ $$const(unit),
-    render: /* @__PURE__ */ $$const(render14),
-    "eval": /* @__PURE__ */ mkEval(defaultEval)
-  });
+  var show5 = /* @__PURE__ */ show(showInt);
+  var map27 = /* @__PURE__ */ map(functorArray);
+  var discard8 = /* @__PURE__ */ discard(discardUnit)(bindHalogenM);
+  var modify_9 = /* @__PURE__ */ modify_(monadStateHalogenM);
+  var append5 = /* @__PURE__ */ append(semigroupArray);
+  var Initialize6 = /* @__PURE__ */ function() {
+    function Initialize17() {
+    }
+    ;
+    Initialize17.value = new Initialize17();
+    return Initialize17;
+  }();
+  var StartNewSession = /* @__PURE__ */ function() {
+    function StartNewSession2() {
+    }
+    ;
+    StartNewSession2.value = new StartNewSession2();
+    return StartNewSession2;
+  }();
+  var RefreshSessions = /* @__PURE__ */ function() {
+    function RefreshSessions2() {
+    }
+    ;
+    RefreshSessions2.value = new RefreshSessions2();
+    return RefreshSessions2;
+  }();
+  var renderSession = function(session) {
+    return tr([cls(["hover:bg-muted/5 transition-colors group cursor-pointer"])])([td([cls(["px-6 py-4 font-mono text-primary"])])([text5(session.id)]), td([cls(["px-6 py-4 text-text"])])([text5(session.directory)]), td([cls(["px-6 py-4 text-muted-foreground"])])([text5(session.model)]), td([cls(["px-6 py-4 text-muted-foreground"])])([text5(show5(session.tokens))]), td([cls(["px-6 py-4"])])([span3([cls(["px-2 py-0.5 rounded text-[10px] uppercase tracking-tighter", function() {
+      var $16 = session.status === "running";
+      if ($16) {
+        return "bg-status/20 text-status";
+      }
+      ;
+      return "bg-muted text-muted-foreground";
+    }()])])([text5(session.status)])])]);
+  };
+  var render14 = function(state3) {
+    return div_([sectionHeader("omega//code // dashboard"), function() {
+      var $17 = length3(state3.sessions) === 0 && !state3.loading;
+      if ($17) {
+        return emptyDashboard("omega//code")(StartNewSession.value);
+      }
+      ;
+      return div_([div2([cls(["flex justify-between items-center mb-6"])])([div_([statusIndicator("2 AGENTS ACTIVE")]), settingsButton("new session")(StartNewSession.value)]), div2([cls(["bg-card border border-border rounded-lg overflow-hidden"])])([table([cls(["w-full text-left text-xs"])])([thead([cls(["bg-muted/30 border-b border-border text-[10px] uppercase tracking-widest text-muted-foreground"])])([tr_([th([cls(["px-6 py-3 font-medium"])])([text5("session id")]), th([cls(["px-6 py-3 font-medium"])])([text5("directory")]), th([cls(["px-6 py-3 font-medium"])])([text5("model")]), th([cls(["px-6 py-3 font-medium"])])([text5("tokens")]), th([cls(["px-6 py-3 font-medium"])])([text5("status")])])]), tbody([cls(["divide-y divide-border"])])(map27(renderSession)(state3.sessions))])])]);
+    }()]);
+  };
+  var handleAction7 = function($copy_v) {
+    var $tco_done = false;
+    var $tco_result;
+    function $tco_loop(v) {
+      if (v instanceof Initialize6) {
+        $copy_v = RefreshSessions.value;
+        return;
+      }
+      ;
+      if (v instanceof RefreshSessions) {
+        $tco_done = true;
+        return discard8(modify_9(function(v1) {
+          var $19 = {};
+          for (var $20 in v1) {
+            if ({}.hasOwnProperty.call(v1, $20)) {
+              $19[$20] = v1[$20];
+            }
+            ;
+          }
+          ;
+          $19.loading = true;
+          return $19;
+        }))(function() {
+          var mockSessions = [{
+            id: "a8f2-1234",
+            directory: "/home/user/project-alpha",
+            status: "idle",
+            model: "claude-3-5",
+            tokens: 1240
+          }, {
+            id: "b2c1-5678",
+            directory: "/home/user/straylight-web",
+            status: "running",
+            model: "gpt-4o",
+            tokens: 8500
+          }];
+          return modify_9(function(v1) {
+            var $22 = {};
+            for (var $23 in v1) {
+              if ({}.hasOwnProperty.call(v1, $23)) {
+                $22[$23] = v1[$23];
+              }
+              ;
+            }
+            ;
+            $22.sessions = mockSessions;
+            $22.loading = false;
+            return $22;
+          });
+        });
+      }
+      ;
+      if (v instanceof StartNewSession) {
+        $tco_done = true;
+        return discard8(modify_9(function(v1) {
+          var $25 = {};
+          for (var $26 in v1) {
+            if ({}.hasOwnProperty.call(v1, $26)) {
+              $25[$26] = v1[$26];
+            }
+            ;
+          }
+          ;
+          $25.loading = true;
+          return $25;
+        }))(function() {
+          return modify_9(function(s2) {
+            var $28 = {};
+            for (var $29 in s2) {
+              if ({}.hasOwnProperty.call(s2, $29)) {
+                $28[$29] = s2[$29];
+              }
+              ;
+            }
+            ;
+            $28.sessions = append5(s2.sessions)([{
+              id: "new-session",
+              directory: "/tmp/new",
+              status: "initializing",
+              model: "claude-3-5",
+              tokens: 0
+            }]);
+            $28.loading = false;
+            return $28;
+          });
+        });
+      }
+      ;
+      throw new Error("Failed pattern match at Straylight.Pages.Products.OmegaCode.Dashboard (line 44, column 16 - line 60, column 171): " + [v.constructor.name]);
+    }
+    ;
+    while (!$tco_done) {
+      $tco_result = $tco_loop($copy_v);
+    }
+    ;
+    return $tco_result;
+  };
+  var dashboardPage2 = /* @__PURE__ */ function() {
+    return mkComponent({
+      initialState: $$const({
+        sessions: [],
+        loading: false
+      }),
+      render: render14,
+      "eval": mkEval({
+        handleQuery: defaultEval.handleQuery,
+        receive: defaultEval.receive,
+        finalize: defaultEval.finalize,
+        handleAction: handleAction7,
+        initialize: new Just(Initialize6.value)
+      })
+    });
+  }();
 
   // output/Straylight.Pages.Products.OmegaCode.Docs/index.js
-  var modify_7 = /* @__PURE__ */ modify_(monadStateHalogenM);
+  var modify_10 = /* @__PURE__ */ modify_(monadStateHalogenM);
   var Receive4 = /* @__PURE__ */ function() {
     function Receive13(value0) {
       this.value0 = value0;
@@ -55448,8 +56297,8 @@ Learn more: https://clerk.com/docs/components/clerk-provider`.trim());
       return div2([cls(["flex items-center gap-4 py-2 border-b border-border"])])([span3([cls(["text-blue-300 w-32"])])([text5(key)]), span3([cls(["text-muted-foreground"])])([text5(desc)])]);
     };
   };
-  var handleAction5 = function(v) {
-    return modify_7(function(v1) {
+  var handleAction8 = function(v) {
+    return modify_10(function(v1) {
       var $8 = {};
       for (var $9 in v1) {
         if ({}.hasOwnProperty.call(v1, $9)) {
@@ -55554,7 +56403,7 @@ Learn more: https://clerk.com/docs/components/clerk-provider`.trim());
         handleQuery: defaultEval.handleQuery,
         initialize: defaultEval.initialize,
         finalize: defaultEval.finalize,
-        handleAction: handleAction5,
+        handleAction: handleAction8,
         receive: function($13) {
           return Just.create(Receive4.create($13));
         }
@@ -55563,9 +56412,9 @@ Learn more: https://clerk.com/docs/components/clerk-provider`.trim());
   }();
 
   // output/Straylight.Pages.Products.OmegaCode.Features/index.js
-  var show4 = /* @__PURE__ */ show(showInt);
+  var show6 = /* @__PURE__ */ show(showInt);
   var div4 = /* @__PURE__ */ div(euclideanRingInt);
-  var map24 = /* @__PURE__ */ map(functorArray);
+  var map28 = /* @__PURE__ */ map(functorArray);
   var trustBadge = function(title3) {
     return function(subtitle) {
       return div2([cls(["bg-card border border-border rounded-lg p-6 text-center"])])([p([cls(["text-2xl font-bold text-blue-300 mb-1"])])([text5(title3)]), p([cls(["text-sm text-muted-foreground"])])([text5(subtitle)])]);
@@ -55577,16 +56426,16 @@ Learn more: https://clerk.com/docs/components/clerk-provider`.trim());
     };
   };
   var perfBar = function(label5) {
-    return function(value12) {
+    return function(value15) {
       return function(color) {
-        return div_([div2([cls(["flex justify-between text-sm mb-2"])])([span3([cls(["text-muted-foreground"])])([text5(label5)]), span3([cls([color])])([text5(show4(value12) + "k")])]), div2([cls(["h-4 bg-muted rounded-full overflow-hidden"])])([div2([cls(["h-full rounded-full transition-all duration-1000", function() {
-          var $6 = value12 > 200;
+        return div_([div2([cls(["flex justify-between text-sm mb-2"])])([span3([cls(["text-muted-foreground"])])([text5(label5)]), span3([cls([color])])([text5(show6(value15) + "k")])]), div2([cls(["h-4 bg-muted rounded-full overflow-hidden"])])([div2([cls(["h-full rounded-full transition-all duration-1000", function() {
+          var $6 = value15 > 200;
           if ($6) {
             return "bg-blue-300";
           }
           ;
           return "bg-muted-foreground/50";
-        }()]), style("width: " + (show4(div4(value12 * 100 | 0)(509)) + "%"))])([])])]);
+        }()]), style("width: " + (show6(div4(value15 * 100 | 0)(509)) + "%"))])([])])]);
       };
     };
   };
@@ -55595,7 +56444,7 @@ Learn more: https://clerk.com/docs/components/clerk-provider`.trim());
     return li([cls(["flex items-start gap-3"])])([span3([cls(["text-blue-300 mt-1"])])([text5("+")]), span3([cls(["text-muted-foreground"])])([text5(text6)])]);
   };
   var featureList2 = function(items2) {
-    return ul([cls(["space-y-3"])])(map24(featureItem2)(items2));
+    return ul([cls(["space-y-3"])])(map28(featureItem2)(items2));
   };
   var dxCard = function(icon) {
     return function(title3) {
@@ -55660,15 +56509,15 @@ Learn more: https://clerk.com/docs/components/clerk-provider`.trim());
     };
   };
   var quickstart = /* @__PURE__ */ section([/* @__PURE__ */ cls(["py-24 border-t border-border"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["max-w-[800px] mx-auto px-6"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["text-center mb-12"])])([/* @__PURE__ */ h2([/* @__PURE__ */ cls(["text-3xl font-bold text-text mb-4"])])([/* @__PURE__ */ text5("Get started in 30 seconds")])]), /* @__PURE__ */ codeBlock([/* @__PURE__ */ codeLine6("# ")("Install (Nix)"), /* @__PURE__ */ codeLine6("$ ")("nix profile install github:straylight-software/omega-code"), /* @__PURE__ */ text5("\n"), /* @__PURE__ */ codeLine6("# ")("Or via curl"), /* @__PURE__ */ codeLine6("$ ")("curl -fsSL https://omega.straylight.software/install.sh | sh"), /* @__PURE__ */ text5("\n"), /* @__PURE__ */ codeLine6("# ")("Authenticate"), /* @__PURE__ */ codeLine6("$ ")("omega auth login"), /* @__PURE__ */ text5("\n"), /* @__PURE__ */ codeLine6("# ")("Start coding"), /* @__PURE__ */ codeLine6("$ ")("omega")]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["mt-8 text-center"])])([/* @__PURE__ */ a([/* @__PURE__ */ href4("/omega/code/docs"), /* @__PURE__ */ cls(["text-blue-300 hover:text-blue-300/80 transition-colors"])])([/* @__PURE__ */ text5("Full documentation ->")])])])]);
-  var cell = function(value12) {
+  var cell = function(value15) {
     return span3([cls([function() {
-      var $1 = value12 === "no";
+      var $1 = value15 === "no";
       if ($1) {
         return "text-muted-foreground/50";
       }
       ;
       return "text-muted-foreground";
-    }()])])([text5(value12)]);
+    }()])])([text5(value15)]);
   };
   var comparisonRow = function(feature) {
     return function(us) {
@@ -55703,7 +56552,7 @@ Learn more: https://clerk.com/docs/components/clerk-provider`.trim());
   });
 
   // output/Straylight.Pages.Products.OmegaCode.Pricing/index.js
-  var map25 = /* @__PURE__ */ map(functorArray);
+  var map29 = /* @__PURE__ */ map(functorArray);
   var hero6 = /* @__PURE__ */ section([/* @__PURE__ */ cls(["py-24"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["max-w-[1100px] mx-auto px-6 text-center"])])([/* @__PURE__ */ h1([/* @__PURE__ */ cls(["text-4xl md:text-5xl font-bold text-text mb-6"])])([/* @__PURE__ */ text5("Simple, honest pricing")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-xl text-muted-foreground max-w-2xl mx-auto"])])([/* @__PURE__ */ text5("Pay for compute. No hidden fees. No per-seat licensing. Cancel anytime.")])])]);
   var featureItem3 = function(text6) {
     return li([cls(["flex items-start gap-3 text-sm"])])([span3([cls(["text-blue-300"])])([text5("+")]), span3([cls(["text-muted-foreground"])])([text5(text6)])]);
@@ -55715,7 +56564,7 @@ Learn more: https://clerk.com/docs/components/clerk-provider`.trim());
       }
       ;
       return "border-border";
-    }()])])([div2([cls(["mb-6"])])([h3([cls(["text-lg font-semibold text-text mb-2"])])([text5(props.name)]), div2([cls(["flex items-baseline gap-1"])])([span3([cls(["text-3xl font-bold text-text"])])([text5(props.price)]), span3([cls(["text-muted-foreground"])])([text5(props.period)])]), p([cls(["text-sm text-muted-foreground mt-2"])])([text5(props.description)])]), ul([cls(["space-y-3 flex-1 mb-6"])])(map25(featureItem3)(props.features)), a([href4(props.ctaHref), cls(["block text-center py-3 rounded-md font-medium transition-colors", function() {
+    }()])])([div2([cls(["mb-6"])])([h3([cls(["text-lg font-semibold text-text mb-2"])])([text5(props.name)]), div2([cls(["flex items-baseline gap-1"])])([span3([cls(["text-3xl font-bold text-text"])])([text5(props.price)]), span3([cls(["text-muted-foreground"])])([text5(props.period)])]), p([cls(["text-sm text-muted-foreground mt-2"])])([text5(props.description)])]), ul([cls(["space-y-3 flex-1 mb-6"])])(map29(featureItem3)(props.features)), a([href4(props.ctaHref), cls(["block text-center py-3 rounded-md font-medium transition-colors", function() {
       if (props.highlighted) {
         return "bg-blue-300 text-background hover:bg-blue-300/90";
       }
@@ -55766,26 +56615,312 @@ Learn more: https://clerk.com/docs/components/clerk-provider`.trim());
   });
 
   // output/Straylight.Pages.Products.OmegaCode.Settings/index.js
-  var header6 = /* @__PURE__ */ div2([/* @__PURE__ */ cls(["mb-8"])])([/* @__PURE__ */ h1([/* @__PURE__ */ cls(["text-2xl font-bold text-text"])])([/* @__PURE__ */ text5("Settings")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-muted-foreground"])])([/* @__PURE__ */ text5("Account settings, billing, and team management.")])]);
-  var render19 = /* @__PURE__ */ div2([/* @__PURE__ */ cls(["max-w-[1100px] mx-auto px-6 py-8"])])([header6, emptySettings]);
-  var settingsPage2 = /* @__PURE__ */ mkComponent({
-    initialState: /* @__PURE__ */ $$const(unit),
-    render: /* @__PURE__ */ $$const(render19),
-    "eval": /* @__PURE__ */ mkEval(defaultEval)
-  });
+  var pure9 = /* @__PURE__ */ pure(applicativeHalogenM);
+  var discard9 = /* @__PURE__ */ discard(discardUnit)(bindHalogenM);
+  var modify_11 = /* @__PURE__ */ modify_(monadStateHalogenM);
+  var Initialize7 = /* @__PURE__ */ function() {
+    function Initialize17() {
+    }
+    ;
+    Initialize17.value = new Initialize17();
+    return Initialize17;
+  }();
+  var ToggleAutoSave = /* @__PURE__ */ function() {
+    function ToggleAutoSave2() {
+    }
+    ;
+    ToggleAutoSave2.value = new ToggleAutoSave2();
+    return ToggleAutoSave2;
+  }();
+  var SetModel = /* @__PURE__ */ function() {
+    function SetModel2(value0) {
+      this.value0 = value0;
+    }
+    ;
+    SetModel2.create = function(value0) {
+      return new SetModel2(value0);
+    };
+    return SetModel2;
+  }();
+  var SetAgentName = /* @__PURE__ */ function() {
+    function SetAgentName2(value0) {
+      this.value0 = value0;
+    }
+    ;
+    SetAgentName2.create = function(value0) {
+      return new SetAgentName2(value0);
+    };
+    return SetAgentName2;
+  }();
+  var SaveChanges2 = /* @__PURE__ */ function() {
+    function SaveChanges11() {
+    }
+    ;
+    SaveChanges11.value = new SaveChanges11();
+    return SaveChanges11;
+  }();
+  var render19 = function(state3) {
+    return div_([sectionHeader("omega//code // settings"), div2([cls(["max-w-4xl"])])([settingsGroup("Agent Configuration")([settingsItem("Agent Name")("Custom identifier for this instance")(settingsInput(state3.agentName)("agent-xyz")(SetAgentName.create)), settingsItem("Preferred Model")("Default LLM for agent reasoning")(settingsInput(state3.preferredModel)("model-id")(SetModel.create)), settingsItem("Auto-save")("Persist session state automatically")(settingsToggle(state3.autoSave)(ToggleAutoSave.value))]), div2([cls(["flex items-center gap-4 mt-6"])])([settingsButton("Save Changes")(SaveChanges2.value), function() {
+      if (state3.saved) {
+        return span3([cls(["text-status text-xs animate-pulse"])])([text5("Changes saved successfully")]);
+      }
+      ;
+      return text5("");
+    }()])])]);
+  };
+  var handleAction9 = function(v) {
+    if (v instanceof Initialize7) {
+      return pure9(unit);
+    }
+    ;
+    if (v instanceof ToggleAutoSave) {
+      return discard9(modify_11(function(s2) {
+        var $13 = {};
+        for (var $14 in s2) {
+          if ({}.hasOwnProperty.call(s2, $14)) {
+            $13[$14] = s2[$14];
+          }
+          ;
+        }
+        ;
+        $13.autoSave = !s2.autoSave;
+        $13.saved = false;
+        return $13;
+      }))(function() {
+        return handleAction9(SaveChanges2.value);
+      });
+    }
+    ;
+    if (v instanceof SetModel) {
+      return modify_11(function(v1) {
+        var $16 = {};
+        for (var $17 in v1) {
+          if ({}.hasOwnProperty.call(v1, $17)) {
+            $16[$17] = v1[$17];
+          }
+          ;
+        }
+        ;
+        $16.preferredModel = v.value0;
+        $16.saved = false;
+        return $16;
+      });
+    }
+    ;
+    if (v instanceof SetAgentName) {
+      return modify_11(function(v1) {
+        var $20 = {};
+        for (var $21 in v1) {
+          if ({}.hasOwnProperty.call(v1, $21)) {
+            $20[$21] = v1[$21];
+          }
+          ;
+        }
+        ;
+        $20.agentName = v.value0;
+        $20.saved = false;
+        return $20;
+      });
+    }
+    ;
+    if (v instanceof SaveChanges2) {
+      return modify_11(function(v1) {
+        var $24 = {};
+        for (var $25 in v1) {
+          if ({}.hasOwnProperty.call(v1, $25)) {
+            $24[$25] = v1[$25];
+          }
+          ;
+        }
+        ;
+        $24.saved = true;
+        return $24;
+      });
+    }
+    ;
+    throw new Error("Failed pattern match at Straylight.Pages.Products.OmegaCode.Settings (line 42, column 16 - line 56, column 33): " + [v.constructor.name]);
+  };
+  var settingsPage2 = /* @__PURE__ */ function() {
+    return mkComponent({
+      initialState: $$const({
+        autoSave: true,
+        preferredModel: "claude-3-5-sonnet",
+        agentName: "straylight-agent-01",
+        saved: false
+      }),
+      render: render19,
+      "eval": mkEval({
+        handleQuery: defaultEval.handleQuery,
+        receive: defaultEval.receive,
+        finalize: defaultEval.finalize,
+        handleAction: handleAction9,
+        initialize: new Just(Initialize7.value)
+      })
+    });
+  }();
 
   // output/Straylight.Pages.Products.OmegaProxy.Dashboard/index.js
-  var quickStart3 = /* @__PURE__ */ div2([/* @__PURE__ */ cls(["bg-card border border-border rounded-lg p-6 mb-8"])])([/* @__PURE__ */ h3([/* @__PURE__ */ cls(["text-lg font-semibold text-text mb-4"])])([/* @__PURE__ */ text5("Quick Start")]), /* @__PURE__ */ codeBlock([/* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-muted-foreground"])])([/* @__PURE__ */ text5("# Configure your API endpoint\n")]), /* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-orange-400"])])([/* @__PURE__ */ text5("$ ")]), /* @__PURE__ */ text5("export OMEGA_PROXY_URL=https://proxy.omega.dev\n\n"), /* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-muted-foreground"])])([/* @__PURE__ */ text5("# Route requests through omega//proxy\n")]), /* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-orange-400"])])([/* @__PURE__ */ text5("$ ")]), /* @__PURE__ */ text5("omega proxy start")])]);
-  var header7 = /* @__PURE__ */ div2([/* @__PURE__ */ cls(["mb-8"])])([/* @__PURE__ */ h1([/* @__PURE__ */ cls(["text-2xl font-bold text-text mb-2"])])([/* @__PURE__ */ text5("Dashboard")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-muted-foreground"])])([/* @__PURE__ */ text5("Request metrics, compression ratios, and provider health.")])]);
-  var render20 = /* @__PURE__ */ div2([/* @__PURE__ */ cls(["max-w-[1100px] mx-auto px-6 py-8"])])([header7, quickStart3, /* @__PURE__ */ emptyDashboard("omega//proxy")]);
-  var dashboardPage3 = /* @__PURE__ */ mkComponent({
-    initialState: /* @__PURE__ */ $$const(unit),
-    render: /* @__PURE__ */ $$const(render20),
-    "eval": /* @__PURE__ */ mkEval(defaultEval)
-  });
+  var show7 = /* @__PURE__ */ show(showInt);
+  var map30 = /* @__PURE__ */ map(functorArray);
+  var discard10 = /* @__PURE__ */ discard(discardUnit)(bindHalogenM);
+  var modify_12 = /* @__PURE__ */ modify_(monadStateHalogenM);
+  var append14 = /* @__PURE__ */ append(semigroupArray);
+  var Initialize8 = /* @__PURE__ */ function() {
+    function Initialize17() {
+    }
+    ;
+    Initialize17.value = new Initialize17();
+    return Initialize17;
+  }();
+  var AddEndpoint = /* @__PURE__ */ function() {
+    function AddEndpoint2() {
+    }
+    ;
+    AddEndpoint2.value = new AddEndpoint2();
+    return AddEndpoint2;
+  }();
+  var RefreshEndpoints = /* @__PURE__ */ function() {
+    function RefreshEndpoints2() {
+    }
+    ;
+    RefreshEndpoints2.value = new RefreshEndpoints2();
+    return RefreshEndpoints2;
+  }();
+  var renderEndpoint = function(ep) {
+    return tr([cls(["hover:bg-muted/5 transition-colors group cursor-pointer"])])([td([cls(["px-6 py-4 font-mono text-primary"])])([text5(ep.id)]), td([cls(["px-6 py-4 text-text font-medium"])])([text5(ep.path)]), td([cls(["px-6 py-4 text-muted-foreground font-mono"])])([text5(ep.target)]), td([cls(["px-6 py-4 text-muted-foreground font-mono"])])([text5(show7(ep.requests))]), td([cls(["px-6 py-4 text-status font-mono"])])([text5(ep.latency)])]);
+  };
+  var render20 = function(state3) {
+    return div_([sectionHeader("omega//proxy // dashboard"), function() {
+      var $16 = length3(state3.endpoints) === 0 && !state3.loading;
+      if ($16) {
+        return emptyDashboard("omega//proxy")(AddEndpoint.value);
+      }
+      ;
+      return div_([div2([cls(["flex justify-between items-center mb-6"])])([div_([statusIndicator(show7(length3(state3.endpoints)) + " ENDPOINTS ACTIVE")]), settingsButton("add endpoint")(AddEndpoint.value)]), div2([cls(["bg-card border border-border rounded-lg overflow-hidden"])])([table([cls(["w-full text-left text-xs"])])([thead([cls(["bg-muted/30 border-b border-border text-[10px] uppercase tracking-widest text-muted-foreground"])])([tr_([th([cls(["px-6 py-3 font-medium"])])([text5("endpoint id")]), th([cls(["px-6 py-3 font-medium"])])([text5("path")]), th([cls(["px-6 py-3 font-medium"])])([text5("target")]), th([cls(["px-6 py-3 font-medium"])])([text5("requests (24h)")]), th([cls(["px-6 py-3 font-medium"])])([text5("avg latency")])])]), tbody([cls(["divide-y divide-border"])])(map30(renderEndpoint)(state3.endpoints))])])]);
+    }()]);
+  };
+  var handleAction10 = function($copy_v) {
+    var $tco_done = false;
+    var $tco_result;
+    function $tco_loop(v) {
+      if (v instanceof Initialize8) {
+        $copy_v = RefreshEndpoints.value;
+        return;
+      }
+      ;
+      if (v instanceof RefreshEndpoints) {
+        $tco_done = true;
+        return discard10(modify_12(function(v1) {
+          var $18 = {};
+          for (var $19 in v1) {
+            if ({}.hasOwnProperty.call(v1, $19)) {
+              $18[$19] = v1[$19];
+            }
+            ;
+          }
+          ;
+          $18.loading = true;
+          return $18;
+        }))(function() {
+          var mockEndpoints = [{
+            id: "ep-1",
+            path: "/api/v1",
+            target: "http://backend-1:8080",
+            requests: 12400,
+            latency: "12ms"
+          }, {
+            id: "ep-2",
+            path: "/auth",
+            target: "http://auth-service:3000",
+            requests: 5200,
+            latency: "45ms"
+          }, {
+            id: "ep-3",
+            path: "/socket.io",
+            target: "ws://gateway:9000",
+            requests: 850,
+            latency: "2ms"
+          }];
+          return modify_12(function(v1) {
+            var $21 = {};
+            for (var $22 in v1) {
+              if ({}.hasOwnProperty.call(v1, $22)) {
+                $21[$22] = v1[$22];
+              }
+              ;
+            }
+            ;
+            $21.endpoints = mockEndpoints;
+            $21.loading = false;
+            return $21;
+          });
+        });
+      }
+      ;
+      if (v instanceof AddEndpoint) {
+        $tco_done = true;
+        return discard10(modify_12(function(v1) {
+          var $24 = {};
+          for (var $25 in v1) {
+            if ({}.hasOwnProperty.call(v1, $25)) {
+              $24[$25] = v1[$25];
+            }
+            ;
+          }
+          ;
+          $24.loading = true;
+          return $24;
+        }))(function() {
+          return modify_12(function(s2) {
+            var $27 = {};
+            for (var $28 in s2) {
+              if ({}.hasOwnProperty.call(s2, $28)) {
+                $27[$28] = s2[$28];
+              }
+              ;
+            }
+            ;
+            $27.endpoints = append14(s2.endpoints)([{
+              id: "ep-new",
+              path: "/new-route",
+              target: "http://localhost:8000",
+              requests: 0,
+              latency: "-"
+            }]);
+            $27.loading = false;
+            return $27;
+          });
+        });
+      }
+      ;
+      throw new Error("Failed pattern match at Straylight.Pages.Products.OmegaProxy.Dashboard (line 45, column 16 - line 60, column 169): " + [v.constructor.name]);
+    }
+    ;
+    while (!$tco_done) {
+      $tco_result = $tco_loop($copy_v);
+    }
+    ;
+    return $tco_result;
+  };
+  var dashboardPage3 = /* @__PURE__ */ function() {
+    return mkComponent({
+      initialState: $$const({
+        endpoints: [],
+        loading: false
+      }),
+      render: render20,
+      "eval": mkEval({
+        handleQuery: defaultEval.handleQuery,
+        receive: defaultEval.receive,
+        finalize: defaultEval.finalize,
+        handleAction: handleAction10,
+        initialize: new Just(Initialize8.value)
+      })
+    });
+  }();
 
   // output/Straylight.Pages.Products.OmegaProxy.Docs/index.js
-  var modify_8 = /* @__PURE__ */ modify_(monadStateHalogenM);
+  var modify_13 = /* @__PURE__ */ modify_(monadStateHalogenM);
   var Receive5 = /* @__PURE__ */ function() {
     function Receive13(value0) {
       this.value0 = value0;
@@ -55822,8 +56957,8 @@ Learn more: https://clerk.com/docs/components/clerk-provider`.trim());
   var quickstartContent3 = /* @__PURE__ */ article([/* @__PURE__ */ cls(["prose prose-invert max-w-none"])])([/* @__PURE__ */ h1([/* @__PURE__ */ cls(["text-3xl font-bold text-text mb-6"])])([/* @__PURE__ */ text5("Quick Start")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-muted-foreground mb-6"])])([/* @__PURE__ */ text5("Get omega//proxy running in under 60 seconds.")]), /* @__PURE__ */ h2([/* @__PURE__ */ cls(["text-xl font-semibold text-text mt-8 mb-4"])])([/* @__PURE__ */ text5("Docker (Recommended)")]), /* @__PURE__ */ codeBlock([/* @__PURE__ */ text5("docker run -p 8080:8080 -p 5555:5555 \\\n"), /* @__PURE__ */ text5("  -e OPENAI_API_KEY=$OPENAI_API_KEY \\\n"), /* @__PURE__ */ text5("  -e ANTHROPIC_API_KEY=$ANTHROPIC_API_KEY \\\n"), /* @__PURE__ */ text5("  straylight/omega-proxy")]), /* @__PURE__ */ h2([/* @__PURE__ */ cls(["text-xl font-semibold text-text mt-8 mb-4"])])([/* @__PURE__ */ text5("Nix")]), /* @__PURE__ */ codeBlock([/* @__PURE__ */ text5("nix run github:straylight-software/omega-proxy")]), /* @__PURE__ */ h2([/* @__PURE__ */ cls(["text-xl font-semibold text-text mt-8 mb-4"])])([/* @__PURE__ */ text5("Connect via ZeroMQ")]), /* @__PURE__ */ codeBlock([/* @__PURE__ */ text5("# Subscribe to SIGIL frames\n"), /* @__PURE__ */ text5("zmq-sub tcp://localhost:5555\n\n"), /* @__PURE__ */ text5("# Or use the HTTP API\n"), /* @__PURE__ */ text5("curl http://localhost:8080/v1/chat/completions \\\n"), /* @__PURE__ */ text5('  -H "Content-Type: application/json" \\\n'), /* @__PURE__ */ text5(`  -d '{"model": "gpt-4", "messages": [...]}'`)])]);
   var providersContent2 = /* @__PURE__ */ article([/* @__PURE__ */ cls(["prose prose-invert max-w-none"])])([/* @__PURE__ */ h1([/* @__PURE__ */ cls(["text-3xl font-bold text-text mb-6"])])([/* @__PURE__ */ text5("Provider Setup")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-muted-foreground mb-6"])])([/* @__PURE__ */ text5("omega//proxy supports all major LLM providers with a unified API.")]), /* @__PURE__ */ h2([/* @__PURE__ */ cls(["text-xl font-semibold text-text mt-8 mb-4"])])([/* @__PURE__ */ text5("Supported Providers")]), /* @__PURE__ */ ul([/* @__PURE__ */ cls(["list-disc list-inside text-muted-foreground space-y-2 mb-6"])])([/* @__PURE__ */ li_([/* @__PURE__ */ text5("OpenAI (GPT-4, GPT-4o, o1)")]), /* @__PURE__ */ li_([/* @__PURE__ */ text5("Anthropic (Claude 3.5 Sonnet, Opus)")]), /* @__PURE__ */ li_([/* @__PURE__ */ text5("Google (Gemini)")]), /* @__PURE__ */ li_([/* @__PURE__ */ text5("Mistral (Mistral Large)")]), /* @__PURE__ */ li_([/* @__PURE__ */ text5("Ollama (local models)")]), /* @__PURE__ */ li_([/* @__PURE__ */ text5("Custom endpoints")])]), /* @__PURE__ */ h2([/* @__PURE__ */ cls(["text-xl font-semibold text-text mt-8 mb-4"])])([/* @__PURE__ */ text5("Configuration")]), /* @__PURE__ */ codeBlock([/* @__PURE__ */ text5("# config.yaml\n"), /* @__PURE__ */ text5("providers:\n"), /* @__PURE__ */ text5("  openai:\n"), /* @__PURE__ */ text5("    api_key: ${OPENAI_API_KEY}\n"), /* @__PURE__ */ text5("    models: [gpt-4, gpt-4o]\n"), /* @__PURE__ */ text5("  anthropic:\n"), /* @__PURE__ */ text5("    api_key: ${ANTHROPIC_API_KEY}\n"), /* @__PURE__ */ text5("    models: [claude-3-5-sonnet]")])]);
   var overviewContent3 = /* @__PURE__ */ article([/* @__PURE__ */ cls(["prose prose-invert max-w-none"])])([/* @__PURE__ */ h1([/* @__PURE__ */ cls(["text-3xl font-bold text-text mb-6"])])([/* @__PURE__ */ text5("omega//proxy Documentation")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-muted-foreground mb-6"])])([/* @__PURE__ */ text5("Verified inference proxy. jaylene-slide ingress: SSE to SIGIL over ZeroMQ. Reset-on-ambiguity. 200-600% wire compression.")]), /* @__PURE__ */ h2([/* @__PURE__ */ cls(["text-2xl font-semibold text-text mt-12 mb-4"])])([/* @__PURE__ */ text5("What is omega//proxy?")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-muted-foreground mb-4"])])([/* @__PURE__ */ text5("omega//proxy sits between your LLM provider and your applications, translating Server-Sent Events (SSE) into the SIGIL protocol over ZeroMQ. It provides verified inference with reset-on-ambiguity semantics, fixing broken tool calls automatically.")]), /* @__PURE__ */ h2([/* @__PURE__ */ cls(["text-2xl font-semibold text-text mt-12 mb-4"])])([/* @__PURE__ */ text5("Key Features")]), /* @__PURE__ */ ul([/* @__PURE__ */ cls(["list-disc list-inside text-muted-foreground space-y-2 mb-6"])])([/* @__PURE__ */ li_([/* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-orange-400"])])([/* @__PURE__ */ text5("SSE to SIGIL")]), /* @__PURE__ */ text5(" \u2014 Real-time translation via jaylene-slide ingress")]), /* @__PURE__ */ li_([/* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-orange-400"])])([/* @__PURE__ */ text5("Reset-on-ambiguity")]), /* @__PURE__ */ text5(" \u2014 Prevents hallucination cascades")]), /* @__PURE__ */ li_([/* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-orange-400"])])([/* @__PURE__ */ text5("200-600% compression")]), /* @__PURE__ */ text5(" \u2014 Wire-level SIGIL optimization")]), /* @__PURE__ */ li_([/* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-orange-400"])])([/* @__PURE__ */ text5("Tool call repair")]), /* @__PURE__ */ text5(" \u2014 Fixes malformed LLM tool responses")]), /* @__PURE__ */ li_([/* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-orange-400"])])([/* @__PURE__ */ text5("Multi-provider")]), /* @__PURE__ */ text5(" \u2014 OpenAI, Anthropic, Google, Ollama, custom")])]), /* @__PURE__ */ h2([/* @__PURE__ */ cls(["text-2xl font-semibold text-text mt-12 mb-4"])])([/* @__PURE__ */ text5("Replaces")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-muted-foreground"])])([/* @__PURE__ */ text5("LiteLLM, raw OpenAI SDK, broken tool calls, custom proxy scripts.")])]);
-  var handleAction6 = function(v) {
-    return modify_8(function(v1) {
+  var handleAction11 = function(v) {
+    return modify_13(function(v1) {
       var $8 = {};
       for (var $9 in v1) {
         if ({}.hasOwnProperty.call(v1, $9)) {
@@ -55880,7 +57015,7 @@ Learn more: https://clerk.com/docs/components/clerk-provider`.trim());
         handleQuery: defaultEval.handleQuery,
         initialize: defaultEval.initialize,
         finalize: defaultEval.finalize,
-        handleAction: handleAction6,
+        handleAction: handleAction11,
         receive: function($13) {
           return Just.create(Receive5.create($13));
         }
@@ -55889,7 +57024,7 @@ Learn more: https://clerk.com/docs/components/clerk-provider`.trim());
   }();
 
   // output/Straylight.Pages.Products.OmegaProxy.Features/index.js
-  var map26 = /* @__PURE__ */ map(functorArray);
+  var map31 = /* @__PURE__ */ map(functorArray);
   var socketPattern = function(pattern2) {
     return function(label5) {
       return div2([cls(["p-4 bg-background rounded-lg"])])([p([cls(["text-orange-400 font-mono font-bold mb-1"])])([text5(pattern2)]), p([cls(["text-muted-foreground text-sm"])])([text5(label5)])]);
@@ -55920,7 +57055,7 @@ Learn more: https://clerk.com/docs/components/clerk-provider`.trim());
     return li([cls(["flex items-start gap-3"])])([span3([cls(["text-orange-400 mt-1"])])([text5("+")]), span3([cls(["text-muted-foreground"])])([text5(text6)])]);
   };
   var featureList3 = function(items2) {
-    return ul([cls(["space-y-3"])])(map26(featureItem4)(items2));
+    return ul([cls(["space-y-3"])])(map31(featureItem4)(items2));
   };
   var cta6 = /* @__PURE__ */ section([/* @__PURE__ */ cls(["py-24 border-t border-border"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["max-w-[800px] mx-auto px-6 text-center"])])([/* @__PURE__ */ h2([/* @__PURE__ */ cls(["text-3xl font-bold text-text mb-4"])])([/* @__PURE__ */ text5("Ready for verified inference?")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-muted-foreground mb-8"])])([/* @__PURE__ */ text5("Deploy omega//proxy today. Open source and free to self-host.")]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["flex flex-col sm:flex-row items-center justify-center gap-4"])])([/* @__PURE__ */ a([/* @__PURE__ */ href4("/omega/proxy/docs"), /* @__PURE__ */ cls(["inline-flex items-center justify-center px-8 py-4 bg-orange-400 text-background font-medium rounded-md hover:bg-orange-400/90 transition-colors"])])([/* @__PURE__ */ text5("Get started")]), /* @__PURE__ */ a([/* @__PURE__ */ href4("/omega/proxy/pricing"), /* @__PURE__ */ cls(["inline-flex items-center justify-center px-8 py-4 border border-border text-text font-medium rounded-md hover:bg-card transition-colors"])])([/* @__PURE__ */ text5("View pricing")])])])]);
   var codeLine7 = function(prompt) {
@@ -55964,22 +57099,22 @@ Learn more: https://clerk.com/docs/components/clerk-provider`.trim());
   };
   var features3 = /* @__PURE__ */ section([/* @__PURE__ */ cls(["py-24 border-t border-border"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["max-w-[1100px] mx-auto px-6"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["text-center mb-16"])])([/* @__PURE__ */ h2([/* @__PURE__ */ cls(["text-3xl font-bold text-text mb-4"])])([/* @__PURE__ */ text5("Why omega//proxy?")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-muted-foreground max-w-xl mx-auto"])])([/* @__PURE__ */ text5("Built for agents that need verified inference, wire compression, and reliable tool calls.")])]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"])])([/* @__PURE__ */ featureCard4(">")("SSE to SIGIL")("jaylene-slide ingress translates Server-Sent Events to SIGIL frames over ZeroMQ. No intermediate buffering. Real-time verified tokens."), /* @__PURE__ */ featureCard4("!")("Reset-on-ambiguity")("Prevents hallucination cascades. Automatic state reset on ambiguous responses. No corrupt context propagation. Clean recovery."), /* @__PURE__ */ featureCard4("\u25CE")("200-600% Compression")("Wire-level compression reduces bandwidth dramatically. SIGIL protocol optimizes token transmission. Lower latency, lower costs."), /* @__PURE__ */ featureCard4("\u26A1")("Fixes Broken Tool Calls")("LLM providers often return malformed tool calls. omega//proxy validates, repairs, and ensures structured responses work every time."), /* @__PURE__ */ featureCard4("\u2194")("Multi-Provider")("OpenAI, Anthropic, Google, Mistral, local models via Ollama. Single unified API. Hot-swap providers without code changes."), /* @__PURE__ */ featureCard4("\u2234")("Verified Inference")("SIGIL protocol ensures structured, verified communication. Every response validated against schema. Tamper-evident audit logs.")])])]);
   var cta7 = /* @__PURE__ */ section([/* @__PURE__ */ cls(["py-24 border-t border-border"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["max-w-[800px] mx-auto px-6 text-center"])])([/* @__PURE__ */ h2([/* @__PURE__ */ cls(["text-3xl font-bold text-text mb-4"])])([/* @__PURE__ */ text5("Ready for verified inference?")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-muted-foreground mb-8"])])([/* @__PURE__ */ text5("omega//proxy is open source and free to self-host. Managed hosting available for teams.")]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["flex flex-col sm:flex-row items-center justify-center gap-4"])])([/* @__PURE__ */ primaryButton4("/omega/proxy/docs")("Deploy now"), /* @__PURE__ */ secondaryButton4("/omega/proxy/pricing")("View pricing")])])]);
-  var compCell = function(value12) {
+  var compCell = function(value15) {
     return span3([cls([function() {
-      if (value12 === "no") {
+      if (value15 === "no") {
         return "text-muted-foreground/50";
       }
       ;
-      if (value12 === "none") {
+      if (value15 === "none") {
         return "text-muted-foreground/50";
       }
       ;
-      if (value12 === "n/a") {
+      if (value15 === "n/a") {
         return "text-muted-foreground/50";
       }
       ;
       return "text-muted-foreground";
-    }()])])([text5(value12)]);
+    }()])])([text5(value15)]);
   };
   var comparisonRow2 = function(feature) {
     return function(us) {
@@ -56020,7 +57155,7 @@ Learn more: https://clerk.com/docs/components/clerk-provider`.trim());
   });
 
   // output/Straylight.Pages.Products.OmegaProxy.Pricing/index.js
-  var map27 = /* @__PURE__ */ map(functorArray);
+  var map32 = /* @__PURE__ */ map(functorArray);
   var hero9 = /* @__PURE__ */ section([/* @__PURE__ */ cls(["py-24"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["max-w-[1100px] mx-auto px-6 text-center"])])([/* @__PURE__ */ h1([/* @__PURE__ */ cls(["text-4xl md:text-5xl font-bold text-text mb-6"])])([/* @__PURE__ */ text5("Simple, transparent pricing")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-xl text-muted-foreground max-w-2xl mx-auto"])])([/* @__PURE__ */ text5("Self-host for free. Use managed hosting for convenience. Pay only for what you use.")])])]);
   var featureItem5 = function(text6) {
     return li([cls(["flex items-start gap-3"])])([span3([cls(["text-orange-400"])])([text5("+")]), span3([cls(["text-muted-foreground text-sm"])])([text5(text6)])]);
@@ -56038,7 +57173,7 @@ Learn more: https://clerk.com/docs/components/clerk-provider`.trim());
       }
       ;
       return text5("");
-    }(), h3([cls(["text-xl font-bold text-text mb-2"])])([text5(props.name)]), div2([cls(["flex items-baseline gap-1 mb-4"])])([span3([cls(["text-3xl font-bold text-text"])])([text5(props.price)]), span3([cls(["text-muted-foreground"])])([text5(props.period)])]), p([cls(["text-muted-foreground text-sm mb-6"])])([text5(props.description)]), ul([cls(["space-y-3 mb-8"])])(map27(featureItem5)(props.features)), a([href4(props.ctaHref), cls(["block w-full py-3 text-center font-medium rounded-md transition-colors", function() {
+    }(), h3([cls(["text-xl font-bold text-text mb-2"])])([text5(props.name)]), div2([cls(["flex items-baseline gap-1 mb-4"])])([span3([cls(["text-3xl font-bold text-text"])])([text5(props.price)]), span3([cls(["text-muted-foreground"])])([text5(props.period)])]), p([cls(["text-muted-foreground text-sm mb-6"])])([text5(props.description)]), ul([cls(["space-y-3 mb-8"])])(map32(featureItem5)(props.features)), a([href4(props.ctaHref), cls(["block w-full py-3 text-center font-medium rounded-md transition-colors", function() {
       if (props.highlighted) {
         return "bg-orange-400 text-background hover:bg-orange-400/90";
       }
@@ -56089,27 +57224,300 @@ Learn more: https://clerk.com/docs/components/clerk-provider`.trim());
   });
 
   // output/Straylight.Pages.Products.OmegaProxy.Settings/index.js
-  var header8 = /* @__PURE__ */ div2([/* @__PURE__ */ cls(["mb-8"])])([/* @__PURE__ */ h1([/* @__PURE__ */ cls(["text-2xl font-bold text-text"])])([/* @__PURE__ */ text5("Settings")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-muted-foreground"])])([/* @__PURE__ */ text5("Provider configuration, verification rules, and rate limits.")])]);
-  var render25 = /* @__PURE__ */ div2([/* @__PURE__ */ cls(["max-w-[1100px] mx-auto px-6 py-8"])])([header8, emptySettings]);
-  var settingsPage3 = /* @__PURE__ */ mkComponent({
-    initialState: /* @__PURE__ */ $$const(unit),
-    render: /* @__PURE__ */ $$const(render25),
-    "eval": /* @__PURE__ */ mkEval(defaultEval)
-  });
+  var modify_14 = /* @__PURE__ */ modify_(monadStateHalogenM);
+  var discard11 = /* @__PURE__ */ discard(discardUnit)(bindHalogenM);
+  var UpdateProxyName = /* @__PURE__ */ function() {
+    function UpdateProxyName2(value0) {
+      this.value0 = value0;
+    }
+    ;
+    UpdateProxyName2.create = function(value0) {
+      return new UpdateProxyName2(value0);
+    };
+    return UpdateProxyName2;
+  }();
+  var ToggleCompression = /* @__PURE__ */ function() {
+    function ToggleCompression3() {
+    }
+    ;
+    ToggleCompression3.value = new ToggleCompression3();
+    return ToggleCompression3;
+  }();
+  var ToggleSsl = /* @__PURE__ */ function() {
+    function ToggleSsl2() {
+    }
+    ;
+    ToggleSsl2.value = new ToggleSsl2();
+    return ToggleSsl2;
+  }();
+  var SaveChanges3 = /* @__PURE__ */ function() {
+    function SaveChanges11() {
+    }
+    ;
+    SaveChanges11.value = new SaveChanges11();
+    return SaveChanges11;
+  }();
+  var render25 = function(state3) {
+    return div_([sectionHeader("omega//proxy // settings"), div2([cls(["max-w-4xl"])])([settingsGroup("Network Settings")([settingsItem("Proxy Name")("Custom name for this proxy instance")(settingsInput(state3.proxyName)("edge-proxy-01")(UpdateProxyName.create)), settingsItem("Gzip Compression")("Compress responses to reduce bandwidth")(settingsToggle(state3.enableCompression)(ToggleCompression.value)), settingsItem("Force SSL")("Redirect all HTTP traffic to HTTPS")(settingsToggle(state3.enableSsl)(ToggleSsl.value))]), div2([cls(["flex items-center gap-4"])])([settingsButton("Save Changes")(SaveChanges3.value), function() {
+      if (state3.saved) {
+        return span3([cls(["text-status text-xs animate-pulse"])])([text5("Changes saved successfully")]);
+      }
+      ;
+      return text5("");
+    }()])])]);
+  };
+  var handleAction12 = function(v) {
+    if (v instanceof UpdateProxyName) {
+      return modify_14(function(v1) {
+        var $12 = {};
+        for (var $13 in v1) {
+          if ({}.hasOwnProperty.call(v1, $13)) {
+            $12[$13] = v1[$13];
+          }
+          ;
+        }
+        ;
+        $12.proxyName = v.value0;
+        $12.saved = false;
+        return $12;
+      });
+    }
+    ;
+    if (v instanceof ToggleCompression) {
+      return discard11(modify_14(function(s2) {
+        var $16 = {};
+        for (var $17 in s2) {
+          if ({}.hasOwnProperty.call(s2, $17)) {
+            $16[$17] = s2[$17];
+          }
+          ;
+        }
+        ;
+        $16.enableCompression = !s2.enableCompression;
+        $16.saved = false;
+        return $16;
+      }))(function() {
+        return handleAction12(SaveChanges3.value);
+      });
+    }
+    ;
+    if (v instanceof ToggleSsl) {
+      return discard11(modify_14(function(s2) {
+        var $19 = {};
+        for (var $20 in s2) {
+          if ({}.hasOwnProperty.call(s2, $20)) {
+            $19[$20] = s2[$20];
+          }
+          ;
+        }
+        ;
+        $19.enableSsl = !s2.enableSsl;
+        $19.saved = false;
+        return $19;
+      }))(function() {
+        return handleAction12(SaveChanges3.value);
+      });
+    }
+    ;
+    if (v instanceof SaveChanges3) {
+      return modify_14(function(v1) {
+        var $22 = {};
+        for (var $23 in v1) {
+          if ({}.hasOwnProperty.call(v1, $23)) {
+            $22[$23] = v1[$23];
+          }
+          ;
+        }
+        ;
+        $22.saved = true;
+        return $22;
+      });
+    }
+    ;
+    throw new Error("Failed pattern match at Straylight.Pages.Products.OmegaProxy.Settings (line 40, column 16 - line 53, column 33): " + [v.constructor.name]);
+  };
+  var settingsPage3 = /* @__PURE__ */ function() {
+    return mkComponent({
+      initialState: $$const({
+        proxyName: "edge-proxy-01",
+        enableCompression: true,
+        enableSsl: true,
+        saved: false
+      }),
+      render: render25,
+      "eval": mkEval({
+        handleQuery: defaultEval.handleQuery,
+        receive: defaultEval.receive,
+        initialize: defaultEval.initialize,
+        finalize: defaultEval.finalize,
+        handleAction: handleAction12
+      })
+    });
+  }();
 
   // output/Straylight.Pages.Products.OmegaWork.Dashboard/index.js
-  var quickStart4 = /* @__PURE__ */ div2([/* @__PURE__ */ cls(["bg-card border border-border rounded-lg p-6 mb-8"])])([/* @__PURE__ */ h3([/* @__PURE__ */ cls(["text-lg font-semibold text-text mb-4"])])([/* @__PURE__ */ text5("Quick Start")]), /* @__PURE__ */ codeBlock([/* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-muted-foreground"])])([/* @__PURE__ */ text5("# Invite your team\n")]), /* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-indigo-400"])])([/* @__PURE__ */ text5("\u2192 ")]), /* @__PURE__ */ text5("Settings > Team > Invite Members\n\n"), /* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-muted-foreground"])])([/* @__PURE__ */ text5("# Create your first workspace\n")]), /* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-indigo-400"])])([/* @__PURE__ */ text5("\u2192 ")]), /* @__PURE__ */ text5("Settings > Workspaces > New Workspace")])]);
-  var header9 = /* @__PURE__ */ div2([/* @__PURE__ */ cls(["mb-8"])])([/* @__PURE__ */ h1([/* @__PURE__ */ cls(["text-2xl font-bold text-text mb-2"])])([/* @__PURE__ */ text5("Team Dashboard")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-muted-foreground"])])([/* @__PURE__ */ text5("Monitor team activity, shared conversations, and workspace usage.")])]);
-  var render26 = /* @__PURE__ */ div2([/* @__PURE__ */ cls(["max-w-[1100px] mx-auto px-6 py-8"])])([header9, quickStart4, /* @__PURE__ */ emptyDashboard("omega//work")]);
-  var dashboardPage4 = /* @__PURE__ */ mkComponent({
-    initialState: /* @__PURE__ */ $$const(unit),
-    render: /* @__PURE__ */ $$const(render26),
-    "eval": /* @__PURE__ */ mkEval(defaultEval)
-  });
+  var show8 = /* @__PURE__ */ show(showInt);
+  var map33 = /* @__PURE__ */ map(functorArray);
+  var discard12 = /* @__PURE__ */ discard(discardUnit)(bindHalogenM);
+  var modify_15 = /* @__PURE__ */ modify_(monadStateHalogenM);
+  var append6 = /* @__PURE__ */ append(semigroupArray);
+  var Initialize9 = /* @__PURE__ */ function() {
+    function Initialize17() {
+    }
+    ;
+    Initialize17.value = new Initialize17();
+    return Initialize17;
+  }();
+  var CreateWorkspace = /* @__PURE__ */ function() {
+    function CreateWorkspace2() {
+    }
+    ;
+    CreateWorkspace2.value = new CreateWorkspace2();
+    return CreateWorkspace2;
+  }();
+  var RefreshWorkspaces = /* @__PURE__ */ function() {
+    function RefreshWorkspaces2() {
+    }
+    ;
+    RefreshWorkspaces2.value = new RefreshWorkspaces2();
+    return RefreshWorkspaces2;
+  }();
+  var renderWorkspace = function(ws) {
+    return tr([cls(["hover:bg-muted/5 transition-colors group cursor-pointer"])])([td([cls(["px-6 py-4 font-mono text-primary"])])([text5(ws.id)]), td([cls(["px-6 py-4 text-text font-medium"])])([text5(ws.name)]), td([cls(["px-6 py-4 text-muted-foreground"])])([span3([cls(["px-1.5 py-0.5 border border-border rounded text-[9px] uppercase tracking-tighter"])])([text5(ws.type_)])]), td([cls(["px-6 py-4 text-muted-foreground font-mono"])])([text5(show8(ws.members))]), td([cls(["px-6 py-4 text-muted-foreground"])])([text5(ws.lastActive)])]);
+  };
+  var render26 = function(state3) {
+    return div_([sectionHeader("omega//work // dashboard"), function() {
+      var $15 = length3(state3.workspaces) === 0 && !state3.loading;
+      if ($15) {
+        return emptyDashboard("omega//work")(CreateWorkspace.value);
+      }
+      ;
+      return div_([div2([cls(["flex justify-between items-center mb-6"])])([div_([statusIndicator("3 WORKSPACES ACTIVE")]), settingsButton("create workspace")(CreateWorkspace.value)]), div2([cls(["bg-card border border-border rounded-lg overflow-hidden"])])([table([cls(["w-full text-left text-xs"])])([thead([cls(["bg-muted/30 border-b border-border text-[10px] uppercase tracking-widest text-muted-foreground"])])([tr_([th([cls(["px-6 py-3 font-medium"])])([text5("workspace id")]), th([cls(["px-6 py-3 font-medium"])])([text5("name")]), th([cls(["px-6 py-3 font-medium"])])([text5("type")]), th([cls(["px-6 py-3 font-medium"])])([text5("members")]), th([cls(["px-6 py-3 font-medium"])])([text5("last active")])])]), tbody([cls(["divide-y divide-border"])])(map33(renderWorkspace)(state3.workspaces))])])]);
+    }()]);
+  };
+  var handleAction13 = function($copy_v) {
+    var $tco_done = false;
+    var $tco_result;
+    function $tco_loop(v) {
+      if (v instanceof Initialize9) {
+        $copy_v = RefreshWorkspaces.value;
+        return;
+      }
+      ;
+      if (v instanceof RefreshWorkspaces) {
+        $tco_done = true;
+        return discard12(modify_15(function(v1) {
+          var $17 = {};
+          for (var $18 in v1) {
+            if ({}.hasOwnProperty.call(v1, $18)) {
+              $17[$18] = v1[$18];
+            }
+            ;
+          }
+          ;
+          $17.loading = true;
+          return $17;
+        }))(function() {
+          var mockWorkspaces = [{
+            id: "ws-1",
+            name: "Engineering Team",
+            type_: "shared",
+            members: 12,
+            lastActive: "2 mins ago"
+          }, {
+            id: "ws-2",
+            name: "Product Design",
+            type_: "shared",
+            members: 5,
+            lastActive: "1 hour ago"
+          }, {
+            id: "ws-3",
+            name: "Personal Sandbox",
+            type_: "private",
+            members: 1,
+            lastActive: "Yesterday"
+          }];
+          return modify_15(function(v1) {
+            var $20 = {};
+            for (var $21 in v1) {
+              if ({}.hasOwnProperty.call(v1, $21)) {
+                $20[$21] = v1[$21];
+              }
+              ;
+            }
+            ;
+            $20.workspaces = mockWorkspaces;
+            $20.loading = false;
+            return $20;
+          });
+        });
+      }
+      ;
+      if (v instanceof CreateWorkspace) {
+        $tco_done = true;
+        return discard12(modify_15(function(v1) {
+          var $23 = {};
+          for (var $24 in v1) {
+            if ({}.hasOwnProperty.call(v1, $24)) {
+              $23[$24] = v1[$24];
+            }
+            ;
+          }
+          ;
+          $23.loading = true;
+          return $23;
+        }))(function() {
+          return modify_15(function(s2) {
+            var $26 = {};
+            for (var $27 in s2) {
+              if ({}.hasOwnProperty.call(s2, $27)) {
+                $26[$27] = s2[$27];
+              }
+              ;
+            }
+            ;
+            $26.workspaces = append6(s2.workspaces)([{
+              id: "ws-new",
+              name: "New Workspace",
+              type_: "private",
+              members: 1,
+              lastActive: "Just now"
+            }]);
+            $26.loading = false;
+            return $26;
+          });
+        });
+      }
+      ;
+      throw new Error("Failed pattern match at Straylight.Pages.Products.OmegaWork.Dashboard (line 44, column 16 - line 59, column 168): " + [v.constructor.name]);
+    }
+    ;
+    while (!$tco_done) {
+      $tco_result = $tco_loop($copy_v);
+    }
+    ;
+    return $tco_result;
+  };
+  var dashboardPage4 = /* @__PURE__ */ function() {
+    return mkComponent({
+      initialState: $$const({
+        workspaces: [],
+        loading: false
+      }),
+      render: render26,
+      "eval": mkEval({
+        handleQuery: defaultEval.handleQuery,
+        receive: defaultEval.receive,
+        finalize: defaultEval.finalize,
+        handleAction: handleAction13,
+        initialize: new Just(Initialize9.value)
+      })
+    });
+  }();
 
   // output/Straylight.Pages.Products.OmegaWork.Docs/index.js
-  var map28 = /* @__PURE__ */ map(functorArray);
-  var modify_9 = /* @__PURE__ */ modify_(monadStateHalogenM);
+  var map34 = /* @__PURE__ */ map(functorArray);
+  var modify_16 = /* @__PURE__ */ modify_(monadStateHalogenM);
   var Receive6 = /* @__PURE__ */ function() {
     function Receive13(value0) {
       this.value0 = value0;
@@ -56146,7 +57554,7 @@ Learn more: https://clerk.com/docs/components/clerk-provider`.trim());
     return tr([cls(["border-b border-border"])])([td([cls(["py-2 text-indigo-400 font-mono"])])([text5(v.key)]), td([cls(["py-2 text-muted-foreground"])])([text5(v.action)])]);
   };
   var shortcutTable = function(shortcuts) {
-    return table([cls(["w-full text-sm mb-6"])])([tbody_(map28(shortcutRow)(shortcuts))]);
+    return table([cls(["w-full text-sm mb-6"])])([tbody_(map34(shortcutRow)(shortcuts))]);
   };
   var p5 = function(text6) {
     return p([cls(["text-muted-foreground mb-4"])])([text5(text6)]);
@@ -56159,8 +57567,8 @@ Learn more: https://clerk.com/docs/components/clerk-provider`.trim());
       return div2([cls(["p-4 bg-card border border-border rounded-lg"])])([h4([cls(["text-text font-medium mb-1"])])([text5(name15)]), p([cls(["text-muted-foreground text-sm"])])([text5(description)])]);
     };
   };
-  var handleAction7 = function(v) {
-    return modify_9(function(v1) {
+  var handleAction14 = function(v) {
+    return modify_16(function(v1) {
       var $13 = {};
       for (var $14 in v1) {
         if ({}.hasOwnProperty.call(v1, $14)) {
@@ -56308,7 +57716,7 @@ Learn more: https://clerk.com/docs/components/clerk-provider`.trim());
         handleQuery: defaultEval.handleQuery,
         initialize: defaultEval.initialize,
         finalize: defaultEval.finalize,
-        handleAction: handleAction7,
+        handleAction: handleAction14,
         receive: function($18) {
           return Just.create(Receive6.create($18));
         }
@@ -56317,7 +57725,7 @@ Learn more: https://clerk.com/docs/components/clerk-provider`.trim());
   }();
 
   // output/Straylight.Pages.Products.OmegaWork.Features/index.js
-  var map29 = /* @__PURE__ */ map(functorArray);
+  var map35 = /* @__PURE__ */ map(functorArray);
   var workspaceStat = function(name15) {
     return function(members) {
       return function(status2) {
@@ -56352,7 +57760,7 @@ Learn more: https://clerk.com/docs/components/clerk-provider`.trim());
     return li([cls(["flex items-start gap-3"])])([span3([cls(["text-indigo-400 mt-1"])])([text5("+")]), span3([cls(["text-muted-foreground"])])([text5(text6)])]);
   };
   var featureList4 = function(items2) {
-    return ul([cls(["space-y-3"])])(map29(featureItem6)(items2));
+    return ul([cls(["space-y-3"])])(map35(featureItem6)(items2));
   };
   var cta8 = /* @__PURE__ */ section([/* @__PURE__ */ cls(["py-24 border-t border-border"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["max-w-[800px] mx-auto px-6 text-center"])])([/* @__PURE__ */ h2([/* @__PURE__ */ cls(["text-3xl font-bold text-text mb-4"])])([/* @__PURE__ */ text5("Ready to empower your team?")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-muted-foreground mb-8"])])([/* @__PURE__ */ text5("Start with a free trial for individuals, or contact us for team pricing.")]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["flex flex-col sm:flex-row items-center justify-center gap-4"])])([/* @__PURE__ */ a([/* @__PURE__ */ href4("/omega/work/pricing"), /* @__PURE__ */ cls(["inline-flex items-center justify-center px-8 py-4 bg-indigo-400 text-background font-medium rounded-md hover:bg-indigo-400/90 transition-colors"])])([/* @__PURE__ */ text5("Start free trial")]), /* @__PURE__ */ a([/* @__PURE__ */ href4("/omega/work/pricing"), /* @__PURE__ */ cls(["inline-flex items-center justify-center px-8 py-4 border border-border text-text font-medium rounded-md hover:bg-card transition-colors"])])([/* @__PURE__ */ text5("View pricing")])])])]);
   var badge5 = function(label5) {
@@ -56442,7 +57850,7 @@ Learn more: https://clerk.com/docs/components/clerk-provider`.trim());
   });
 
   // output/Straylight.Pages.Products.OmegaWork.Pricing/index.js
-  var map30 = /* @__PURE__ */ map(functorArray);
+  var map36 = /* @__PURE__ */ map(functorArray);
   var hero12 = /* @__PURE__ */ section([/* @__PURE__ */ cls(["py-24"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["max-w-[1100px] mx-auto px-6 text-center"])])([/* @__PURE__ */ h1([/* @__PURE__ */ cls(["text-4xl md:text-5xl font-bold text-text mb-6"])])([/* @__PURE__ */ text5("Pricing for every team")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-xl text-muted-foreground max-w-2xl mx-auto"])])([/* @__PURE__ */ text5("Start free as an individual. Scale to your whole team when you're ready.")])])]);
   var featureItem7 = function(feature) {
     return li([cls(["flex items-start gap-2 text-sm"])])([span3([cls(["text-indigo-400"])])([text5("+")]), span3([cls(["text-muted-foreground"])])([text5(feature)])]);
@@ -56460,7 +57868,7 @@ Learn more: https://clerk.com/docs/components/clerk-provider`.trim());
       }
       ;
       return text5("");
-    }(), h3([cls(["text-lg font-semibold text-text mb-2"])])([text5(props.name)]), div2([cls(["mb-4"])])([span3([cls(["text-3xl font-bold text-text"])])([text5(props.price)]), span3([cls(["text-muted-foreground"])])([text5(props.period)])]), p([cls(["text-sm text-muted-foreground mb-6"])])([text5(props.description)]), ul([cls(["space-y-2 mb-6"])])(map30(featureItem7)(props.features)), a([href4(props.ctaHref), cls(["block w-full py-3 text-center font-medium rounded-md transition-colors", function() {
+    }(), h3([cls(["text-lg font-semibold text-text mb-2"])])([text5(props.name)]), div2([cls(["mb-4"])])([span3([cls(["text-3xl font-bold text-text"])])([text5(props.price)]), span3([cls(["text-muted-foreground"])])([text5(props.period)])]), p([cls(["text-sm text-muted-foreground mb-6"])])([text5(props.description)]), ul([cls(["space-y-2 mb-6"])])(map36(featureItem7)(props.features)), a([href4(props.ctaHref), cls(["block w-full py-3 text-center font-medium rounded-md transition-colors", function() {
       if (props.highlighted) {
         return "bg-indigo-400 text-background hover:bg-indigo-400/90";
       }
@@ -56521,26 +57929,306 @@ Learn more: https://clerk.com/docs/components/clerk-provider`.trim());
   });
 
   // output/Straylight.Pages.Products.OmegaWork.Settings/index.js
-  var header10 = /* @__PURE__ */ div2([/* @__PURE__ */ cls(["mb-8"])])([/* @__PURE__ */ h1([/* @__PURE__ */ cls(["text-2xl font-bold text-text"])])([/* @__PURE__ */ text5("Settings")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-muted-foreground"])])([/* @__PURE__ */ text5("Team management, workspaces, SSO, and integrations.")])]);
-  var render31 = /* @__PURE__ */ div2([/* @__PURE__ */ cls(["max-w-[1100px] mx-auto px-6 py-8"])])([header10, emptySettings]);
-  var settingsPage4 = /* @__PURE__ */ mkComponent({
-    initialState: /* @__PURE__ */ $$const(unit),
-    render: /* @__PURE__ */ $$const(render31),
-    "eval": /* @__PURE__ */ mkEval(defaultEval)
-  });
+  var modify_17 = /* @__PURE__ */ modify_(monadStateHalogenM);
+  var discard13 = /* @__PURE__ */ discard(discardUnit)(bindHalogenM);
+  var UpdateDefaultWorkspaceName = /* @__PURE__ */ function() {
+    function UpdateDefaultWorkspaceName2(value0) {
+      this.value0 = value0;
+    }
+    ;
+    UpdateDefaultWorkspaceName2.create = function(value0) {
+      return new UpdateDefaultWorkspaceName2(value0);
+    };
+    return UpdateDefaultWorkspaceName2;
+  }();
+  var TogglePrivateByDefault = /* @__PURE__ */ function() {
+    function TogglePrivateByDefault2() {
+    }
+    ;
+    TogglePrivateByDefault2.value = new TogglePrivateByDefault2();
+    return TogglePrivateByDefault2;
+  }();
+  var ToggleEnableCollaboration = /* @__PURE__ */ function() {
+    function ToggleEnableCollaboration2() {
+    }
+    ;
+    ToggleEnableCollaboration2.value = new ToggleEnableCollaboration2();
+    return ToggleEnableCollaboration2;
+  }();
+  var SaveChanges4 = /* @__PURE__ */ function() {
+    function SaveChanges11() {
+    }
+    ;
+    SaveChanges11.value = new SaveChanges11();
+    return SaveChanges11;
+  }();
+  var render31 = function(state3) {
+    return div_([sectionHeader("omega//work // settings"), div2([cls(["max-w-4xl"])])([settingsGroup("Workspace Defaults")([settingsItem("Default Name")("Name given to newly created workspaces")(settingsInput(state3.defaultWorkspaceName)("new-workspace")(UpdateDefaultWorkspaceName.create)), settingsItem("Private by Default")("New workspaces are only visible to the creator")(settingsToggle(state3.privateByDeault)(TogglePrivateByDefault.value)), settingsItem("Real-time Collaboration")("Enable multi-user editing in shared workspaces")(settingsToggle(state3.enableCollaboration)(ToggleEnableCollaboration.value))]), div2([cls(["flex items-center gap-4"])])([settingsButton("Save Changes")(SaveChanges4.value), function() {
+      if (state3.saved) {
+        return span3([cls(["text-status text-xs animate-pulse"])])([text5("Changes saved successfully")]);
+      }
+      ;
+      return text5("");
+    }()])])]);
+  };
+  var handleAction15 = function(v) {
+    if (v instanceof UpdateDefaultWorkspaceName) {
+      return modify_17(function(v1) {
+        var $12 = {};
+        for (var $13 in v1) {
+          if ({}.hasOwnProperty.call(v1, $13)) {
+            $12[$13] = v1[$13];
+          }
+          ;
+        }
+        ;
+        $12.defaultWorkspaceName = v.value0;
+        $12.saved = false;
+        return $12;
+      });
+    }
+    ;
+    if (v instanceof TogglePrivateByDefault) {
+      return discard13(modify_17(function(s2) {
+        var $16 = {};
+        for (var $17 in s2) {
+          if ({}.hasOwnProperty.call(s2, $17)) {
+            $16[$17] = s2[$17];
+          }
+          ;
+        }
+        ;
+        $16.privateByDeault = !s2.privateByDeault;
+        $16.saved = false;
+        return $16;
+      }))(function() {
+        return handleAction15(SaveChanges4.value);
+      });
+    }
+    ;
+    if (v instanceof ToggleEnableCollaboration) {
+      return discard13(modify_17(function(s2) {
+        var $19 = {};
+        for (var $20 in s2) {
+          if ({}.hasOwnProperty.call(s2, $20)) {
+            $19[$20] = s2[$20];
+          }
+          ;
+        }
+        ;
+        $19.enableCollaboration = !s2.enableCollaboration;
+        $19.saved = false;
+        return $19;
+      }))(function() {
+        return handleAction15(SaveChanges4.value);
+      });
+    }
+    ;
+    if (v instanceof SaveChanges4) {
+      return modify_17(function(v1) {
+        var $22 = {};
+        for (var $23 in v1) {
+          if ({}.hasOwnProperty.call(v1, $23)) {
+            $22[$23] = v1[$23];
+          }
+          ;
+        }
+        ;
+        $22.saved = true;
+        return $22;
+      });
+    }
+    ;
+    throw new Error("Failed pattern match at Straylight.Pages.Products.OmegaWork.Settings (line 40, column 16 - line 53, column 33): " + [v.constructor.name]);
+  };
+  var settingsPage4 = /* @__PURE__ */ function() {
+    return mkComponent({
+      initialState: $$const({
+        defaultWorkspaceName: "new-workspace",
+        privateByDeault: true,
+        enableCollaboration: true,
+        saved: false
+      }),
+      render: render31,
+      "eval": mkEval({
+        handleQuery: defaultEval.handleQuery,
+        receive: defaultEval.receive,
+        initialize: defaultEval.initialize,
+        finalize: defaultEval.finalize,
+        handleAction: handleAction15
+      })
+    });
+  }();
 
   // output/Straylight.Pages.Products.SensenetBuild.Dashboard/index.js
-  var quickStart5 = /* @__PURE__ */ div2([/* @__PURE__ */ cls(["bg-card border border-border rounded-lg p-6 mb-8"])])([/* @__PURE__ */ h3([/* @__PURE__ */ cls(["text-lg font-semibold text-text mb-4"])])([/* @__PURE__ */ text5("Quick Start")]), /* @__PURE__ */ codeBlock([/* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-muted-foreground"])])([/* @__PURE__ */ text5("# Install sensenet//build\n")]), /* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-green-400"])])([/* @__PURE__ */ text5("$ ")]), /* @__PURE__ */ text5("nix profile install github:sensenet/build\n\n"), /* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-muted-foreground"])])([/* @__PURE__ */ text5("# Run your first verified build\n")]), /* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-green-400"])])([/* @__PURE__ */ text5("$ ")]), /* @__PURE__ */ text5("build --verify")])]);
-  var header11 = /* @__PURE__ */ div2([/* @__PURE__ */ cls(["mb-8"])])([/* @__PURE__ */ h1([/* @__PURE__ */ cls(["text-2xl font-bold text-text mb-2"])])([/* @__PURE__ */ text5("Dashboard")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-muted-foreground"])])([/* @__PURE__ */ text5("Manage builds, jobs, and proofs.")])]);
-  var render32 = /* @__PURE__ */ div2([/* @__PURE__ */ cls(["max-w-[1100px] mx-auto px-6 py-8"])])([header11, quickStart5, /* @__PURE__ */ emptyDashboard("sensenet//build")]);
-  var dashboardPage5 = /* @__PURE__ */ mkComponent({
-    initialState: /* @__PURE__ */ $$const(unit),
-    render: /* @__PURE__ */ $$const(render32),
-    "eval": /* @__PURE__ */ mkEval(defaultEval)
-  });
+  var map37 = /* @__PURE__ */ map(functorArray);
+  var discard14 = /* @__PURE__ */ discard(discardUnit)(bindHalogenM);
+  var modify_18 = /* @__PURE__ */ modify_(monadStateHalogenM);
+  var append7 = /* @__PURE__ */ append(semigroupArray);
+  var Initialize10 = /* @__PURE__ */ function() {
+    function Initialize17() {
+    }
+    ;
+    Initialize17.value = new Initialize17();
+    return Initialize17;
+  }();
+  var TriggerBuild = /* @__PURE__ */ function() {
+    function TriggerBuild2() {
+    }
+    ;
+    TriggerBuild2.value = new TriggerBuild2();
+    return TriggerBuild2;
+  }();
+  var RefreshBuilds = /* @__PURE__ */ function() {
+    function RefreshBuilds2() {
+    }
+    ;
+    RefreshBuilds2.value = new RefreshBuilds2();
+    return RefreshBuilds2;
+  }();
+  var renderBuild = function(build) {
+    return tr([cls(["hover:bg-muted/5 transition-colors group cursor-pointer"])])([td([cls(["px-6 py-4 font-mono text-primary"])])([text5(build.id)]), td([cls(["px-6 py-4 text-text"])])([text5(build.flakeRef)]), td([cls(["px-6 py-4"])])([span3([cls(["px-2 py-0.5 rounded text-[10px] uppercase tracking-tighter", function() {
+      if (build.status === "success") {
+        return "bg-status/20 text-status";
+      }
+      ;
+      if (build.status === "running") {
+        return "bg-blue-500/20 text-blue-400 status-pulse";
+      }
+      ;
+      if (build.status === "failed") {
+        return "bg-red-500/20 text-red-400";
+      }
+      ;
+      return "bg-muted text-muted-foreground";
+    }()])])([text5(build.status)])]), td([cls(["px-6 py-4 text-muted-foreground font-mono"])])([text5(build.duration)]), td([cls(["px-6 py-4 text-muted-foreground"])])([text5(build.finishedAt)])]);
+  };
+  var render32 = function(state3) {
+    return div_([sectionHeader("sensenet//build // dashboard"), function() {
+      var $15 = length3(state3.builds) === 0 && !state3.loading;
+      if ($15) {
+        return emptyDashboard("sensenet//build")(TriggerBuild.value);
+      }
+      ;
+      return div_([div2([cls(["flex justify-between items-center mb-6"])])([div_([statusIndicator("1 BUILD RUNNING")]), settingsButton("trigger build")(TriggerBuild.value)]), div2([cls(["bg-card border border-border rounded-lg overflow-hidden"])])([table([cls(["w-full text-left text-xs"])])([thead([cls(["bg-muted/30 border-b border-border text-[10px] uppercase tracking-widest text-muted-foreground"])])([tr_([th([cls(["px-6 py-3 font-medium"])])([text5("build id")]), th([cls(["px-6 py-3 font-medium"])])([text5("flake ref")]), th([cls(["px-6 py-3 font-medium"])])([text5("status")]), th([cls(["px-6 py-3 font-medium"])])([text5("duration")]), th([cls(["px-6 py-3 font-medium"])])([text5("finished")])])]), tbody([cls(["divide-y divide-border"])])(map37(renderBuild)(state3.builds))])])]);
+    }()]);
+  };
+  var handleAction16 = function($copy_v) {
+    var $tco_done = false;
+    var $tco_result;
+    function $tco_loop(v) {
+      if (v instanceof Initialize10) {
+        $copy_v = RefreshBuilds.value;
+        return;
+      }
+      ;
+      if (v instanceof RefreshBuilds) {
+        $tco_done = true;
+        return discard14(modify_18(function(v1) {
+          var $17 = {};
+          for (var $18 in v1) {
+            if ({}.hasOwnProperty.call(v1, $18)) {
+              $17[$18] = v1[$18];
+            }
+            ;
+          }
+          ;
+          $17.loading = true;
+          return $17;
+        }))(function() {
+          var mockBuilds = [{
+            id: "build-1234",
+            flakeRef: "github:straylight/armory",
+            status: "success",
+            duration: "4m 12s",
+            finishedAt: "10 mins ago"
+          }, {
+            id: "build-1235",
+            flakeRef: "github:straylight/sdk",
+            status: "running",
+            duration: "1m 30s",
+            finishedAt: "ongoing"
+          }];
+          return modify_18(function(v1) {
+            var $20 = {};
+            for (var $21 in v1) {
+              if ({}.hasOwnProperty.call(v1, $21)) {
+                $20[$21] = v1[$21];
+              }
+              ;
+            }
+            ;
+            $20.builds = mockBuilds;
+            $20.loading = false;
+            return $20;
+          });
+        });
+      }
+      ;
+      if (v instanceof TriggerBuild) {
+        $tco_done = true;
+        return discard14(modify_18(function(v1) {
+          var $23 = {};
+          for (var $24 in v1) {
+            if ({}.hasOwnProperty.call(v1, $24)) {
+              $23[$24] = v1[$24];
+            }
+            ;
+          }
+          ;
+          $23.loading = true;
+          return $23;
+        }))(function() {
+          return modify_18(function(s2) {
+            var $26 = {};
+            for (var $27 in s2) {
+              if ({}.hasOwnProperty.call(s2, $27)) {
+                $26[$27] = s2[$27];
+              }
+              ;
+            }
+            ;
+            $26.builds = append7(s2.builds)([{
+              id: "build-new",
+              flakeRef: "github:user/repo",
+              status: "queued",
+              duration: "-",
+              finishedAt: "-"
+            }]);
+            $26.loading = false;
+            return $26;
+          });
+        });
+      }
+      ;
+      throw new Error("Failed pattern match at Straylight.Pages.Products.SensenetBuild.Dashboard (line 44, column 16 - line 58, column 166): " + [v.constructor.name]);
+    }
+    ;
+    while (!$tco_done) {
+      $tco_result = $tco_loop($copy_v);
+    }
+    ;
+    return $tco_result;
+  };
+  var dashboardPage5 = /* @__PURE__ */ function() {
+    return mkComponent({
+      initialState: $$const({
+        builds: [],
+        loading: false
+      }),
+      render: render32,
+      "eval": mkEval({
+        handleQuery: defaultEval.handleQuery,
+        receive: defaultEval.receive,
+        finalize: defaultEval.finalize,
+        handleAction: handleAction16,
+        initialize: new Just(Initialize10.value)
+      })
+    });
+  }();
 
   // output/Straylight.Pages.Products.SensenetBuild.Docs/index.js
-  var modify_10 = /* @__PURE__ */ modify_(monadStateHalogenM);
+  var modify_19 = /* @__PURE__ */ modify_(monadStateHalogenM);
   var Receive7 = /* @__PURE__ */ function() {
     function Receive13(value0) {
       this.value0 = value0;
@@ -56576,8 +58264,8 @@ Learn more: https://clerk.com/docs/components/clerk-provider`.trim());
   var quickstartContent5 = /* @__PURE__ */ article([/* @__PURE__ */ cls(["prose prose-invert max-w-none"])])([/* @__PURE__ */ h1([/* @__PURE__ */ cls(["text-3xl font-bold text-text mb-6"])])([/* @__PURE__ */ text5("Quick Start")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-muted-foreground mb-8"])])([/* @__PURE__ */ text5("Get started with sensenet//build in 5 minutes.")]), /* @__PURE__ */ h2([/* @__PURE__ */ cls(["text-xl font-semibold text-text mt-8 mb-4"])])([/* @__PURE__ */ text5("Installation")]), /* @__PURE__ */ codeBlock([/* @__PURE__ */ text5("# Install via nix\nnix profile install github:straylight-software/sensenet-build\n\n# Or use the binary cache\nnix run github:straylight-software/sensenet-build -- --help")]), /* @__PURE__ */ h2([/* @__PURE__ */ cls(["text-xl font-semibold text-text mt-8 mb-4"])])([/* @__PURE__ */ text5("Create your first build")]), /* @__PURE__ */ codeBlock([/* @__PURE__ */ text5("# Initialize a new project\nsensenet-build init my-project\ncd my-project\n\n# Build with verification\nsensenet-build --verify")])]);
   var overviewContent5 = /* @__PURE__ */ article([/* @__PURE__ */ cls(["prose prose-invert max-w-none"])])([/* @__PURE__ */ h1([/* @__PURE__ */ cls(["text-3xl font-bold text-text mb-6"])])([/* @__PURE__ */ text5("sensenet//build Documentation")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-muted-foreground mb-8"])])([/* @__PURE__ */ text5("Typed build system with formal verification. Dhall configs. Lean4-proven derivations.")]), /* @__PURE__ */ codeBlock([/* @__PURE__ */ text5("# Build with proofs\nsensenet-build --verify ./derivation.dhall")]), /* @__PURE__ */ h2([/* @__PURE__ */ cls(["text-xl font-semibold text-text mt-12 mb-4"])])([/* @__PURE__ */ text5("Why sensenet//build?")]), /* @__PURE__ */ ul([/* @__PURE__ */ cls(["list-disc list-inside text-muted-foreground space-y-2 mb-8"])])([/* @__PURE__ */ li_([/* @__PURE__ */ text5("Type-safe build configurations with Dhall")]), /* @__PURE__ */ li_([/* @__PURE__ */ text5("Lean4 proofs for derivation correctness")]), /* @__PURE__ */ li_([/* @__PURE__ */ text5("Content-addressed artifacts with attestations")]), /* @__PURE__ */ li_([/* @__PURE__ */ text5("Hermetic builds by default")])])]);
   var lean4Content = /* @__PURE__ */ article([/* @__PURE__ */ cls(["prose prose-invert max-w-none"])])([/* @__PURE__ */ h1([/* @__PURE__ */ cls(["text-3xl font-bold text-text mb-6"])])([/* @__PURE__ */ text5("Lean4 Proofs")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-muted-foreground mb-8"])])([/* @__PURE__ */ text5("Prove properties about your builds using Lean4.")]), /* @__PURE__ */ h2([/* @__PURE__ */ cls(["text-xl font-semibold text-text mt-8 mb-4"])])([/* @__PURE__ */ text5("Proof obligations")]), /* @__PURE__ */ codeBlock([/* @__PURE__ */ text5("-- Prove that output hash is deterministic\ntheorem hash_deterministic (d : Derivation) :\n  build d = build d := by\n  rfl")])]);
-  var handleAction8 = function(v) {
-    return modify_10(function(v1) {
+  var handleAction17 = function(v) {
+    return modify_19(function(v1) {
       var $8 = {};
       for (var $9 in v1) {
         if ({}.hasOwnProperty.call(v1, $9)) {
@@ -56639,7 +58327,7 @@ Learn more: https://clerk.com/docs/components/clerk-provider`.trim());
         handleQuery: defaultEval.handleQuery,
         initialize: defaultEval.initialize,
         finalize: defaultEval.finalize,
-        handleAction: handleAction8,
+        handleAction: handleAction17,
         receive: function($13) {
           return Just.create(Receive7.create($13));
         }
@@ -56648,7 +58336,7 @@ Learn more: https://clerk.com/docs/components/clerk-provider`.trim());
   }();
 
   // output/Straylight.Pages.Products.SensenetBuild.Features/index.js
-  var map31 = /* @__PURE__ */ map(functorArray);
+  var map38 = /* @__PURE__ */ map(functorArray);
   var proofItem2 = function(theorem) {
     return function(status2) {
       return div2([cls(["flex items-center justify-between py-2 border-b border-border last:border-0"])])([code([cls(["text-sm text-text font-mono"])])([text5(theorem)]), span3([cls(["text-xs px-2 py-0.5 rounded bg-green-400/20 text-green-400"])])([text5(status2)])]);
@@ -56667,7 +58355,7 @@ Learn more: https://clerk.com/docs/components/clerk-provider`.trim());
     return li([cls(["flex items-start gap-3"])])([span3([cls(["text-green-400 mt-1"])])([text5("+")]), span3([cls(["text-muted-foreground"])])([text5(text6)])]);
   };
   var featureList5 = function(items2) {
-    return ul([cls(["space-y-3"])])(map31(featureItem8)(items2));
+    return ul([cls(["space-y-3"])])(map38(featureItem8)(items2));
   };
   var execCard = function(title3) {
     return function(desc) {
@@ -56743,15 +58431,15 @@ Learn more: https://clerk.com/docs/components/clerk-provider`.trim());
   };
   var features5 = /* @__PURE__ */ section([/* @__PURE__ */ cls(["py-24 border-t border-border"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["max-w-[1100px] mx-auto px-6"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["text-center mb-16"])])([/* @__PURE__ */ h2([/* @__PURE__ */ cls(["text-3xl font-bold text-text mb-4"])])([/* @__PURE__ */ text5("Why sensenet//build?")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-muted-foreground max-w-xl mx-auto"])])([/* @__PURE__ */ text5("Built for engineers who demand mathematical certainty from their build infrastructure.")])]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"])])([/* @__PURE__ */ featureCard6("lambda")("Dhall configuration")("Total functions, no Turing-completeness, no escape hatches. Your config terminates or it doesn't typecheck."), /* @__PURE__ */ featureCard6("proof")("Lean4 proofs")("Derivation semantics formalized in Lean4. Build correctness is a proven property, not a hope."), /* @__PURE__ */ featureCard6("lock")("Hermetic builds")("Content-addressed filesystem sandbox. No network, no ambient state. Inputs are hashed, outputs are deterministic."), /* @__PURE__ */ featureCard6("parallel")("Distributed execution")("Remote build cluster with capability-based scheduling. Work-stealing, speculative execution, automatic retries."), /* @__PURE__ */ featureCard6("universal")("Language-agnostic")("First-class support for Rust, Go, Haskell, PureScript, TypeScript, C++, Python. Unified dependency graph."), /* @__PURE__ */ featureCard6("checkmark")("Reproducibility guarantees")("Bit-for-bit identical outputs. Cryptographic attestation chain from source to artifact.")])])]);
   var cta11 = /* @__PURE__ */ section([/* @__PURE__ */ cls(["py-24 border-t border-border"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["max-w-[800px] mx-auto px-6 text-center"])])([/* @__PURE__ */ h2([/* @__PURE__ */ cls(["text-3xl font-bold text-text mb-4"])])([/* @__PURE__ */ text5("Ready for builds you can trust?")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-muted-foreground mb-8"])])([/* @__PURE__ */ text5("Start free. No credit card required. Unlimited local builds.")]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["flex flex-col sm:flex-row items-center justify-center gap-4"])])([/* @__PURE__ */ primaryButton6("/sensenet/build/pricing")("Get started free"), /* @__PURE__ */ secondaryButton6("/sensenet/build/features")("See all features")])])]);
-  var compCell2 = function(value12) {
+  var compCell2 = function(value15) {
     return span3([cls([function() {
-      var $3 = value12 === "no";
+      var $3 = value15 === "no";
       if ($3) {
         return "text-muted-foreground/50";
       }
       ;
       return "text-muted-foreground";
-    }()])])([text5(value12)]);
+    }()])])([text5(value15)]);
   };
   var comparisonRow5 = function(feature) {
     return function(us) {
@@ -56792,7 +58480,7 @@ Learn more: https://clerk.com/docs/components/clerk-provider`.trim());
   });
 
   // output/Straylight.Pages.Products.SensenetBuild.Pricing/index.js
-  var map32 = /* @__PURE__ */ map(functorArray);
+  var map39 = /* @__PURE__ */ map(functorArray);
   var hero15 = /* @__PURE__ */ section([/* @__PURE__ */ cls(["py-24"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["max-w-[1100px] mx-auto px-6 text-center"])])([/* @__PURE__ */ h1([/* @__PURE__ */ cls(["text-4xl md:text-5xl font-bold text-text mb-6"])])([/* @__PURE__ */ text5("Simple, transparent pricing")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-xl text-muted-foreground max-w-2xl mx-auto"])])([/* @__PURE__ */ text5("Start free. Pay for remote execution when you need it. No hidden fees.")])])]);
   var featureItem9 = function(text6) {
     return li([cls(["flex items-center gap-2 text-sm text-muted-foreground"])])([span3([cls(["text-green-400"])])([text5("+")]), text5(text6)]);
@@ -56804,7 +58492,7 @@ Learn more: https://clerk.com/docs/components/clerk-provider`.trim());
       }
       ;
       return "bg-card border-border";
-    }()])])([h3([cls(["text-lg font-semibold text-text mb-2"])])([text5(config.name)]), div2([cls(["mb-4"])])([span3([cls(["text-3xl font-bold text-text"])])([text5(config.price)]), span3([cls(["text-muted-foreground"])])([text5(config.period)])]), p([cls(["text-sm text-muted-foreground mb-6"])])([text5(config.description)]), ul([cls(["space-y-2 mb-6"])])(map32(featureItem9)(config.features)), a([href4(config.ctaHref), cls(["block text-center py-3 rounded-md font-medium transition-colors", function() {
+    }()])])([h3([cls(["text-lg font-semibold text-text mb-2"])])([text5(config.name)]), div2([cls(["mb-4"])])([span3([cls(["text-3xl font-bold text-text"])])([text5(config.price)]), span3([cls(["text-muted-foreground"])])([text5(config.period)])]), p([cls(["text-sm text-muted-foreground mb-6"])])([text5(config.description)]), ul([cls(["space-y-2 mb-6"])])(map39(featureItem9)(config.features)), a([href4(config.ctaHref), cls(["block text-center py-3 rounded-md font-medium transition-colors", function() {
       if (config.highlighted) {
         return "bg-green-400 text-background hover:bg-green-400/90";
       }
@@ -56855,26 +58543,267 @@ Learn more: https://clerk.com/docs/components/clerk-provider`.trim());
   });
 
   // output/Straylight.Pages.Products.SensenetBuild.Settings/index.js
-  var header12 = /* @__PURE__ */ div2([/* @__PURE__ */ cls(["mb-8"])])([/* @__PURE__ */ h1([/* @__PURE__ */ cls(["text-2xl font-bold text-text"])])([/* @__PURE__ */ text5("Settings")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-muted-foreground"])])([/* @__PURE__ */ text5("Build settings, proof verification, cache, and remote execution.")])]);
-  var render37 = /* @__PURE__ */ div2([/* @__PURE__ */ cls(["max-w-[1100px] mx-auto px-6 py-8"])])([header12, emptySettings]);
-  var settingsPage5 = /* @__PURE__ */ mkComponent({
-    initialState: /* @__PURE__ */ $$const(unit),
-    render: /* @__PURE__ */ $$const(render37),
-    "eval": /* @__PURE__ */ mkEval(defaultEval)
-  });
+  var modify_20 = /* @__PURE__ */ modify_(monadStateHalogenM);
+  var discard15 = /* @__PURE__ */ discard(discardUnit)(bindHalogenM);
+  var UpdateConcurrentBuilds = /* @__PURE__ */ function() {
+    function UpdateConcurrentBuilds2(value0) {
+      this.value0 = value0;
+    }
+    ;
+    UpdateConcurrentBuilds2.create = function(value0) {
+      return new UpdateConcurrentBuilds2(value0);
+    };
+    return UpdateConcurrentBuilds2;
+  }();
+  var ToggleUseCache = /* @__PURE__ */ function() {
+    function ToggleUseCache2() {
+    }
+    ;
+    ToggleUseCache2.value = new ToggleUseCache2();
+    return ToggleUseCache2;
+  }();
+  var ToggleNotifyOnSuccess = /* @__PURE__ */ function() {
+    function ToggleNotifyOnSuccess2() {
+    }
+    ;
+    ToggleNotifyOnSuccess2.value = new ToggleNotifyOnSuccess2();
+    return ToggleNotifyOnSuccess2;
+  }();
+  var SaveChanges5 = /* @__PURE__ */ function() {
+    function SaveChanges11() {
+    }
+    ;
+    SaveChanges11.value = new SaveChanges11();
+    return SaveChanges11;
+  }();
+  var render37 = function(state3) {
+    return div_([sectionHeader("sensenet//build // settings"), div2([cls(["max-w-4xl"])])([settingsGroup("Build Execution")([settingsItem("Concurrent Builds")("Maximum number of simultaneous builds")(settingsInput(state3.concurrentBuilds)("4")(UpdateConcurrentBuilds.create)), settingsItem("Use Build Cache")("Cache intermediate build results to speed up builds")(settingsToggle(state3.useCache)(ToggleUseCache.value)), settingsItem("Success Notifications")("Send alerts when a build completes successfully")(settingsToggle(state3.notifyOnSuccess)(ToggleNotifyOnSuccess.value))]), div2([cls(["flex items-center gap-4"])])([settingsButton("Save Changes")(SaveChanges5.value), function() {
+      if (state3.saved) {
+        return span3([cls(["text-status text-xs animate-pulse"])])([text5("Changes saved successfully")]);
+      }
+      ;
+      return text5("");
+    }()])])]);
+  };
+  var handleAction18 = function(v) {
+    if (v instanceof UpdateConcurrentBuilds) {
+      return modify_20(function(v1) {
+        var $12 = {};
+        for (var $13 in v1) {
+          if ({}.hasOwnProperty.call(v1, $13)) {
+            $12[$13] = v1[$13];
+          }
+          ;
+        }
+        ;
+        $12.concurrentBuilds = v.value0;
+        $12.saved = false;
+        return $12;
+      });
+    }
+    ;
+    if (v instanceof ToggleUseCache) {
+      return discard15(modify_20(function(s2) {
+        var $16 = {};
+        for (var $17 in s2) {
+          if ({}.hasOwnProperty.call(s2, $17)) {
+            $16[$17] = s2[$17];
+          }
+          ;
+        }
+        ;
+        $16.useCache = !s2.useCache;
+        $16.saved = false;
+        return $16;
+      }))(function() {
+        return handleAction18(SaveChanges5.value);
+      });
+    }
+    ;
+    if (v instanceof ToggleNotifyOnSuccess) {
+      return discard15(modify_20(function(s2) {
+        var $19 = {};
+        for (var $20 in s2) {
+          if ({}.hasOwnProperty.call(s2, $20)) {
+            $19[$20] = s2[$20];
+          }
+          ;
+        }
+        ;
+        $19.notifyOnSuccess = !s2.notifyOnSuccess;
+        $19.saved = false;
+        return $19;
+      }))(function() {
+        return handleAction18(SaveChanges5.value);
+      });
+    }
+    ;
+    if (v instanceof SaveChanges5) {
+      return modify_20(function(v1) {
+        var $22 = {};
+        for (var $23 in v1) {
+          if ({}.hasOwnProperty.call(v1, $23)) {
+            $22[$23] = v1[$23];
+          }
+          ;
+        }
+        ;
+        $22.saved = true;
+        return $22;
+      });
+    }
+    ;
+    throw new Error("Failed pattern match at Straylight.Pages.Products.SensenetBuild.Settings (line 40, column 16 - line 53, column 33): " + [v.constructor.name]);
+  };
+  var settingsPage5 = /* @__PURE__ */ function() {
+    return mkComponent({
+      initialState: $$const({
+        concurrentBuilds: "4",
+        useCache: true,
+        notifyOnSuccess: false,
+        saved: false
+      }),
+      render: render37,
+      "eval": mkEval({
+        handleQuery: defaultEval.handleQuery,
+        receive: defaultEval.receive,
+        initialize: defaultEval.initialize,
+        finalize: defaultEval.finalize,
+        handleAction: handleAction18
+      })
+    });
+  }();
 
   // output/Straylight.Pages.Products.SensenetCache.Dashboard/index.js
-  var quickStart6 = /* @__PURE__ */ div2([/* @__PURE__ */ cls(["bg-card border border-border rounded-lg p-6 mb-8"])])([/* @__PURE__ */ h3([/* @__PURE__ */ cls(["text-lg font-semibold text-text mb-4"])])([/* @__PURE__ */ text5("Quick Start")]), /* @__PURE__ */ codeBlock([/* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-muted-foreground"])])([/* @__PURE__ */ text5("# Push your first artifact\n")]), /* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-cyan-400"])])([/* @__PURE__ */ text5("$ ")]), /* @__PURE__ */ text5("sensenet-cache push ./result\n\n"), /* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-muted-foreground"])])([/* @__PURE__ */ text5("# Verify an attestation\n")]), /* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-cyan-400"])])([/* @__PURE__ */ text5("$ ")]), /* @__PURE__ */ text5("sensenet-cache verify <hash>")])]);
-  var header13 = /* @__PURE__ */ div2([/* @__PURE__ */ cls(["mb-8"])])([/* @__PURE__ */ h1([/* @__PURE__ */ cls(["text-2xl font-bold text-text mb-2"])])([/* @__PURE__ */ text5("Dashboard")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-muted-foreground"])])([/* @__PURE__ */ text5("Manage caches, view attestations, and monitor usage.")])]);
-  var render38 = /* @__PURE__ */ div2([/* @__PURE__ */ cls(["max-w-[1100px] mx-auto px-6 py-8"])])([header13, quickStart6, /* @__PURE__ */ emptyDashboard("sensenet//cache")]);
-  var dashboardPage6 = /* @__PURE__ */ mkComponent({
-    initialState: /* @__PURE__ */ $$const(unit),
-    render: /* @__PURE__ */ $$const(render38),
-    "eval": /* @__PURE__ */ mkEval(defaultEval)
-  });
+  var show9 = /* @__PURE__ */ show(showInt);
+  var map40 = /* @__PURE__ */ map(functorArray);
+  var pure10 = /* @__PURE__ */ pure(applicativeHalogenM);
+  var discard16 = /* @__PURE__ */ discard(discardUnit)(bindHalogenM);
+  var modify_21 = /* @__PURE__ */ modify_(monadStateHalogenM);
+  var Initialize11 = /* @__PURE__ */ function() {
+    function Initialize17() {
+    }
+    ;
+    Initialize17.value = new Initialize17();
+    return Initialize17;
+  }();
+  var Connect = /* @__PURE__ */ function() {
+    function Connect2() {
+    }
+    ;
+    Connect2.value = new Connect2();
+    return Connect2;
+  }();
+  var RefreshEntries = /* @__PURE__ */ function() {
+    function RefreshEntries2() {
+    }
+    ;
+    RefreshEntries2.value = new RefreshEntries2();
+    return RefreshEntries2;
+  }();
+  var renderEntry = function(entry) {
+    return tr([cls(["hover:bg-muted/5 transition-colors group cursor-pointer"])])([td([cls(["px-6 py-4 font-mono text-primary truncate max-w-xs"])])([text5(entry.key)]), td([cls(["px-6 py-4 text-muted-foreground font-mono"])])([text5(entry.size)]), td([cls(["px-6 py-4 text-muted-foreground font-mono"])])([text5(entry.ttl)]), td([cls(["px-6 py-4 text-muted-foreground"])])([text5(entry.lastAccessed)])]);
+  };
+  var render38 = function(state3) {
+    return div_([sectionHeader("sensenet//cache // dashboard"), function() {
+      var $13 = !state3.hasData && !state3.loading;
+      if ($13) {
+        return emptyDashboard("sensenet//cache")(Connect.value);
+      }
+      ;
+      return div_([div2([cls(["flex justify-between items-center mb-6"])])([div_([statusIndicator(show9(length3(state3.entries)) + " ENTRIES CACHED")]), settingsButton("purge cache")(RefreshEntries.value)]), div2([cls(["bg-card border border-border rounded-lg overflow-hidden"])])([table([cls(["w-full text-left text-xs"])])([thead([cls(["bg-muted/30 border-b border-border text-[10px] uppercase tracking-widest text-muted-foreground"])])([tr_([th([cls(["px-6 py-3 font-medium"])])([text5("cache key")]), th([cls(["px-6 py-3 font-medium"])])([text5("size")]), th([cls(["px-6 py-3 font-medium"])])([text5("ttl")]), th([cls(["px-6 py-3 font-medium"])])([text5("last accessed")])])]), tbody([cls(["divide-y divide-border"])])(map40(renderEntry)(state3.entries))])])]);
+    }()]);
+  };
+  var handleAction19 = function($copy_v) {
+    var $tco_done = false;
+    var $tco_result;
+    function $tco_loop(v) {
+      if (v instanceof Initialize11) {
+        $tco_done = true;
+        return pure10(unit);
+      }
+      ;
+      if (v instanceof Connect) {
+        $tco_done = true;
+        return discard16(modify_21(function(v1) {
+          var $15 = {};
+          for (var $16 in v1) {
+            if ({}.hasOwnProperty.call(v1, $16)) {
+              $15[$16] = v1[$16];
+            }
+            ;
+          }
+          ;
+          $15.loading = true;
+          return $15;
+        }))(function() {
+          var mockEntries = [{
+            key: "user:session:a8f2",
+            size: "1.2KB",
+            ttl: "24m",
+            lastAccessed: "Just now"
+          }, {
+            key: "pkg:nix:armory",
+            size: "450MB",
+            ttl: "6d",
+            lastAccessed: "12 mins ago"
+          }, {
+            key: "api:cache:v1:results",
+            size: "45KB",
+            ttl: "1h",
+            lastAccessed: "2 mins ago"
+          }];
+          return modify_21(function(v1) {
+            var $18 = {};
+            for (var $19 in v1) {
+              if ({}.hasOwnProperty.call(v1, $19)) {
+                $18[$19] = v1[$19];
+              }
+              ;
+            }
+            ;
+            $18.entries = mockEntries;
+            $18.loading = false;
+            $18.hasData = true;
+            return $18;
+          });
+        });
+      }
+      ;
+      if (v instanceof RefreshEntries) {
+        $copy_v = Connect.value;
+        return;
+      }
+      ;
+      throw new Error("Failed pattern match at Straylight.Pages.Products.SensenetCache.Dashboard (line 46, column 16 - line 59, column 25): " + [v.constructor.name]);
+    }
+    ;
+    while (!$tco_done) {
+      $tco_result = $tco_loop($copy_v);
+    }
+    ;
+    return $tco_result;
+  };
+  var dashboardPage6 = /* @__PURE__ */ function() {
+    return mkComponent({
+      initialState: $$const({
+        entries: [],
+        loading: false,
+        hasData: false
+      }),
+      render: render38,
+      "eval": mkEval({
+        handleQuery: defaultEval.handleQuery,
+        receive: defaultEval.receive,
+        finalize: defaultEval.finalize,
+        handleAction: handleAction19,
+        initialize: new Just(Initialize11.value)
+      })
+    });
+  }();
 
   // output/Straylight.Pages.Products.SensenetCache.Docs/index.js
-  var modify_11 = /* @__PURE__ */ modify_(monadStateHalogenM);
+  var modify_22 = /* @__PURE__ */ modify_(monadStateHalogenM);
   var Receive8 = /* @__PURE__ */ function() {
     function Receive13(value0) {
       this.value0 = value0;
@@ -56910,8 +58839,8 @@ Learn more: https://clerk.com/docs/components/clerk-provider`.trim());
   var quickstartContent6 = /* @__PURE__ */ article([/* @__PURE__ */ cls(["prose prose-invert max-w-none"])])([/* @__PURE__ */ h1([/* @__PURE__ */ cls(["text-3xl font-bold text-text mb-6"])])([/* @__PURE__ */ text5("Quick Start")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-muted-foreground mb-8"])])([/* @__PURE__ */ text5("Get started with sensenet//cache in under 5 minutes.")]), /* @__PURE__ */ h2([/* @__PURE__ */ cls(["text-xl font-semibold text-text mt-8 mb-4"])])([/* @__PURE__ */ text5("1. Install the CLI")]), /* @__PURE__ */ codeBlock([/* @__PURE__ */ text5("# Install via Nix\nnix profile install github:straylight-software/sensenet-cache\n\n# Or run directly\nnix run github:straylight-software/sensenet-cache -- --help")]), /* @__PURE__ */ h2([/* @__PURE__ */ cls(["text-xl font-semibold text-text mt-8 mb-4"])])([/* @__PURE__ */ text5("2. Authenticate")]), /* @__PURE__ */ codeBlock([/* @__PURE__ */ text5("# Login to your account\nsensenet-cache login\n\n# This opens a browser for OAuth authentication\n# Your credentials are stored in ~/.config/sensenet-cache/auth.json")]), /* @__PURE__ */ h2([/* @__PURE__ */ cls(["text-xl font-semibold text-text mt-8 mb-4"])])([/* @__PURE__ */ text5("3. Push Your First Artifact")]), /* @__PURE__ */ codeBlock([/* @__PURE__ */ text5("# Build something with Nix\nnix build .#mypackage\n\n# Push to your cache with attestation\nsensenet-cache push --attest ./result\n\n# Output:\n# Uploading blake3://7f83b1657ff1fc53...\n# Attestation signed with SPHINCS+-256s\n# Done: https://cache.sensenet.dev/yourorg/7f83b1657ff1fc53")]), /* @__PURE__ */ h2([/* @__PURE__ */ cls(["text-xl font-semibold text-text mt-8 mb-4"])])([/* @__PURE__ */ text5("4. Configure as Nix Substituter")]), /* @__PURE__ */ codeBlock([/* @__PURE__ */ text5('# Add to your flake.nix\nnixConfig = {\n  extra-substituters = [\n    "https://cache.sensenet.dev/yourorg"\n  ];\n  extra-trusted-public-keys = [\n    "yourorg.cache.sensenet.dev:abc123..."\n  ];\n};')]), /* @__PURE__ */ h2([/* @__PURE__ */ cls(["text-xl font-semibold text-text mt-8 mb-4"])])([/* @__PURE__ */ text5("5. Verify Downloads")]), /* @__PURE__ */ codeBlock([/* @__PURE__ */ text5("# Nix automatically verifies signatures on download\n# For manual verification:\nsensenet-cache verify ./result\n\n# Output:\n# Hash: blake3://7f83b1657ff1fc53...\n# Signature: SPHINCS+-256s (valid)\n# Builder: ci.yourorg.com\n# Source: github.com/yourorg/repo@abc123\n# SLSA Level: 3")])]);
   var postQuantumContent = /* @__PURE__ */ article([/* @__PURE__ */ cls(["prose prose-invert max-w-none"])])([/* @__PURE__ */ h1([/* @__PURE__ */ cls(["text-3xl font-bold text-text mb-6"])])([/* @__PURE__ */ text5("Post-Quantum Signatures")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-muted-foreground mb-8"])])([/* @__PURE__ */ text5("sensenet//cache uses SPHINCS+ signatures to protect your artifacts against both classical and quantum computer attacks.")]), /* @__PURE__ */ h2([/* @__PURE__ */ cls(["text-xl font-semibold text-text mt-8 mb-4"])])([/* @__PURE__ */ text5("Why Post-Quantum?")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-muted-foreground mb-6"])])([/* @__PURE__ */ text5("Large-scale quantum computers will break RSA, ECDSA, and Ed25519 signatures. Artifacts signed today with classical algorithms will be forgeable in the future. SPHINCS+ is a hash-based signature scheme that remains secure against quantum attacks, standardized by NIST in 2024.")]), /* @__PURE__ */ h2([/* @__PURE__ */ cls(["text-xl font-semibold text-text mt-8 mb-4"])])([/* @__PURE__ */ text5("SPHINCS+ Parameters")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-muted-foreground mb-4"])])([/* @__PURE__ */ text5("sensenet//cache uses SPHINCS+-256s with the following security properties:")]), /* @__PURE__ */ ul([/* @__PURE__ */ cls(["list-disc list-inside text-muted-foreground space-y-2 mb-8"])])([/* @__PURE__ */ li_([/* @__PURE__ */ text5("NIST Security Level 3 (192-bit classical, 128-bit quantum)")]), /* @__PURE__ */ li_([/* @__PURE__ */ text5("256-bit hash output (Blake3)")]), /* @__PURE__ */ li_([/* @__PURE__ */ text5("Small signature variant for faster verification")]), /* @__PURE__ */ li_([/* @__PURE__ */ text5("Signature size: ~8KB (vs 64 bytes for Ed25519)")])]), /* @__PURE__ */ h2([/* @__PURE__ */ cls(["text-xl font-semibold text-text mt-8 mb-4"])])([/* @__PURE__ */ text5("Hybrid Mode")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-muted-foreground mb-4"])])([/* @__PURE__ */ text5("For backward compatibility, sensenet//cache supports hybrid signing that combines Ed25519 with SPHINCS+:")]), /* @__PURE__ */ codeBlock([/* @__PURE__ */ text5("# Sign with both Ed25519 and SPHINCS+\nsensenet-cache push --sign hybrid ./result\n\n# Verify requires both signatures to be valid\nsensenet-cache verify --require hybrid blake3://...")]), /* @__PURE__ */ h2([/* @__PURE__ */ cls(["text-xl font-semibold text-text mt-8 mb-4"])])([/* @__PURE__ */ text5("Key Management")]), /* @__PURE__ */ codeBlock([/* @__PURE__ */ text5("# Generate a new SPHINCS+ keypair\nsensenet-cache keys generate --algorithm sphincs\n\n# List signing keys\nsensenet-cache keys list\n\n# Rotate keys (signs new artifacts with new key)\nsensenet-cache keys rotate --grace-period 30d\n\n# Export public key for substituter config\nsensenet-cache keys export --public")]), /* @__PURE__ */ h2([/* @__PURE__ */ cls(["text-xl font-semibold text-text mt-8 mb-4"])])([/* @__PURE__ */ text5("HSM Support")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-muted-foreground mb-4"])])([/* @__PURE__ */ text5("Enterprise plans support Hardware Security Modules for key storage:")]), /* @__PURE__ */ codeBlock([/* @__PURE__ */ text5("# Configure HSM backend\nsensenet-cache config set signing.backend hsm\nsensenet-cache config set signing.hsm.slot 1\nsensenet-cache config set signing.hsm.pin-env SENSENET_HSM_PIN")])]);
   var overviewContent6 = /* @__PURE__ */ article([/* @__PURE__ */ cls(["prose prose-invert max-w-none"])])([/* @__PURE__ */ h1([/* @__PURE__ */ cls(["text-3xl font-bold text-text mb-6"])])([/* @__PURE__ */ text5("sensenet//cache Documentation")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-muted-foreground mb-8"])])([/* @__PURE__ */ text5("Attestation-aware binary cache with content-addressed storage and post-quantum signatures. A drop-in replacement for Cachix and S3 artifact buckets.")]), /* @__PURE__ */ h2([/* @__PURE__ */ cls(["text-xl font-semibold text-text mt-12 mb-4"])])([/* @__PURE__ */ text5("What is sensenet//cache?")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-muted-foreground mb-6"])])([/* @__PURE__ */ text5("sensenet//cache is a content-addressed binary cache designed for Nix and other build systems. Every artifact is identified by its Blake3 cryptographic hash and signed with post-quantum SPHINCS+ signatures. Attestation metadata tracks provenance from source to binary.")]), /* @__PURE__ */ h2([/* @__PURE__ */ cls(["text-xl font-semibold text-text mt-8 mb-4"])])([/* @__PURE__ */ text5("Key Features")]), /* @__PURE__ */ ul([/* @__PURE__ */ cls(["list-disc list-inside text-muted-foreground space-y-2 mb-8"])])([/* @__PURE__ */ li_([/* @__PURE__ */ text5("Content-addressed storage with Blake3 hashing (7GB/s)")]), /* @__PURE__ */ li_([/* @__PURE__ */ text5("Post-quantum SPHINCS+ signatures (NIST Level 3)")]), /* @__PURE__ */ li_([/* @__PURE__ */ text5("Full attestation chain for SLSA Level 3 compliance")]), /* @__PURE__ */ li_([/* @__PURE__ */ text5("Drop-in Nix substituter support")]), /* @__PURE__ */ li_([/* @__PURE__ */ text5("io_uring async I/O for 2.1M lookups/sec")])]), /* @__PURE__ */ h2([/* @__PURE__ */ cls(["text-xl font-semibold text-text mt-8 mb-4"])])([/* @__PURE__ */ text5("Quick Example")]), /* @__PURE__ */ codeBlock([/* @__PURE__ */ text5("# Push an artifact with attestation\nsensenet-cache push --attest ./result\n\n# Verify an artifact's provenance\nsensenet-cache verify blake3://abc123...")])]);
-  var handleAction9 = function(v) {
-    return modify_11(function(v1) {
+  var handleAction20 = function(v) {
+    return modify_22(function(v1) {
       var $8 = {};
       for (var $9 in v1) {
         if ({}.hasOwnProperty.call(v1, $9)) {
@@ -56973,7 +58902,7 @@ Learn more: https://clerk.com/docs/components/clerk-provider`.trim());
         handleQuery: defaultEval.handleQuery,
         initialize: defaultEval.initialize,
         finalize: defaultEval.finalize,
-        handleAction: handleAction9,
+        handleAction: handleAction20,
         receive: function($13) {
           return Just.create(Receive8.create($13));
         }
@@ -56982,16 +58911,16 @@ Learn more: https://clerk.com/docs/components/clerk-provider`.trim());
   }();
 
   // output/Straylight.Pages.Products.SensenetCache.Features/index.js
-  var map33 = /* @__PURE__ */ map(functorArray);
+  var map41 = /* @__PURE__ */ map(functorArray);
   var secCard = function(title3) {
     return function(description) {
       return div2([cls(["bg-card border border-border rounded-lg p-6 hover:border-cyan-400/30 transition-colors"])])([h3([cls(["text-text font-semibold mb-2"])])([text5(title3)]), p([cls(["text-muted-foreground text-sm"])])([text5(description)])]);
     };
   };
-  var perfCard = function(value12) {
+  var perfCard = function(value15) {
     return function(label5) {
       return function(sublabel) {
-        return div2([cls(["bg-card border border-border rounded-lg p-6 text-center"])])([p([cls(["text-3xl font-bold text-cyan-400 mb-1"])])([text5(value12)]), p([cls(["text-text font-medium mb-1"])])([text5(label5)]), p([cls(["text-sm text-muted-foreground"])])([text5(sublabel)])]);
+        return div2([cls(["bg-card border border-border rounded-lg p-6 text-center"])])([p([cls(["text-3xl font-bold text-cyan-400 mb-1"])])([text5(value15)]), p([cls(["text-text font-medium mb-1"])])([text5(label5)]), p([cls(["text-sm text-muted-foreground"])])([text5(sublabel)])]);
       };
     };
   };
@@ -57000,7 +58929,7 @@ Learn more: https://clerk.com/docs/components/clerk-provider`.trim());
     return li([cls(["flex items-start gap-3"])])([span3([cls(["text-cyan-400 mt-1"])])([text5("+")]), span3([cls(["text-muted-foreground"])])([text5(txt)])]);
   };
   var featureList6 = function(items2) {
-    return ul([cls(["space-y-3"])])(map33(featureItem10)(items2));
+    return ul([cls(["space-y-3"])])(map41(featureItem10)(items2));
   };
   var cta12 = /* @__PURE__ */ section([/* @__PURE__ */ cls(["py-24 border-t border-border"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["max-w-[800px] mx-auto px-6 text-center"])])([/* @__PURE__ */ h2([/* @__PURE__ */ cls(["text-3xl font-bold text-text mb-4"])])([/* @__PURE__ */ text5("Ready for artifacts you can trust?")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-muted-foreground mb-8"])])([/* @__PURE__ */ text5("Start free. No credit card required.")]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["flex flex-col sm:flex-row items-center justify-center gap-4"])])([/* @__PURE__ */ a([/* @__PURE__ */ href4("/sensenet/cache/pricing"), /* @__PURE__ */ cls(["inline-flex items-center justify-center px-8 py-4 bg-cyan-400 text-background font-medium rounded-md hover:bg-cyan-400/90 transition-colors"])])([/* @__PURE__ */ text5("Get started free")]), /* @__PURE__ */ a([/* @__PURE__ */ href4("/sensenet/cache/docs"), /* @__PURE__ */ cls(["inline-flex items-center justify-center px-8 py-4 border border-border text-text font-medium rounded-md hover:bg-card transition-colors"])])([/* @__PURE__ */ text5("Read the docs")])])])]);
   var cryptoBadge = function(title3) {
@@ -57056,14 +58985,14 @@ Learn more: https://clerk.com/docs/components/clerk-provider`.trim());
     };
   };
   var quickstart5 = /* @__PURE__ */ section([/* @__PURE__ */ cls(["py-24 border-t border-border"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["max-w-[800px] mx-auto px-6"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["text-center mb-12"])])([/* @__PURE__ */ h2([/* @__PURE__ */ cls(["text-3xl font-bold text-text mb-4"])])([/* @__PURE__ */ text5("Get started in 30 seconds")])]), /* @__PURE__ */ codeBlock([/* @__PURE__ */ codeLine12("# ")("Install the CLI"), /* @__PURE__ */ codeLine12("$ ")("nix profile install github:straylight-software/sensenet-cache"), /* @__PURE__ */ text5("\n"), /* @__PURE__ */ codeLine12("# ")("Authenticate"), /* @__PURE__ */ codeLine12("$ ")("sensenet-cache login"), /* @__PURE__ */ text5("\n"), /* @__PURE__ */ codeLine12("# ")("Push your first artifact"), /* @__PURE__ */ codeLine12("$ ")("nix build .#mypackage && sensenet-cache push ./result"), /* @__PURE__ */ text5("\n"), /* @__PURE__ */ codeLine12("# ")("Configure as substituter"), /* @__PURE__ */ codeLine12("$ ")("sensenet-cache config --substituter")]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["mt-8 text-center"])])([/* @__PURE__ */ a([/* @__PURE__ */ href4("/sensenet/cache/docs/quickstart"), /* @__PURE__ */ cls(["text-cyan-400 hover:text-cyan-400/80 transition-colors"])])([/* @__PURE__ */ text5("Full quickstart guide ->")])])])]);
-  var cell2 = function(value12) {
+  var cell2 = function(value15) {
     return function(isUs) {
       var textColor = function() {
-        if (value12 === "yes") {
+        if (value15 === "yes") {
           return "text-text";
         }
         ;
-        if (value12 === "no") {
+        if (value15 === "no") {
           return "text-muted-foreground/50";
         }
         ;
@@ -57075,7 +59004,7 @@ Learn more: https://clerk.com/docs/components/clerk-provider`.trim());
         }
         ;
         return textColor;
-      }()])])([text5(value12)]);
+      }()])])([text5(value15)]);
     };
   };
   var comparisonRow6 = function(feature) {
@@ -57098,10 +59027,10 @@ Learn more: https://clerk.com/docs/components/clerk-provider`.trim());
   });
 
   // output/Straylight.Pages.Products.SensenetCache.Legal/index.js
-  var append5 = /* @__PURE__ */ append(semigroupArray);
+  var append8 = /* @__PURE__ */ append(semigroupArray);
   var section8 = function(title3) {
     return function(children2) {
-      return div_(append5([h2([cls(["text-lg font-semibold text-text mb-3"])])([text5(title3)])])(children2));
+      return div_(append8([h2([cls(["text-lg font-semibold text-text mb-3"])])([text5(title3)])])(children2));
     };
   };
   var renderPrivacy6 = /* @__PURE__ */ div2([/* @__PURE__ */ cls(["max-w-[800px] mx-auto px-6 py-12"])])([/* @__PURE__ */ h1([/* @__PURE__ */ cls(["text-3xl font-bold text-text mb-2"])])([/* @__PURE__ */ text5("Privacy Policy")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-muted-foreground mb-8"])])([/* @__PURE__ */ text5("Last updated: February 2026")]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["prose prose-invert max-w-none space-y-8"])])([/* @__PURE__ */ section8("Overview")([/* @__PURE__ */ p([/* @__PURE__ */ cls(["text-muted-foreground"])])([/* @__PURE__ */ text5("sensenet//cache is operated by Straylight Software, Inc. This privacy policy explains how we collect, use, and protect your data when you use our attestation-aware binary cache service.")])]), /* @__PURE__ */ section8("Information We Collect")([/* @__PURE__ */ p([/* @__PURE__ */ cls(["text-muted-foreground mb-4"])])([/* @__PURE__ */ text5("We collect the following types of information:")]), /* @__PURE__ */ ul([/* @__PURE__ */ cls(["list-disc list-inside text-muted-foreground space-y-2"])])([/* @__PURE__ */ li_([/* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-text"])])([/* @__PURE__ */ text5("Account information: ")]), /* @__PURE__ */ text5("Email address, organization name, and billing details when you create an account.")]), /* @__PURE__ */ li_([/* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-text"])])([/* @__PURE__ */ text5("Artifact metadata: ")]), /* @__PURE__ */ text5("Blake3 hashes, attestation records, upload timestamps, and file sizes for artifacts you push to the cache.")]), /* @__PURE__ */ li_([/* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-text"])])([/* @__PURE__ */ text5("Usage data: ")]), /* @__PURE__ */ text5("API access logs, bandwidth consumption, and cache hit/miss statistics.")]), /* @__PURE__ */ li_([/* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-text"])])([/* @__PURE__ */ text5("Technical data: ")]), /* @__PURE__ */ text5("IP addresses, browser type, and device information for security and debugging purposes.")])])]), /* @__PURE__ */ section8("How We Use Your Data")([/* @__PURE__ */ ul([/* @__PURE__ */ cls(["list-disc list-inside text-muted-foreground space-y-2"])])([/* @__PURE__ */ li_([/* @__PURE__ */ text5("Provide and maintain the sensenet//cache service")]), /* @__PURE__ */ li_([/* @__PURE__ */ text5("Verify artifact integrity and attestation chains")]), /* @__PURE__ */ li_([/* @__PURE__ */ text5("Enforce storage and transfer limits based on your plan")]), /* @__PURE__ */ li_([/* @__PURE__ */ text5("Send service notifications (usage alerts, security alerts)")]), /* @__PURE__ */ li_([/* @__PURE__ */ text5("Improve our service through aggregated, anonymized analytics")]), /* @__PURE__ */ li_([/* @__PURE__ */ text5("Comply with legal obligations")])])]), /* @__PURE__ */ section8("Data Storage & Security")([/* @__PURE__ */ p([/* @__PURE__ */ cls(["text-muted-foreground mb-4"])])([/* @__PURE__ */ text5("Your data is protected by:")]), /* @__PURE__ */ ul([/* @__PURE__ */ cls(["list-disc list-inside text-muted-foreground space-y-2"])])([/* @__PURE__ */ li_([/* @__PURE__ */ text5("Content-addressed storage with Blake3 cryptographic hashing")]), /* @__PURE__ */ li_([/* @__PURE__ */ text5("Post-quantum SPHINCS+ signatures on all artifacts")]), /* @__PURE__ */ li_([/* @__PURE__ */ text5("Encryption in transit (TLS 1.3) and at rest (AES-256-GCM)")]), /* @__PURE__ */ li_([/* @__PURE__ */ text5("SOC 2 Type II certified infrastructure")]), /* @__PURE__ */ li_([/* @__PURE__ */ text5("Geographic redundancy across multiple data centers")])])]), /* @__PURE__ */ section8("Data Retention")([/* @__PURE__ */ p([/* @__PURE__ */ cls(["text-muted-foreground"])])([/* @__PURE__ */ text5("Cached artifacts are retained as long as your account is active. Attestation records are retained for verification purposes. Audit logs are retained for 90 days. When you delete your account, all artifacts and associated data are permanently deleted within 30 days.")])]), /* @__PURE__ */ section8("Third-Party Services")([/* @__PURE__ */ p([/* @__PURE__ */ cls(["text-muted-foreground"])])([/* @__PURE__ */ text5("We use the following third-party services to operate sensenet//cache:")]), /* @__PURE__ */ ul([/* @__PURE__ */ cls(["list-disc list-inside text-muted-foreground space-y-2 mt-4"])])([/* @__PURE__ */ li_([/* @__PURE__ */ text5("Stripe for payment processing")]), /* @__PURE__ */ li_([/* @__PURE__ */ text5("Cloudflare for DDoS protection and CDN")]), /* @__PURE__ */ li_([/* @__PURE__ */ text5("AWS/GCP for infrastructure (self-hosted option available for Enterprise)")])])]), /* @__PURE__ */ section8("Your Rights")([/* @__PURE__ */ p([/* @__PURE__ */ cls(["text-muted-foreground mb-4"])])([/* @__PURE__ */ text5("You have the right to:")]), /* @__PURE__ */ ul([/* @__PURE__ */ cls(["list-disc list-inside text-muted-foreground space-y-2"])])([/* @__PURE__ */ li_([/* @__PURE__ */ text5("Access your personal data")]), /* @__PURE__ */ li_([/* @__PURE__ */ text5("Correct inaccurate data")]), /* @__PURE__ */ li_([/* @__PURE__ */ text5("Delete your account and associated data")]), /* @__PURE__ */ li_([/* @__PURE__ */ text5("Export your artifact metadata and attestation records")]), /* @__PURE__ */ li_([/* @__PURE__ */ text5("Opt out of marketing communications")])])]), /* @__PURE__ */ section8("Contact")([/* @__PURE__ */ p([/* @__PURE__ */ cls(["text-muted-foreground"])])([/* @__PURE__ */ text5("For privacy-related inquiries, contact us at "), /* @__PURE__ */ a([/* @__PURE__ */ href4("mailto:privacy@straylight.software"), /* @__PURE__ */ cls(["text-cyan-400 hover:text-cyan-300"])])([/* @__PURE__ */ text5("privacy@straylight.software")]), /* @__PURE__ */ text5(".")])])])]);
@@ -57112,7 +59041,7 @@ Learn more: https://clerk.com/docs/components/clerk-provider`.trim());
   });
 
   // output/Straylight.Pages.Products.SensenetCache.Pricing/index.js
-  var map34 = /* @__PURE__ */ map(functorArray);
+  var map42 = /* @__PURE__ */ map(functorArray);
   var hero18 = /* @__PURE__ */ section([/* @__PURE__ */ cls(["py-24"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["max-w-[1100px] mx-auto px-6 text-center"])])([/* @__PURE__ */ h1([/* @__PURE__ */ cls(["text-4xl md:text-5xl font-bold text-text mb-6"])])([/* @__PURE__ */ text5("Simple, honest pricing")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-xl text-muted-foreground max-w-2xl mx-auto"])])([/* @__PURE__ */ text5("Pay for what you use. No hidden fees. Post-quantum security included at every tier.")])])]);
   var featureItem11 = function(feature) {
     return li([cls(["flex items-start gap-2 text-sm"])])([span3([cls(["text-cyan-400 mt-0.5"])])([text5("+")]), span3([cls(["text-muted-foreground"])])([text5(feature)])]);
@@ -57130,7 +59059,7 @@ Learn more: https://clerk.com/docs/components/clerk-provider`.trim());
       }
       ;
       return text5("");
-    }(), h3([cls(["text-lg font-semibold text-text mb-2"])])([text5(config.name)]), div2([cls(["mb-4"])])([span3([cls(["text-3xl font-bold text-text"])])([text5(config.price)]), span3([cls(["text-muted-foreground"])])([text5(config.period)])]), p([cls(["text-sm text-muted-foreground mb-6"])])([text5(config.description)]), ul([cls(["space-y-2 flex-grow mb-6"])])(map34(featureItem11)(config.features)), a([href4(config.ctaHref), cls(["block text-center py-3 rounded-md font-medium transition-colors", function() {
+    }(), h3([cls(["text-lg font-semibold text-text mb-2"])])([text5(config.name)]), div2([cls(["mb-4"])])([span3([cls(["text-3xl font-bold text-text"])])([text5(config.price)]), span3([cls(["text-muted-foreground"])])([text5(config.period)])]), p([cls(["text-sm text-muted-foreground mb-6"])])([text5(config.description)]), ul([cls(["space-y-2 flex-grow mb-6"])])(map42(featureItem11)(config.features)), a([href4(config.ctaHref), cls(["block text-center py-3 rounded-md font-medium transition-colors", function() {
       if (config.highlighted) {
         return "bg-cyan-400 text-background hover:bg-cyan-400/90";
       }
@@ -57181,26 +59110,310 @@ Learn more: https://clerk.com/docs/components/clerk-provider`.trim());
   });
 
   // output/Straylight.Pages.Products.SensenetCache.Settings/index.js
-  var header14 = /* @__PURE__ */ div2([/* @__PURE__ */ cls(["mb-8"])])([/* @__PURE__ */ h1([/* @__PURE__ */ cls(["text-2xl font-bold text-text"])])([/* @__PURE__ */ text5("Settings")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-muted-foreground"])])([/* @__PURE__ */ text5("Account, API keys, team, billing, and security settings.")])]);
-  var render43 = /* @__PURE__ */ div2([/* @__PURE__ */ cls(["max-w-[1100px] mx-auto px-6 py-8"])])([header14, emptySettings]);
-  var settingsPage6 = /* @__PURE__ */ mkComponent({
-    initialState: /* @__PURE__ */ $$const(unit),
-    render: /* @__PURE__ */ $$const(render43),
-    "eval": /* @__PURE__ */ mkEval(defaultEval)
-  });
+  var modify_23 = /* @__PURE__ */ modify_(monadStateHalogenM);
+  var discard17 = /* @__PURE__ */ discard(discardUnit)(bindHalogenM);
+  var UpdateMaxCacheSize = /* @__PURE__ */ function() {
+    function UpdateMaxCacheSize2(value0) {
+      this.value0 = value0;
+    }
+    ;
+    UpdateMaxCacheSize2.create = function(value0) {
+      return new UpdateMaxCacheSize2(value0);
+    };
+    return UpdateMaxCacheSize2;
+  }();
+  var UpdateEvictionPolicy = /* @__PURE__ */ function() {
+    function UpdateEvictionPolicy2(value0) {
+      this.value0 = value0;
+    }
+    ;
+    UpdateEvictionPolicy2.create = function(value0) {
+      return new UpdateEvictionPolicy2(value0);
+    };
+    return UpdateEvictionPolicy2;
+  }();
+  var ToggleCompression2 = /* @__PURE__ */ function() {
+    function ToggleCompression3() {
+    }
+    ;
+    ToggleCompression3.value = new ToggleCompression3();
+    return ToggleCompression3;
+  }();
+  var SaveChanges6 = /* @__PURE__ */ function() {
+    function SaveChanges11() {
+    }
+    ;
+    SaveChanges11.value = new SaveChanges11();
+    return SaveChanges11;
+  }();
+  var render43 = function(state3) {
+    return div_([sectionHeader("sensenet//cache // settings"), div2([cls(["max-w-4xl"])])([settingsGroup("Cache Configuration")([settingsItem("Max Cache Size")("Maximum disk space allocated for caching")(settingsInput(state3.maxCacheSize)("10GB")(UpdateMaxCacheSize.create)), settingsItem("Eviction Policy")("Algorithm used for cache eviction (LRU, LFU, FIFO)")(settingsInput(state3.evictionPolicy)("LRU")(UpdateEvictionPolicy.create)), settingsItem("Enable Compression")("Compress cache entries to save space")(settingsToggle(state3.compressionEnabled)(ToggleCompression2.value))]), div2([cls(["flex items-center gap-4"])])([settingsButton("Save Changes")(SaveChanges6.value), function() {
+      if (state3.saved) {
+        return span3([cls(["text-status text-xs animate-pulse"])])([text5("Changes saved successfully")]);
+      }
+      ;
+      return text5("");
+    }()])])]);
+  };
+  var handleAction21 = function(v) {
+    if (v instanceof UpdateMaxCacheSize) {
+      return modify_23(function(v1) {
+        var $12 = {};
+        for (var $13 in v1) {
+          if ({}.hasOwnProperty.call(v1, $13)) {
+            $12[$13] = v1[$13];
+          }
+          ;
+        }
+        ;
+        $12.maxCacheSize = v.value0;
+        $12.saved = false;
+        return $12;
+      });
+    }
+    ;
+    if (v instanceof UpdateEvictionPolicy) {
+      return modify_23(function(v1) {
+        var $16 = {};
+        for (var $17 in v1) {
+          if ({}.hasOwnProperty.call(v1, $17)) {
+            $16[$17] = v1[$17];
+          }
+          ;
+        }
+        ;
+        $16.evictionPolicy = v.value0;
+        $16.saved = false;
+        return $16;
+      });
+    }
+    ;
+    if (v instanceof ToggleCompression2) {
+      return discard17(modify_23(function(s2) {
+        var $20 = {};
+        for (var $21 in s2) {
+          if ({}.hasOwnProperty.call(s2, $21)) {
+            $20[$21] = s2[$21];
+          }
+          ;
+        }
+        ;
+        $20.compressionEnabled = !s2.compressionEnabled;
+        $20.saved = false;
+        return $20;
+      }))(function() {
+        return handleAction21(SaveChanges6.value);
+      });
+    }
+    ;
+    if (v instanceof SaveChanges6) {
+      return modify_23(function(v1) {
+        var $23 = {};
+        for (var $24 in v1) {
+          if ({}.hasOwnProperty.call(v1, $24)) {
+            $23[$24] = v1[$24];
+          }
+          ;
+        }
+        ;
+        $23.saved = true;
+        return $23;
+      });
+    }
+    ;
+    throw new Error("Failed pattern match at Straylight.Pages.Products.SensenetCache.Settings (line 40, column 16 - line 52, column 33): " + [v.constructor.name]);
+  };
+  var settingsPage6 = /* @__PURE__ */ function() {
+    return mkComponent({
+      initialState: $$const({
+        maxCacheSize: "10GB",
+        evictionPolicy: "LRU",
+        compressionEnabled: true,
+        saved: false
+      }),
+      render: render43,
+      "eval": mkEval({
+        handleQuery: defaultEval.handleQuery,
+        receive: defaultEval.receive,
+        initialize: defaultEval.initialize,
+        finalize: defaultEval.finalize,
+        handleAction: handleAction21
+      })
+    });
+  }();
 
   // output/Straylight.Pages.Products.SensenetConfirm.Dashboard/index.js
-  var quickStart7 = /* @__PURE__ */ div2([/* @__PURE__ */ cls(["bg-card border border-border rounded-lg p-6 mb-8"])])([/* @__PURE__ */ h3([/* @__PURE__ */ cls(["text-lg font-semibold text-text mb-4"])])([/* @__PURE__ */ text5("Quick Start")]), /* @__PURE__ */ codeBlock([/* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-muted-foreground"])])([/* @__PURE__ */ text5("# Run your pipeline\n")]), /* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-amber-400"])])([/* @__PURE__ */ text5("$ ")]), /* @__PURE__ */ text5("confirm run\n\n"), /* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-muted-foreground"])])([/* @__PURE__ */ text5("# Run with proof verification\n")]), /* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-amber-400"])])([/* @__PURE__ */ text5("$ ")]), /* @__PURE__ */ text5("confirm run --verify")])]);
-  var header15 = /* @__PURE__ */ div2([/* @__PURE__ */ cls(["mb-8"])])([/* @__PURE__ */ h1([/* @__PURE__ */ cls(["text-2xl font-bold text-text mb-2"])])([/* @__PURE__ */ text5("Dashboard")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-muted-foreground"])])([/* @__PURE__ */ text5("Manage your pipelines, builds, and proofs.")])]);
-  var render44 = /* @__PURE__ */ div2([/* @__PURE__ */ cls(["max-w-[1100px] mx-auto px-6 py-8"])])([header15, quickStart7, /* @__PURE__ */ emptyDashboard("sensenet//confirm")]);
-  var dashboardPage7 = /* @__PURE__ */ mkComponent({
-    initialState: /* @__PURE__ */ $$const(unit),
-    render: /* @__PURE__ */ $$const(render44),
-    "eval": /* @__PURE__ */ mkEval(defaultEval)
-  });
+  var show10 = /* @__PURE__ */ show(showInt);
+  var map43 = /* @__PURE__ */ map(functorArray);
+  var discard18 = /* @__PURE__ */ discard(discardUnit)(bindHalogenM);
+  var modify_24 = /* @__PURE__ */ modify_(monadStateHalogenM);
+  var append15 = /* @__PURE__ */ append(semigroupArray);
+  var Initialize12 = /* @__PURE__ */ function() {
+    function Initialize17() {
+    }
+    ;
+    Initialize17.value = new Initialize17();
+    return Initialize17;
+  }();
+  var CreateProof = /* @__PURE__ */ function() {
+    function CreateProof2() {
+    }
+    ;
+    CreateProof2.value = new CreateProof2();
+    return CreateProof2;
+  }();
+  var RefreshProofs = /* @__PURE__ */ function() {
+    function RefreshProofs2() {
+    }
+    ;
+    RefreshProofs2.value = new RefreshProofs2();
+    return RefreshProofs2;
+  }();
+  var renderProof = function(proof) {
+    return tr([cls(["hover:bg-muted/5 transition-colors group cursor-pointer"])])([td([cls(["px-6 py-4 font-mono text-primary"])])([text5(proof.id)]), td([cls(["px-6 py-4 text-text font-medium"])])([text5(proof.pipeline)]), td([cls(["px-6 py-4"])])([span3([cls(["px-2 py-0.5 rounded text-[10px] uppercase tracking-tighter", function() {
+      if (proof.status === "verified") {
+        return "bg-status/20 text-status";
+      }
+      ;
+      if (proof.status === "pending") {
+        return "bg-blue-500/20 text-blue-400 status-pulse";
+      }
+      ;
+      if (proof.status === "failing") {
+        return "bg-red-500/20 text-red-400";
+      }
+      ;
+      return "bg-muted text-muted-foreground";
+    }()])])([text5(proof.status)])]), td([cls(["px-6 py-4 text-muted-foreground"])])([text5(proof.verifiedAt)])]);
+  };
+  var render44 = function(state3) {
+    return div_([sectionHeader("sensenet//confirm // dashboard"), function() {
+      var $17 = length3(state3.proofs) === 0 && !state3.loading;
+      if ($17) {
+        return emptyDashboard("sensenet//confirm")(CreateProof.value);
+      }
+      ;
+      return div_([div2([cls(["flex justify-between items-center mb-6"])])([div_([statusIndicator(show10(length3(state3.proofs)) + " PROOFS VERIFIED")]), settingsButton("create proof")(CreateProof.value)]), div2([cls(["bg-card border border-border rounded-lg overflow-hidden"])])([table([cls(["w-full text-left text-xs"])])([thead([cls(["bg-muted/30 border-b border-border text-[10px] uppercase tracking-widest text-muted-foreground"])])([tr_([th([cls(["px-6 py-3 font-medium"])])([text5("proof id")]), th([cls(["px-6 py-3 font-medium"])])([text5("pipeline")]), th([cls(["px-6 py-3 font-medium"])])([text5("status")]), th([cls(["px-6 py-3 font-medium"])])([text5("verified at")])])]), tbody([cls(["divide-y divide-border"])])(map43(renderProof)(state3.proofs))])])]);
+    }()]);
+  };
+  var handleAction22 = function($copy_v) {
+    var $tco_done = false;
+    var $tco_result;
+    function $tco_loop(v) {
+      if (v instanceof Initialize12) {
+        $copy_v = RefreshProofs.value;
+        return;
+      }
+      ;
+      if (v instanceof RefreshProofs) {
+        $tco_done = true;
+        return discard18(modify_24(function(v1) {
+          var $19 = {};
+          for (var $20 in v1) {
+            if ({}.hasOwnProperty.call(v1, $20)) {
+              $19[$20] = v1[$20];
+            }
+            ;
+          }
+          ;
+          $19.loading = true;
+          return $19;
+        }))(function() {
+          var mockProofs = [{
+            id: "proof-921",
+            pipeline: "main-auth-flow",
+            status: "verified",
+            verifiedAt: "5 mins ago"
+          }, {
+            id: "proof-922",
+            pipeline: "billing-v2",
+            status: "verified",
+            verifiedAt: "1 hour ago"
+          }, {
+            id: "proof-923",
+            pipeline: "kernel-patch",
+            status: "failing",
+            verifiedAt: "2 mins ago"
+          }];
+          return modify_24(function(v1) {
+            var $22 = {};
+            for (var $23 in v1) {
+              if ({}.hasOwnProperty.call(v1, $23)) {
+                $22[$23] = v1[$23];
+              }
+              ;
+            }
+            ;
+            $22.proofs = mockProofs;
+            $22.loading = false;
+            return $22;
+          });
+        });
+      }
+      ;
+      if (v instanceof CreateProof) {
+        $tco_done = true;
+        return discard18(modify_24(function(v1) {
+          var $25 = {};
+          for (var $26 in v1) {
+            if ({}.hasOwnProperty.call(v1, $26)) {
+              $25[$26] = v1[$26];
+            }
+            ;
+          }
+          ;
+          $25.loading = true;
+          return $25;
+        }))(function() {
+          return modify_24(function(s2) {
+            var $28 = {};
+            for (var $29 in s2) {
+              if ({}.hasOwnProperty.call(s2, $29)) {
+                $28[$29] = s2[$29];
+              }
+              ;
+            }
+            ;
+            $28.proofs = append15(s2.proofs)([{
+              id: "proof-new",
+              pipeline: "manual-check",
+              status: "pending",
+              verifiedAt: "-"
+            }]);
+            $28.loading = false;
+            return $28;
+          });
+        });
+      }
+      ;
+      throw new Error("Failed pattern match at Straylight.Pages.Products.SensenetConfirm.Dashboard (line 44, column 16 - line 59, column 148): " + [v.constructor.name]);
+    }
+    ;
+    while (!$tco_done) {
+      $tco_result = $tco_loop($copy_v);
+    }
+    ;
+    return $tco_result;
+  };
+  var dashboardPage7 = /* @__PURE__ */ function() {
+    return mkComponent({
+      initialState: $$const({
+        proofs: [],
+        loading: false
+      }),
+      render: render44,
+      "eval": mkEval({
+        handleQuery: defaultEval.handleQuery,
+        receive: defaultEval.receive,
+        finalize: defaultEval.finalize,
+        handleAction: handleAction22,
+        initialize: new Just(Initialize12.value)
+      })
+    });
+  }();
 
   // output/Straylight.Pages.Products.SensenetConfirm.Docs/index.js
-  var modify_12 = /* @__PURE__ */ modify_(monadStateHalogenM);
+  var modify_25 = /* @__PURE__ */ modify_(monadStateHalogenM);
   var Receive9 = /* @__PURE__ */ function() {
     function Receive13(value0) {
       this.value0 = value0;
@@ -57251,8 +59464,8 @@ Learn more: https://clerk.com/docs/components/clerk-provider`.trim());
       };
     };
   };
-  var handleAction10 = function(v) {
-    return modify_12(function(v1) {
+  var handleAction23 = function(v) {
+    return modify_25(function(v1) {
       var $8 = {};
       for (var $9 in v1) {
         if ({}.hasOwnProperty.call(v1, $9)) {
@@ -57352,7 +59565,7 @@ Learn more: https://clerk.com/docs/components/clerk-provider`.trim());
         handleQuery: defaultEval.handleQuery,
         initialize: defaultEval.initialize,
         finalize: defaultEval.finalize,
-        handleAction: handleAction10,
+        handleAction: handleAction23,
         receive: function($13) {
           return Just.create(Receive9.create($13));
         }
@@ -57361,10 +59574,10 @@ Learn more: https://clerk.com/docs/components/clerk-provider`.trim());
   }();
 
   // output/Straylight.Pages.Products.SensenetConfirm.Features/index.js
-  var map35 = /* @__PURE__ */ map(functorArray);
-  var statCard = function(value12) {
+  var map44 = /* @__PURE__ */ map(functorArray);
+  var statCard = function(value15) {
     return function(label5) {
-      return div2([cls(["bg-card border border-border rounded-lg p-6 text-center"])])([p([cls(["text-2xl font-bold text-amber-400 mb-1"])])([text5(value12)]), p([cls(["text-sm text-muted-foreground"])])([text5(label5)])]);
+      return div2([cls(["bg-card border border-border rounded-lg p-6 text-center"])])([p([cls(["text-2xl font-bold text-amber-400 mb-1"])])([text5(value15)]), p([cls(["text-sm text-muted-foreground"])])([text5(label5)])]);
     };
   };
   var reviewStatus = function(source2) {
@@ -57389,7 +59602,7 @@ Learn more: https://clerk.com/docs/components/clerk-provider`.trim());
     return li([cls(["flex items-start gap-3"])])([span3([cls(["text-amber-400 mt-1"])])([text5("+")]), span3([cls(["text-muted-foreground"])])([text5(text6)])]);
   };
   var featureList7 = function(items2) {
-    return ul([cls(["space-y-3"])])(map35(featureItem12)(items2));
+    return ul([cls(["space-y-3"])])(map44(featureItem12)(items2));
   };
   var cta14 = /* @__PURE__ */ section([/* @__PURE__ */ cls(["py-24 border-t border-border"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["max-w-[800px] mx-auto px-6 text-center"])])([/* @__PURE__ */ h2([/* @__PURE__ */ cls(["text-3xl font-bold text-text mb-4"])])([/* @__PURE__ */ text5("Ready for provable CI?")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-muted-foreground mb-8"])])([/* @__PURE__ */ text5("Start free. No credit card required. Unlimited public repos.")]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["flex flex-col sm:flex-row items-center justify-center gap-4"])])([/* @__PURE__ */ a([/* @__PURE__ */ href4("/sensenet/confirm/pricing"), /* @__PURE__ */ cls(["inline-flex items-center justify-center px-8 py-4 bg-amber-400 text-background font-medium rounded-md hover:bg-amber-400/90 transition-colors"])])([/* @__PURE__ */ text5("Get started free")]), /* @__PURE__ */ a([/* @__PURE__ */ href4("/sensenet/confirm/docs"), /* @__PURE__ */ cls(["inline-flex items-center justify-center px-8 py-4 border border-border text-text font-medium rounded-md hover:bg-card transition-colors"])])([/* @__PURE__ */ text5("Read the docs")])])])]);
   var codeLine14 = function(prompt) {
@@ -57438,15 +59651,15 @@ Learn more: https://clerk.com/docs/components/clerk-provider`.trim());
   };
   var features7 = /* @__PURE__ */ section([/* @__PURE__ */ cls(["py-24 border-t border-border"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["max-w-[1100px] mx-auto px-6"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["text-center mb-16"])])([/* @__PURE__ */ h2([/* @__PURE__ */ cls(["text-3xl font-bold text-text mb-4"])])([/* @__PURE__ */ text5("Why sensenet//confirm?")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-muted-foreground max-w-xl mx-auto"])])([/* @__PURE__ */ text5("Built by engineers who understand that CI is a security boundary, not a script runner.")])]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"])])([/* @__PURE__ */ featureCard8("?")("Proof obligations")("Every pipeline step carries preconditions and postconditions. Proofs checked at merge time."), /* @__PURE__ */ featureCard8("{}")("Typed Dhall pipelines")("No YAML. No string interpolation bugs. Dhall's type system catches pipeline errors before they run."), /* @__PURE__ */ featureCard8("!")("Agent code review")("AI-generated commits face stricter review burden. Automatic taint tracking for untrusted sources."), /* @__PURE__ */ featureCard8("#")("Cryptographic attestation")("Every build step signed. Reproducible outputs anchored to input hashes. Post-quantum signatures."), /* @__PURE__ */ featureCard8("||")("Parallel execution")("Dependency-aware parallelization. Share-nothing isolation per job. Linear scaling to 256 cores."), /* @__PURE__ */ featureCard8("=")("Reproducible CI")("Hermetic builds by default. Nix integration. Content-addressed caching.")])])]);
   var cta15 = /* @__PURE__ */ section([/* @__PURE__ */ cls(["py-24 border-t border-border"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["max-w-[800px] mx-auto px-6 text-center"])])([/* @__PURE__ */ h2([/* @__PURE__ */ cls(["text-3xl font-bold text-text mb-4"])])([/* @__PURE__ */ text5("Ready for CI that actually works?")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-muted-foreground mb-8"])])([/* @__PURE__ */ text5("Free tier includes unlimited public repos. No credit card required.")]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["flex flex-col sm:flex-row items-center justify-center gap-4"])])([/* @__PURE__ */ primaryButton8("/sensenet/confirm/pricing")("Create free account"), /* @__PURE__ */ secondaryButton8("/sensenet/confirm/pricing")("See all plans")])])]);
-  var compCell3 = function(value12) {
+  var compCell3 = function(value15) {
     return span3([cls([function() {
-      var $1 = value12 === "no";
+      var $1 = value15 === "no";
       if ($1) {
         return "text-muted-foreground/50";
       }
       ;
       return "text-muted-foreground";
-    }()])])([text5(value12)]);
+    }()])])([text5(value15)]);
   };
   var comparisonRow7 = function(feature) {
     return function(us) {
@@ -57487,7 +59700,7 @@ Learn more: https://clerk.com/docs/components/clerk-provider`.trim());
   });
 
   // output/Straylight.Pages.Products.SensenetConfirm.Pricing/index.js
-  var map36 = /* @__PURE__ */ map(functorArray);
+  var map45 = /* @__PURE__ */ map(functorArray);
   var planFeature = function(feature) {
     return li([cls(["flex items-start gap-2 text-sm"])])([span3([cls(["text-amber-400 mt-0.5"])])([text5("+")]), span3([cls(["text-muted-foreground"])])([text5(feature)])]);
   };
@@ -57504,7 +59717,7 @@ Learn more: https://clerk.com/docs/components/clerk-provider`.trim());
       }
       ;
       return text5("");
-    }(), h3([cls(["text-lg font-semibold text-text mb-2"])])([text5(config.name)]), div2([cls(["mb-4"])])([span3([cls(["text-3xl font-bold text-text"])])([text5(config.price)]), span3([cls(["text-muted-foreground"])])([text5(config.period)])]), p([cls(["text-sm text-muted-foreground mb-6"])])([text5(config.description)]), ul([cls(["space-y-3 mb-8 flex-grow"])])(map36(planFeature)(config.features)), a([href4(config.ctaHref), cls(["block text-center py-3 rounded-md font-medium transition-colors", function() {
+    }(), h3([cls(["text-lg font-semibold text-text mb-2"])])([text5(config.name)]), div2([cls(["mb-4"])])([span3([cls(["text-3xl font-bold text-text"])])([text5(config.price)]), span3([cls(["text-muted-foreground"])])([text5(config.period)])]), p([cls(["text-sm text-muted-foreground mb-6"])])([text5(config.description)]), ul([cls(["space-y-3 mb-8 flex-grow"])])(map45(planFeature)(config.features)), a([href4(config.ctaHref), cls(["block text-center py-3 rounded-md font-medium transition-colors", function() {
       if (config.highlighted) {
         return "bg-amber-400 text-background hover:bg-amber-400/90";
       }
@@ -57556,26 +59769,313 @@ Learn more: https://clerk.com/docs/components/clerk-provider`.trim());
   });
 
   // output/Straylight.Pages.Products.SensenetConfirm.Settings/index.js
-  var header16 = /* @__PURE__ */ div2([/* @__PURE__ */ cls(["mb-8"])])([/* @__PURE__ */ h1([/* @__PURE__ */ cls(["text-2xl font-bold text-text"])])([/* @__PURE__ */ text5("Settings")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-muted-foreground"])])([/* @__PURE__ */ text5("Pipeline config, proof requirements, integrations, and billing.")])]);
-  var render49 = /* @__PURE__ */ div2([/* @__PURE__ */ cls(["max-w-[1100px] mx-auto px-6 py-8"])])([header16, emptySettings]);
-  var settingsPage7 = /* @__PURE__ */ mkComponent({
-    initialState: /* @__PURE__ */ $$const(unit),
-    render: /* @__PURE__ */ $$const(render49),
-    "eval": /* @__PURE__ */ mkEval(defaultEval)
-  });
+  var modify_26 = /* @__PURE__ */ modify_(monadStateHalogenM);
+  var discard19 = /* @__PURE__ */ discard(discardUnit)(bindHalogenM);
+  var UpdatePipelinePrefix = /* @__PURE__ */ function() {
+    function UpdatePipelinePrefix2(value0) {
+      this.value0 = value0;
+    }
+    ;
+    UpdatePipelinePrefix2.create = function(value0) {
+      return new UpdatePipelinePrefix2(value0);
+    };
+    return UpdatePipelinePrefix2;
+  }();
+  var ToggleAutoVerify = /* @__PURE__ */ function() {
+    function ToggleAutoVerify2() {
+    }
+    ;
+    ToggleAutoVerify2.value = new ToggleAutoVerify2();
+    return ToggleAutoVerify2;
+  }();
+  var ToggleNotifyOnFailure = /* @__PURE__ */ function() {
+    function ToggleNotifyOnFailure2() {
+    }
+    ;
+    ToggleNotifyOnFailure2.value = new ToggleNotifyOnFailure2();
+    return ToggleNotifyOnFailure2;
+  }();
+  var SaveChanges7 = /* @__PURE__ */ function() {
+    function SaveChanges11() {
+    }
+    ;
+    SaveChanges11.value = new SaveChanges11();
+    return SaveChanges11;
+  }();
+  var render49 = function(state3) {
+    return div_([sectionHeader("sensenet//confirm // settings"), div2([cls(["max-w-4xl"])])([settingsGroup("Pipeline Verification")([settingsItem("Pipeline Prefix")("Prefix for automatically discovered pipelines")(settingsInput(state3.pipelinePrefix)("ci-confirm-")(UpdatePipelinePrefix.create)), settingsItem("Auto-verify")("Verify proofs automatically on pipeline completion")(settingsToggle(state3.autoVerify)(ToggleAutoVerify.value)), settingsItem("Failure Notifications")("Send alerts when a proof fails verification")(settingsToggle(state3.notifyOnFailure)(ToggleNotifyOnFailure.value))]), div2([cls(["flex items-center gap-4"])])([settingsButton("Save Changes")(SaveChanges7.value), function() {
+      if (state3.saved) {
+        return span3([cls(["text-status text-xs animate-pulse"])])([text5("Changes saved successfully")]);
+      }
+      ;
+      return text5("");
+    }()])])]);
+  };
+  var handleAction24 = function(v) {
+    if (v instanceof UpdatePipelinePrefix) {
+      return modify_26(function(v1) {
+        var $12 = {};
+        for (var $13 in v1) {
+          if ({}.hasOwnProperty.call(v1, $13)) {
+            $12[$13] = v1[$13];
+          }
+          ;
+        }
+        ;
+        $12.pipelinePrefix = v.value0;
+        $12.saved = false;
+        return $12;
+      });
+    }
+    ;
+    if (v instanceof ToggleAutoVerify) {
+      return discard19(modify_26(function(s2) {
+        var $16 = {};
+        for (var $17 in s2) {
+          if ({}.hasOwnProperty.call(s2, $17)) {
+            $16[$17] = s2[$17];
+          }
+          ;
+        }
+        ;
+        $16.autoVerify = !s2.autoVerify;
+        $16.saved = false;
+        return $16;
+      }))(function() {
+        return handleAction24(SaveChanges7.value);
+      });
+    }
+    ;
+    if (v instanceof ToggleNotifyOnFailure) {
+      return discard19(modify_26(function(s2) {
+        var $19 = {};
+        for (var $20 in s2) {
+          if ({}.hasOwnProperty.call(s2, $20)) {
+            $19[$20] = s2[$20];
+          }
+          ;
+        }
+        ;
+        $19.notifyOnFailure = !s2.notifyOnFailure;
+        $19.saved = false;
+        return $19;
+      }))(function() {
+        return handleAction24(SaveChanges7.value);
+      });
+    }
+    ;
+    if (v instanceof SaveChanges7) {
+      return modify_26(function(v1) {
+        var $22 = {};
+        for (var $23 in v1) {
+          if ({}.hasOwnProperty.call(v1, $23)) {
+            $22[$23] = v1[$23];
+          }
+          ;
+        }
+        ;
+        $22.saved = true;
+        return $22;
+      });
+    }
+    ;
+    throw new Error("Failed pattern match at Straylight.Pages.Products.SensenetConfirm.Settings (line 40, column 16 - line 53, column 33): " + [v.constructor.name]);
+  };
+  var settingsPage7 = /* @__PURE__ */ function() {
+    return mkComponent({
+      initialState: $$const({
+        pipelinePrefix: "ci-confirm-",
+        autoVerify: true,
+        notifyOnFailure: true,
+        saved: false
+      }),
+      render: render49,
+      "eval": mkEval({
+        handleQuery: defaultEval.handleQuery,
+        receive: defaultEval.receive,
+        initialize: defaultEval.initialize,
+        finalize: defaultEval.finalize,
+        handleAction: handleAction24
+      })
+    });
+  }();
 
   // output/Straylight.Pages.Products.SensenetConverge.Dashboard/index.js
-  var quickStart8 = /* @__PURE__ */ div2([/* @__PURE__ */ cls(["bg-card border border-border rounded-lg p-6 mb-8"])])([/* @__PURE__ */ h3([/* @__PURE__ */ cls(["text-lg font-semibold text-text mb-4"])])([/* @__PURE__ */ text5("Quick Start")]), /* @__PURE__ */ codeBlock([/* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-muted-foreground"])])([/* @__PURE__ */ text5("# Converge now\n")]), /* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-purple-400"])])([/* @__PURE__ */ text5("$ ")]), /* @__PURE__ */ text5("converge up\n\n"), /* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-muted-foreground"])])([/* @__PURE__ */ text5("# Watch for drift\n")]), /* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-purple-400"])])([/* @__PURE__ */ text5("$ ")]), /* @__PURE__ */ text5("converge watch")])]);
-  var header17 = /* @__PURE__ */ div2([/* @__PURE__ */ cls(["mb-8"])])([/* @__PURE__ */ h1([/* @__PURE__ */ cls(["text-2xl font-bold text-text mb-2"])])([/* @__PURE__ */ text5("Dashboard")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-muted-foreground"])])([/* @__PURE__ */ text5("Manage your infrastructure, monitor drift, and track convergence.")])]);
-  var render50 = /* @__PURE__ */ div2([/* @__PURE__ */ cls(["max-w-[1100px] mx-auto px-6 py-8"])])([header17, quickStart8, /* @__PURE__ */ emptyDashboard("sensenet//converge")]);
-  var dashboardPage8 = /* @__PURE__ */ mkComponent({
-    initialState: /* @__PURE__ */ $$const(unit),
-    render: /* @__PURE__ */ $$const(render50),
-    "eval": /* @__PURE__ */ mkEval(defaultEval)
-  });
+  var show11 = /* @__PURE__ */ show(showInt);
+  var map46 = /* @__PURE__ */ map(functorArray);
+  var discard20 = /* @__PURE__ */ discard(discardUnit)(bindHalogenM);
+  var modify_27 = /* @__PURE__ */ modify_(monadStateHalogenM);
+  var append16 = /* @__PURE__ */ append(semigroupArray);
+  var Initialize13 = /* @__PURE__ */ function() {
+    function Initialize17() {
+    }
+    ;
+    Initialize17.value = new Initialize17();
+    return Initialize17;
+  }();
+  var ProvisionCluster = /* @__PURE__ */ function() {
+    function ProvisionCluster2() {
+    }
+    ;
+    ProvisionCluster2.value = new ProvisionCluster2();
+    return ProvisionCluster2;
+  }();
+  var RefreshClusters = /* @__PURE__ */ function() {
+    function RefreshClusters2() {
+    }
+    ;
+    RefreshClusters2.value = new RefreshClusters2();
+    return RefreshClusters2;
+  }();
+  var renderCluster = function(cluster) {
+    return tr([cls(["hover:bg-muted/5 transition-colors group cursor-pointer"])])([td([cls(["px-6 py-4 font-mono text-primary"])])([text5(cluster.id)]), td([cls(["px-6 py-4 text-text font-medium"])])([text5(cluster.name)]), td([cls(["px-6 py-4 text-muted-foreground font-mono"])])([text5(show11(cluster.nodes))]), td([cls(["px-6 py-4 text-muted-foreground"])])([text5(cluster.region)]), td([cls(["px-6 py-4"])])([span3([cls(["px-2 py-0.5 rounded text-[10px] uppercase tracking-tighter", function() {
+      if (cluster.status === "converged") {
+        return "bg-status/20 text-status";
+      }
+      ;
+      if (cluster.status === "provisioning") {
+        return "bg-blue-500/20 text-blue-400 status-pulse";
+      }
+      ;
+      if (cluster.status === "drifting") {
+        return "bg-red-500/20 text-red-400";
+      }
+      ;
+      return "bg-muted text-muted-foreground";
+    }()])])([text5(cluster.status)])])]);
+  };
+  var render50 = function(state3) {
+    return div_([sectionHeader("sensenet//converge // dashboard"), function() {
+      var $17 = length3(state3.clusters) === 0 && !state3.loading;
+      if ($17) {
+        return emptyDashboard("sensenet//converge")(ProvisionCluster.value);
+      }
+      ;
+      return div_([div2([cls(["flex justify-between items-center mb-6"])])([div_([statusIndicator(show11(length3(state3.clusters)) + " CLUSTERS CONVERGED")]), settingsButton("provision cluster")(ProvisionCluster.value)]), div2([cls(["bg-card border border-border rounded-lg overflow-hidden"])])([table([cls(["w-full text-left text-xs"])])([thead([cls(["bg-muted/30 border-b border-border text-[10px] uppercase tracking-widest text-muted-foreground"])])([tr_([th([cls(["px-6 py-3 font-medium"])])([text5("cluster id")]), th([cls(["px-6 py-3 font-medium"])])([text5("name")]), th([cls(["px-6 py-3 font-medium"])])([text5("nodes")]), th([cls(["px-6 py-3 font-medium"])])([text5("region")]), th([cls(["px-6 py-3 font-medium"])])([text5("status")])])]), tbody([cls(["divide-y divide-border"])])(map46(renderCluster)(state3.clusters))])])]);
+    }()]);
+  };
+  var handleAction25 = function($copy_v) {
+    var $tco_done = false;
+    var $tco_result;
+    function $tco_loop(v) {
+      if (v instanceof Initialize13) {
+        $copy_v = RefreshClusters.value;
+        return;
+      }
+      ;
+      if (v instanceof RefreshClusters) {
+        $tco_done = true;
+        return discard20(modify_27(function(v1) {
+          var $19 = {};
+          for (var $20 in v1) {
+            if ({}.hasOwnProperty.call(v1, $20)) {
+              $19[$20] = v1[$20];
+            }
+            ;
+          }
+          ;
+          $19.loading = true;
+          return $19;
+        }))(function() {
+          var mockClusters = [{
+            id: "cl-101",
+            name: "Production Core",
+            nodes: 24,
+            region: "us-east-1",
+            status: "converged"
+          }, {
+            id: "cl-102",
+            name: "Staging Overlay",
+            nodes: 8,
+            region: "eu-west-1",
+            status: "converged"
+          }, {
+            id: "cl-103",
+            name: "Dev Sandbox",
+            nodes: 3,
+            region: "us-west-2",
+            status: "drifting"
+          }];
+          return modify_27(function(v1) {
+            var $22 = {};
+            for (var $23 in v1) {
+              if ({}.hasOwnProperty.call(v1, $23)) {
+                $22[$23] = v1[$23];
+              }
+              ;
+            }
+            ;
+            $22.clusters = mockClusters;
+            $22.loading = false;
+            return $22;
+          });
+        });
+      }
+      ;
+      if (v instanceof ProvisionCluster) {
+        $tco_done = true;
+        return discard20(modify_27(function(v1) {
+          var $25 = {};
+          for (var $26 in v1) {
+            if ({}.hasOwnProperty.call(v1, $26)) {
+              $25[$26] = v1[$26];
+            }
+            ;
+          }
+          ;
+          $25.loading = true;
+          return $25;
+        }))(function() {
+          return modify_27(function(s2) {
+            var $28 = {};
+            for (var $29 in s2) {
+              if ({}.hasOwnProperty.call(s2, $29)) {
+                $28[$29] = s2[$29];
+              }
+              ;
+            }
+            ;
+            $28.clusters = append16(s2.clusters)([{
+              id: "cl-new",
+              name: "New Cluster",
+              nodes: 1,
+              region: "us-east-1",
+              status: "provisioning"
+            }]);
+            $28.loading = false;
+            return $28;
+          });
+        });
+      }
+      ;
+      throw new Error("Failed pattern match at Straylight.Pages.Products.SensenetConverge.Dashboard (line 45, column 16 - line 60, column 163): " + [v.constructor.name]);
+    }
+    ;
+    while (!$tco_done) {
+      $tco_result = $tco_loop($copy_v);
+    }
+    ;
+    return $tco_result;
+  };
+  var dashboardPage8 = /* @__PURE__ */ function() {
+    return mkComponent({
+      initialState: $$const({
+        clusters: [],
+        loading: false
+      }),
+      render: render50,
+      "eval": mkEval({
+        handleQuery: defaultEval.handleQuery,
+        receive: defaultEval.receive,
+        finalize: defaultEval.finalize,
+        handleAction: handleAction25,
+        initialize: new Just(Initialize13.value)
+      })
+    });
+  }();
 
   // output/Straylight.Pages.Products.SensenetConverge.Docs/index.js
-  var modify_13 = /* @__PURE__ */ modify_(monadStateHalogenM);
+  var modify_28 = /* @__PURE__ */ modify_(monadStateHalogenM);
   var Receive10 = /* @__PURE__ */ function() {
     function Receive13(value0) {
       this.value0 = value0;
@@ -57626,8 +60126,8 @@ Learn more: https://clerk.com/docs/components/clerk-provider`.trim());
       };
     };
   };
-  var handleAction11 = function(v) {
-    return modify_13(function(v1) {
+  var handleAction26 = function(v) {
+    return modify_28(function(v1) {
       var $8 = {};
       for (var $9 in v1) {
         if ({}.hasOwnProperty.call(v1, $9)) {
@@ -57727,7 +60227,7 @@ Learn more: https://clerk.com/docs/components/clerk-provider`.trim());
         handleQuery: defaultEval.handleQuery,
         initialize: defaultEval.initialize,
         finalize: defaultEval.finalize,
-        handleAction: handleAction11,
+        handleAction: handleAction26,
         receive: function($13) {
           return Just.create(Receive10.create($13));
         }
@@ -57736,7 +60236,7 @@ Learn more: https://clerk.com/docs/components/clerk-provider`.trim());
   }();
 
   // output/Straylight.Pages.Products.SensenetConverge.Features/index.js
-  var map37 = /* @__PURE__ */ map(functorArray);
+  var map47 = /* @__PURE__ */ map(functorArray);
   var trustBadge2 = function(title3) {
     return function(subtitle) {
       return div2([cls(["bg-card border border-border rounded-lg p-6 text-center"])])([p([cls(["text-2xl font-bold text-purple-400 mb-1"])])([text5(title3)]), p([cls(["text-sm text-muted-foreground"])])([text5(subtitle)])]);
@@ -57747,7 +60247,7 @@ Learn more: https://clerk.com/docs/components/clerk-provider`.trim());
     return li([cls(["flex items-start gap-3"])])([span3([cls(["text-purple-400 mt-1"])])([text5("+")]), span3([cls(["text-muted-foreground"])])([text5(text6)])]);
   };
   var featureList8 = function(items2) {
-    return ul([cls(["space-y-3"])])(map37(featureItem13)(items2));
+    return ul([cls(["space-y-3"])])(map47(featureItem13)(items2));
   };
   var dxCard2 = function(icon) {
     return function(title3) {
@@ -57863,7 +60363,7 @@ Learn more: https://clerk.com/docs/components/clerk-provider`.trim());
   });
 
   // output/Straylight.Pages.Products.SensenetConverge.Pricing/index.js
-  var map38 = /* @__PURE__ */ map(functorArray);
+  var map48 = /* @__PURE__ */ map(functorArray);
   var hero24 = /* @__PURE__ */ section([/* @__PURE__ */ cls(["py-24"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["max-w-[1100px] mx-auto px-6 text-center"])])([/* @__PURE__ */ h1([/* @__PURE__ */ cls(["text-4xl md:text-5xl font-bold text-text mb-6"])])([/* @__PURE__ */ text5("Simple, honest pricing")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-xl text-muted-foreground max-w-2xl mx-auto"])])([/* @__PURE__ */ text5("Pay for resources managed. No hidden fees. No surprise bills. Cancel anytime.")])])]);
   var featureItem14 = function(text6) {
     return li([cls(["flex items-start gap-2 text-sm"])])([span3([cls(["text-purple-400"])])([text5("+")]), span3([cls(["text-muted-foreground"])])([text5(text6)])]);
@@ -57875,7 +60375,7 @@ Learn more: https://clerk.com/docs/components/clerk-provider`.trim());
       }
       ;
       return "border-border";
-    }()])])([div2([cls(["mb-6"])])([h3([cls(["text-lg font-semibold text-text mb-2"])])([text5(props.name)]), div2([cls(["flex items-baseline gap-1"])])([span3([cls(["text-3xl font-bold text-text"])])([text5(props.price)]), span3([cls(["text-muted-foreground"])])([text5(props.period)])]), p([cls(["text-sm text-muted-foreground mt-2"])])([text5(props.description)])]), ul([cls(["space-y-3 mb-6"])])(map38(featureItem14)(props.features)), a([href4(props.ctaHref), cls(["block w-full py-3 text-center font-medium rounded-md transition-colors", function() {
+    }()])])([div2([cls(["mb-6"])])([h3([cls(["text-lg font-semibold text-text mb-2"])])([text5(props.name)]), div2([cls(["flex items-baseline gap-1"])])([span3([cls(["text-3xl font-bold text-text"])])([text5(props.price)]), span3([cls(["text-muted-foreground"])])([text5(props.period)])]), p([cls(["text-sm text-muted-foreground mt-2"])])([text5(props.description)])]), ul([cls(["space-y-3 mb-6"])])(map48(featureItem14)(props.features)), a([href4(props.ctaHref), cls(["block w-full py-3 text-center font-medium rounded-md transition-colors", function() {
       if (props.highlighted) {
         return "bg-purple-400 text-background hover:bg-purple-400/90";
       }
@@ -57935,26 +60435,313 @@ Learn more: https://clerk.com/docs/components/clerk-provider`.trim());
   });
 
   // output/Straylight.Pages.Products.SensenetConverge.Settings/index.js
-  var header18 = /* @__PURE__ */ div2([/* @__PURE__ */ cls(["mb-8"])])([/* @__PURE__ */ h1([/* @__PURE__ */ cls(["text-2xl font-bold text-text"])])([/* @__PURE__ */ text5("Settings")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-muted-foreground"])])([/* @__PURE__ */ text5("Cloud credentials, environments, team access, and API keys.")])]);
-  var render55 = /* @__PURE__ */ div2([/* @__PURE__ */ cls(["max-w-[1100px] mx-auto px-6 py-8"])])([header18, emptySettings]);
-  var settingsPage8 = /* @__PURE__ */ mkComponent({
-    initialState: /* @__PURE__ */ $$const(unit),
-    render: /* @__PURE__ */ $$const(render55),
-    "eval": /* @__PURE__ */ mkEval(defaultEval)
-  });
+  var modify_29 = /* @__PURE__ */ modify_(monadStateHalogenM);
+  var discard21 = /* @__PURE__ */ discard(discardUnit)(bindHalogenM);
+  var UpdateDefaultRegion = /* @__PURE__ */ function() {
+    function UpdateDefaultRegion2(value0) {
+      this.value0 = value0;
+    }
+    ;
+    UpdateDefaultRegion2.create = function(value0) {
+      return new UpdateDefaultRegion2(value0);
+    };
+    return UpdateDefaultRegion2;
+  }();
+  var ToggleAutoConverge = /* @__PURE__ */ function() {
+    function ToggleAutoConverge2() {
+    }
+    ;
+    ToggleAutoConverge2.value = new ToggleAutoConverge2();
+    return ToggleAutoConverge2;
+  }();
+  var ToggleDriftDetection = /* @__PURE__ */ function() {
+    function ToggleDriftDetection2() {
+    }
+    ;
+    ToggleDriftDetection2.value = new ToggleDriftDetection2();
+    return ToggleDriftDetection2;
+  }();
+  var SaveChanges8 = /* @__PURE__ */ function() {
+    function SaveChanges11() {
+    }
+    ;
+    SaveChanges11.value = new SaveChanges11();
+    return SaveChanges11;
+  }();
+  var render55 = function(state3) {
+    return div_([sectionHeader("sensenet//converge // settings"), div2([cls(["max-w-4xl"])])([settingsGroup("Cluster Defaults")([settingsItem("Default Region")("Primary region for new cluster provisioning")(settingsInput(state3.defaultRegion)("us-east-1")(UpdateDefaultRegion.create)), settingsItem("Auto-converge")("Automatically reconcile state when drift is detected")(settingsToggle(state3.autoConverge)(ToggleAutoConverge.value)), settingsItem("Drift Detection")("Monitor clusters for configuration drift")(settingsToggle(state3.driftDetection)(ToggleDriftDetection.value))]), div2([cls(["flex items-center gap-4"])])([settingsButton("Save Changes")(SaveChanges8.value), function() {
+      if (state3.saved) {
+        return span3([cls(["text-status text-xs animate-pulse"])])([text5("Changes saved successfully")]);
+      }
+      ;
+      return text5("");
+    }()])])]);
+  };
+  var handleAction27 = function(v) {
+    if (v instanceof UpdateDefaultRegion) {
+      return modify_29(function(v1) {
+        var $12 = {};
+        for (var $13 in v1) {
+          if ({}.hasOwnProperty.call(v1, $13)) {
+            $12[$13] = v1[$13];
+          }
+          ;
+        }
+        ;
+        $12.defaultRegion = v.value0;
+        $12.saved = false;
+        return $12;
+      });
+    }
+    ;
+    if (v instanceof ToggleAutoConverge) {
+      return discard21(modify_29(function(s2) {
+        var $16 = {};
+        for (var $17 in s2) {
+          if ({}.hasOwnProperty.call(s2, $17)) {
+            $16[$17] = s2[$17];
+          }
+          ;
+        }
+        ;
+        $16.autoConverge = !s2.autoConverge;
+        $16.saved = false;
+        return $16;
+      }))(function() {
+        return handleAction27(SaveChanges8.value);
+      });
+    }
+    ;
+    if (v instanceof ToggleDriftDetection) {
+      return discard21(modify_29(function(s2) {
+        var $19 = {};
+        for (var $20 in s2) {
+          if ({}.hasOwnProperty.call(s2, $20)) {
+            $19[$20] = s2[$20];
+          }
+          ;
+        }
+        ;
+        $19.driftDetection = !s2.driftDetection;
+        $19.saved = false;
+        return $19;
+      }))(function() {
+        return handleAction27(SaveChanges8.value);
+      });
+    }
+    ;
+    if (v instanceof SaveChanges8) {
+      return modify_29(function(v1) {
+        var $22 = {};
+        for (var $23 in v1) {
+          if ({}.hasOwnProperty.call(v1, $23)) {
+            $22[$23] = v1[$23];
+          }
+          ;
+        }
+        ;
+        $22.saved = true;
+        return $22;
+      });
+    }
+    ;
+    throw new Error("Failed pattern match at Straylight.Pages.Products.SensenetConverge.Settings (line 40, column 16 - line 53, column 33): " + [v.constructor.name]);
+  };
+  var settingsPage8 = /* @__PURE__ */ function() {
+    return mkComponent({
+      initialState: $$const({
+        defaultRegion: "us-east-1",
+        autoConverge: true,
+        driftDetection: true,
+        saved: false
+      }),
+      render: render55,
+      "eval": mkEval({
+        handleQuery: defaultEval.handleQuery,
+        receive: defaultEval.receive,
+        initialize: defaultEval.initialize,
+        finalize: defaultEval.finalize,
+        handleAction: handleAction27
+      })
+    });
+  }();
 
   // output/Straylight.Pages.Products.SensenetForge.Dashboard/index.js
-  var quickStart9 = /* @__PURE__ */ div2([/* @__PURE__ */ cls(["bg-card border border-border rounded-lg p-6 mb-8"])])([/* @__PURE__ */ h3([/* @__PURE__ */ cls(["text-lg font-semibold text-text mb-4"])])([/* @__PURE__ */ text5("Quick Start")]), /* @__PURE__ */ codeBlock([/* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-muted-foreground"])])([/* @__PURE__ */ text5("# Clone a repository\n")]), /* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-rose-400"])])([/* @__PURE__ */ text5("$ ")]), /* @__PURE__ */ text5("jj git clone forge://your-org/repo\n\n"), /* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-muted-foreground"])])([/* @__PURE__ */ text5("# Create a stacked diff\n")]), /* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-rose-400"])])([/* @__PURE__ */ text5("$ ")]), /* @__PURE__ */ text5("forge diff create")])]);
-  var header19 = /* @__PURE__ */ div2([/* @__PURE__ */ cls(["mb-8"])])([/* @__PURE__ */ h1([/* @__PURE__ */ cls(["text-2xl font-bold text-text mb-2"])])([/* @__PURE__ */ text5("Dashboard")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-muted-foreground"])])([/* @__PURE__ */ text5("Manage your repositories, diffs, and reviews.")])]);
-  var render56 = /* @__PURE__ */ div2([/* @__PURE__ */ cls(["max-w-[1100px] mx-auto px-6 py-8"])])([header19, quickStart9, /* @__PURE__ */ emptyDashboard("sensenet//forge")]);
-  var dashboardPage9 = /* @__PURE__ */ mkComponent({
-    initialState: /* @__PURE__ */ $$const(unit),
-    render: /* @__PURE__ */ $$const(render56),
-    "eval": /* @__PURE__ */ mkEval(defaultEval)
-  });
+  var show12 = /* @__PURE__ */ show(showInt);
+  var map49 = /* @__PURE__ */ map(functorArray);
+  var discard23 = /* @__PURE__ */ discard(discardUnit)(bindHalogenM);
+  var modify_30 = /* @__PURE__ */ modify_(monadStateHalogenM);
+  var append17 = /* @__PURE__ */ append(semigroupArray);
+  var Initialize14 = /* @__PURE__ */ function() {
+    function Initialize17() {
+    }
+    ;
+    Initialize17.value = new Initialize17();
+    return Initialize17;
+  }();
+  var CreateTemplate = /* @__PURE__ */ function() {
+    function CreateTemplate2() {
+    }
+    ;
+    CreateTemplate2.value = new CreateTemplate2();
+    return CreateTemplate2;
+  }();
+  var RefreshTemplates = /* @__PURE__ */ function() {
+    function RefreshTemplates2() {
+    }
+    ;
+    RefreshTemplates2.value = new RefreshTemplates2();
+    return RefreshTemplates2;
+  }();
+  var renderTemplate = function(tmpl) {
+    return tr([cls(["hover:bg-muted/5 transition-colors group cursor-pointer"])])([td([cls(["px-6 py-4 font-mono text-primary"])])([text5(tmpl.id)]), td([cls(["px-6 py-4 text-text font-medium"])])([text5(tmpl.name)]), td([cls(["px-6 py-4 text-muted-foreground font-mono"])])([text5(tmpl.version)]), td([cls(["px-6 py-4 text-muted-foreground"])])([text5(tmpl.lastUsed)]), td([cls(["px-6 py-4"])])([span3([cls(["px-2 py-0.5 rounded text-[10px] uppercase tracking-tighter", function() {
+      if (tmpl.status === "stable") {
+        return "bg-status/20 text-status";
+      }
+      ;
+      if (tmpl.status === "beta") {
+        return "bg-blue-500/20 text-blue-400";
+      }
+      ;
+      if (tmpl.status === "draft") {
+        return "bg-muted text-muted-foreground";
+      }
+      ;
+      return "bg-muted text-muted-foreground";
+    }()])])([text5(tmpl.status)])])]);
+  };
+  var render56 = function(state3) {
+    return div_([sectionHeader("sensenet//forge // dashboard"), function() {
+      var $17 = length3(state3.templates) === 0 && !state3.loading;
+      if ($17) {
+        return emptyDashboard("sensenet//forge")(CreateTemplate.value);
+      }
+      ;
+      return div_([div2([cls(["flex justify-between items-center mb-6"])])([div_([statusIndicator(show12(length3(state3.templates)) + " TEMPLATES AVAILABLE")]), settingsButton("create template")(CreateTemplate.value)]), div2([cls(["bg-card border border-border rounded-lg overflow-hidden"])])([table([cls(["w-full text-left text-xs"])])([thead([cls(["bg-muted/30 border-b border-border text-[10px] uppercase tracking-widest text-muted-foreground"])])([tr_([th([cls(["px-6 py-3 font-medium"])])([text5("template id")]), th([cls(["px-6 py-3 font-medium"])])([text5("name")]), th([cls(["px-6 py-3 font-medium"])])([text5("version")]), th([cls(["px-6 py-3 font-medium"])])([text5("last used")]), th([cls(["px-6 py-3 font-medium"])])([text5("status")])])]), tbody([cls(["divide-y divide-border"])])(map49(renderTemplate)(state3.templates))])])]);
+    }()]);
+  };
+  var handleAction28 = function($copy_v) {
+    var $tco_done = false;
+    var $tco_result;
+    function $tco_loop(v) {
+      if (v instanceof Initialize14) {
+        $copy_v = RefreshTemplates.value;
+        return;
+      }
+      ;
+      if (v instanceof RefreshTemplates) {
+        $tco_done = true;
+        return discard23(modify_30(function(v1) {
+          var $19 = {};
+          for (var $20 in v1) {
+            if ({}.hasOwnProperty.call(v1, $20)) {
+              $19[$20] = v1[$20];
+            }
+            ;
+          }
+          ;
+          $19.loading = true;
+          return $19;
+        }))(function() {
+          var mockTemplates = [{
+            id: "tmpl-a1",
+            name: "Rust Service Base",
+            version: "v1.2.4",
+            lastUsed: "10 mins ago",
+            status: "stable"
+          }, {
+            id: "tmpl-a2",
+            name: "Next.js Frontend",
+            version: "v2.0.0",
+            lastUsed: "2 hours ago",
+            status: "stable"
+          }, {
+            id: "tmpl-b1",
+            name: "Python Data API",
+            version: "v0.5.2",
+            lastUsed: "Yesterday",
+            status: "beta"
+          }];
+          return modify_30(function(v1) {
+            var $22 = {};
+            for (var $23 in v1) {
+              if ({}.hasOwnProperty.call(v1, $23)) {
+                $22[$23] = v1[$23];
+              }
+              ;
+            }
+            ;
+            $22.templates = mockTemplates;
+            $22.loading = false;
+            return $22;
+          });
+        });
+      }
+      ;
+      if (v instanceof CreateTemplate) {
+        $tco_done = true;
+        return discard23(modify_30(function(v1) {
+          var $25 = {};
+          for (var $26 in v1) {
+            if ({}.hasOwnProperty.call(v1, $26)) {
+              $25[$26] = v1[$26];
+            }
+            ;
+          }
+          ;
+          $25.loading = true;
+          return $25;
+        }))(function() {
+          return modify_30(function(s2) {
+            var $28 = {};
+            for (var $29 in s2) {
+              if ({}.hasOwnProperty.call(s2, $29)) {
+                $28[$29] = s2[$29];
+              }
+              ;
+            }
+            ;
+            $28.templates = append17(s2.templates)([{
+              id: "tmpl-new",
+              name: "New Template",
+              version: "v0.1.0",
+              lastUsed: "Just now",
+              status: "draft"
+            }]);
+            $28.loading = false;
+            return $28;
+          });
+        });
+      }
+      ;
+      throw new Error("Failed pattern match at Straylight.Pages.Products.SensenetForge.Dashboard (line 45, column 16 - line 60, column 171): " + [v.constructor.name]);
+    }
+    ;
+    while (!$tco_done) {
+      $tco_result = $tco_loop($copy_v);
+    }
+    ;
+    return $tco_result;
+  };
+  var dashboardPage9 = /* @__PURE__ */ function() {
+    return mkComponent({
+      initialState: $$const({
+        templates: [],
+        loading: false
+      }),
+      render: render56,
+      "eval": mkEval({
+        handleQuery: defaultEval.handleQuery,
+        receive: defaultEval.receive,
+        finalize: defaultEval.finalize,
+        handleAction: handleAction28,
+        initialize: new Just(Initialize14.value)
+      })
+    });
+  }();
 
   // output/Straylight.Pages.Products.SensenetForge.Docs/index.js
-  var modify_14 = /* @__PURE__ */ modify_(monadStateHalogenM);
+  var modify_31 = /* @__PURE__ */ modify_(monadStateHalogenM);
   var Receive11 = /* @__PURE__ */ function() {
     function Receive13(value0) {
       this.value0 = value0;
@@ -58005,8 +60792,8 @@ Learn more: https://clerk.com/docs/components/clerk-provider`.trim());
       };
     };
   };
-  var handleAction12 = function(v) {
-    return modify_14(function(v1) {
+  var handleAction29 = function(v) {
+    return modify_31(function(v1) {
       var $8 = {};
       for (var $9 in v1) {
         if ({}.hasOwnProperty.call(v1, $9)) {
@@ -58096,7 +60883,7 @@ Learn more: https://clerk.com/docs/components/clerk-provider`.trim());
         handleQuery: defaultEval.handleQuery,
         initialize: defaultEval.initialize,
         finalize: defaultEval.finalize,
-        handleAction: handleAction12,
+        handleAction: handleAction29,
         receive: function($13) {
           return Just.create(Receive11.create($13));
         }
@@ -58105,7 +60892,7 @@ Learn more: https://clerk.com/docs/components/clerk-provider`.trim());
   }();
 
   // output/Straylight.Pages.Products.SensenetForge.Features/index.js
-  var map39 = /* @__PURE__ */ map(functorArray);
+  var map50 = /* @__PURE__ */ map(functorArray);
   var trustBadge3 = function(title3) {
     return function(subtitle) {
       return div2([cls(["bg-card border border-border rounded-lg p-6 text-center"])])([p([cls(["text-2xl font-bold text-rose-400 mb-1"])])([text5(title3)]), p([cls(["text-sm text-muted-foreground"])])([text5(subtitle)])]);
@@ -58144,7 +60931,7 @@ Learn more: https://clerk.com/docs/components/clerk-provider`.trim());
     return li([cls(["flex items-start gap-3"])])([span3([cls(["text-rose-400 mt-1"])])([text5("+")]), span3([cls(["text-muted-foreground"])])([text5(text6)])]);
   };
   var featureList9 = function(items2) {
-    return ul([cls(["space-y-3"])])(map39(featureItem15)(items2));
+    return ul([cls(["space-y-3"])])(map50(featureItem15)(items2));
   };
   var dxCard3 = function(icon) {
     return function(title3) {
@@ -58196,14 +60983,14 @@ Learn more: https://clerk.com/docs/components/clerk-provider`.trim());
   };
   var features9 = /* @__PURE__ */ section([/* @__PURE__ */ cls(["py-24 border-t border-border"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["max-w-[1100px] mx-auto px-6"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["text-center mb-16"])])([/* @__PURE__ */ h2([/* @__PURE__ */ cls(["text-3xl font-bold text-text mb-4"])])([/* @__PURE__ */ text5("Why sensenet//forge?")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-muted-foreground max-w-xl mx-auto"])])([/* @__PURE__ */ text5("Built for teams who ship fast with AI agents and want review workflows that don't fight them.")])]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"])])([/* @__PURE__ */ featureCard10("||")("Stacked diffs")("Review changes in logical units, not massive PRs. Dependent changes stack cleanly. Rebase propagates automatically."), /* @__PURE__ */ featureCard10("@")("jujutsu native")("First-class jj support. Anonymous branches. Operation log. Conflict-free rebasing. Git compatibility when you need it."), /* @__PURE__ */ featureCard10("[]")("Agent-aware review")("AI-generated changes get dedicated review flows. Attestation shows provenance. Humans review intent, not boilerplate."), /* @__PURE__ */ featureCard10("~")("Attestation")("Every commit cryptographically signed. Agent identity verified. Post-quantum signatures. Audit trail from prompt to production."), /* @__PURE__ */ featureCard10("?")("Semantic code search")("Search by meaning, not just text. Find all error handlers. Locate similar patterns. Understand impact before merge."), /* @__PURE__ */ featureCard10("/")("Branch-free workflow")("No feature branches to manage. Work directly on changes. Stack, split, squash without ceremony. Ship when ready.")])])]);
   var cta19 = /* @__PURE__ */ section([/* @__PURE__ */ cls(["py-24 border-t border-border"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["max-w-[800px] mx-auto px-6 text-center"])])([/* @__PURE__ */ h2([/* @__PURE__ */ cls(["text-3xl font-bold text-text mb-4"])])([/* @__PURE__ */ text5("Ready to ship faster?")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-muted-foreground mb-8"])])([/* @__PURE__ */ text5("Free tier includes unlimited public repos. No credit card required.")]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["flex flex-col sm:flex-row items-center justify-center gap-4"])])([/* @__PURE__ */ primaryButton10("/sensenet/forge/dashboard")("Create free account"), /* @__PURE__ */ secondaryButton10("/sensenet/forge/pricing")("See all plans")])])]);
-  var compCell4 = function(value12) {
+  var compCell4 = function(value15) {
     return span3([cls([function() {
-      if (value12 === "no") {
+      if (value15 === "no") {
         return "text-muted-foreground/50";
       }
       ;
       return "text-muted-foreground";
-    }()])])([text5(value12)]);
+    }()])])([text5(value15)]);
   };
   var comparisonRow9 = function(feature) {
     return function(us) {
@@ -58244,7 +61031,7 @@ Learn more: https://clerk.com/docs/components/clerk-provider`.trim());
   });
 
   // output/Straylight.Pages.Products.SensenetForge.Pricing/index.js
-  var map40 = /* @__PURE__ */ map(functorArray);
+  var map51 = /* @__PURE__ */ map(functorArray);
   var hero27 = /* @__PURE__ */ section([/* @__PURE__ */ cls(["py-24"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["max-w-[1100px] mx-auto px-6 text-center"])])([/* @__PURE__ */ h1([/* @__PURE__ */ cls(["text-4xl md:text-5xl font-bold text-text mb-6"])])([/* @__PURE__ */ text5("Simple, honest pricing")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-xl text-muted-foreground max-w-2xl mx-auto"])])([/* @__PURE__ */ text5("Free for open source. Pay only for what you use on private repos.")])])]);
   var featureItem16 = function(text6) {
     return li([cls(["flex items-start gap-2 text-sm"])])([span3([cls(["text-rose-400"])])([text5("+")]), span3([cls(["text-muted-foreground"])])([text5(text6)])]);
@@ -58256,7 +61043,7 @@ Learn more: https://clerk.com/docs/components/clerk-provider`.trim());
       }
       ;
       return "border-border";
-    }()])])([div2([cls(["mb-4"])])([h3([cls(["text-lg font-semibold text-text mb-1"])])([text5(config.name)]), div2([cls(["flex items-baseline gap-1"])])([span3([cls(["text-3xl font-bold text-text"])])([text5(config.price)]), span3([cls(["text-muted-foreground text-sm"])])([text5(config.period)])]), p([cls(["text-sm text-muted-foreground mt-2"])])([text5(config.description)])]), ul([cls(["space-y-2 mb-6 flex-1"])])(map40(featureItem16)(config.features)), a([href4(config.ctaHref), cls(["w-full py-2 text-center font-medium rounded-md transition-colors block", function() {
+    }()])])([div2([cls(["mb-4"])])([h3([cls(["text-lg font-semibold text-text mb-1"])])([text5(config.name)]), div2([cls(["flex items-baseline gap-1"])])([span3([cls(["text-3xl font-bold text-text"])])([text5(config.price)]), span3([cls(["text-muted-foreground text-sm"])])([text5(config.period)])]), p([cls(["text-sm text-muted-foreground mt-2"])])([text5(config.description)])]), ul([cls(["space-y-2 mb-6 flex-1"])])(map51(featureItem16)(config.features)), a([href4(config.ctaHref), cls(["w-full py-2 text-center font-medium rounded-md transition-colors block", function() {
       if (config.highlighted) {
         return "bg-rose-400 text-background hover:bg-rose-400/90";
       }
@@ -58307,26 +61094,313 @@ Learn more: https://clerk.com/docs/components/clerk-provider`.trim());
   });
 
   // output/Straylight.Pages.Products.SensenetForge.Settings/index.js
-  var header20 = /* @__PURE__ */ div2([/* @__PURE__ */ cls(["mb-8"])])([/* @__PURE__ */ h1([/* @__PURE__ */ cls(["text-2xl font-bold text-text"])])([/* @__PURE__ */ text5("Settings")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-muted-foreground"])])([/* @__PURE__ */ text5("Profile, billing, team, security, repositories, and branch policies.")])]);
-  var render61 = /* @__PURE__ */ div2([/* @__PURE__ */ cls(["max-w-[1100px] mx-auto px-6 py-8"])])([header20, emptySettings]);
-  var settingsPage9 = /* @__PURE__ */ mkComponent({
-    initialState: /* @__PURE__ */ $$const(unit),
-    render: /* @__PURE__ */ $$const(render61),
-    "eval": /* @__PURE__ */ mkEval(defaultEval)
-  });
+  var modify_32 = /* @__PURE__ */ modify_(monadStateHalogenM);
+  var discard24 = /* @__PURE__ */ discard(discardUnit)(bindHalogenM);
+  var UpdateTemplateRepo = /* @__PURE__ */ function() {
+    function UpdateTemplateRepo2(value0) {
+      this.value0 = value0;
+    }
+    ;
+    UpdateTemplateRepo2.create = function(value0) {
+      return new UpdateTemplateRepo2(value0);
+    };
+    return UpdateTemplateRepo2;
+  }();
+  var ToggleAutoTag = /* @__PURE__ */ function() {
+    function ToggleAutoTag2() {
+    }
+    ;
+    ToggleAutoTag2.value = new ToggleAutoTag2();
+    return ToggleAutoTag2;
+  }();
+  var ToggleStrictValidation = /* @__PURE__ */ function() {
+    function ToggleStrictValidation2() {
+    }
+    ;
+    ToggleStrictValidation2.value = new ToggleStrictValidation2();
+    return ToggleStrictValidation2;
+  }();
+  var SaveChanges9 = /* @__PURE__ */ function() {
+    function SaveChanges11() {
+    }
+    ;
+    SaveChanges11.value = new SaveChanges11();
+    return SaveChanges11;
+  }();
+  var render61 = function(state3) {
+    return div_([sectionHeader("sensenet//forge // settings"), div2([cls(["max-w-4xl"])])([settingsGroup("Template Management")([settingsItem("Template Repository")("Nix flake reference for base templates")(settingsInput(state3.templateRepo)("github:straylight/templates")(UpdateTemplateRepo.create)), settingsItem("Auto-tag Versions")("Automatically tag new template releases")(settingsToggle(state3.autoTag)(ToggleAutoTag.value)), settingsItem("Strict Validation")("Enforce schema validation on template creation")(settingsToggle(state3.strictValidation)(ToggleStrictValidation.value))]), div2([cls(["flex items-center gap-4"])])([settingsButton("Save Changes")(SaveChanges9.value), function() {
+      if (state3.saved) {
+        return span3([cls(["text-status text-xs animate-pulse"])])([text5("Changes saved successfully")]);
+      }
+      ;
+      return text5("");
+    }()])])]);
+  };
+  var handleAction30 = function(v) {
+    if (v instanceof UpdateTemplateRepo) {
+      return modify_32(function(v1) {
+        var $12 = {};
+        for (var $13 in v1) {
+          if ({}.hasOwnProperty.call(v1, $13)) {
+            $12[$13] = v1[$13];
+          }
+          ;
+        }
+        ;
+        $12.templateRepo = v.value0;
+        $12.saved = false;
+        return $12;
+      });
+    }
+    ;
+    if (v instanceof ToggleAutoTag) {
+      return discard24(modify_32(function(s2) {
+        var $16 = {};
+        for (var $17 in s2) {
+          if ({}.hasOwnProperty.call(s2, $17)) {
+            $16[$17] = s2[$17];
+          }
+          ;
+        }
+        ;
+        $16.autoTag = !s2.autoTag;
+        $16.saved = false;
+        return $16;
+      }))(function() {
+        return handleAction30(SaveChanges9.value);
+      });
+    }
+    ;
+    if (v instanceof ToggleStrictValidation) {
+      return discard24(modify_32(function(s2) {
+        var $19 = {};
+        for (var $20 in s2) {
+          if ({}.hasOwnProperty.call(s2, $20)) {
+            $19[$20] = s2[$20];
+          }
+          ;
+        }
+        ;
+        $19.strictValidation = !s2.strictValidation;
+        $19.saved = false;
+        return $19;
+      }))(function() {
+        return handleAction30(SaveChanges9.value);
+      });
+    }
+    ;
+    if (v instanceof SaveChanges9) {
+      return modify_32(function(v1) {
+        var $22 = {};
+        for (var $23 in v1) {
+          if ({}.hasOwnProperty.call(v1, $23)) {
+            $22[$23] = v1[$23];
+          }
+          ;
+        }
+        ;
+        $22.saved = true;
+        return $22;
+      });
+    }
+    ;
+    throw new Error("Failed pattern match at Straylight.Pages.Products.SensenetForge.Settings (line 40, column 16 - line 53, column 33): " + [v.constructor.name]);
+  };
+  var settingsPage9 = /* @__PURE__ */ function() {
+    return mkComponent({
+      initialState: $$const({
+        templateRepo: "github:straylight/templates",
+        autoTag: true,
+        strictValidation: false,
+        saved: false
+      }),
+      render: render61,
+      "eval": mkEval({
+        handleQuery: defaultEval.handleQuery,
+        receive: defaultEval.receive,
+        initialize: defaultEval.initialize,
+        finalize: defaultEval.finalize,
+        handleAction: handleAction30
+      })
+    });
+  }();
 
   // output/Straylight.Pages.Products.SensenetPublish.Dashboard/index.js
-  var quickStart10 = /* @__PURE__ */ div2([/* @__PURE__ */ cls(["bg-card border border-border rounded-lg p-6 mb-8"])])([/* @__PURE__ */ h3([/* @__PURE__ */ cls(["text-lg font-semibold text-text mb-4"])])([/* @__PURE__ */ text5("Quick Start")]), /* @__PURE__ */ codeBlock([/* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-muted-foreground"])])([/* @__PURE__ */ text5("# Build your docs\n")]), /* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-teal-400"])])([/* @__PURE__ */ text5("$ ")]), /* @__PURE__ */ text5("publish build\n\n"), /* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-muted-foreground"])])([/* @__PURE__ */ text5("# Check for broken references\n")]), /* @__PURE__ */ span3([/* @__PURE__ */ cls(["text-teal-400"])])([/* @__PURE__ */ text5("$ ")]), /* @__PURE__ */ text5("publish check --refs")])]);
-  var header21 = /* @__PURE__ */ div2([/* @__PURE__ */ cls(["mb-8"])])([/* @__PURE__ */ h1([/* @__PURE__ */ cls(["text-2xl font-bold text-text mb-2"])])([/* @__PURE__ */ text5("Dashboard")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-muted-foreground"])])([/* @__PURE__ */ text5("Documentation builds, reference status, and scope-graph analytics.")])]);
-  var render62 = /* @__PURE__ */ div2([/* @__PURE__ */ cls(["max-w-[1100px] mx-auto px-6 py-8"])])([header21, quickStart10, /* @__PURE__ */ emptyDashboard("sensenet//publish")]);
-  var dashboardPage10 = /* @__PURE__ */ mkComponent({
-    initialState: /* @__PURE__ */ $$const(unit),
-    render: /* @__PURE__ */ $$const(render62),
-    "eval": /* @__PURE__ */ mkEval(defaultEval)
-  });
+  var show13 = /* @__PURE__ */ show(showInt);
+  var map52 = /* @__PURE__ */ map(functorArray);
+  var discard25 = /* @__PURE__ */ discard(discardUnit)(bindHalogenM);
+  var modify_33 = /* @__PURE__ */ modify_(monadStateHalogenM);
+  var append18 = /* @__PURE__ */ append(semigroupArray);
+  var Initialize15 = /* @__PURE__ */ function() {
+    function Initialize17() {
+    }
+    ;
+    Initialize17.value = new Initialize17();
+    return Initialize17;
+  }();
+  var DeploySite = /* @__PURE__ */ function() {
+    function DeploySite2() {
+    }
+    ;
+    DeploySite2.value = new DeploySite2();
+    return DeploySite2;
+  }();
+  var RefreshSites = /* @__PURE__ */ function() {
+    function RefreshSites2() {
+    }
+    ;
+    RefreshSites2.value = new RefreshSites2();
+    return RefreshSites2;
+  }();
+  var renderSite = function(site) {
+    return tr([cls(["hover:bg-muted/5 transition-colors group cursor-pointer"])])([td([cls(["px-6 py-4 font-mono text-primary"])])([text5(site.id)]), td([cls(["px-6 py-4 text-text font-medium"])])([text5(site.domain)]), td([cls(["px-6 py-4 text-muted-foreground font-mono"])])([text5(site.branch)]), td([cls(["px-6 py-4 text-muted-foreground"])])([text5(site.lastDeploy)]), td([cls(["px-6 py-4"])])([span3([cls(["px-2 py-0.5 rounded text-[10px] uppercase tracking-tighter", function() {
+      if (site.status === "live") {
+        return "bg-status/20 text-status";
+      }
+      ;
+      if (site.status === "building") {
+        return "bg-blue-500/20 text-blue-400 status-pulse";
+      }
+      ;
+      if (site.status === "queued") {
+        return "bg-muted text-muted-foreground";
+      }
+      ;
+      return "bg-muted text-muted-foreground";
+    }()])])([text5(site.status)])])]);
+  };
+  var render62 = function(state3) {
+    return div_([sectionHeader("sensenet//publish // dashboard"), function() {
+      var $17 = length3(state3.sites) === 0 && !state3.loading;
+      if ($17) {
+        return emptyDashboard("sensenet//publish")(DeploySite.value);
+      }
+      ;
+      return div_([div2([cls(["flex justify-between items-center mb-6"])])([div_([statusIndicator(show13(length3(state3.sites)) + " SITES LIVE")]), settingsButton("deploy site")(DeploySite.value)]), div2([cls(["bg-card border border-border rounded-lg overflow-hidden"])])([table([cls(["w-full text-left text-xs"])])([thead([cls(["bg-muted/30 border-b border-border text-[10px] uppercase tracking-widest text-muted-foreground"])])([tr_([th([cls(["px-6 py-3 font-medium"])])([text5("site id")]), th([cls(["px-6 py-3 font-medium"])])([text5("domain")]), th([cls(["px-6 py-3 font-medium"])])([text5("branch")]), th([cls(["px-6 py-3 font-medium"])])([text5("last deploy")]), th([cls(["px-6 py-3 font-medium"])])([text5("status")])])]), tbody([cls(["divide-y divide-border"])])(map52(renderSite)(state3.sites))])])]);
+    }()]);
+  };
+  var handleAction31 = function($copy_v) {
+    var $tco_done = false;
+    var $tco_result;
+    function $tco_loop(v) {
+      if (v instanceof Initialize15) {
+        $copy_v = RefreshSites.value;
+        return;
+      }
+      ;
+      if (v instanceof RefreshSites) {
+        $tco_done = true;
+        return discard25(modify_33(function(v1) {
+          var $19 = {};
+          for (var $20 in v1) {
+            if ({}.hasOwnProperty.call(v1, $20)) {
+              $19[$20] = v1[$20];
+            }
+            ;
+          }
+          ;
+          $19.loading = true;
+          return $19;
+        }))(function() {
+          var mockSites = [{
+            id: "site-f21",
+            domain: "straylight.run",
+            branch: "main",
+            lastDeploy: "12 mins ago",
+            status: "live"
+          }, {
+            id: "site-f22",
+            domain: "docs.straylight.run",
+            branch: "main",
+            lastDeploy: "1 hour ago",
+            status: "live"
+          }, {
+            id: "site-f23",
+            domain: "preview-feat-x.straylight.run",
+            branch: "feat-x",
+            lastDeploy: "2 mins ago",
+            status: "building"
+          }];
+          return modify_33(function(v1) {
+            var $22 = {};
+            for (var $23 in v1) {
+              if ({}.hasOwnProperty.call(v1, $23)) {
+                $22[$23] = v1[$23];
+              }
+              ;
+            }
+            ;
+            $22.sites = mockSites;
+            $22.loading = false;
+            return $22;
+          });
+        });
+      }
+      ;
+      if (v instanceof DeploySite) {
+        $tco_done = true;
+        return discard25(modify_33(function(v1) {
+          var $25 = {};
+          for (var $26 in v1) {
+            if ({}.hasOwnProperty.call(v1, $26)) {
+              $25[$26] = v1[$26];
+            }
+            ;
+          }
+          ;
+          $25.loading = true;
+          return $25;
+        }))(function() {
+          return modify_33(function(s2) {
+            var $28 = {};
+            for (var $29 in s2) {
+              if ({}.hasOwnProperty.call(s2, $29)) {
+                $28[$29] = s2[$29];
+              }
+              ;
+            }
+            ;
+            $28.sites = append18(s2.sites)([{
+              id: "site-new",
+              domain: "new-site.run",
+              branch: "main",
+              lastDeploy: "Just now",
+              status: "queued"
+            }]);
+            $28.loading = false;
+            return $28;
+          });
+        });
+      }
+      ;
+      throw new Error("Failed pattern match at Straylight.Pages.Products.SensenetPublish.Dashboard (line 45, column 16 - line 60, column 165): " + [v.constructor.name]);
+    }
+    ;
+    while (!$tco_done) {
+      $tco_result = $tco_loop($copy_v);
+    }
+    ;
+    return $tco_result;
+  };
+  var dashboardPage10 = /* @__PURE__ */ function() {
+    return mkComponent({
+      initialState: $$const({
+        sites: [],
+        loading: false
+      }),
+      render: render62,
+      "eval": mkEval({
+        handleQuery: defaultEval.handleQuery,
+        receive: defaultEval.receive,
+        finalize: defaultEval.finalize,
+        handleAction: handleAction31,
+        initialize: new Just(Initialize15.value)
+      })
+    });
+  }();
 
   // output/Straylight.Pages.Products.SensenetPublish.Docs/index.js
-  var modify_15 = /* @__PURE__ */ modify_(monadStateHalogenM);
+  var modify_34 = /* @__PURE__ */ modify_(monadStateHalogenM);
   var Receive12 = /* @__PURE__ */ function() {
     function Receive13(value0) {
       this.value0 = value0;
@@ -58382,8 +61456,8 @@ Learn more: https://clerk.com/docs/components/clerk-provider`.trim());
       return div2([cls(["bg-card border border-border rounded-lg p-3 text-center"])])([p([cls(["text-text font-medium"])])([text5(name15)]), p([cls(["text-xs text-muted-foreground"])])([text5(status2)])]);
     };
   };
-  var handleAction13 = function(v) {
-    return modify_15(function(v1) {
+  var handleAction32 = function(v) {
+    return modify_34(function(v1) {
       var $8 = {};
       for (var $9 in v1) {
         if ({}.hasOwnProperty.call(v1, $9)) {
@@ -58488,7 +61562,7 @@ Learn more: https://clerk.com/docs/components/clerk-provider`.trim());
         handleQuery: defaultEval.handleQuery,
         initialize: defaultEval.initialize,
         finalize: defaultEval.finalize,
-        handleAction: handleAction13,
+        handleAction: handleAction32,
         receive: function($13) {
           return Just.create(Receive12.create($13));
         }
@@ -58497,7 +61571,7 @@ Learn more: https://clerk.com/docs/components/clerk-provider`.trim());
   }();
 
   // output/Straylight.Pages.Products.SensenetPublish.Features/index.js
-  var map41 = /* @__PURE__ */ map(functorArray);
+  var map53 = /* @__PURE__ */ map(functorArray);
   var langCard2 = function(name15) {
     return function(status2) {
       return div2([cls(["bg-card border border-border rounded-lg p-4 text-center hover:border-teal-400/50 transition-colors"])])([p([cls(["text-text font-medium mb-1"])])([text5(name15)]), p([cls(["text-xs text-muted-foreground"])])([text5(status2)])]);
@@ -58508,7 +61582,7 @@ Learn more: https://clerk.com/docs/components/clerk-provider`.trim());
     return li([cls(["flex items-start gap-3"])])([span3([cls(["text-teal-400 mt-1"])])([text5("+")]), span3([cls(["text-muted-foreground"])])([text5(text6)])]);
   };
   var featureList10 = function(items2) {
-    return ul([cls(["space-y-3"])])(map41(featureItem17)(items2));
+    return ul([cls(["space-y-3"])])(map53(featureItem17)(items2));
   };
   var dxCard4 = function(icon) {
     return function(title3) {
@@ -58565,14 +61639,14 @@ Learn more: https://clerk.com/docs/components/clerk-provider`.trim());
   };
   var features10 = /* @__PURE__ */ section([/* @__PURE__ */ cls(["py-24 border-t border-border"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["max-w-[1100px] mx-auto px-6"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["text-center mb-16"])])([/* @__PURE__ */ h2([/* @__PURE__ */ cls(["text-3xl font-bold text-text mb-4"])])([/* @__PURE__ */ text5("Why sensenet//publish?")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-muted-foreground max-w-xl mx-auto"])])([/* @__PURE__ */ text5("Built by engineers who got tired of dead links and stale documentation.")])]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"])])([/* @__PURE__ */ featureCard11("G")("Scope-graph analysis")("Full semantic understanding via scope graphs. Every reference tracked from definition to usage. No regex heuristics."), /* @__PURE__ */ featureCard11("~>")("Reference resolution")("Every cross-reference in your docs is verified at build time. Broken links fail the build. Zero dead references in production."), /* @__PURE__ */ featureCard11("{ }")("Cross-language")("Rust, Haskell, TypeScript, C++, Python, and more. Unified scope-graph representation across all supported languages."), /* @__PURE__ */ featureCard11("{}")("Machine-readable output")("JSON-LD, OpenAPI, and custom formats. Structured output for IDE plugins, search indexes, and downstream tooling."), /* @__PURE__ */ featureCard11("!")("Build-integrated")("Runs in your CI pipeline. Docs are artifacts, not afterthoughts. Version-pinned references across releases."), /* @__PURE__ */ featureCard11("?")("Semantic search")("Query by type signature, scope, or relationship. Find all callers of a function. Trace data flow through your codebase.")])])]);
   var cta21 = /* @__PURE__ */ section([/* @__PURE__ */ cls(["py-24 border-t border-border"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["max-w-[800px] mx-auto px-6 text-center"])])([/* @__PURE__ */ h2([/* @__PURE__ */ cls(["text-3xl font-bold text-text mb-4"])])([/* @__PURE__ */ text5("Ready for docs that don't lie?")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-muted-foreground mb-8"])])([/* @__PURE__ */ text5("Free for open source. Simple pricing for teams.")]), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["flex flex-col sm:flex-row items-center justify-center gap-4"])])([/* @__PURE__ */ primaryButton11("/sensenet/publish/pricing")("View pricing"), /* @__PURE__ */ secondaryButton11("/sensenet/publish/docs")("Read the docs")])])]);
-  var compCell5 = function(value12) {
+  var compCell5 = function(value15) {
     return span3([cls([function() {
-      if (value12 === "no") {
+      if (value15 === "no") {
         return "text-muted-foreground/50";
       }
       ;
       return "text-muted-foreground";
-    }()])])([text5(value12)]);
+    }()])])([text5(value15)]);
   };
   var comparisonRow10 = function(feature) {
     return function(us) {
@@ -58615,7 +61689,7 @@ Learn more: https://clerk.com/docs/components/clerk-provider`.trim());
   });
 
   // output/Straylight.Pages.Products.SensenetPublish.Pricing/index.js
-  var map42 = /* @__PURE__ */ map(functorArray);
+  var map54 = /* @__PURE__ */ map(functorArray);
   var hero30 = /* @__PURE__ */ section([/* @__PURE__ */ cls(["py-24"])])([/* @__PURE__ */ div2([/* @__PURE__ */ cls(["max-w-[1100px] mx-auto px-6 text-center"])])([/* @__PURE__ */ h1([/* @__PURE__ */ cls(["text-4xl md:text-5xl font-bold text-text mb-6"])])([/* @__PURE__ */ text5("Simple, transparent pricing")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-xl text-muted-foreground max-w-2xl mx-auto"])])([/* @__PURE__ */ text5("Free for open source. Pay for what you need as you scale.")])])]);
   var featureItem18 = function(text6) {
     return li([cls(["flex items-center gap-2 text-sm text-muted-foreground"])])([span3([cls(["text-teal-400"])])([text5("+")]), text5(text6)]);
@@ -58633,7 +61707,7 @@ Learn more: https://clerk.com/docs/components/clerk-provider`.trim());
       }
       ;
       return text5("");
-    }(), h3([cls(["text-xl font-bold text-text mt-2"])])([text5(props.name)]), div2([cls(["mt-4 mb-6"])])([span3([cls(["text-4xl font-bold text-text"])])([text5(props.price)]), span3([cls(["text-muted-foreground"])])([text5(props.period)])]), p([cls(["text-sm text-muted-foreground mb-6"])])([text5(props.description)]), ul([cls(["space-y-3 mb-8"])])(map42(featureItem18)(props.features)), a([href4(props.ctaHref), cls(["block w-full py-3 text-center font-medium rounded-md transition-colors", function() {
+    }(), h3([cls(["text-xl font-bold text-text mt-2"])])([text5(props.name)]), div2([cls(["mt-4 mb-6"])])([span3([cls(["text-4xl font-bold text-text"])])([text5(props.price)]), span3([cls(["text-muted-foreground"])])([text5(props.period)])]), p([cls(["text-sm text-muted-foreground mb-6"])])([text5(props.description)]), ul([cls(["space-y-3 mb-8"])])(map54(featureItem18)(props.features)), a([href4(props.ctaHref), cls(["block w-full py-3 text-center font-medium rounded-md transition-colors", function() {
       if (props.highlighted) {
         return "bg-teal-400 text-background hover:bg-teal-400/90";
       }
@@ -58684,21 +61758,144 @@ Learn more: https://clerk.com/docs/components/clerk-provider`.trim());
   });
 
   // output/Straylight.Pages.Products.SensenetPublish.Settings/index.js
-  var header22 = /* @__PURE__ */ div2([/* @__PURE__ */ cls(["mb-8"])])([/* @__PURE__ */ h1([/* @__PURE__ */ cls(["text-2xl font-bold text-text"])])([/* @__PURE__ */ text5("Settings")]), /* @__PURE__ */ p([/* @__PURE__ */ cls(["text-muted-foreground"])])([/* @__PURE__ */ text5("Project settings, language configs, output options, and API keys.")])]);
-  var render67 = /* @__PURE__ */ div2([/* @__PURE__ */ cls(["max-w-[1100px] mx-auto px-6 py-8"])])([header22, emptySettings]);
-  var settingsPage10 = /* @__PURE__ */ mkComponent({
-    initialState: /* @__PURE__ */ $$const(unit),
-    render: /* @__PURE__ */ $$const(render67),
-    "eval": /* @__PURE__ */ mkEval(defaultEval)
-  });
+  var modify_35 = /* @__PURE__ */ modify_(monadStateHalogenM);
+  var discard26 = /* @__PURE__ */ discard(discardUnit)(bindHalogenM);
+  var UpdateCustomDomain = /* @__PURE__ */ function() {
+    function UpdateCustomDomain2(value0) {
+      this.value0 = value0;
+    }
+    ;
+    UpdateCustomDomain2.create = function(value0) {
+      return new UpdateCustomDomain2(value0);
+    };
+    return UpdateCustomDomain2;
+  }();
+  var ToggleEdgeCaching = /* @__PURE__ */ function() {
+    function ToggleEdgeCaching2() {
+    }
+    ;
+    ToggleEdgeCaching2.value = new ToggleEdgeCaching2();
+    return ToggleEdgeCaching2;
+  }();
+  var ToggleAutoDeploy = /* @__PURE__ */ function() {
+    function ToggleAutoDeploy2() {
+    }
+    ;
+    ToggleAutoDeploy2.value = new ToggleAutoDeploy2();
+    return ToggleAutoDeploy2;
+  }();
+  var SaveChanges10 = /* @__PURE__ */ function() {
+    function SaveChanges11() {
+    }
+    ;
+    SaveChanges11.value = new SaveChanges11();
+    return SaveChanges11;
+  }();
+  var render67 = function(state3) {
+    return div_([sectionHeader("sensenet//publish // settings"), div2([cls(["max-w-4xl"])])([settingsGroup("Deployment Settings")([settingsItem("Custom Domain")("Primary domain for your published site")(settingsInput(state3.customDomain)("example.com")(UpdateCustomDomain.create)), settingsItem("Edge Caching")("Enable global CDN caching for faster delivery")(settingsToggle(state3.edgeCaching)(ToggleEdgeCaching.value)), settingsItem("Auto-deploy")("Deploy changes automatically on git push")(settingsToggle(state3.autoDeploy)(ToggleAutoDeploy.value))]), div2([cls(["flex items-center gap-4"])])([settingsButton("Save Changes")(SaveChanges10.value), function() {
+      if (state3.saved) {
+        return span3([cls(["text-status text-xs animate-pulse"])])([text5("Changes saved successfully")]);
+      }
+      ;
+      return text5("");
+    }()])])]);
+  };
+  var handleAction33 = function(v) {
+    if (v instanceof UpdateCustomDomain) {
+      return modify_35(function(v1) {
+        var $12 = {};
+        for (var $13 in v1) {
+          if ({}.hasOwnProperty.call(v1, $13)) {
+            $12[$13] = v1[$13];
+          }
+          ;
+        }
+        ;
+        $12.customDomain = v.value0;
+        $12.saved = false;
+        return $12;
+      });
+    }
+    ;
+    if (v instanceof ToggleEdgeCaching) {
+      return discard26(modify_35(function(s2) {
+        var $16 = {};
+        for (var $17 in s2) {
+          if ({}.hasOwnProperty.call(s2, $17)) {
+            $16[$17] = s2[$17];
+          }
+          ;
+        }
+        ;
+        $16.edgeCaching = !s2.edgeCaching;
+        $16.saved = false;
+        return $16;
+      }))(function() {
+        return handleAction33(SaveChanges10.value);
+      });
+    }
+    ;
+    if (v instanceof ToggleAutoDeploy) {
+      return discard26(modify_35(function(s2) {
+        var $19 = {};
+        for (var $20 in s2) {
+          if ({}.hasOwnProperty.call(s2, $20)) {
+            $19[$20] = s2[$20];
+          }
+          ;
+        }
+        ;
+        $19.autoDeploy = !s2.autoDeploy;
+        $19.saved = false;
+        return $19;
+      }))(function() {
+        return handleAction33(SaveChanges10.value);
+      });
+    }
+    ;
+    if (v instanceof SaveChanges10) {
+      return modify_35(function(v1) {
+        var $22 = {};
+        for (var $23 in v1) {
+          if ({}.hasOwnProperty.call(v1, $23)) {
+            $22[$23] = v1[$23];
+          }
+          ;
+        }
+        ;
+        $22.saved = true;
+        return $22;
+      });
+    }
+    ;
+    throw new Error("Failed pattern match at Straylight.Pages.Products.SensenetPublish.Settings (line 40, column 16 - line 53, column 33): " + [v.constructor.name]);
+  };
+  var settingsPage10 = /* @__PURE__ */ function() {
+    return mkComponent({
+      initialState: $$const({
+        customDomain: "straylight.run",
+        edgeCaching: true,
+        autoDeploy: true,
+        saved: false
+      }),
+      render: render67,
+      "eval": mkEval({
+        handleQuery: defaultEval.handleQuery,
+        receive: defaultEval.receive,
+        initialize: defaultEval.initialize,
+        finalize: defaultEval.finalize,
+        handleAction: handleAction33
+      })
+    });
+  }();
 
   // output/Straylight.Components.Tag/index.js
-  var map43 = /* @__PURE__ */ map(functorArray);
+  var map55 = /* @__PURE__ */ map(functorArray);
   var tag = function(content3) {
     return span3([class_("uv-tag")])([text5(content3)]);
   };
   var tags = function(ts) {
-    return div2([class_("flex flex-wrap gap-2")])(map43(tag)(ts));
+    return div2([class_("flex flex-wrap gap-2")])(map55(tag)(ts));
   };
 
   // output/Straylight.Pages.Razorgirl/index.js
@@ -58750,7 +61947,7 @@ Learn more: https://clerk.com/docs/components/clerk-provider`.trim());
   });
 
   // output/Straylight.Pages.Software/index.js
-  var map44 = /* @__PURE__ */ map(functorArray);
+  var map56 = /* @__PURE__ */ map(functorArray);
   var projects = [{
     name: "verified-purescript",
     desc: "proof-carrying PureScript from Lean 4. 21 theorems, 0 sorry.",
@@ -58786,11 +61983,11 @@ Learn more: https://clerk.com/docs/components/clerk-provider`.trim());
   var categoryHeader = function(title3) {
     return div2([cls(["text-[0.75rem] text-primary uppercase tracking-wider mb-3"])])([text5("// " + title3)]);
   };
-  var render69 = /* @__PURE__ */ div_([/* @__PURE__ */ sectionHeader("software"), /* @__PURE__ */ p([/* @__PURE__ */ cls(["mb-8 text-muted-foreground"])])([/* @__PURE__ */ text5("correct by construction. the result is saved.")]), /* @__PURE__ */ categoryHeader("rfl nexus"), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["flex flex-col gap-4 mb-8"])])(/* @__PURE__ */ map44(projectRow)(/* @__PURE__ */ filter(function(p10) {
+  var render69 = /* @__PURE__ */ div_([/* @__PURE__ */ sectionHeader("software"), /* @__PURE__ */ p([/* @__PURE__ */ cls(["mb-8 text-muted-foreground"])])([/* @__PURE__ */ text5("correct by construction. the result is saved.")]), /* @__PURE__ */ categoryHeader("rfl nexus"), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["flex flex-col gap-4 mb-8"])])(/* @__PURE__ */ map56(projectRow)(/* @__PURE__ */ filter(function(p10) {
     return p10.category === "rfl";
-  })(projects))), /* @__PURE__ */ categoryHeader("infrastructure"), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["flex flex-col gap-4 mb-8"])])(/* @__PURE__ */ map44(projectRow)(/* @__PURE__ */ filter(function(p10) {
+  })(projects))), /* @__PURE__ */ categoryHeader("infrastructure"), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["flex flex-col gap-4 mb-8"])])(/* @__PURE__ */ map56(projectRow)(/* @__PURE__ */ filter(function(p10) {
     return p10.category === "infra";
-  })(projects))), /* @__PURE__ */ categoryHeader("tools"), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["flex flex-col gap-4"])])(/* @__PURE__ */ map44(projectRow)(/* @__PURE__ */ filter(function(p10) {
+  })(projects))), /* @__PURE__ */ categoryHeader("tools"), /* @__PURE__ */ div2([/* @__PURE__ */ cls(["flex flex-col gap-4"])])(/* @__PURE__ */ map56(projectRow)(/* @__PURE__ */ filter(function(p10) {
     return p10.category === "tools";
   })(projects)))]);
   var softwarePage = /* @__PURE__ */ mkComponent({
@@ -59438,11 +62635,11 @@ Learn more: https://clerk.com/docs/components/clerk-provider`.trim());
   var toEvent = unsafeCoerce2;
 
   // output/Main/index.js
-  var discard6 = /* @__PURE__ */ discard(discardUnit);
-  var discard12 = /* @__PURE__ */ discard6(bindHalogenM);
-  var modify_16 = /* @__PURE__ */ modify_(monadStateHalogenM);
+  var discard27 = /* @__PURE__ */ discard(discardUnit);
+  var discard110 = /* @__PURE__ */ discard27(bindHalogenM);
+  var modify_36 = /* @__PURE__ */ modify_(monadStateHalogenM);
   var parseRoute2 = /* @__PURE__ */ parseRoute(isRouteRoute);
-  var pure9 = /* @__PURE__ */ pure(applicativeHalogenM);
+  var pure11 = /* @__PURE__ */ pure(applicativeHalogenM);
   var bind7 = /* @__PURE__ */ bind(bindHalogenM);
   var $$void9 = /* @__PURE__ */ $$void(functorHalogenM);
   var routeToPath2 = /* @__PURE__ */ routeToPath(isRouteRoute);
@@ -59463,19 +62660,19 @@ Learn more: https://clerk.com/docs/components/clerk-provider`.trim());
       return "footer";
     }
   })(ordUnit);
-  var discard23 = /* @__PURE__ */ discard6(bindAff);
+  var discard28 = /* @__PURE__ */ discard27(bindAff);
   var bind15 = /* @__PURE__ */ bind(bindAff);
   var liftEffect6 = /* @__PURE__ */ liftEffect(monadEffectAff);
   var bind22 = /* @__PURE__ */ bind(bindEffect);
   var bind32 = /* @__PURE__ */ bind(bindMaybe);
   var pure12 = /* @__PURE__ */ pure(applicativeAff);
   var void1 = /* @__PURE__ */ $$void(functorAff);
-  var Initialize5 = /* @__PURE__ */ function() {
-    function Initialize6() {
+  var Initialize16 = /* @__PURE__ */ function() {
+    function Initialize17() {
     }
     ;
-    Initialize6.value = new Initialize6();
-    return Initialize6;
+    Initialize17.value = new Initialize17();
+    return Initialize17;
   }();
   var Navigate = /* @__PURE__ */ function() {
     function Navigate2(value0, value1) {
@@ -59563,8 +62760,8 @@ Learn more: https://clerk.com/docs/components/clerk-provider`.trim());
     return function(authState) {
       return function(route) {
         if (authState instanceof SignedIn && route instanceof Home) {
-          return discard12(liftEffect12(pushState2("/omega/code/dashboard")))(function() {
-            return modify_16(function(v) {
+          return discard110(liftEffect12(pushState2("/omega/code/dashboard")))(function() {
+            return modify_36(function(v) {
               var $83 = {};
               for (var $84 in v) {
                 if ({}.hasOwnProperty.call(v, $84)) {
@@ -59580,7 +62777,7 @@ Learn more: https://clerk.com/docs/components/clerk-provider`.trim());
           });
         }
         ;
-        return pure9(unit);
+        return pure11(unit);
       };
     };
   };
@@ -59595,14 +62792,14 @@ Learn more: https://clerk.com/docs/components/clerk-provider`.trim());
     ;
     return "max-w-[900px] mx-auto px-8 py-12";
   };
-  var handleAction14 = function(dictMonadAff) {
+  var handleAction34 = function(dictMonadAff) {
     var liftEffect12 = liftEffect(monadEffectHalogenM(dictMonadAff.MonadEffect0()));
     var redirectIfSignedInOnHome1 = redirectIfSignedInOnHome(dictMonadAff);
     return function(v) {
-      if (v instanceof Initialize5) {
+      if (v instanceof Initialize16) {
         return bind7(liftEffect12(getPathname))(function(path) {
           return bind7(liftEffect12(getAuthState))(function(authState) {
-            return discard12(modify_16(function(v1) {
+            return discard110(modify_36(function(v1) {
               var $92 = {};
               for (var $93 in v1) {
                 if ({}.hasOwnProperty.call(v1, $93)) {
@@ -59616,17 +62813,17 @@ Learn more: https://clerk.com/docs/components/clerk-provider`.trim());
               $92.authState = authState;
               return $92;
             }))(function() {
-              return discard12(redirectIfSignedInOnHome1(authState)(parseRoute2(path)))(function() {
+              return discard110(redirectIfSignedInOnHome1(authState)(parseRoute2(path)))(function() {
                 return bind7(liftEffect12(create3))(function(v1) {
-                  return discard12(liftEffect12(onPopState(function(p10) {
+                  return discard110(liftEffect12(onPopState(function(p10) {
                     return notify(v1.listener)(new RouteChanged(p10));
                   })))(function() {
-                    return discard12(liftEffect12(interceptLinks(function(p10) {
+                    return discard110(liftEffect12(interceptLinks(function(p10) {
                       return notify(v1.listener)(new RouteChanged(p10));
                     })))(function() {
-                      return discard12($$void9(subscribe2(v1.emitter)))(function() {
+                      return discard110($$void9(subscribe2(v1.emitter)))(function() {
                         return bind7(liftEffect12(create3))(function(v2) {
-                          return discard12($$void9(liftEffect12(onAuthStateChange(notify(v2.listener)(AuthStateChanged2.value)))))(function() {
+                          return discard110($$void9(liftEffect12(onAuthStateChange(notify(v2.listener)(AuthStateChanged2.value)))))(function() {
                             return $$void9(subscribe2(v2.emitter));
                           });
                         });
@@ -59641,9 +62838,9 @@ Learn more: https://clerk.com/docs/components/clerk-provider`.trim());
       }
       ;
       if (v instanceof Navigate) {
-        return discard12(liftEffect12(preventDefault(toEvent(v.value1))))(function() {
-          return discard12(liftEffect12(pushState2(routeToPath2(v.value0))))(function() {
-            return modify_16(function(v1) {
+        return discard110(liftEffect12(preventDefault(toEvent(v.value1))))(function() {
+          return discard110(liftEffect12(pushState2(routeToPath2(v.value0))))(function() {
+            return modify_36(function(v1) {
               var $101 = {};
               for (var $102 in v1) {
                 if ({}.hasOwnProperty.call(v1, $102)) {
@@ -59660,7 +62857,7 @@ Learn more: https://clerk.com/docs/components/clerk-provider`.trim());
       }
       ;
       if (v instanceof RouteChanged) {
-        return modify_16(function(v1) {
+        return modify_36(function(v1) {
           var $106 = {};
           for (var $107 in v1) {
             if ({}.hasOwnProperty.call(v1, $107)) {
@@ -59678,7 +62875,7 @@ Learn more: https://clerk.com/docs/components/clerk-provider`.trim());
       if (v instanceof AuthStateChanged2) {
         return bind7(liftEffect12(getAuthState))(function(authState) {
           return bind7(get3)(function(state3) {
-            return discard12(modify_16(function(v1) {
+            return discard110(modify_36(function(v1) {
               var $110 = {};
               for (var $111 in v1) {
                 if ({}.hasOwnProperty.call(v1, $111)) {
@@ -60047,9 +63244,9 @@ Learn more: https://clerk.com/docs/components/clerk-provider`.trim());
     return $$Proxy.value;
   }();
   var renderHeader = function(dictMonadAff) {
-    var header23 = header2(dictMonadAff);
+    var header3 = header2(dictMonadAff);
     return function(state3) {
-      return slot_22(_header)(unit)(header23)({
+      return slot_22(_header)(unit)(header3)({
         currentPath: routeToPath2(state3.route),
         themeLock: routeThemeLock(state3.route)
       });
@@ -60078,14 +63275,14 @@ Learn more: https://clerk.com/docs/components/clerk-provider`.trim());
         handleQuery: defaultEval.handleQuery,
         receive: defaultEval.receive,
         finalize: defaultEval.finalize,
-        handleAction: handleAction14(dictMonadAff),
-        initialize: new Just(Initialize5.value)
+        handleAction: handleAction34(dictMonadAff),
+        initialize: new Just(Initialize16.value)
       })
     });
   };
   var appComponent1 = /* @__PURE__ */ appComponent(monadAffAff);
-  var main2 = /* @__PURE__ */ launchAff_(/* @__PURE__ */ discard23(awaitLoad)(function() {
-    return discard23(initClerk(clerkPublishableKey))(function() {
+  var main2 = /* @__PURE__ */ launchAff_(/* @__PURE__ */ discard28(awaitLoad)(function() {
+    return discard28(initClerk(clerkPublishableKey))(function() {
       return bind15(liftEffect6(bind22(windowImpl)(document2)))(function(doc) {
         var parent2 = toParentNode(doc);
         return bind15(liftEffect6(querySelector("#straylight-app")(parent2)))(function(mbContainer) {

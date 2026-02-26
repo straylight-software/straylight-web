@@ -11,6 +11,7 @@ module Straylight.Auth
   , signOut
   , openUserProfile
   , onAuthStateChange
+  , getSessionToken
   ) where
 
 import Prelude
@@ -59,6 +60,7 @@ foreign import signUpImpl :: Effect Unit
 foreign import signOutImpl :: EffectFnAff Unit
 foreign import openUserProfileImpl :: Effect Unit
 foreign import onAuthStateChangeImpl :: (Effect Unit) -> Effect (Effect Unit)
+foreign import getSessionTokenImpl :: EffectFnAff (Nullable String)
 
 -- ============================================================
 -- PUBLIC API
@@ -95,6 +97,10 @@ signOut = fromEffectFnAff signOutImpl
 -- | Open Clerk user profile modal
 openUserProfile :: Effect Unit
 openUserProfile = openUserProfileImpl
+
+-- | Get Clerk session token
+getSessionToken :: Aff (Maybe String)
+getSessionToken = map toMaybe $ fromEffectFnAff getSessionTokenImpl
 
 -- | Subscribe to auth state changes, returns unsubscribe function
 onAuthStateChange :: Effect Unit -> Effect (Effect Unit)

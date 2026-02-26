@@ -94,9 +94,15 @@ export const onAuthStateChangeImpl = (callback) => () => {
 };
 
 // Helper to get session token for API calls
-export const getSessionToken = async () => {
+export const getSessionTokenImpl = (onError, onSuccess) => {
   if (!clerkInstance?.session) {
-    return null;
+    onSuccess(null);
+  } else {
+    clerkInstance.session.getToken()
+      .then(token => onSuccess(token))
+      .catch(e => onError(e));
   }
-  return await clerkInstance.session.getToken();
+  return (cancelError, onCancelerError, onCancelerSuccess) => {
+    onCancelerSuccess();
+  };
 };

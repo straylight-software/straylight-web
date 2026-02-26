@@ -3,42 +3,72 @@ module Straylight.Pages.Products.SensenetCache.Settings where
 
 import Prelude
 
+import Data.Maybe (Maybe(..))
 import Halogen as H
 import Halogen.HTML as HH
+import Halogen.HTML.Events as HE
+import Straylight.UI (cls, sectionHeader, settingsGroup, settingsItem, settingsToggle, settingsInput, settingsButton)
 
-import Straylight.UI (cls, emptySettings)
+type State = 
+  { maxCacheSize :: String
+  , evictionPolicy :: String
+  , compressionEnabled :: Boolean
+  , saved :: Boolean
+  }
 
--- ============================================================
--- COMPONENT
--- ============================================================
+data Action 
+  = UpdateMaxCacheSize String
+  | UpdateEvictionPolicy String
+  | ToggleCompression
+  | SaveChanges
 
 settingsPage :: forall q i o m. H.Component q i o m
 settingsPage = H.mkComponent
-  { initialState: const unit
-  , render: const render
+  { initialState: const 
+      { maxCacheSize: "10GB"
+      , evictionPolicy: "LRU"
+      , compressionEnabled: true
+      , saved: false
+      }
+  , render
   , eval: H.mkEval H.defaultEval
+      { handleAction = handleAction
+      }
   }
 
--- ============================================================
--- RENDER
--- ============================================================
+handleAction :: forall o m. Action -> H.HalogenM State Action () o m Unit
+handleAction = case _ of
+  UpdateMaxCacheSize size -> do
+    H.modify_ _ { maxCacheSize = size, saved = false }
+  
+  UpdateEvictionPolicy policy -> do
+    H.modify_ _ { evictionPolicy = policy, saved = false }
 
-render :: forall w i. HH.HTML w i
-render =
-  HH.div
-    [ cls [ "max-w-[1100px] mx-auto px-6 py-8" ] ]
-    [ header
-    , emptySettings
-    ]
+  ToggleCompression -> do
+    H.modify_ \s -> s { compressionEnabled = not s.compressionEnabled, saved = false }
+    handleAction SaveChanges
 
-header :: forall w i. HH.HTML w i
-header =
-  HH.div
-    [ cls [ "mb-8" ] ]
-    [ HH.h1
-        [ cls [ "text-2xl font-bold text-text" ] ]
-        [ HH.text "Settings" ]
-    , HH.p
-        [ cls [ "text-muted-foreground" ] ]
-        [ HH.text "Account, API keys, team, billing, and security settings." ]
+  SaveChanges -> do
+    H.modify_ _ { saved = true }
+
+render :: forall m. State -> H.ComponentHTML Action () m
+render state =
+  HH.div_
+    [ sectionHeader "sensenet//cache // settings"
+    , HH.div [ cls [ "max-w-4xl" ] ]
+        [ settingsGroup "Cache Configuration"
+            [ settingsItem "Max Cache Size" "Maximum disk space allocated for caching" 
+                (settingsInput state.maxCacheSize "10GB" UpdateMaxCacheSize)
+            , settingsItem "Eviction Policy" "Algorithm used for cache eviction (LRU, LFU, FIFO)" 
+                (settingsInput state.evictionPolicy "LRU" UpdateEvictionPolicy)
+            , settingsItem "Enable Compression" "Compress cache entries to save space" 
+                (settingsToggle state.compressionEnabled ToggleCompression)
+            ]
+        , HH.div [ cls [ "flex items-center gap-4" ] ]
+            [ settingsButton "Save Changes" SaveChanges
+            , if state.saved 
+                then HH.span [ cls [ "text-status text-xs animate-pulse" ] ] [ HH.text "Changes saved successfully" ]
+                else HH.text ""
+            ]
+        ]
     ]
