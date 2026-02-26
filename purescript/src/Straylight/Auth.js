@@ -48,13 +48,19 @@ export const getAuthStateImpl = () => {
 
 export const signInImpl = () => {
   if (clerkInstance) {
-    clerkInstance.openSignIn();
+    clerkInstance.openSignIn({
+      afterSignInUrl: "/omega/code/dashboard",
+      afterSignUpUrl: "/omega/code/dashboard",
+    });
   }
 };
 
 export const signUpImpl = () => {
   if (clerkInstance) {
-    clerkInstance.openSignUp();
+    clerkInstance.openSignUp({
+      afterSignInUrl: "/omega/code/dashboard",
+      afterSignUpUrl: "/omega/code/dashboard",
+    });
   }
 };
 

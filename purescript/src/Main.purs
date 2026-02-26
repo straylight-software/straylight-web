@@ -156,12 +156,13 @@ main = launchAff_ do
 -- APP COMPONENT
 -- ============================================================
 
-type AppState = { route :: Route, currentPath :: String }
+type AppState = { route :: Route, currentPath :: String, authState :: Auth.AuthState }
 
 data AppAction
   = Initialize
   | Navigate Route MouseEvent
   | RouteChanged String
+  | AuthStateChanged
 
 type AppSlots =
   ( header :: H.Slot (Const Void) Void Unit
@@ -180,7 +181,7 @@ _page = Proxy
 
 appComponent :: forall q i o m. MonadAff m => H.Component q i o m
 appComponent = H.mkComponent
-  { initialState: const { route: Home, currentPath: "/" }
+  { initialState: const { route: Home, currentPath: "/", authState: Auth.Loading }
   , render
   , eval: H.mkEval H.defaultEval
       { handleAction = handleAction
@@ -192,11 +193,19 @@ handleAction :: forall o m. MonadAff m => AppAction -> H.HalogenM AppState AppAc
 handleAction = case _ of
   Initialize -> do
     path <- liftEffect getPathname
-    H.modify_ _ { route = parseRoute path, currentPath = path }
+    authState <- liftEffect Auth.getAuthState
+    H.modify_ _ { route = parseRoute path, currentPath = path, authState = authState }
+    -- Redirect signed-in users on home page to dashboard
+    redirectIfSignedInOnHome authState (parseRoute path)
+    -- Subscribe to route changes
     { emitter, listener } <- liftEffect HS.create
     liftEffect $ onPopState (\p -> HS.notify listener (RouteChanged p))
     liftEffect $ interceptLinks (\p -> HS.notify listener (RouteChanged p))
     void $ H.subscribe emitter
+    -- Subscribe to auth state changes
+    { emitter: authEmitter, listener: authListener } <- liftEffect HS.create
+    void $ liftEffect $ Auth.onAuthStateChange (HS.notify authListener AuthStateChanged)
+    void $ H.subscribe authEmitter
   
   Navigate route event -> do
     liftEffect $ preventDefault (toEvent event)
@@ -205,6 +214,22 @@ handleAction = case _ of
   
   RouteChanged path -> do
     H.modify_ _ { route = parseRoute path, currentPath = path }
+  
+  AuthStateChanged -> do
+    authState <- liftEffect Auth.getAuthState
+    state <- H.get
+    H.modify_ _ { authState = authState }
+    -- Redirect signed-in users on home page to dashboard
+    redirectIfSignedInOnHome authState state.route
+
+-- | Redirect to omega//code dashboard if user is signed in and on home page
+redirectIfSignedInOnHome :: forall o m. MonadAff m => Auth.AuthState -> Route -> H.HalogenM AppState AppAction AppSlots o m Unit
+redirectIfSignedInOnHome authState route = case authState, route of
+  Auth.SignedIn _ _, Home -> do
+    let dashboardPath = "/omega/code/dashboard"
+    liftEffect $ pushState dashboardPath
+    H.modify_ _ { route = parseRoute dashboardPath, currentPath = dashboardPath }
+  _, _ -> pure unit
 
 render :: forall m. MonadAff m => AppState -> H.ComponentHTML AppAction AppSlots m
 render state =

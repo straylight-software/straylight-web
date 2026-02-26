@@ -104,7 +104,7 @@
     return dict.pure;
   };
   var unless = function(dictApplicative) {
-    var pure12 = pure(dictApplicative);
+    var pure13 = pure(dictApplicative);
     return function(v) {
       return function(v1) {
         if (!v) {
@@ -112,7 +112,7 @@
         }
         ;
         if (v) {
-          return pure12(unit);
+          return pure13(unit);
         }
         ;
         throw new Error("Failed pattern match at Control.Applicative (line 68, column 1 - line 68, column 65): " + [v.constructor.name, v1.constructor.name]);
@@ -120,7 +120,7 @@
     };
   };
   var when = function(dictApplicative) {
-    var pure12 = pure(dictApplicative);
+    var pure13 = pure(dictApplicative);
     return function(v) {
       return function(v1) {
         if (v) {
@@ -128,7 +128,7 @@
         }
         ;
         if (!v) {
-          return pure12(unit);
+          return pure13(unit);
         }
         ;
         throw new Error("Failed pattern match at Control.Applicative (line 63, column 1 - line 63, column 63): " + [v.constructor.name, v1.constructor.name]);
@@ -137,10 +137,10 @@
   };
   var liftA1 = function(dictApplicative) {
     var apply2 = apply(dictApplicative.Apply0());
-    var pure12 = pure(dictApplicative);
+    var pure13 = pure(dictApplicative);
     return function(f2) {
       return function(a3) {
-        return apply2(pure12(f2))(a3);
+        return apply2(pure13(f2))(a3);
       };
     };
   };
@@ -5405,13 +5405,13 @@
   var foldFree = function(dictMonadRec) {
     var Monad0 = dictMonadRec.Monad0();
     var map110 = map(Monad0.Bind1().Apply0().Functor0());
-    var pure12 = pure(Monad0.Applicative0());
+    var pure13 = pure(Monad0.Applicative0());
     var tailRecM4 = tailRecM(dictMonadRec);
     return function(k) {
       var go2 = function(f2) {
         var v = toView(f2);
         if (v instanceof Return) {
-          return map110(Done.create)(pure12(v.value0));
+          return map110(Done.create)(pure13(v.value0));
         }
         ;
         if (v instanceof Bind) {
@@ -53370,7 +53370,10 @@ Learn more: https://clerk.com/docs/components/clerk-provider`.trim());
   };
   var signInImpl = () => {
     if (clerkInstance) {
-      clerkInstance.openSignIn();
+      clerkInstance.openSignIn({
+        afterSignInUrl: "/omega/code/dashboard",
+        afterSignUpUrl: "/omega/code/dashboard"
+      });
     }
   };
   var signOutImpl = (onError, onSuccess) => {
@@ -53701,11 +53704,11 @@ Learn more: https://clerk.com/docs/components/clerk-provider`.trim());
     return SignOut2;
   }();
   var AuthStateChanged = /* @__PURE__ */ function() {
-    function AuthStateChanged2() {
+    function AuthStateChanged3() {
     }
     ;
-    AuthStateChanged2.value = new AuthStateChanged2();
-    return AuthStateChanged2;
+    AuthStateChanged3.value = new AuthStateChanged3();
+    return AuthStateChanged3;
   }();
   var startsWith = function(prefix) {
     return function(str) {
@@ -59436,13 +59439,15 @@ Learn more: https://clerk.com/docs/components/clerk-provider`.trim());
   var toEvent = unsafeCoerce2;
 
   // output/Main/index.js
-  var bind7 = /* @__PURE__ */ bind(bindHalogenM);
   var discard6 = /* @__PURE__ */ discard(discardUnit);
   var discard12 = /* @__PURE__ */ discard6(bindHalogenM);
   var modify_16 = /* @__PURE__ */ modify_(monadStateHalogenM);
   var parseRoute2 = /* @__PURE__ */ parseRoute(isRouteRoute);
+  var pure9 = /* @__PURE__ */ pure(applicativeHalogenM);
+  var bind7 = /* @__PURE__ */ bind(bindHalogenM);
   var $$void9 = /* @__PURE__ */ $$void(functorHalogenM);
   var routeToPath2 = /* @__PURE__ */ routeToPath(isRouteRoute);
+  var get3 = /* @__PURE__ */ get(monadStateHalogenM);
   var slot_2 = /* @__PURE__ */ slot_();
   var slot_1 = /* @__PURE__ */ slot_2({
     reflectSymbol: function() {
@@ -59464,7 +59469,7 @@ Learn more: https://clerk.com/docs/components/clerk-provider`.trim());
   var liftEffect6 = /* @__PURE__ */ liftEffect(monadEffectAff);
   var bind22 = /* @__PURE__ */ bind(bindEffect);
   var bind32 = /* @__PURE__ */ bind(bindMaybe);
-  var pure9 = /* @__PURE__ */ pure(applicativeAff);
+  var pure12 = /* @__PURE__ */ pure(applicativeAff);
   var void1 = /* @__PURE__ */ $$void(functorAff);
   var Initialize5 = /* @__PURE__ */ function() {
     function Initialize6() {
@@ -59495,6 +59500,13 @@ Learn more: https://clerk.com/docs/components/clerk-provider`.trim());
       return new RouteChanged2(value0);
     };
     return RouteChanged2;
+  }();
+  var AuthStateChanged2 = /* @__PURE__ */ function() {
+    function AuthStateChanged3() {
+    }
+    ;
+    AuthStateChanged3.value = new AuthStateChanged3();
+    return AuthStateChanged3;
   }();
   var routeThemeLock = function(v) {
     if (v instanceof Plan) {
@@ -59547,6 +59559,32 @@ Learn more: https://clerk.com/docs/components/clerk-provider`.trim());
     ;
     return Nothing.value;
   };
+  var redirectIfSignedInOnHome = function(dictMonadAff) {
+    var liftEffect12 = liftEffect(monadEffectHalogenM(dictMonadAff.MonadEffect0()));
+    return function(authState) {
+      return function(route) {
+        if (authState instanceof SignedIn && route instanceof Home) {
+          return discard12(liftEffect12(pushState2("/omega/code/dashboard")))(function() {
+            return modify_16(function(v) {
+              var $83 = {};
+              for (var $84 in v) {
+                if ({}.hasOwnProperty.call(v, $84)) {
+                  $83[$84] = v[$84];
+                }
+                ;
+              }
+              ;
+              $83.route = parseRoute2("/omega/code/dashboard");
+              $83.currentPath = "/omega/code/dashboard";
+              return $83;
+            });
+          });
+        }
+        ;
+        return pure9(unit);
+      };
+    };
+  };
   var mainMaxWidth = function(v) {
     if (v instanceof Home) {
       return "max-w-[1100px] mx-auto px-8 py-12";
@@ -59560,30 +59598,42 @@ Learn more: https://clerk.com/docs/components/clerk-provider`.trim());
   };
   var handleAction14 = function(dictMonadAff) {
     var liftEffect12 = liftEffect(monadEffectHalogenM(dictMonadAff.MonadEffect0()));
+    var redirectIfSignedInOnHome1 = redirectIfSignedInOnHome(dictMonadAff);
     return function(v) {
       if (v instanceof Initialize5) {
         return bind7(liftEffect12(getPathname))(function(path) {
-          return discard12(modify_16(function(v1) {
-            var $75 = {};
-            for (var $76 in v1) {
-              if ({}.hasOwnProperty.call(v1, $76)) {
-                $75[$76] = v1[$76];
+          return bind7(liftEffect12(getAuthState))(function(authState) {
+            return discard12(modify_16(function(v1) {
+              var $92 = {};
+              for (var $93 in v1) {
+                if ({}.hasOwnProperty.call(v1, $93)) {
+                  $92[$93] = v1[$93];
+                }
+                ;
               }
               ;
-            }
-            ;
-            $75.route = parseRoute2(path);
-            $75.currentPath = path;
-            return $75;
-          }))(function() {
-            return bind7(liftEffect12(create3))(function(v1) {
-              return discard12(liftEffect12(onPopState(function(p10) {
-                return notify(v1.listener)(new RouteChanged(p10));
-              })))(function() {
-                return discard12(liftEffect12(interceptLinks(function(p10) {
-                  return notify(v1.listener)(new RouteChanged(p10));
-                })))(function() {
-                  return $$void9(subscribe2(v1.emitter));
+              $92.route = parseRoute2(path);
+              $92.currentPath = path;
+              $92.authState = authState;
+              return $92;
+            }))(function() {
+              return discard12(redirectIfSignedInOnHome1(authState)(parseRoute2(path)))(function() {
+                return bind7(liftEffect12(create3))(function(v1) {
+                  return discard12(liftEffect12(onPopState(function(p10) {
+                    return notify(v1.listener)(new RouteChanged(p10));
+                  })))(function() {
+                    return discard12(liftEffect12(interceptLinks(function(p10) {
+                      return notify(v1.listener)(new RouteChanged(p10));
+                    })))(function() {
+                      return discard12($$void9(subscribe2(v1.emitter)))(function() {
+                        return bind7(liftEffect12(create3))(function(v2) {
+                          return discard12($$void9(liftEffect12(onAuthStateChange(notify(v2.listener)(AuthStateChanged2.value)))))(function() {
+                            return $$void9(subscribe2(v2.emitter));
+                          });
+                        });
+                      });
+                    });
+                  });
                 });
               });
             });
@@ -59595,16 +59645,16 @@ Learn more: https://clerk.com/docs/components/clerk-provider`.trim());
         return discard12(liftEffect12(preventDefault(toEvent(v.value1))))(function() {
           return discard12(liftEffect12(pushState2(routeToPath2(v.value0))))(function() {
             return modify_16(function(v1) {
-              var $81 = {};
-              for (var $82 in v1) {
-                if ({}.hasOwnProperty.call(v1, $82)) {
-                  $81[$82] = v1[$82];
+              var $101 = {};
+              for (var $102 in v1) {
+                if ({}.hasOwnProperty.call(v1, $102)) {
+                  $101[$102] = v1[$102];
                 }
                 ;
               }
               ;
-              $81.route = v.value0;
-              return $81;
+              $101.route = v.value0;
+              return $101;
             });
           });
         });
@@ -59612,21 +59662,42 @@ Learn more: https://clerk.com/docs/components/clerk-provider`.trim());
       ;
       if (v instanceof RouteChanged) {
         return modify_16(function(v1) {
-          var $86 = {};
-          for (var $87 in v1) {
-            if ({}.hasOwnProperty.call(v1, $87)) {
-              $86[$87] = v1[$87];
+          var $106 = {};
+          for (var $107 in v1) {
+            if ({}.hasOwnProperty.call(v1, $107)) {
+              $106[$107] = v1[$107];
             }
             ;
           }
           ;
-          $86.route = parseRoute2(v.value0);
-          $86.currentPath = v.value0;
-          return $86;
+          $106.route = parseRoute2(v.value0);
+          $106.currentPath = v.value0;
+          return $106;
         });
       }
       ;
-      throw new Error("Failed pattern match at Main (line 192, column 16 - line 207, column 64): " + [v.constructor.name]);
+      if (v instanceof AuthStateChanged2) {
+        return bind7(liftEffect12(getAuthState))(function(authState) {
+          return bind7(get3)(function(state3) {
+            return discard12(modify_16(function(v1) {
+              var $110 = {};
+              for (var $111 in v1) {
+                if ({}.hasOwnProperty.call(v1, $111)) {
+                  $110[$111] = v1[$111];
+                }
+                ;
+              }
+              ;
+              $110.authState = authState;
+              return $110;
+            }))(function() {
+              return redirectIfSignedInOnHome1(authState)(state3.route);
+            });
+          });
+        });
+      }
+      ;
+      throw new Error("Failed pattern match at Main (line 193, column 16 - line 223, column 51): " + [v.constructor.name]);
     };
   };
   var clerkPublishableKey = "pk_test_cmFwaWQtd2FzcC04Ny5jbGVyay5hY2NvdW50cy5kZXYk";
@@ -59969,7 +60040,7 @@ Learn more: https://clerk.com/docs/components/clerk-provider`.trim());
           return slot_1(_page)(key)(discordPage)(unit);
         }
         ;
-        throw new Error("Failed pattern match at Main (line 228, column 18 - line 322, column 57): " + [v.constructor.name]);
+        throw new Error("Failed pattern match at Main (line 253, column 18 - line 347, column 57): " + [v.constructor.name]);
       };
     };
   };
@@ -60000,7 +60071,8 @@ Learn more: https://clerk.com/docs/components/clerk-provider`.trim());
     return mkComponent({
       initialState: $$const({
         route: Home.value,
-        currentPath: "/"
+        currentPath: "/",
+        authState: Loading2.value
       }),
       render: render71(dictMonadAff),
       "eval": mkEval({
@@ -60020,7 +60092,7 @@ Learn more: https://clerk.com/docs/components/clerk-provider`.trim());
         return bind15(liftEffect6(querySelector("#straylight-app")(parent2)))(function(mbContainer) {
           var v = bind32(mbContainer)(fromElement);
           if (v instanceof Nothing) {
-            return pure9(unit);
+            return pure12(unit);
           }
           ;
           if (v instanceof Just) {
