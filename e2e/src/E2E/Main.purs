@@ -11,6 +11,11 @@ import Effect.Console (log)
 import E2E.Core.Harness (defaultConfig, withBrowser)
 import E2E.Test.ProductsSpec as ProductsSpec
 import E2E.Test.NavigationSpec as NavigationSpec
+import E2E.Test.DashboardSpec as DashboardSpec
+import E2E.Test.SettingsSpec as SettingsSpec
+import E2E.Test.HeaderSpec as HeaderSpec
+import E2E.Test.AuthSpec as AuthSpec
+import E2E.Test.ThemeSpec as ThemeSpec
 
 main :: Effect Unit
 main = launchAff_ do
@@ -26,8 +31,18 @@ main = launchAff_ do
   liftEffect $ log ""
   
   withBrowser defaultConfig \env -> do
+    -- Core navigation and routing tests
     NavigationSpec.runNavigationTests env
     ProductsSpec.spec env
+    
+    -- Property tests for interactive UI
+    DashboardSpec.runDashboardTests env
+    SettingsSpec.runSettingsTests env
+    HeaderSpec.runHeaderTests env
+    
+    -- Auth and theme tests
+    AuthSpec.runAuthTests env
+    ThemeSpec.runThemeTests env
     
     liftEffect $ log ""
     liftEffect $ log "═══════════════════════════════════════════════════════════════"
